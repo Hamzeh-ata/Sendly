@@ -1,0 +1,151 @@
+<div class="compose-page">
+  <div class="page-header">
+    <h2>{{ 'compose.title' | translate }}</h2>
+    <div class="header-actions">
+      <button type="button" class="btn btn-ghost" (click)="openTestDialog()">
+        {{ 'compose.testEmail' | translate }}
+      </button>
+      <button type="button" class="btn btn-primary" [disabled]="!canSend()" (click)="openConfirm()">
+        {{ 'compose.send' | translate }}
+      </button>
+    </div>
+  </div>
+
+  <div class="compose-grid">
+    <section class="card">
+      <app-compose-recipients
+        [rawRecipients]="rawRecipients()"
+        [validEmails]="validEmails()"
+        [invalidEmails]="invalidEmails()"
+        [validCount]="validCount()"
+        [invalidCount]="invalidCount()"
+        [validating]="validating()"
+        (recipientsChange)="onRecipientsChange($event)"
+        (removeValid)="onRemoveValidEmail($event)"
+      />
+    </section>
+
+    <section class="card">
+      <label class="field-label">{{ 'compose.subject' | translate }}</label>
+      <input
+        type="text"
+        class="input"
+        [value]="subject()"
+        (input)="onSubjectChange($any($event.target).value)"
+        [placeholder]="'compose.subjectPlaceholder' | translate"
+      />
+    </section>
+
+    <section class="card editor-card">
+      <app-compose-editor
+        [htmlBody]="htmlBody()"
+        [previewMode]="previewMode()"
+        (bodyChange)="onBodyChange($event)"
+        (previewToggle)="onPreviewToggle()"
+      />
+      @if (selectedSignatureHtml()) {
+        <div class="signature-separator">
+          <span>{{ 'compose.signatureBlockLabel' | translate }}</span>
+          <div class="signature-block" [innerHTML]="selectedSignatureHtml()"></div>
+        </div>
+      }
+    </section>
+
+    <section class="card">
+      <app-signature-selector
+        [signatures]="signatures()"
+        [selectedId]="selectedSignatureId()"
+        [signaturesEnabled]="signaturesEnabled()"
+        (selectionChange)="onSignatureChange($event)"
+      />
+    </section>
+
+    <section class="card">
+      <app-compose-attachments
+        [attachments]="attachments()"
+        [totalSizeLabel]="totalAttachmentSizeLabel()"
+        [uploading]="uploading()"
+        (fileSelected)="onFileSelected($event)"
+        (remove)="onRemoveAttachment($event)"
+      />
+    </section>
+
+    <section class="card options-card">
+      <h3>{{ 'compose.sendingOptions' | translate }}</h3>
+      <div class="options-grid">
+        <div class="field">
+          <label>{{ 'compose.delayMs' | translate }}</label>
+          <input
+            type="number"
+            class="input"
+            [value]="delayMs()"
+            (input)="onDelayChange($any($event.target).value)"
+            min="0"
+          />
+        </div>
+        <div class="field">
+          <label>{{ 'compose.batchSize' | translate }}</label>
+          <input
+            type="number"
+            class="input"
+            [value]="batchSize()"
+            (input)="onBatchSizeChange($any($event.target).value)"
+            min="1"
+          />
+        </div>
+        <div class="field">
+          <label>{{ 'compose.maxRetries' | translate }}</label>
+          <input
+            type="number"
+            class="input"
+            [value]="maxRetries()"
+            (input)="onMaxRetriesChange($any($event.target).value)"
+            min="0"
+          />
+        </div>
+      </div>
+    </section>
+  </div>
+
+  @if (activeCampaignId()) {
+    <app-compose-progress
+      [campaignId]="activeCampaignId()!"
+      (viewDetail)="goToDetail()"
+      (dismiss)="dismissProgress()"
+    />
+  }
+
+  <app-confirm-dialog
+    [visible]="showConfirm()"
+    [titleKey]="'compose.confirmTitle'"
+    [messageKey]="'compose.confirmMessage'"
+    [messageParams]="confirmMessageParams()"
+    [loading]="sending()"
+    (confirmed)="sendCampaign()"
+    (cancelled)="closeConfirm()"
+  />
+
+  @if (showTestDialog()) {
+    <div class="overlay" (click)="closeTestDialog()">
+      <div class="dialog" role="dialog" (click)="$event.stopPropagation()">
+        <h2>{{ 'compose.testEmailTitle' | translate }}</h2>
+        <label class="field-label">{{ 'compose.testEmailAddress' | translate }}</label>
+        <input
+          type="email"
+          class="input"
+          [value]="testEmail()"
+          (input)="onTestEmailChange($any($event.target).value)"
+          [placeholder]="'compose.testEmailPlaceholder' | translate"
+        />
+        <div class="dialog-actions">
+          <button type="button" class="btn btn-ghost" [disabled]="testSending()" (click)="closeTestDialog()">
+            {{ 'common.cancel' | translate }}
+          </button>
+          <button type="button" class="btn btn-primary" [disabled]="testSending()" (click)="sendTestEmail()">
+            {{ 'compose.sendTest' | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+</div>

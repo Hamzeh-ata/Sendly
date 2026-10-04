@@ -1,0 +1,23 @@
+@if (visible()) {
+  <div class="overlay" (click)="onCancel()">
+    <div class="dialog" role="dialog" (click)="$event.stopPropagation()">
+      <h2>{{ titleKey() | translate }}</h2>
+      <p>{{ messageKey() | translate: messageParams() }}</p>
+      <div class="actions">
+        <button type="button" class="btn btn-ghost" [disabled]="loading()" (click)="onCancel()">
+          {{ cancelKey() | translate }}
+        </button>
+        <button
+          type="button"
+          class="btn"
+          [class.btn-primary]="confirmVariant() === 'primary'"
+          [class.btn-danger]="confirmVariant() === 'danger'"
+          [disabled]="loading()"
+          (click)="onConfirm()"
+        >
+          {{ confirmKey() | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+}

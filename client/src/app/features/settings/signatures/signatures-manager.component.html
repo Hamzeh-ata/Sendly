@@ -1,0 +1,126 @@
+<section class="signatures-manager card">
+  <div class="section-header">
+    <div>
+      <h3>{{ 'signatures.title' | translate }}</h3>
+      <p class="section-desc">{{ 'signatures.description' | translate }}</p>
+    </div>
+    <button type="button" class="btn btn-primary" (click)="openCreate()">
+      {{ 'signatures.create' | translate }}
+    </button>
+  </div>
+
+  <label class="toggle-row">
+    <input
+      type="checkbox"
+      [checked]="signaturesEnabled()"
+      (change)="onToggleEnabled($any($event.target).checked)"
+    />
+    <span>{{ 'signatures.globalEnabled' | translate }}</span>
+  </label>
+
+  @if (loading()) {
+    <app-loading />
+  } @else if (signatures().length === 0) {
+    <app-empty-state
+      [titleKey]="'signatures.emptyTitle'"
+      [descriptionKey]="'signatures.emptyDescription'"
+    />
+  } @else {
+    <div class="signature-list">
+      @for (signature of signatures(); track signature.id) {
+        <article class="signature-item">
+          <div class="signature-meta">
+            <div class="name-row">
+              <h4>{{ signature.name }}</h4>
+              @if (signature.isDefault) {
+                <span class="badge default">{{ 'signatures.defaultBadge' | translate }}</span>
+              }
+              @if (!signature.isActive) {
+                <span class="badge inactive">{{ 'signatures.inactiveBadge' | translate }}</span>
+              }
+            </div>
+            <div class="preview-box" [innerHTML]="signature.htmlContent"></div>
+          </div>
+          <div class="signature-actions">
+            <button type="button" class="btn btn-ghost" (click)="openEdit(signature)">
+              {{ 'signatures.edit' | translate }}
+            </button>
+            <button type="button" class="btn btn-ghost" (click)="duplicate(signature.id)">
+              {{ 'signatures.duplicate' | translate }}
+            </button>
+            @if (!signature.isDefault) {
+              <button type="button" class="btn btn-ghost" (click)="setDefault(signature.id)">
+                {{ 'signatures.setDefault' | translate }}
+              </button>
+            }
+            <button type="button" class="btn btn-danger" (click)="openDelete(signature.id)">
+              {{ 'signatures.delete' | translate }}
+            </button>
+          </div>
+        </article>
+      }
+    </div>
+  }
+</section>
+
+@if (showEditor()) {
+  <div class="editor-overlay">
+    <div class="editor-dialog card">
+      <div class="dialog-header">
+        <h3>{{ editorTitleKey() | translate }}</h3>
+        <button type="button" class="btn btn-ghost" (click)="closeEditor()">
+          {{ 'common.cancel' | translate }}
+        </button>
+      </div>
+
+      <div class="field">
+        <label>{{ 'signatures.name' | translate }}</label>
+        <input
+          type="text"
+          class="input"
+          [value]="name()"
+          (input)="onNameChange($any($event.target).value)"
+          [placeholder]="'signatures.namePlaceholder' | translate"
+        />
+      </div>
+
+      <div class="checks">
+        <label class="toggle-row">
+          <input type="checkbox" [checked]="isDefault()" (change)="onDefaultChange($any($event.target).checked)" />
+          <span>{{ 'signatures.markDefault' | translate }}</span>
+        </label>
+        <label class="toggle-row">
+          <input type="checkbox" [checked]="isActive()" (change)="onActiveChange($any($event.target).checked)" />
+          <span>{{ 'signatures.markActive' | translate }}</span>
+        </label>
+      </div>
+
+      <app-signature-editor
+        [htmlContent]="htmlContent()"
+        [previewMode]="previewMode()"
+        (contentChange)="onContentChange($event)"
+        (previewToggle)="onPreviewToggle()"
+      />
+
+      <div class="dialog-actions">
+        <button type="button" class="btn btn-ghost" (click)="closeEditor()">
+          {{ 'common.cancel' | translate }}
+        </button>
+        <button type="button" class="btn btn-primary" [disabled]="saving()" (click)="saveSignature()">
+          {{ 'signatures.save' | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+}
+
+<app-confirm-dialog
+  [visible]="deleteId() !== null"
+  [titleKey]="'signatures.deleteTitle'"
+  [messageKey]="'signatures.deleteMessage'"
+  [confirmKey]="'signatures.delete'"
+  [confirmVariant]="'danger'"
+  [loading]="saving()"
+  (confirmed)="confirmDelete()"
+  (cancelled)="closeDelete()"
+/>

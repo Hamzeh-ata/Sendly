@@ -1,0 +1,27 @@
+<div class="editor">
+  <div class="toolbar">
+    <button type="button" class="tool-btn" (click)="execCommand('bold')">{{ 'compose.toolbarBold' | translate }}</button>
+    <button type="button" class="tool-btn" (click)="execCommand('italic')">{{ 'compose.toolbarItalic' | translate }}</button>
+    <button type="button" class="tool-btn" (click)="execCommand('underline')">{{ 'compose.toolbarUnderline' | translate }}</button>
+    <button type="button" class="tool-btn" (click)="insertLink()">{{ 'compose.toolbarLink' | translate }}</button>
+    <button type="button" class="tool-btn" (click)="execCommand('insertUnorderedList')">{{ 'compose.toolbarList' | translate }}</button>
+    <button type="button" class="tool-btn" (click)="execCommand('insertOrderedList')">{{ 'compose.toolbarOrderedList' | translate }}</button>
+    <button type="button" class="tool-btn" (click)="execCommand('formatBlock', 'p')">{{ 'compose.toolbarParagraph' | translate }}</button>
+    <span class="spacer"></span>
+    <button type="button" class="tool-btn preview-btn" [class.active]="previewMode()" (click)="onTogglePreview()">
+      {{ 'compose.preview' | translate }}
+    </button>
+  </div>
+
+  @if (previewMode()) {
+    <div class="preview" [innerHTML]="htmlBody()"></div>
+  } @else {
+    <div
+      #editor
+      class="contenteditable"
+      contenteditable="true"
+      [innerHTML]="htmlBody()"
+      (input)="onInput()"
+    ></div>
+  }
+</div>

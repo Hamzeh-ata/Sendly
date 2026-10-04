@@ -1,0 +1,28 @@
+## .NET
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+App_Data/
+*.db
+*.db-shm
+*.db-wal
+
+## Node / Angular
+client/node_modules/
+client/dist/
+client/.angular/
+npm-debug.log*
+*.log
+
+## IDE
+.vs/
+.idea/
+*.swp
+.DS_Store
+
+## Secrets
+appsettings.*.local.json
+secrets.json

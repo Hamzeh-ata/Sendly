@@ -1,0 +1,29 @@
+<div class="attachments">
+  <div class="header">
+    <label class="field-label">{{ 'compose.attachments' | translate }}</label>
+    <span class="total-size">{{ 'compose.totalSize' | translate }}: {{ totalSizeLabel() }}</span>
+  </div>
+
+  <label class="upload-area">
+    <input type="file" multiple hidden (change)="onFileChange($event)" />
+    <span>{{ 'compose.uploadFiles' | translate }}</span>
+  </label>
+
+  @if (uploading()) {
+    <p class="uploading">{{ 'compose.uploading' | translate }}</p>
+  }
+
+  @if (displayItems().length > 0) {
+    <ul class="file-list">
+      @for (item of displayItems(); track item.id) {
+        <li>
+          <div class="file-info">
+            <span class="file-name">{{ item.fileName }}</span>
+            <span class="file-meta">{{ item.sizeLabel }} · {{ item.contentType }}</span>
+          </div>
+          <button type="button" class="btn-remove" (click)="onRemove(item.id)">×</button>
+        </li>
+      }
+    </ul>
+  }
+</div>

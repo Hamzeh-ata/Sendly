@@ -1,0 +1,50 @@
+<div class="history-page">
+  <div class="page-header">
+    <h2>{{ 'history.title' | translate }}</h2>
+    <input
+      type="search"
+      class="input search-input"
+      [value]="search()"
+      (input)="onSearchChange($any($event.target).value)"
+      [placeholder]="'history.searchPlaceholder' | translate"
+    />
+  </div>
+
+  @if (loading()) {
+    <app-loading />
+  } @else if (campaigns().length === 0) {
+    <app-empty-state
+      [titleKey]="'history.emptyTitle'"
+      [descriptionKey]="'history.emptyDescription'"
+    />
+  } @else {
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>{{ 'history.subject' | translate }}</th>
+            <th>{{ 'history.status' | translate }}</th>
+            <th>{{ 'history.recipients' | translate }}</th>
+            <th>{{ 'history.success' | translate }}</th>
+            <th>{{ 'history.failed' | translate }}</th>
+            <th>{{ 'history.progress' | translate }}</th>
+            <th>{{ 'history.created' | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (campaign of campaigns(); track campaign.id) {
+            <tr class="clickable" (click)="openDetail(campaign.id)">
+              <td class="subject">{{ campaign.subject }}</td>
+              <td><app-status-badge [status]="campaign.status" /></td>
+              <td>{{ campaign.totalRecipients }}</td>
+              <td>{{ campaign.successCount }}</td>
+              <td>{{ campaign.failedCount }}</td>
+              <td>{{ campaign.progressPercent }}%</td>
+              <td>{{ campaign.createdLabel }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

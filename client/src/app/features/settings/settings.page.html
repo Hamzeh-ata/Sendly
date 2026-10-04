@@ -1,0 +1,110 @@
+<div class="settings-page">
+  <h2>{{ 'settings.title' | translate }}</h2>
+  <h3 class="smtp-heading">{{ 'settings.smtpTitle' | translate }}</h3>
+
+  @if (loading()) {
+    <app-loading />
+  } @else {
+    @if (isInsecure()) {
+      <div class="warning-banner">
+        {{ 'settings.insecureWarning' | translate }}
+      </div>
+    }
+
+    <form class="settings-form" (submit)="$event.preventDefault()">
+      <section class="card">
+        <h3>{{ 'settings.serverSection' | translate }}</h3>
+        <div class="field-grid">
+          <div class="field">
+            <label>{{ 'settings.host' | translate }}</label>
+            <input type="text" class="input" [value]="host()" (input)="onHostChange($any($event.target).value)" />
+          </div>
+          <div class="field">
+            <label>{{ 'settings.port' | translate }}</label>
+            <input type="number" class="input" [value]="port()" (input)="onPortChange($any($event.target).value)" />
+          </div>
+          <div class="field">
+            <label>{{ 'settings.securityMode' | translate }}</label>
+            <select class="input" [value]="securityMode()" (change)="onSecurityModeChange($any($event.target).value)">
+              @for (mode of securityModeOptions; track mode.value) {
+                <option [value]="mode.value">{{ mode.labelKey | translate }}</option>
+              }
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h3>{{ 'settings.authSection' | translate }}</h3>
+        <div class="field-grid">
+          <div class="field">
+            <label>{{ 'settings.username' | translate }}</label>
+            <input type="text" class="input" [value]="username()" (input)="onUsernameChange($any($event.target).value)" />
+          </div>
+          <div class="field">
+            <label>{{ 'settings.password' | translate }}</label>
+            <div class="password-field">
+              <input
+                [type]="showPassword() ? 'text' : 'password'"
+                class="input"
+                [value]="password()"
+                (input)="onPasswordChange($any($event.target).value)"
+                [placeholder]="passwordPlaceholder()"
+              />
+              <button type="button" class="btn btn-ghost toggle-btn" (click)="togglePassword()">
+                {{ (showPassword() ? 'settings.hidePassword' : 'settings.showPassword') | translate }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h3>{{ 'settings.senderSection' | translate }}</h3>
+        <div class="field-grid">
+          <div class="field">
+            <label>{{ 'settings.senderEmail' | translate }}</label>
+            <input type="email" class="input" [value]="senderEmail()" (input)="onSenderEmailChange($any($event.target).value)" />
+          </div>
+          <div class="field">
+            <label>{{ 'settings.senderDisplayName' | translate }}</label>
+            <input type="text" class="input" [value]="senderDisplayName()" (input)="onSenderDisplayNameChange($any($event.target).value)" />
+          </div>
+          <div class="field">
+            <label>{{ 'settings.replyToEmail' | translate }}</label>
+            <input type="email" class="input" [value]="replyToEmail()" (input)="onReplyToChange($any($event.target).value)" />
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h3>{{ 'settings.testingSection' | translate }}</h3>
+        <p class="section-desc">{{ 'settings.testingDescription' | translate }}</p>
+        <div class="actions">
+          <button type="button" class="btn btn-ghost" [disabled]="testing()" (click)="testConnection()">
+            {{ 'settings.testConnection' | translate }}
+          </button>
+          <button type="button" class="btn btn-primary" [disabled]="saving()" (click)="save()">
+            {{ 'settings.save' | translate }}
+          </button>
+          <button type="button" class="btn btn-danger" [disabled]="saving()" (click)="openDeleteConfirm()">
+            {{ 'settings.delete' | translate }}
+          </button>
+        </div>
+      </section>
+    </form>
+
+    <app-signatures-manager />
+  }
+
+  <app-confirm-dialog
+    [visible]="showDeleteConfirm()"
+    [titleKey]="'settings.deleteTitle'"
+    [messageKey]="'settings.deleteMessage'"
+    [confirmKey]="'settings.delete'"
+    [confirmVariant]="'danger'"
+    [loading]="saving()"
+    (confirmed)="deleteSettings()"
+    (cancelled)="closeDeleteConfirm()"
+  />
+</div>

@@ -1,0 +1,32 @@
+<div class="signature-selector">
+  <div class="header-row">
+    <label class="field-label">{{ 'compose.signature' | translate }}</label>
+    <a class="edit-link" routerLink="/settings">{{ 'compose.editSignatures' | translate }}</a>
+  </div>
+
+  @if (!signaturesEnabled()) {
+    <p class="disabled-hint">{{ 'compose.signaturesDisabled' | translate }}</p>
+  } @else {
+    <select
+      class="input"
+      [value]="selectedId() ?? ''"
+      (change)="onSelect($any($event.target).value)"
+    >
+      <option value="">{{ 'compose.noSignature' | translate }}</option>
+      @for (signature of optionList(); track signature.id) {
+        <option [value]="signature.id">{{ signature.name }}</option>
+      }
+    </select>
+
+    @if (includeHintVisible()) {
+      <p class="include-hint">{{ 'compose.signatureIncluded' | translate }}</p>
+    }
+
+    @if (selectedSignature(); as signature) {
+      <div class="signature-preview">
+        <span class="preview-label">{{ 'compose.signaturePreview' | translate }}</span>
+        <div class="preview-content" [innerHTML]="signature.htmlContent"></div>
+      </div>
+    }
+  }
+</div>

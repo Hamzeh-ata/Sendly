@@ -1,0 +1,47 @@
+<div class="shell" [class.sidebar-open]="sidebarOpen()">
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <span class="logo">Sendly</span>
+      <button type="button" class="close-btn mobile-only" (click)="closeSidebar()" [attr.aria-label]="'shell.closeMenu' | translate">×</button>
+    </div>
+    <nav class="nav">
+      <a routerLink="/compose" routerLinkActive="active" (click)="closeSidebar()">
+        {{ 'nav.compose' | translate }}
+      </a>
+      <a routerLink="/history" routerLinkActive="active" (click)="closeSidebar()">
+        {{ 'nav.history' | translate }}
+      </a>
+      <a routerLink="/settings" routerLinkActive="active" (click)="closeSidebar()">
+        {{ 'nav.settings' | translate }}
+      </a>
+    </nav>
+  </aside>
+
+  @if (sidebarOpen()) {
+    <div class="backdrop mobile-only" (click)="closeSidebar()"></div>
+  }
+
+  <div class="main-area">
+    <header class="topbar">
+      <button type="button" class="menu-btn mobile-only" (click)="toggleSidebar()" [attr.aria-label]="'shell.openMenu' | translate">☰</button>
+      <h1 class="page-title">{{ 'app.title' | translate }}</h1>
+      <div class="connection-status">
+        @if (smtpLoading()) {
+          <span class="status-dot loading"></span>
+          <span>{{ 'shell.checkingConnection' | translate }}</span>
+        } @else if (smtpConfigured()) {
+          <span class="status-dot connected"></span>
+          <span>{{ 'shell.smtpConfigured' | translate }}</span>
+        } @else {
+          <span class="status-dot disconnected"></span>
+          <span>{{ 'shell.smtpNotConfigured' | translate }}</span>
+        }
+      </div>
+    </header>
+    <main class="content">
+      <router-outlet />
+    </main>
+  </div>
+
+  <app-notification-host />
+</div>

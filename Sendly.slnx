@@ -1,0 +1,12 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Sendly.Api/Sendly.Api.csproj" />
+    <Project Path="src/Sendly.Application/Sendly.Application.csproj" />
+    <Project Path="src/Sendly.Domain/Sendly.Domain.csproj" />
+    <Project Path="src/Sendly.Infrastructure/Sendly.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Sendly.Application.Tests/Sendly.Application.Tests.csproj" />
+    <Project Path="tests/Sendly.Domain.Tests/Sendly.Domain.Tests.csproj" />
+  </Folder>
+</Solution>

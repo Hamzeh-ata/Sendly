@@ -1,0 +1,37 @@
+<div class="recipients">
+  <label class="field-label">{{ 'compose.recipients' | translate }}</label>
+  <textarea
+    class="textarea"
+    rows="4"
+    [value]="rawRecipients()"
+    (input)="onInput($event)"
+    [placeholder]="'compose.recipientsPlaceholder' | translate"
+  ></textarea>
+
+  <div class="counts">
+    <span class="valid">{{ 'compose.validCount' | translate: { count: validCount() } }}</span>
+    <span class="invalid">{{ 'compose.invalidCount' | translate: { count: invalidCount() } }}</span>
+    @if (validating()) {
+      <span class="validating">{{ 'compose.validating' | translate }}</span>
+    }
+  </div>
+
+  @if (validEmails().length > 0) {
+    <div class="chip-list">
+      @for (email of validEmails(); track email) {
+        <span class="chip valid">
+          {{ email }}
+          <button type="button" class="chip-remove" (click)="onRemove(email)">×</button>
+        </span>
+      }
+    </div>
+  }
+
+  @if (invalidEmails().length > 0) {
+    <div class="chip-list invalid-list">
+      @for (email of invalidEmails(); track email) {
+        <span class="chip invalid">{{ email }}</span>
+      }
+    </div>
+  }
+</div>

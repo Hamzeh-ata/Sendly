@@ -1,0 +1,28 @@
+<div class="signature-editor">
+  <div class="toolbar">
+    <button type="button" class="tool-btn" (click)="execCommand('bold')">{{ 'compose.toolbarBold' | translate }}</button>
+    <button type="button" class="tool-btn" (click)="execCommand('italic')">{{ 'compose.toolbarItalic' | translate }}</button>
+    <button type="button" class="tool-btn" (click)="execCommand('insertParagraph')">{{ 'compose.toolbarParagraph' | translate }}</button>
+    <button type="button" class="tool-btn" (click)="insertWebsiteLink()">{{ 'signatures.linkWebsite' | translate }}</button>
+    <button type="button" class="tool-btn" (click)="insertEmailLink()">{{ 'signatures.linkEmail' | translate }}</button>
+    <button type="button" class="tool-btn" (click)="insertPhoneLink()">{{ 'signatures.linkPhone' | translate }}</button>
+    <button type="button" class="tool-btn" (click)="insertWhatsAppLink()">{{ 'signatures.linkWhatsApp' | translate }}</button>
+    <button type="button" class="tool-btn" (click)="insertImage()">{{ 'signatures.linkImage' | translate }}</button>
+    <span class="spacer"></span>
+    <button type="button" class="tool-btn preview-btn" [class.active]="previewMode()" (click)="onTogglePreview()">
+      {{ 'compose.preview' | translate }}
+    </button>
+  </div>
+
+  @if (previewMode()) {
+    <div class="preview" [innerHTML]="htmlContent()"></div>
+  } @else {
+    <div
+      #editor
+      class="contenteditable"
+      contenteditable="true"
+      [innerHTML]="htmlContent()"
+      (input)="onInput()"
+    ></div>
+  }
+</div>

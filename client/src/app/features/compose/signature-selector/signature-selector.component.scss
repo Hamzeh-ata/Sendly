@@ -1,0 +1,66 @@
+.signature-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.field-label {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.edit-link {
+  color: var(--accent-blue);
+  font-size: 0.8rem;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.disabled-hint,
+.include-hint {
+  margin: 0;
+  font-size: 0.85rem;
+}
+
+.disabled-hint {
+  color: var(--text-muted);
+}
+
+.include-hint {
+  color: var(--accent-teal);
+}
+
+.signature-preview {
+  border-top: 1px dashed var(--border);
+  padding-top: 0.75rem;
+}
+
+.preview-label {
+  display: block;
+  margin-bottom: 0.45rem;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.preview-content {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.55;
+
+  img {
+    max-width: 160px;
+    height: auto;
+  }
+}

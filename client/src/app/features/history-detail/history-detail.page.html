@@ -1,0 +1,119 @@
+<div class="detail-page">
+  <div class="breadcrumb">
+    <a routerLink="/history">{{ 'detail.backToHistory' | translate }}</a>
+  </div>
+
+  @if (loading()) {
+    <app-loading />
+  } @else if (campaign()) {
+    <div class="page-header">
+      <div>
+        <h2>{{ campaign()!.subject }}</h2>
+        <app-status-badge [status]="campaign()!.status" />
+      </div>
+      <div class="header-actions">
+        @if (isActive()) {
+          <button type="button" class="btn btn-danger" [disabled]="actionLoading()" (click)="openCancelConfirm()">
+            {{ 'detail.cancel' | translate }}
+          </button>
+        }
+        @if (canRetry()) {
+          <button type="button" class="btn btn-ghost" [disabled]="actionLoading()" (click)="retryFailed()">
+            {{ 'detail.retryFailed' | translate }}
+          </button>
+        }
+        <button type="button" class="btn btn-primary" (click)="exportCsv()">
+          {{ 'detail.exportCsv' | translate }}
+        </button>
+      </div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <span class="stat-label">{{ 'detail.total' | translate }}</span>
+        <span class="stat-value">{{ campaign()!.totalRecipients }}</span>
+      </div>
+      <div class="stat-card success">
+        <span class="stat-label">{{ 'detail.success' | translate }}</span>
+        <span class="stat-value">{{ campaign()!.successCount }}</span>
+      </div>
+      <div class="stat-card danger">
+        <span class="stat-label">{{ 'detail.failed' | translate }}</span>
+        <span class="stat-value">{{ campaign()!.failedCount }}</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">{{ 'detail.pending' | translate }}</span>
+        <span class="stat-value">{{ campaign()!.pendingCount }}</span>
+      </div>
+      <div class="stat-card highlight">
+        <span class="stat-label">{{ 'detail.progress' | translate }}</span>
+        <span class="stat-value">{{ progressPercent() }}%</span>
+      </div>
+    </div>
+
+    <div class="progress-bar-wrap">
+      <div class="progress-bar" [style.width.%]="progressPercent()"></div>
+    </div>
+
+    @if (campaign()!.currentRecipientEmail) {
+      <p class="current-recipient">
+        {{ 'compose.currentRecipient' | translate: { email: campaign()!.currentRecipientEmail } }}
+      </p>
+    }
+
+    <p class="disclaimer">{{ 'detail.disclaimer' | translate }}</p>
+
+    <div class="filters">
+      @for (btn of filterButtons; track btn.value) {
+        <button
+          type="button"
+          class="filter-btn"
+          [class.active]="filter() === btn.value"
+          (click)="setFilter(btn.value)"
+        >
+          {{ btn.labelKey | translate }}
+        </button>
+      }
+    </div>
+
+    @if (recipientsLoading()) {
+      <app-loading [messageKey]="'common.loading'" />
+    } @else {
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>{{ 'detail.email' | translate }}</th>
+              <th>{{ 'detail.recipientStatus' | translate }}</th>
+              <th>{{ 'detail.attempts' | translate }}</th>
+              <th>{{ 'detail.lastAttempt' | translate }}</th>
+              <th>{{ 'detail.failureReason' | translate }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (recipient of recipients(); track recipient.id) {
+              <tr>
+                <td>{{ recipient.email }}</td>
+                <td><app-status-badge [status]="recipient.status" prefix="recipientStatus" /></td>
+                <td>{{ recipient.attemptCount }}</td>
+                <td>{{ recipient.lastAttemptLabel }}</td>
+                <td class="failure">{{ recipient.failureReason ?? '—' }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  }
+
+  <app-confirm-dialog
+    [visible]="showCancelConfirm()"
+    [titleKey]="'detail.cancelTitle'"
+    [messageKey]="'detail.cancelMessage'"
+    [confirmKey]="'detail.cancel'"
+    [confirmVariant]="'danger'"
+    [loading]="actionLoading()"
+    (confirmed)="cancelCampaign()"
+    (cancelled)="closeCancelConfirm()"
+  />
+</div>

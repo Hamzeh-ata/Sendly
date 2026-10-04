@@ -1,0 +1,36 @@
+<div class="progress-panel">
+  <div class="panel-header">
+    <h3>{{ 'compose.progressTitle' | translate }}</h3>
+    @if (progress()) {
+      <app-status-badge [status]="progress()!.status" />
+    }
+  </div>
+
+  @if (progress()) {
+    <div class="progress-bar-wrap">
+      <div class="progress-bar" [style.width.%]="progress()!.progressPercent"></div>
+    </div>
+    <p class="progress-text">
+      {{ 'compose.progressPercent' | translate: { percent: progress()!.progressPercent } }}
+    </p>
+    <div class="stats">
+      <span>{{ 'detail.success' | translate }}: {{ progress()!.successCount }}</span>
+      <span>{{ 'detail.failed' | translate }}: {{ progress()!.failedCount }}</span>
+      <span>{{ 'detail.pending' | translate }}: {{ progress()!.pendingCount }}</span>
+    </div>
+    @if (progress()!.currentRecipientEmail) {
+      <p class="current">{{ 'compose.currentRecipient' | translate: { email: progress()!.currentRecipientEmail } }}</p>
+    }
+  } @else {
+    <p class="waiting">{{ 'compose.waitingProgress' | translate }}</p>
+  }
+
+  <div class="actions">
+    <button type="button" class="btn btn-ghost" (click)="onDismiss()">
+      {{ 'common.dismiss' | translate }}
+    </button>
+    <button type="button" class="btn btn-primary" (click)="onViewDetail()">
+      {{ 'compose.viewDetail' | translate }}
+    </button>
+  </div>
+</div>
