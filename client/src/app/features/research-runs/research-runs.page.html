@@ -1,0 +1,88 @@
+<div class="research-runs-page">
+  <div class="page-header">
+    <div>
+      <h2>{{ 'researchRuns.title' | translate }}</h2>
+      <p class="page-desc">{{ 'researchRuns.description' | translate }}</p>
+    </div>
+  </div>
+
+  @if (tabs().length > 1) {
+    <div class="template-tabs" role="tablist">
+      @for (tab of tabs(); track tab.id ?? 'all') {
+        <button
+          type="button"
+          class="template-tab"
+          role="tab"
+          [class.active]="activeTemplateId() === tab.id"
+          (click)="selectTab(tab.id)"
+        >
+          @if (tab.labelKey) {
+            {{ tab.labelKey | translate }}
+          } @else {
+            {{ tab.label }}
+          }
+        </button>
+      }
+    </div>
+  }
+
+  @if (loading()) {
+    <app-loading />
+  } @else if (runs().length === 0) {
+    <app-empty-state
+      [titleKey]="'researchRuns.emptyTitle'"
+      [descriptionKey]="'researchRuns.emptyDescription'"
+    />
+  } @else {
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>{{ 'researchRuns.project' | translate }}</th>
+            <th>{{ 'researchRuns.status' | translate }}</th>
+            <th>{{ 'researchRuns.progress' | translate }}</th>
+            <th>{{ 'researchRuns.requested' | translate }}</th>
+            <th>{{ 'researchRuns.companies' | translate }}</th>
+            <th>{{ 'researchRuns.contacts' | translate }}</th>
+            <th>{{ 'researchRuns.qualified' | translate }}</th>
+            <th>{{ 'researchRuns.created' | translate }}</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (run of runs(); track run.id) {
+            <tr>
+              <td class="name">{{ run.projectName || '—' }}</td>
+              <td><app-status-badge prefix="researchStatus" [status]="run.status" /></td>
+              <td>{{ run.progressPercent }}%</td>
+              <td>{{ run.requestedProspectCount }}</td>
+              <td>{{ run.companiesFound }}</td>
+              <td>{{ run.contactsFound }}</td>
+              <td>{{ run.qualifiedCount }}</td>
+              <td>{{ run.createdLabel }}</td>
+              <td class="actions-cell">
+                <button type="button" class="btn btn-ghost btn-sm" (click)="openDetail(run.id)">
+                  {{ 'researchRuns.view' | translate }}
+                </button>
+                <button type="button" class="btn btn-danger btn-sm" (click)="openDelete(run.id)">
+                  {{ 'researchRuns.delete' | translate }}
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>
+
+<app-confirm-dialog
+  [visible]="deleteId() !== null"
+  [titleKey]="'researchRuns.deleteTitle'"
+  [messageKey]="'researchRuns.deleteMessage'"
+  [confirmKey]="'researchRuns.delete'"
+  [confirmVariant]="'danger'"
+  [loading]="saving()"
+  (confirmed)="confirmDelete()"
+  (cancelled)="closeDelete()"
+/>

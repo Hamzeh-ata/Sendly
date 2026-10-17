@@ -9,9 +9,26 @@
     <div class="page-header">
       <div>
         <h2>{{ campaign()!.subject }}</h2>
+        <p class="template-meta">
+          <span>{{ 'history.template' | translate }}:</span>
+          {{ templateLabel() }}
+        </p>
+        <p class="template-meta">
+          <span>{{ 'history.provider' | translate }}:</span>
+          {{ providerLabel() }}
+        </p>
+        <p class="template-meta">
+          <span>{{ 'history.sendingAccount' | translate }}:</span>
+          {{ sendingAccountLabel() }}
+        </p>
         <app-status-badge [status]="campaign()!.status" />
       </div>
       <div class="header-actions">
+        @if (canStart()) {
+          <button type="button" class="btn btn-primary" [disabled]="actionLoading()" (click)="startCampaign()">
+            {{ 'detail.start' | translate }}
+          </button>
+        }
         @if (isActive()) {
           <button type="button" class="btn btn-danger" [disabled]="actionLoading()" (click)="openCancelConfirm()">
             {{ 'detail.cancel' | translate }}

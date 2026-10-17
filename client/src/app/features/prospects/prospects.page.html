@@ -1,0 +1,393 @@
+<div class="prospects-page">
+  <div class="page-header">
+    <div>
+      <h2>{{ 'prospects.title' | translate }}</h2>
+      <p class="page-desc">{{ 'prospects.description' | translate }}</p>
+    </div>
+    <div class="header-actions">
+      <button
+        type="button"
+        class="btn btn-ghost"
+        [disabled]="!canEnrollInSequence()"
+        (click)="openEnrollSequence()"
+      >
+        {{ 'prospects.enrollInSequence' | translate }}
+        @if (hasSelection()) {
+          ({{ selectedCount() }})
+        }
+      </button>
+      <button
+        type="button"
+        class="btn btn-primary"
+        [disabled]="!hasSelection() || saving()"
+        (click)="openCampaignForSelected()"
+      >
+        {{ 'prospects.createCampaignSelected' | translate }}
+        @if (hasSelection()) {
+          ({{ selectedCount() }})
+        }
+      </button>
+    </div>
+  </div>
+
+  <section class="filter-panel">
+    <div class="filter-primary">
+      <input
+        type="search"
+        class="input search-input"
+        [value]="search()"
+        (input)="onSearchChange($any($event.target).value)"
+        [placeholder]="'prospects.searchPlaceholder' | translate"
+      />
+      <select class="input project-select" [value]="projectId()" (change)="onProjectChange($any($event.target).value)">
+        <option value="">{{ 'prospects.filterAllProjects' | translate }}</option>
+        @for (project of projects(); track project.id) {
+          <option [value]="project.id">{{ project.name }}</option>
+        }
+      </select>
+      <input
+        type="text"
+        class="input"
+        [value]="country()"
+        (input)="onCountryChange($any($event.target).value)"
+        [placeholder]="'prospects.countryPlaceholder' | translate"
+      />
+      <input
+        type="text"
+        class="input"
+        [value]="industry()"
+        (input)="onIndustryChange($any($event.target).value)"
+        [placeholder]="'prospects.industryPlaceholder' | translate"
+      />
+    </div>
+
+    <div class="status-filter-block">
+      <div class="filter-block-label">{{ 'prospects.statusFilterLabel' | translate }}</div>
+      <div class="status-chips">
+        @for (choice of statusChoices(); track choice.value) {
+          <button
+            type="button"
+            class="filter-chip"
+            [class.active]="choice.selected"
+            (click)="toggleStatus(choice.value)"
+          >
+            {{ choice.labelKey | translate }}
+          </button>
+        }
+      </div>
+    </div>
+
+    <div class="filter-secondary">
+      <div class="multi-filter" [class.open]="contactMethodMenuOpen()">
+        <button
+          type="button"
+          class="multi-filter-trigger"
+          [class.active]="hasContactMethodSelection()"
+          (click)="openContactMethodMenu($event)"
+        >
+          @if (hasContactMethodSelection()) {
+            {{ 'prospects.filterContactMethodsSelected' | translate: { count: contactMethodCount() } }}
+          } @else {
+            {{ 'prospects.filterAllContactMethods' | translate }}
+          }
+        </button>
+        @if (contactMethodMenuOpen()) {
+          <div class="multi-filter-menu" (click)="stopMenuPropagation($event)">
+            @for (choice of contactMethodChoices(); track choice.value) {
+              <label class="multi-filter-option">
+                <input
+                  type="checkbox"
+                  [checked]="choice.selected"
+                  (change)="toggleContactMethod(choice.value, $event)"
+                />
+                <span>{{ choice.labelKey | translate }}</span>
+              </label>
+            }
+          </div>
+        }
+      </div>
+
+      <div class="multi-filter" [class.open]="qualificationMenuOpen()">
+        <button
+          type="button"
+          class="multi-filter-trigger"
+          [class.active]="hasQualificationSelection()"
+          (click)="openQualificationMenu($event)"
+        >
+          @if (hasQualificationSelection()) {
+            {{ 'prospects.filterQualificationSelected' | translate: { count: qualificationCount() } }}
+          } @else {
+            {{ 'prospects.filterAllQualification' | translate }}
+          }
+        </button>
+        @if (qualificationMenuOpen()) {
+          <div class="multi-filter-menu" (click)="stopMenuPropagation($event)">
+            @for (choice of qualificationChoices(); track choice.value) {
+              <label class="multi-filter-option">
+                <input
+                  type="checkbox"
+                  [checked]="choice.selected"
+                  (change)="toggleQualification(choice.value, $event)"
+                />
+                <span>{{ choice.labelKey | translate }}</span>
+              </label>
+            }
+          </div>
+        }
+      </div>
+
+      <div class="multi-filter" [class.open]="duplicateMenuOpen()">
+        <button
+          type="button"
+          class="multi-filter-trigger"
+          [class.active]="hasDuplicateSelection()"
+          (click)="openDuplicateMenu($event)"
+        >
+          @if (hasDuplicateSelection()) {
+            {{ 'prospects.filterDuplicatesSelected' | translate: { count: duplicateCount() } }}
+          } @else {
+            {{ 'prospects.filterAllDuplicates' | translate }}
+          }
+        </button>
+        @if (duplicateMenuOpen()) {
+          <div class="multi-filter-menu" (click)="stopMenuPropagation($event)">
+            @for (choice of duplicateChoices(); track choice.value) {
+              <label class="multi-filter-option">
+                <input
+                  type="checkbox"
+                  [checked]="choice.selected"
+                  (change)="toggleDuplicate(choice.value, $event)"
+                />
+                <span>{{ choice.labelKey | translate }}</span>
+              </label>
+            }
+          </div>
+        }
+      </div>
+
+      @if (hasActiveFilters()) {
+        <button type="button" class="btn btn-ghost clear-filters-btn" (click)="clearAllFilters()">
+          {{ 'prospects.clearFilters' | translate }}
+        </button>
+      }
+    </div>
+
+    @if (hasActiveFilters()) {
+      <div class="active-filters">
+        @for (chip of activeFilterChips(); track chip.group + chip.value) {
+          <button type="button" class="active-chip" (click)="removeActiveChip(chip)">
+            <span>{{ chip.labelKey | translate }}</span>
+            <span class="active-chip-remove" aria-hidden="true">×</span>
+          </button>
+        }
+      </div>
+    }
+  </section>
+
+  @if (hasSelection()) {
+    <div class="selection-bar">
+      <div class="selection-info">
+        <span class="selection-count">{{ 'prospects.selectedCount' | translate: { count: selectedCount() } }}</span>
+        <button type="button" class="btn btn-ghost btn-sm" (click)="clearSelection()">
+          {{ 'prospects.clearSelection' | translate }}
+        </button>
+      </div>
+      <div class="selection-actions">
+        <button
+          type="button"
+          class="btn btn-ghost btn-sm"
+          [disabled]="!canEnrollInSequence()"
+          (click)="openEnrollSequence()"
+        >
+          {{ 'prospects.enrollInSequence' | translate }}
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary btn-sm"
+          [disabled]="saving()"
+          (click)="openCampaignForSelected()"
+        >
+          {{ 'prospects.createCampaignSelected' | translate }}
+        </button>
+      </div>
+    </div>
+  }
+
+  <div class="results-meta">
+    <label class="select-all-row">
+      <input
+        type="checkbox"
+        [checked]="allSelected()"
+        [disabled]="loading() || displayRows().length === 0"
+        (change)="toggleSelectAll()"
+      />
+      <span>{{ 'prospects.selectAll' | translate }}</span>
+    </label>
+    <span class="result-count">{{ 'prospects.resultCount' | translate: { count: resultCount() } }}</span>
+  </div>
+
+  @if (loading()) {
+    <app-loading />
+  } @else if (displayRows().length === 0) {
+    <app-empty-state
+      [titleKey]="'prospects.emptyTitle'"
+      [descriptionKey]="'prospects.emptyDescription'"
+    />
+  } @else {
+    <div class="prospect-list">
+      @for (prospect of displayRows(); track prospect.id) {
+        <article class="prospect-card" [class.selected]="prospect.selected">
+          <div class="card-select">
+            <input
+              type="checkbox"
+              [checked]="prospect.selected"
+              (change)="toggleSelect(prospect.id)"
+              [attr.aria-label]="'prospects.selectRow' | translate"
+            />
+          </div>
+
+          <div class="card-main">
+            <div class="card-top">
+              <div class="card-identity">
+                <h3 class="company-name">{{ prospect.companyName }}</h3>
+                <p class="contact-line">{{ prospect.contactLabel }} · {{ prospect.projectLabel }}</p>
+              </div>
+              <div class="card-badges">
+                <app-status-badge prefix="prospectStatus" [status]="prospect.status" />
+                <span class="score-pill">{{ 'prospects.scoreLabel' | translate: { score: prospect.qualificationLabel } }}</span>
+              </div>
+            </div>
+
+            <div class="card-meta">
+              <span class="meta-item">{{ prospect.locationLabel }}</span>
+              @if (prospect.industry) {
+                <span class="meta-item">{{ prospect.industry }}</span>
+              }
+              <span class="meta-item">{{ prospect.duplicateLabelKey | translate }}</span>
+              <span class="meta-item">{{ prospect.createdLabel }}</span>
+            </div>
+
+            <div class="card-contacts">
+              <span class="contact-pill" [class.missing]="!prospect.hasEmail">
+                {{ 'prospects.email' | translate }}: {{ prospect.emailLabel }}
+              </span>
+              <span class="contact-pill" [class.missing]="!prospect.hasWhatsApp">
+                {{ 'prospects.whatsApp' | translate }}: {{ prospect.whatsAppLabel }}
+              </span>
+              <span class="contact-pill muted">
+                {{ 'prospects.template' | translate }}: {{ prospect.templateLabel }}
+              </span>
+            </div>
+
+            <div class="card-actions">
+              <button type="button" class="btn btn-ghost btn-sm" (click)="openView(prospect.id)">
+                {{ 'prospects.view' | translate }}
+              </button>
+              <button
+                type="button"
+                class="btn btn-ghost btn-sm"
+                [disabled]="saving()"
+                (click)="approve(prospect.id)"
+              >
+                {{ 'prospects.approve' | translate }}
+              </button>
+              <button
+                type="button"
+                class="btn btn-ghost btn-sm"
+                [disabled]="saving()"
+                (click)="reject(prospect.id)"
+              >
+                {{ 'prospects.reject' | translate }}
+              </button>
+              <button
+                type="button"
+                class="btn btn-ghost btn-sm"
+                [disabled]="saving()"
+                (click)="doNotContact(prospect.id)"
+              >
+                {{ 'prospects.doNotContact' | translate }}
+              </button>
+              <button
+                type="button"
+                class="btn btn-primary btn-sm"
+                [disabled]="saving()"
+                (click)="openCampaignForOne(prospect.id)"
+              >
+                {{ 'prospects.createCampaign' | translate }}
+              </button>
+            </div>
+          </div>
+        </article>
+      }
+    </div>
+  }
+</div>
+
+@if (campaignOpen()) {
+  <div class="overlay" (click)="closeCampaign()">
+    <div class="dialog" role="dialog" (click)="$event.stopPropagation()">
+      <h2>{{ 'prospects.campaignTitle' | translate }}</h2>
+      <div class="field">
+        <label>{{ 'prospects.campaignChannel' | translate }}</label>
+        <select class="input" [value]="campaignChannel()" (change)="onCampaignChannelChange($any($event.target).value)">
+          <option value="email">{{ 'projects.channelEmail' | translate }}</option>
+          <option value="whatsApp">{{ 'projects.channelWhatsApp' | translate }}</option>
+        </select>
+      </div>
+      <label class="toggle-row">
+        <input
+          type="checkbox"
+          [checked]="useAiRecommendedTemplate()"
+          (change)="onUseAiTemplateChange($any($event.target).checked)"
+        />
+        <span>{{ 'prospects.useAiRecommendedTemplate' | translate }}</span>
+      </label>
+      <div class="dialog-actions">
+        <button type="button" class="btn btn-ghost" [disabled]="saving()" (click)="closeCampaign()">
+          {{ 'common.cancel' | translate }}
+        </button>
+        <button type="button" class="btn btn-primary" [disabled]="saving()" (click)="confirmCampaign()">
+          {{ 'prospects.createCampaign' | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+}
+
+@if (enrollOpen()) {
+  <div class="overlay" (click)="closeEnrollSequence()">
+    <div class="dialog" role="dialog" (click)="$event.stopPropagation()">
+      <h2>{{ 'prospects.enrollTitle' | translate }}</h2>
+      @if (enrollSequences().length === 0) {
+        <p class="dialog-hint">{{ 'prospects.noSequences' | translate }}</p>
+      } @else {
+        <div class="field">
+          <label>{{ 'prospects.selectSequence' | translate }}</label>
+          <select
+            class="input"
+            [value]="selectedSequenceId()"
+            (change)="onEnrollSequenceChange($any($event.target).value)"
+          >
+            <option value="">{{ 'prospects.selectSequencePlaceholder' | translate }}</option>
+            @for (sequence of enrollSequences(); track sequence.id) {
+              <option [value]="sequence.id">{{ sequence.name }}</option>
+            }
+          </select>
+        </div>
+      }
+      <div class="dialog-actions">
+        <button type="button" class="btn btn-ghost" [disabled]="saving()" (click)="closeEnrollSequence()">
+          {{ 'common.cancel' | translate }}
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          [disabled]="!canConfirmEnroll() || enrollSequences().length === 0"
+          (click)="confirmEnrollSequence()"
+        >
+          {{ 'prospects.enrollConfirm' | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+}

@@ -1,4 +1,4 @@
-<section class="signatures-manager card">
+<section class="signatures-manager">
   <div class="section-header">
     <div>
       <h3>{{ 'signatures.title' | translate }}</h3>
@@ -64,12 +64,12 @@
 </section>
 
 @if (showEditor()) {
-  <div class="editor-overlay">
-    <div class="editor-dialog card">
+  <div #editorPortal class="editor-overlay" (click)="closeEditor()">
+    <div class="editor-dialog" (click)="$event.stopPropagation()">
       <div class="dialog-header">
         <h3>{{ editorTitleKey() | translate }}</h3>
         <button type="button" class="btn btn-ghost" (click)="closeEditor()">
-          {{ 'common.cancel' | translate }}
+          {{ 'common.dismiss' | translate }}
         </button>
       </div>
 

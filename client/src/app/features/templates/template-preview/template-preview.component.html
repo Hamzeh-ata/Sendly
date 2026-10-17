@@ -1,0 +1,51 @@
+@if (visible()) {
+  <div class="preview-overlay" (click)="onClose()">
+    <div class="preview-shell" (click)="$event.stopPropagation()">
+      <div class="preview-toolbar">
+        <h3>{{ 'templates.previewTitle' | translate }}</h3>
+        <button type="button" class="btn btn-ghost" (click)="onClose()">
+          {{ 'common.dismiss' | translate }}
+        </button>
+      </div>
+
+      @if (loading()) {
+        <p class="preview-loading">{{ 'common.loading' | translate }}</p>
+      } @else if (preview()) {
+        <div class="mail-window">
+          <div class="mail-chrome">
+            <span class="chrome-dot"></span>
+            <span class="chrome-dot"></span>
+            <span class="chrome-dot"></span>
+            <span class="chrome-title">{{ preview()!.name }}</span>
+          </div>
+          <div class="mail-meta">
+            <div class="meta-row">
+              <span class="meta-label">{{ 'templates.previewSubject' | translate }}</span>
+              <span class="meta-value">{{ preview()!.subject }}</span>
+            </div>
+            @if (preview()!.signatureName) {
+              <div class="meta-row">
+                <span class="meta-label">{{ 'templates.previewSignature' | translate }}</span>
+                <span class="meta-value">{{ preview()!.signatureName }}</span>
+              </div>
+            }
+          </div>
+          <div class="mail-body" [innerHTML]="preview()!.htmlBody"></div>
+          @if (preview()!.attachments.length > 0) {
+            <div class="mail-attachments">
+              <h4>{{ 'templates.previewAttachments' | translate }}</h4>
+              <ul>
+                @for (file of preview()!.attachments; track file.id) {
+                  <li>
+                    <span class="file-name">{{ file.fileName }}</span>
+                    <span class="file-meta">{{ file.contentType }} · {{ file.sizeLabel }}</span>
+                  </li>
+                }
+              </ul>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  </div>
+}

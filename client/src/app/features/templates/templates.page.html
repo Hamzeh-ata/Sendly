@@ -1,0 +1,132 @@
+<div class="templates-page">
+  <div class="page-header">
+    <div>
+      <h2>{{ 'templates.title' | translate }}</h2>
+      <p class="page-desc">{{ 'templates.description' | translate }}</p>
+    </div>
+    <button type="button" class="btn btn-primary" (click)="openCreate()">
+      {{ 'templates.create' | translate }}
+    </button>
+  </div>
+
+  <div class="toolbar">
+    <input
+      type="search"
+      class="input search-input"
+      [value]="search()"
+      (input)="onSearchChange($any($event.target).value)"
+      [placeholder]="'templates.searchPlaceholder' | translate"
+    />
+    <select class="input status-filter" [value]="statusFilter()" (change)="onStatusChange($any($event.target).value)">
+      @for (option of statusOptions; track option.value) {
+        <option [value]="option.value">{{ option.labelKey | translate }}</option>
+      }
+    </select>
+  </div>
+
+  @if (loading()) {
+    <app-loading />
+  } @else if (templates().length === 0) {
+    <app-empty-state
+      [titleKey]="'templates.emptyTitle'"
+      [descriptionKey]="'templates.emptyDescription'"
+    />
+  } @else {
+    <div class="template-grid">
+      @for (template of templates(); track template.id) {
+        <article class="template-card">
+          <div class="card-top">
+            <div>
+              <h3>{{ template.name }}</h3>
+              <p class="subject">{{ template.subject }}</p>
+            </div>
+            <span class="status-pill" [class.inactive]="!template.isActive">
+              {{ template.statusLabelKey | translate }}
+            </span>
+          </div>
+
+          <div class="meta-grid">
+            <div>
+              <span class="meta-label">{{ 'templates.emailAccount' | translate }}</span>
+              <span class="meta-value">{{ template.emailAccountLabel }}</span>
+            </div>
+            <div>
+              <span class="meta-label">{{ 'templates.signature' | translate }}</span>
+              <span class="meta-value">{{ template.signatureLabel }}</span>
+            </div>
+            <div>
+              <span class="meta-label">{{ 'templates.attachments' | translate }}</span>
+              <span class="meta-value">{{ template.attachmentCount }}</span>
+            </div>
+            <div>
+              <span class="meta-label">{{ 'templates.updated' | translate }}</span>
+              <span class="meta-value">{{ template.updatedLabel }}</span>
+            </div>
+          </div>
+
+          <div class="stats-grid">
+            <div>
+              <span class="meta-label">{{ 'templates.statCampaigns' | translate }}</span>
+              <span class="meta-value">{{ template.totalCampaigns }}</span>
+            </div>
+            <div>
+              <span class="meta-label">{{ 'templates.statUnique' | translate }}</span>
+              <span class="meta-value">{{ template.uniqueRecipients }}</span>
+            </div>
+            <div>
+              <span class="meta-label">{{ 'templates.statSent' | translate }}</span>
+              <span class="meta-value">{{ template.successfullyContacted }}</span>
+            </div>
+            <div>
+              <span class="meta-label">{{ 'templates.statFailed' | translate }}</span>
+              <span class="meta-value">{{ template.failedRecipients }}</span>
+            </div>
+            <div class="span-2">
+              <span class="meta-label">{{ 'templates.statLastUsed' | translate }}</span>
+              <span class="meta-value">{{ template.lastUsedLabel }}</span>
+            </div>
+          </div>
+
+          <div class="card-actions">
+            <button type="button" class="btn btn-primary" (click)="useTemplate(template.id)">
+              {{ 'templates.use' | translate }}
+            </button>
+            <button type="button" class="btn btn-ghost" (click)="openPreview(template.id)">
+              {{ 'templates.preview' | translate }}
+            </button>
+            <button type="button" class="btn btn-ghost" (click)="openHistory(template.id)">
+              {{ 'templates.recipientHistory' | translate }}
+            </button>
+            <button type="button" class="btn btn-ghost" (click)="openEdit(template.id)">
+              {{ 'templates.edit' | translate }}
+            </button>
+            <button type="button" class="btn btn-ghost" [disabled]="saving()" (click)="duplicate(template.id)">
+              {{ 'templates.duplicate' | translate }}
+            </button>
+            <button type="button" class="btn btn-danger" (click)="openDelete(template.id)">
+              {{ 'templates.delete' | translate }}
+            </button>
+          </div>
+        </article>
+      }
+    </div>
+  }
+</div>
+
+<app-template-preview
+  [visible]="previewVisible()"
+  [preview]="preview()"
+  [loading]="previewLoading()"
+  (closed)="closePreview()"
+/>
+
+<app-confirm-dialog
+  [visible]="deleteId() !== null"
+  [titleKey]="'templates.deleteTitle'"
+  [messageKey]="'templates.deleteMessage'"
+  [confirmKey]="'templates.delete'"
+  [confirmVariant]="'danger'"
+  [loading]="saving()"
+  (confirmed)="confirmDelete()"
+  (cancelled)="closeDelete()"
+/>

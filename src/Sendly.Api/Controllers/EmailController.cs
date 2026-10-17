@@ -16,7 +16,7 @@ public class EmailController : ControllerBase
     }
 
     [HttpPost("test")]
-    public async Task<ActionResult<SmtpTestResultDto>> SendTest(
+    public async Task<ActionResult<EmailTestResultDto>> SendTest(
         [FromBody] TestEmailRequestDto request,
         CancellationToken cancellationToken)
     {

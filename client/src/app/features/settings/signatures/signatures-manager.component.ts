@@ -1,4 +1,15 @@
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  effect,
+  ElementRef,
+  inject,
+  OnDestroy,
+  OnInit,
+  signal,
+  untracked,
+  viewChild
+} from '@angular/core';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { EmailSignature } from '../../../core/models/signature.model';
@@ -21,10 +32,11 @@ import { SignatureEditorComponent } from './signature-editor.component';
   templateUrl: './signatures-manager.component.html',
   styleUrl: './signatures-manager.component.scss'
 })
-export class SignaturesManagerComponent implements OnInit {
+export class SignaturesManagerComponent implements OnInit, OnDestroy {
   private readonly signatureApi = inject(SignatureApiService);
   private readonly notification = inject(NotificationService);
   private readonly translate = inject(TranslateService);
+  private readonly editorPortal = viewChild<ElementRef<HTMLElement>>('editorPortal');
 
   readonly loading = signal(true);
   readonly saving = signal(false);
@@ -43,8 +55,20 @@ export class SignaturesManagerComponent implements OnInit {
     this.editingId() ? 'signatures.editTitle' : 'signatures.createTitle'
   );
 
+  constructor() {
+    effect(() => {
+      const open = this.showEditor();
+      const portal = this.editorPortal()?.nativeElement;
+      untracked(() => this.syncEditorPortal(open, portal));
+    });
+  }
+
   ngOnInit(): void {
     this.loadAll();
+  }
+
+  ngOnDestroy(): void {
+    this.removeEditorPortal();
   }
 
   onToggleEnabled(checked: boolean): void {
@@ -61,7 +85,7 @@ export class SignaturesManagerComponent implements OnInit {
   openCreate(): void {
     this.editingId.set(null);
     this.name.set('');
-    this.htmlContent.set('<p></p>');
+    this.htmlContent.set('<p><br></p>');
     this.isDefault.set(false);
     this.isActive.set(true);
     this.previewMode.set(false);
@@ -104,7 +128,7 @@ export class SignaturesManagerComponent implements OnInit {
 
   saveSignature(): void {
     const name = this.name().trim();
-    const htmlContent = this.htmlContent().trim();
+    const htmlContent = this.normalizeHtml(this.htmlContent());
     if (!name || !htmlContent) {
       this.notification.error(this.translate.instant('signatures.validationRequired'));
       return;
@@ -211,11 +235,44 @@ export class SignaturesManagerComponent implements OnInit {
     });
   }
 
+  private normalizeHtml(value: string): string {
+    const trimmed = value.trim();
+    if (!trimmed) {
+      return '';
+    }
+    const text = trimmed
+      .replace(/<br\s*\/?>/gi, '')
+      .replace(/&nbsp;/gi, ' ')
+      .replace(/<[^>]+>/g, '')
+      .trim();
+    return text.length === 0 ? '' : trimmed;
+  }
+
   private notifyError(err: HttpErrorResponse): void {
+    if (err.status === 0) {
+      this.notification.error(this.translate.instant('common.apiOffline'));
+      return;
+    }
     if (err.error?.message) {
       this.notification.error(err.error.message);
       return;
     }
     this.notification.error(this.translate.instant('common.errorGeneric'));
+  }
+
+  private syncEditorPortal(open: boolean, portal: HTMLElement | undefined): void {
+    if (!open || !portal) {
+      return;
+    }
+    if (portal.parentElement !== document.body) {
+      document.body.appendChild(portal);
+    }
+  }
+
+  private removeEditorPortal(): void {
+    const portal = this.editorPortal()?.nativeElement;
+    if (portal?.parentElement === document.body) {
+      portal.remove();
+    }
   }
 }

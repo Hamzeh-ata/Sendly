@@ -1,0 +1,328 @@
+<div class="research-run-detail-page">
+  <div class="breadcrumb">
+    <a routerLink="/research-runs">{{ 'researchRuns.backToList' | translate }}</a>
+  </div>
+
+  @if (loading() && !run()) {
+    <app-loading />
+  } @else if (run()) {
+    <div class="page-header">
+      <div>
+        <h2>{{ 'researchRuns.detailTitle' | translate }}</h2>
+        <p class="meta">
+          <span>{{ 'researchRuns.project' | translate }}:</span>
+          {{ run()!.projectName || '—' }}
+        </p>
+        <p class="meta">
+          <span>{{ 'researchRuns.channels' | translate }}:</span>
+          {{ channelsLabel() }}
+        </p>
+        <app-status-badge prefix="researchStatus" [status]="run()!.status" />
+        @if (isActive()) {
+          <p class="meta live-status">
+            @if (liveConnected()) {
+              {{ 'researchRuns.liveConnected' | translate }}
+            } @else {
+              {{ 'researchRuns.livePolling' | translate }}
+            }
+          </p>
+        }
+      </div>
+      <div class="header-actions">
+        <button type="button" class="btn btn-ghost" (click)="openProject()">
+          {{ 'researchRuns.viewProject' | translate }}
+        </button>
+        <button type="button" class="btn btn-ghost" (click)="openProspects()">
+          {{ 'researchRuns.viewProspects' | translate }}
+        </button>
+        @if (isActive()) {
+          <button
+            type="button"
+            class="btn btn-ghost"
+            [disabled]="actionLoading()"
+            (click)="openCancelConfirm()"
+          >
+            {{ 'researchRuns.cancel' | translate }}
+          </button>
+        }
+        <button
+          type="button"
+          class="btn btn-danger"
+          [disabled]="actionLoading()"
+          (click)="openDeleteConfirm()"
+        >
+          {{ 'researchRuns.delete' | translate }}
+        </button>
+      </div>
+    </div>
+
+    <div class="progress-bar-wrap">
+      <div class="progress-bar" [style.width.%]="progressPercent()"></div>
+    </div>
+    <p class="progress-label">{{ progressPercent() }}%</p>
+
+    @if (isActive()) {
+      <p class="progress-status">
+        @if (continueSearching()) {
+          {{ 'researchRuns.searchingMore' | translate }}
+        } @else {
+          {{ 'researchRuns.findingProspects' | translate }}
+        }
+      </p>
+    }
+
+    <div class="stats-grid">
+      <div class="stat-card highlight">
+        <span class="stat-label">{{ 'researchRuns.progress' | translate }}</span>
+        <span class="stat-value">{{ progressPercent() }}%</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">{{ 'researchRuns.requested' | translate }}</span>
+        <span class="stat-value">{{ run()!.requestedProspectCount }}</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">{{ 'researchRuns.searchQueries' | translate }}</span>
+        <span class="stat-value">{{ run()!.searchQueriesExecuted || 0 }}</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">{{ 'researchRuns.searchResults' | translate }}</span>
+        <span class="stat-value">{{ run()!.searchResultsReceived || 0 }}</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">{{ 'researchRuns.candidatesDiscovered' | translate }}</span>
+        <span class="stat-value">{{ run()!.candidatesDiscovered || 0 }}</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">{{ 'researchRuns.duplicatesRemoved' | translate }}</span>
+        <span class="stat-value">{{ duplicatesRemoved() }}</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">{{ 'researchRuns.candidatesValidated' | translate }}</span>
+        <span class="stat-value">{{ run()!.candidatesValidated || 0 }}</span>
+      </div>
+      <div class="stat-card success">
+        <span class="stat-label">{{ 'researchRuns.qualified' | translate }}</span>
+        <span class="stat-value">{{ run()!.qualifiedCount }}</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">{{ 'researchRuns.prospectsSaved' | translate }}</span>
+        <span class="stat-value">{{ run()!.prospectsSaved || 0 }}</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">{{ 'researchRuns.validEmails' | translate }}</span>
+        <span class="stat-value">{{ run()!.validEmails }}</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">{{ 'researchRuns.validWhatsApp' | translate }}</span>
+        <span class="stat-value">{{ run()!.validWhatsApp }}</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">{{ 'researchRuns.duplicates' | translate }}</span>
+        <span class="stat-value">{{ run()!.duplicatesFound }}</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">{{ 'researchRuns.skippedDuplicates' | translate }}</span>
+        <span class="stat-value">{{ run()!.prospectsSkippedAsDuplicates || 0 }}</span>
+      </div>
+      <div class="stat-card danger">
+        <span class="stat-label">{{ 'researchRuns.rejected' | translate }}</span>
+        <span class="stat-value">{{ run()!.rejectedCount }}</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">{{ 'researchRuns.minScore' | translate }}</span>
+        <span class="stat-value">{{ run()!.minQualificationScore }}</span>
+      </div>
+    </div>
+
+    <section class="card live-results-card">
+      <div class="live-results-header">
+        <h3>{{ 'researchRuns.liveResults' | translate }}</h3>
+        <span class="live-results-count">{{ liveProspects().length }}</span>
+      </div>
+      @if (!hasLiveProspects()) {
+        <p class="empty-live">
+          @if (isActive()) {
+            {{ 'researchRuns.liveResultsWaiting' | translate }}
+          } @else {
+            {{ 'researchRuns.liveResultsEmpty' | translate }}
+          }
+        </p>
+      } @else {
+        <div class="live-results-table-wrap">
+          <table class="live-results-table">
+            <thead>
+              <tr>
+                <th>{{ 'researchRuns.resultCompany' | translate }}</th>
+                <th>{{ 'researchRuns.resultLocation' | translate }}</th>
+                <th>{{ 'researchRuns.resultContact' | translate }}</th>
+                <th>{{ 'researchRuns.resultScore' | translate }}</th>
+                <th>{{ 'researchRuns.resultStatus' | translate }}</th>
+                <th>{{ 'researchRuns.resultSource' | translate }}</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (prospect of liveProspects(); track prospect.id) {
+                <tr>
+                  <td>
+                    <div class="company-cell">
+                      <strong>{{ prospect.companyName }}</strong>
+                      @if (prospect.website) {
+                        <span class="muted">{{ prospect.website }}</span>
+                      }
+                    </div>
+                  </td>
+                  <td>
+                    <div class="company-cell">
+                      <span>{{ prospect.city || '—' }}</span>
+                      @if (prospect.country) {
+                        <span class="muted">{{ prospect.country }}</span>
+                      }
+                    </div>
+                  </td>
+                  <td>
+                    {{ prospect.email || prospect.whatsApp || '—' }}
+                  </td>
+                  <td>
+                    {{ prospect.qualificationScore ?? '—' }}
+                  </td>
+                  <td>
+                    <app-status-badge prefix="prospectStatus" [status]="prospect.status" />
+                  </td>
+                  <td>
+                    @if (prospect.sourceUrl) {
+                      <a
+                        class="source-link"
+                        [href]="prospect.sourceUrl"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {{ 'researchRuns.openSource' | translate }}
+                      </a>
+                    } @else {
+                      —
+                    }
+                  </td>
+                  <td>
+                    <button
+                      type="button"
+                      class="btn btn-ghost btn-small"
+                      (click)="openProspect(prospect.id)"
+                    >
+                      {{ 'researchRuns.viewResult' | translate }}
+                    </button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </section>
+
+    @if (run()!.researchLimitsReached) {
+      <section class="card limits-card">
+        <h3>{{ 'researchRuns.limitsReached' | translate }}</h3>
+        <p class="warning-text">
+          {{ run()!.researchLimitsReachedReason || ('researchRuns.limitsReachedDefault' | translate) }}
+        </p>
+      </section>
+    }
+
+    @if (rejectionReasonEntries().length > 0) {
+      <section class="card">
+        <h3>{{ 'researchRuns.rejectionReasons' | translate }}</h3>
+        <div class="reason-list">
+          @for (entry of rejectionReasonEntries(); track entry.reason) {
+            <div class="reason-row">
+              <span>{{ entry.reason }}</span>
+              <strong>{{ entry.count }}</strong>
+            </div>
+          }
+        </div>
+      </section>
+    }
+
+    @if (providerDiagnostics(); as diagnostics) {
+      <section class="card">
+        <h3>{{ 'researchRuns.providerDiagnostics' | translate }}</h3>
+        <div class="meta-grid">
+          <div>
+            <span class="meta-label">{{ 'researchRuns.provider' | translate }}</span>
+            <span class="meta-value">{{ diagnostics.provider }}</span>
+          </div>
+          <div>
+            <span class="meta-label">{{ 'researchRuns.requestsSuccessful' | translate }}</span>
+            <span class="meta-value">{{ diagnostics.requestsSuccessful }}</span>
+          </div>
+          <div>
+            <span class="meta-label">{{ 'researchRuns.requestsFailed' | translate }}</span>
+            <span class="meta-value">{{ diagnostics.requestsFailed }}</span>
+          </div>
+          <div>
+            <span class="meta-label">{{ 'researchRuns.http401' | translate }}</span>
+            <span class="meta-value">{{ diagnostics.http401 }}</span>
+          </div>
+          <div>
+            <span class="meta-label">{{ 'researchRuns.http429' | translate }}</span>
+            <span class="meta-value">{{ diagnostics.http429 }}</span>
+          </div>
+          <div>
+            <span class="meta-label">{{ 'researchRuns.http5xx' | translate }}</span>
+            <span class="meta-value">{{ diagnostics.http5xx }}</span>
+          </div>
+          <div>
+            <span class="meta-label">{{ 'researchRuns.timeouts' | translate }}</span>
+            <span class="meta-value">{{ diagnostics.timeouts }}</span>
+          </div>
+        </div>
+      </section>
+    }
+
+    <section class="card">
+      <h3>{{ 'researchRuns.timing' | translate }}</h3>
+      <div class="meta-grid">
+        <div>
+          <span class="meta-label">{{ 'researchRuns.created' | translate }}</span>
+          <span class="meta-value">{{ createdLabel() }}</span>
+        </div>
+        <div>
+          <span class="meta-label">{{ 'researchRuns.started' | translate }}</span>
+          <span class="meta-value">{{ startedLabel() }}</span>
+        </div>
+        <div>
+          <span class="meta-label">{{ 'researchRuns.completed' | translate }}</span>
+          <span class="meta-value">{{ completedLabel() }}</span>
+        </div>
+      </div>
+      @if (run()!.error) {
+        <p class="error-text">{{ run()!.error }}</p>
+      }
+      @if (run()!.warning) {
+        <p class="warning-text">{{ run()!.warning }}</p>
+      }
+    </section>
+  }
+</div>
+
+<app-confirm-dialog
+  [visible]="showCancelConfirm()"
+  [titleKey]="'researchRuns.cancelTitle'"
+  [messageKey]="'researchRuns.cancelMessage'"
+  [confirmKey]="'researchRuns.cancel'"
+  [confirmVariant]="'danger'"
+  [loading]="actionLoading()"
+  (confirmed)="confirmCancel()"
+  (cancelled)="closeCancelConfirm()"
+/>
+
+<app-confirm-dialog
+  [visible]="showDeleteConfirm()"
+  [titleKey]="'researchRuns.deleteTitle'"
+  [messageKey]="'researchRuns.deleteMessage'"
+  [confirmKey]="'researchRuns.delete'"
+  [confirmVariant]="'danger'"
+  [loading]="actionLoading()"
+  (confirmed)="confirmDelete()"
+  (cancelled)="closeDeleteConfirm()"
+/>

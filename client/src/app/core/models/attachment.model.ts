@@ -14,4 +14,5 @@ export interface AttachmentUploadResult {
 
 export interface AttachmentItem extends AttachmentUploadResult {
   file?: File;
+  canDelete?: boolean;
 }

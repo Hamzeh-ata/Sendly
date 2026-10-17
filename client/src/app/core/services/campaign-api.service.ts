@@ -51,6 +51,10 @@ export class CampaignApiService {
     );
   }
 
+  startCampaign(id: string): Observable<void> {
+    return this.http.post<void>(`${this.api.baseUrl}/campaigns/${id}/start`, null);
+  }
+
   cancelCampaign(id: string): Observable<void> {
     return this.http.post<void>(`${this.api.baseUrl}/campaigns/${id}/cancel`, null);
   }

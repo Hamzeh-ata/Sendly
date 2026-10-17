@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { CampaignSummary } from '../../core/models/campaign.model';
 import { CampaignHistoryRow } from '../../core/models/history-row.model';
 import { CampaignApiService } from '../../core/services/campaign-api.service';
@@ -18,6 +18,7 @@ import { StatusBadgeComponent } from '../../shared/components/status-badge/statu
 export class HistoryPage implements OnInit {
   private readonly campaignApi = inject(CampaignApiService);
   private readonly router = inject(Router);
+  private readonly translate = inject(TranslateService);
 
   readonly campaigns = signal<CampaignHistoryRow[]>([]);
   readonly loading = signal(true);
@@ -61,7 +62,8 @@ export class HistoryPage implements OnInit {
         ...item,
         id: String(item.id),
         status: item.status,
-        createdLabel: formatDate(item.createdAtUtc ?? null)
+        createdLabel: formatDate(item.createdAtUtc ?? null),
+        templateLabel: item.templateName || this.translate.instant('history.noTemplate')
       });
     }
     return rows;

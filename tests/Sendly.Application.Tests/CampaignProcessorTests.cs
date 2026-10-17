@@ -8,7 +8,6 @@ using Sendly.Infrastructure.Persistence;
 using Sendly.Infrastructure.Security;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging.Abstractions;
-using Microsoft.Extensions.Options;
 using Moq;
 
 namespace Sendly.Application.Tests;
@@ -20,20 +19,11 @@ public class CampaignProcessorTests
     {
         await using var db = CreateDb();
         var sentTo = new List<string>();
-        var emailSender = new Mock<IEmailSender>();
-        emailSender
-            .Setup(x => x.SendAsync(It.IsAny<EmailSendRequest>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync((EmailSendRequest request, CancellationToken _) =>
-            {
-                sentTo.Add(request.ToEmail);
-                Assert.DoesNotContain(";", request.ToEmail);
-                Assert.DoesNotContain(",", request.ToEmail);
-                return new EmailSendResult { Success = true, Message = "ok" };
-            });
+        var providerSender = CreateProviderSender(sentTo, success: true);
 
-        var smtp = await SeedSmtpAsync(db);
-        var campaign = await SeedCampaignAsync(db, ["one@example.com", "two@example.com"]);
-        var processor = CreateProcessor(db, emailSender.Object, smtp);
+        var account = await SeedEmailAccountAsync(db);
+        var campaign = await SeedCampaignAsync(db, ["one@example.com", "two@example.com"], account);
+        var processor = CreateProcessor(db, providerSender.Object);
 
         await processor.ProcessAsync(campaign.Id, CancellationToken.None);
 
@@ -52,9 +42,13 @@ public class CampaignProcessorTests
     {
         await using var db = CreateDb();
         var attempts = 0;
-        var emailSender = new Mock<IEmailSender>();
-        emailSender
-            .Setup(x => x.SendAsync(It.IsAny<EmailSendRequest>(), It.IsAny<CancellationToken>()))
+        var providerSender = new Mock<IProviderEmailSender>();
+        providerSender.SetupGet(x => x.Provider).Returns(EmailProvider.Smtp);
+        providerSender
+            .Setup(x => x.SendAsync(
+                It.IsAny<EmailAccountCredentials>(),
+                It.IsAny<EmailDeliveryRequest>(),
+                It.IsAny<CancellationToken>()))
             .ReturnsAsync(() =>
             {
                 attempts++;
@@ -66,12 +60,12 @@ public class CampaignProcessorTests
                 };
             });
 
-        var smtp = await SeedSmtpAsync(db);
-        var campaign = await SeedCampaignAsync(db, ["fail@example.com"]);
+        var account = await SeedEmailAccountAsync(db);
+        var campaign = await SeedCampaignAsync(db, ["fail@example.com"], account);
         campaign.MaxRetryCount = 3;
         await db.SaveChangesAsync();
 
-        var processor = CreateProcessor(db, emailSender.Object, smtp);
+        var processor = CreateProcessor(db, providerSender.Object);
         await processor.ProcessAsync(campaign.Id, CancellationToken.None);
 
         Assert.Equal(1, attempts);
@@ -88,15 +82,20 @@ public class CampaignProcessorTests
         return new SendlyDbContext(options);
     }
 
-    private static async Task<SmtpSettings> SeedSmtpAsync(SendlyDbContext db)
+    private static async Task<EmailAccount> SeedEmailAccountAsync(SendlyDbContext db)
     {
         var protector = new AesSecretProtector(Microsoft.Extensions.Options.Options.Create(new SecretProtectionOptions
         {
             EncryptionKey = Convert.ToBase64String(new byte[32])
         }));
 
-        var settings = new SmtpSettings
+        var account = new EmailAccount
         {
+            Provider = EmailProvider.Smtp,
+            DisplayName = "Default",
+            EmailAddress = "sender@example.com",
+            IsDefault = true,
+            IsActive = true,
             Host = "smtp.example.com",
             Port = 587,
             SecurityMode = SmtpSecurityMode.StartTls,
@@ -106,12 +105,15 @@ public class CampaignProcessorTests
             SenderDisplayName = "Sender"
         };
 
-        db.SmtpSettings.Add(settings);
+        db.EmailAccounts.Add(account);
         await db.SaveChangesAsync();
-        return settings;
+        return account;
     }
 
-    private static async Task<Campaign> SeedCampaignAsync(SendlyDbContext db, string[] emails)
+    private static async Task<Campaign> SeedCampaignAsync(
+        SendlyDbContext db,
+        string[] emails,
+        EmailAccount account)
     {
         var campaign = new Campaign
         {
@@ -123,7 +125,11 @@ public class CampaignProcessorTests
             PendingCount = emails.Length,
             DelayMilliseconds = 0,
             BatchSize = 10,
-            MaxRetryCount = 2
+            MaxRetryCount = 2,
+            EmailAccountId = account.Id,
+            Provider = account.Provider,
+            SendingAccountName = account.DisplayName,
+            SendingAccountEmail = account.EmailAddress
         };
 
         foreach (var email in emails)
@@ -136,7 +142,26 @@ public class CampaignProcessorTests
         return campaign;
     }
 
-    private static CampaignProcessor CreateProcessor(SendlyDbContext db, IEmailSender emailSender, SmtpSettings smtp)
+    private static Mock<IProviderEmailSender> CreateProviderSender(List<string> sentTo, bool success)
+    {
+        var providerSender = new Mock<IProviderEmailSender>();
+        providerSender.SetupGet(x => x.Provider).Returns(EmailProvider.Smtp);
+        providerSender
+            .Setup(x => x.SendAsync(
+                It.IsAny<EmailAccountCredentials>(),
+                It.IsAny<EmailDeliveryRequest>(),
+                It.IsAny<CancellationToken>()))
+            .ReturnsAsync((EmailAccountCredentials _, EmailDeliveryRequest request, CancellationToken _) =>
+            {
+                sentTo.Add(request.ToEmail);
+                Assert.DoesNotContain(";", request.ToEmail);
+                Assert.DoesNotContain(",", request.ToEmail);
+                return new EmailSendResult { Success = success, Message = "ok" };
+            });
+        return providerSender;
+    }
+
+    private static CampaignProcessor CreateProcessor(SendlyDbContext db, IProviderEmailSender providerSender)
     {
         var attachmentStore = new Mock<IAttachmentStore>();
         attachmentStore
@@ -153,15 +178,19 @@ public class CampaignProcessorTests
             EncryptionKey = Convert.ToBase64String(new byte[32])
         }));
 
-        var tester = new Mock<ISmtpConnectionTester>();
-        var smtpService = new SmtpSettingsService(db, protector, tester.Object);
+        var microsoftToken = new Mock<IMicrosoftTokenService>();
+        var delivery = new EmailDeliveryService(
+            db,
+            protector,
+            microsoftToken.Object,
+            [providerSender]);
 
         return new CampaignProcessor(
             db,
-            emailSender,
+            delivery,
             attachmentStore.Object,
             notifier.Object,
-            smtpService,
+            new TemplateRecipientProtectionService(db),
             new CampaignCancellationRegistry(),
             NullLogger<CampaignProcessor>.Instance);
     }

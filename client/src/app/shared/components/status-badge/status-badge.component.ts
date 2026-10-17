@@ -13,13 +13,32 @@ export class StatusBadgeComponent {
 
   readonly statusClass = computed(() => {
     const value = this.status();
-    if (value === 'completed' || value === 'sent') {
+    if (
+      value === 'completed' ||
+      value === 'sent' ||
+      value === 'qualified' ||
+      value === 'readyForOutreach' ||
+      value === 'contacted'
+    ) {
       return 'success';
     }
-    if (value === 'failed' || value === 'completedWithFailures') {
+    if (
+      value === 'failed' ||
+      value === 'completedWithFailures' ||
+      value === 'rejected' ||
+      value === 'doNotContact'
+    ) {
       return 'danger';
     }
-    if (value === 'running' || value === 'sending' || value === 'queued') {
+    if (
+      value === 'running' ||
+      value === 'sending' ||
+      value === 'queued' ||
+      value === 'pending' ||
+      value === 'waiting' ||
+      value === 'researching' ||
+      value === 'discovered'
+    ) {
       return 'info';
     }
     if (value === 'cancelled') {

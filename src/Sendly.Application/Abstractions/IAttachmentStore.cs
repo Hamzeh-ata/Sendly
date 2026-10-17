@@ -17,6 +17,8 @@ public interface IAttachmentStore
 
     Task AssignToCampaignAsync(IEnumerable<Guid> attachmentIds, Guid campaignId, CancellationToken cancellationToken);
 
+    Task AssignToTemplateAsync(IEnumerable<Guid> attachmentIds, Guid templateId, CancellationToken cancellationToken);
+
     Task DeleteAsync(Guid attachmentId, CancellationToken cancellationToken);
 
     Task CleanupOrphansAsync(CancellationToken cancellationToken);

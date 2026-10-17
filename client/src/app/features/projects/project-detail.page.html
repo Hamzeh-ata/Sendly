@@ -1,0 +1,204 @@
+<div class="project-detail-page">
+  <div class="breadcrumb">
+    <a routerLink="/projects">{{ 'projects.backToList' | translate }}</a>
+  </div>
+
+  @if (loading()) {
+    <app-loading />
+  } @else if (project()) {
+    <div class="page-header">
+      <div>
+        <h2>{{ project()!.name }}</h2>
+        <p class="meta">{{ project()!.description || ('projects.noDescription' | translate) }}</p>
+        <p class="meta">
+          <span>{{ 'projects.researchInstructionsLabel' | translate }}:</span>
+          {{ researchInstructionsLabel() }}
+        </p>
+        <p class="meta">
+          <span>{{ 'projects.active' | translate }}:</span>
+          {{ statusLabelKey() | translate }}
+        </p>
+        <p class="meta">
+          <span>{{ 'projects.contactMethods' | translate }}:</span>
+          {{ contactMethodsLabel() }}
+        </p>
+        <p class="meta">
+          <span>{{ 'projects.duplicateHandling' | translate }}:</span>
+          {{ duplicateHandlingLabel() }}
+        </p>
+      </div>
+      <div class="header-actions">
+        <button type="button" class="btn btn-ghost" (click)="openEdit()">
+          {{ 'projects.edit' | translate }}
+        </button>
+        <button type="button" class="btn btn-primary" (click)="openResearch()">
+          {{ 'projects.runResearch' | translate }}
+        </button>
+        <button type="button" class="btn btn-ghost" (click)="openProspects()">
+          {{ 'projects.viewProspects' | translate }}
+        </button>
+        <button type="button" class="btn btn-ghost" (click)="openSequences()">
+          {{ 'projects.viewSequences' | translate }}
+        </button>
+        <button type="button" class="btn btn-danger" (click)="openDelete()">
+          {{ 'projects.delete' | translate }}
+        </button>
+      </div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <span class="stat-label">{{ 'projects.prospectCount' | translate }}</span>
+        <span class="stat-value">{{ project()!.prospectCount }}</span>
+      </div>
+      <div class="stat-card success">
+        <span class="stat-label">{{ 'projects.qualified' | translate }}</span>
+        <span class="stat-value">{{ project()!.qualifiedCount }}</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">{{ 'projects.needsReview' | translate }}</span>
+        <span class="stat-value">{{ project()!.needsReviewCount }}</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">{{ 'projects.readyForOutreach' | translate }}</span>
+        <span class="stat-value">{{ project()!.readyForOutreachCount }}</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">{{ 'projects.validEmails' | translate }}</span>
+        <span class="stat-value">{{ project()!.validEmailCount }}</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">{{ 'projects.validWhatsApp' | translate }}</span>
+        <span class="stat-value">{{ project()!.validWhatsAppCount }}</span>
+      </div>
+    </div>
+
+    <div class="info-grid">
+      <section class="card">
+        <h3>{{ 'projects.keywords' | translate }}</h3>
+        <p>{{ keywordsLabel() }}</p>
+      </section>
+      <section class="card">
+        <h3>{{ 'projects.countries' | translate }}</h3>
+        <p>{{ countriesLabel() }}</p>
+      </section>
+      <section class="card">
+        <h3>{{ 'projects.targetRoles' | translate }}</h3>
+        <p>{{ rolesLabel() }}</p>
+      </section>
+      <section class="card">
+        <h3>{{ 'projects.industries' | translate }}</h3>
+        <p>{{ industriesLabel() }}</p>
+      </section>
+    </div>
+
+    <section class="card">
+      <h3>{{ 'projects.linkedTemplates' | translate }}</h3>
+      @if (templateNames().length === 0) {
+        <p class="empty-hint">{{ 'projects.noTemplates' | translate }}</p>
+      } @else {
+        <ul class="chip-list">
+          @for (name of templateNames(); track name) {
+            <li>{{ name }}</li>
+          }
+        </ul>
+      }
+    </section>
+
+    <section class="card">
+      <h3>{{ 'projects.recentResearch' | translate }}</h3>
+      @if (researchRuns().length === 0) {
+        <p class="empty-hint">{{ 'projects.noResearchRuns' | translate }}</p>
+      } @else {
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>{{ 'researchRuns.status' | translate }}</th>
+                <th>{{ 'researchRuns.progress' | translate }}</th>
+                <th>{{ 'researchRuns.requested' | translate }}</th>
+                <th>{{ 'researchRuns.qualified' | translate }}</th>
+                <th>{{ 'researchRuns.created' | translate }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (run of researchRuns(); track run.id) {
+                <tr class="clickable" (click)="openResearchRun(run.id)">
+                  <td><app-status-badge prefix="researchStatus" [status]="run.status" /></td>
+                  <td>{{ run.progressPercent }}%</td>
+                  <td>{{ run.requestedProspectCount }}</td>
+                  <td>{{ run.qualifiedCount }}</td>
+                  <td>{{ run.createdLabel }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </section>
+  }
+</div>
+
+@if (researchOpen()) {
+  <div class="overlay" (click)="closeResearch()">
+    <div class="dialog" role="dialog" (click)="$event.stopPropagation()">
+      <h2>{{ 'projects.researchTitle' | translate }}</h2>
+      <div class="field">
+        <label>{{ 'projects.requestedProspectCount' | translate }}</label>
+        <input
+          type="number"
+          class="input"
+          min="1"
+          [value]="researchRequestedCount()"
+          (input)="onResearchCountChange($any($event.target).value)"
+        />
+      </div>
+      <label class="toggle-row">
+        <input
+          type="checkbox"
+          [checked]="researchIncludeEmail()"
+          (change)="onResearchEmailChange($any($event.target).checked)"
+        />
+        <span>{{ 'projects.includeEmail' | translate }}</span>
+      </label>
+      <label class="toggle-row">
+        <input
+          type="checkbox"
+          [checked]="researchIncludeWhatsApp()"
+          (change)="onResearchWhatsAppChange($any($event.target).checked)"
+        />
+        <span>{{ 'projects.includeWhatsApp' | translate }}</span>
+      </label>
+      <div class="field">
+        <label>{{ 'projects.minQualificationScore' | translate }}</label>
+        <input
+          type="number"
+          class="input"
+          min="0"
+          max="100"
+          [value]="researchMinScore()"
+          (input)="onResearchMinScoreChange($any($event.target).value)"
+        />
+      </div>
+      <div class="dialog-actions">
+        <button type="button" class="btn btn-ghost" [disabled]="saving()" (click)="closeResearch()">
+          {{ 'common.cancel' | translate }}
+        </button>
+        <button type="button" class="btn btn-primary" [disabled]="saving()" (click)="confirmResearch()">
+          {{ 'projects.startResearch' | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+}
+
+<app-confirm-dialog
+  [visible]="deleteOpen()"
+  [titleKey]="'projects.deleteTitle'"
+  [messageKey]="'projects.deleteMessage'"
+  [confirmKey]="'projects.delete'"
+  [confirmVariant]="'danger'"
+  [loading]="saving()"
+  (confirmed)="confirmDelete()"
+  (cancelled)="closeDelete()"
+/>

@@ -9,11 +9,15 @@
   flex-wrap: wrap;
   gap: 0.4rem;
   align-items: center;
+  padding: 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-secondary);
 }
 
 .tool-btn {
   border: 1px solid var(--border);
-  background: var(--bg-elevated);
+  background: var(--bg-card);
   color: var(--text-secondary);
   border-radius: 0.5rem;
   padding: 0.35rem 0.65rem;
@@ -29,15 +33,16 @@
 
 .spacer {
   flex: 1;
+  min-width: 0.5rem;
 }
 
 .contenteditable,
 .preview {
-  min-height: 160px;
+  min-height: 180px;
   padding: 0.9rem 1rem;
   border-radius: var(--radius-md);
   border: 1px solid var(--border);
-  background: var(--bg-elevated);
+  background: var(--bg-secondary);
   color: var(--text-primary);
   line-height: 1.6;
 }

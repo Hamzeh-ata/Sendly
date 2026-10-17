@@ -8,8 +8,23 @@
       <a routerLink="/compose" routerLinkActive="active" (click)="closeSidebar()">
         {{ 'nav.compose' | translate }}
       </a>
+      <a routerLink="/projects" routerLinkActive="active" (click)="closeSidebar()">
+        {{ 'nav.projects' | translate }}
+      </a>
+      <a routerLink="/research-runs" routerLinkActive="active" (click)="closeSidebar()">
+        {{ 'nav.researchRuns' | translate }}
+      </a>
+      <a routerLink="/prospects" routerLinkActive="active" (click)="closeSidebar()">
+        {{ 'nav.prospects' | translate }}
+      </a>
+      <a routerLink="/sequences" routerLinkActive="active" (click)="closeSidebar()">
+        {{ 'nav.sequences' | translate }}
+      </a>
+      <a routerLink="/templates" routerLinkActive="active" (click)="closeSidebar()">
+        {{ 'nav.templates' | translate }}
+      </a>
       <a routerLink="/history" routerLinkActive="active" (click)="closeSidebar()">
-        {{ 'nav.history' | translate }}
+        {{ 'nav.campaigns' | translate }}
       </a>
       <a routerLink="/settings" routerLinkActive="active" (click)="closeSidebar()">
         {{ 'nav.settings' | translate }}
@@ -26,15 +41,15 @@
       <button type="button" class="menu-btn mobile-only" (click)="toggleSidebar()" [attr.aria-label]="'shell.openMenu' | translate">☰</button>
       <h1 class="page-title">{{ 'app.title' | translate }}</h1>
       <div class="connection-status">
-        @if (smtpLoading()) {
+        @if (accountsLoading()) {
           <span class="status-dot loading"></span>
           <span>{{ 'shell.checkingConnection' | translate }}</span>
-        } @else if (smtpConfigured()) {
+        } @else if (accountsConfigured()) {
           <span class="status-dot connected"></span>
-          <span>{{ 'shell.smtpConfigured' | translate }}</span>
+          <span>{{ 'shell.accountsConfigured' | translate }}</span>
         } @else {
           <span class="status-dot disconnected"></span>
-          <span>{{ 'shell.smtpNotConfigured' | translate }}</span>
+          <span>{{ 'shell.accountsNotConfigured' | translate }}</span>
         }
       </div>
     </header>

@@ -8,7 +8,7 @@ namespace Sendly.Infrastructure.Email;
 
 public class MailKitSmtpConnectionTester : ISmtpConnectionTester
 {
-    public async Task<SmtpTestResultDto> TestAsync(SmtpConnectionTestRequest request, CancellationToken cancellationToken)
+    public async Task<EmailTestResultDto> TestAsync(SmtpConnectionTestRequest request, CancellationToken cancellationToken)
     {
         try
         {
@@ -25,7 +25,7 @@ public class MailKitSmtpConnectionTester : ISmtpConnectionTester
 
             await client.DisconnectAsync(true, cancellationToken);
 
-            return new SmtpTestResultDto
+            return new EmailTestResultDto
             {
                 Success = true,
                 Message = "SMTP connection and authentication succeeded."
@@ -33,7 +33,7 @@ public class MailKitSmtpConnectionTester : ISmtpConnectionTester
         }
         catch (Exception ex)
         {
-            return new SmtpTestResultDto
+            return new EmailTestResultDto
             {
                 Success = false,
                 Message = Sanitize(ex.Message)

@@ -46,10 +46,42 @@ export class HistoryDetailPage implements OnInit, OnDestroy {
   readonly campaignId = signal('');
 
   readonly progressPercent = computed(() => this.campaign()?.progressPercent ?? 0);
+  readonly templateLabel = computed(
+    () => this.campaign()?.templateName || this.translate.instant('history.noTemplate')
+  );
+  readonly providerLabel = computed(() => {
+    const provider = this.campaign()?.provider;
+    if (provider === 'microsoftGraph') {
+      return this.translate.instant('provider.microsoftGraph');
+    }
+    if (provider === 'smtp') {
+      return this.translate.instant('provider.smtp');
+    }
+    return this.translate.instant('history.noProvider');
+  });
+  readonly sendingAccountLabel = computed(() => {
+    const campaign = this.campaign();
+    if (!campaign) {
+      return this.translate.instant('history.noSendingAccount');
+    }
+    const name = campaign.sendingAccountName?.trim() ?? '';
+    const email = campaign.sendingAccountEmail?.trim() ?? '';
+    if (name && email) {
+      return `${name} (${email})`;
+    }
+    if (email) {
+      return email;
+    }
+    if (name) {
+      return name;
+    }
+    return this.translate.instant('history.noSendingAccount');
+  });
   readonly isActive = computed(() => {
     const status = this.campaign()?.status;
     return status === 'queued' || status === 'running';
   });
+  readonly canStart = computed(() => this.campaign()?.status === 'draft');
   readonly canRetry = computed(() => (this.campaign()?.failedCount ?? 0) > 0);
   readonly filterButtons = [
     { value: 'all' as RecipientFilter, labelKey: 'filter.all' },
@@ -106,6 +138,22 @@ export class HistoryDetailPage implements OnInit, OnDestroy {
         this.actionLoading.set(false);
         this.showCancelConfirm.set(false);
         this.notification.success(this.translate.instant('detail.cancelSuccess'));
+        this.loadCampaign(this.campaignId());
+        this.loadRecipients(this.campaignId());
+      },
+      error: (err: HttpErrorResponse) => {
+        this.actionLoading.set(false);
+        this.notification.error(this.extractError(err));
+      }
+    });
+  }
+
+  startCampaign(): void {
+    this.actionLoading.set(true);
+    this.campaignApi.startCampaign(this.campaignId()).subscribe({
+      next: () => {
+        this.actionLoading.set(false);
+        this.notification.success(this.translate.instant('detail.startSuccess'));
         this.loadCampaign(this.campaignId());
         this.loadRecipients(this.campaignId());
       },

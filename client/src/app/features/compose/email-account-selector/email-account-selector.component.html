@@ -1,0 +1,27 @@
+<div class="email-account-selector">
+  <div class="header-row">
+    <label class="field-label">{{ labelKey() | translate }}</label>
+    <a class="edit-link" routerLink="/settings">{{ 'compose.editEmailAccounts' | translate }}</a>
+  </div>
+
+  @if (!hasAccounts()) {
+    <p class="disabled-hint">{{ 'compose.accountRequired' | translate }}</p>
+  } @else {
+    <select
+      class="input"
+      [value]="selectedId() ?? ''"
+      (change)="onSelect($any($event.target).value)"
+    >
+      @if (allowNone()) {
+        <option value="">{{ noneLabelKey() | translate }}</option>
+      }
+      @for (account of optionList(); track account.id) {
+        <option [value]="account.id">{{ account.label }}</option>
+      }
+    </select>
+
+    @if (selectedSummary()) {
+      <p class="include-hint">{{ selectedSummary() }}</p>
+    }
+  }
+</div>

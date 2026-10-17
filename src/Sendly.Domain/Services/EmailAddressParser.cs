@@ -38,6 +38,11 @@ public static class EmailAddressParser
         return EmailRegex.IsMatch(email.Trim());
     }
 
+    public static string Normalize(string email)
+    {
+        return email.Trim().ToLowerInvariant();
+    }
+
     private static IEnumerable<string> SplitTokens(string rawInput)
     {
         var normalized = rawInput
@@ -70,7 +75,7 @@ public static class EmailAddressParser
             return;
         }
 
-        if (seen.Add(email))
+        if (seen.Add(Normalize(email)))
         {
             valid.Add(email);
         }

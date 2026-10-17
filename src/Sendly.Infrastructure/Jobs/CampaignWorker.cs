@@ -1,5 +1,6 @@
 using Sendly.Application.Abstractions;
 using Sendly.Application.Services;
+using Sendly.Domain.Entities;
 using Sendly.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -43,6 +44,7 @@ public class CampaignWorker : BackgroundService
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Campaign worker failed for {CampaignId}", campaignId);
+                await MarkCampaignFailedAsync(campaignId, ex.Message, stoppingToken);
             }
         }
     }
@@ -60,5 +62,91 @@ public class CampaignWorker : BackgroundService
         {
             await _queue.EnqueueAsync(campaignId, stoppingToken);
         }
+    }
+
+    private async Task MarkCampaignFailedAsync(
+        Guid campaignId,
+        string? error,
+        CancellationToken cancellationToken)
+    {
+        try
+        {
+            using var scope = _scopeFactory.CreateScope();
+            var db = scope.ServiceProvider.GetRequiredService<ISendlyDbContext>();
+            var campaign = await db.Campaigns
+                .Include(x => x.Recipients)
+                .FirstOrDefaultAsync(x => x.Id == campaignId, cancellationToken);
+            if (campaign is null)
+            {
+                return;
+            }
+
+            if (campaign.Status is CampaignStatus.Completed
+                or CampaignStatus.CompletedWithFailures
+                or CampaignStatus.Cancelled
+                or CampaignStatus.Failed)
+            {
+                return;
+            }
+
+            var reason = string.IsNullOrWhiteSpace(error)
+                ? "Campaign worker failed."
+                : SanitizeWorkerError(error);
+            campaign.Status = CampaignStatus.Failed;
+            campaign.CompletedAtUtc = DateTimeOffset.UtcNow;
+            campaign.CurrentRecipientEmail = null;
+            foreach (var recipient in campaign.Recipients)
+            {
+                if (recipient.Status is RecipientDeliveryStatus.Pending or RecipientDeliveryStatus.Sending)
+                {
+                    recipient.Status = RecipientDeliveryStatus.Failed;
+                    recipient.FailureReason = reason;
+                }
+            }
+
+            Recount(campaign);
+            await db.SaveChangesAsync(cancellationToken);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to mark campaign {CampaignId} as failed", campaignId);
+        }
+    }
+
+    private static void Recount(Campaign campaign)
+    {
+        var success = 0;
+        var failed = 0;
+        var cancelled = 0;
+        var pending = 0;
+        foreach (var recipient in campaign.Recipients)
+        {
+            switch (recipient.Status)
+            {
+                case RecipientDeliveryStatus.Sent:
+                    success++;
+                    break;
+                case RecipientDeliveryStatus.Failed:
+                    failed++;
+                    break;
+                case RecipientDeliveryStatus.Cancelled:
+                    cancelled++;
+                    break;
+                default:
+                    pending++;
+                    break;
+            }
+        }
+
+        campaign.SuccessCount = success;
+        campaign.FailedCount = failed;
+        campaign.CancelledCount = cancelled;
+        campaign.PendingCount = pending;
+    }
+
+    private static string SanitizeWorkerError(string message)
+    {
+        var sanitized = message.Replace("password", "****", StringComparison.OrdinalIgnoreCase);
+        return sanitized.Length > 500 ? sanitized[..500] : sanitized;
     }
 }

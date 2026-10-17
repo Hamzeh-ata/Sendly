@@ -11,6 +11,18 @@
     </div>
   </div>
 
+  @if (templateName()) {
+    <section class="card template-banner">
+      <div>
+        <span class="banner-label">{{ 'compose.templateLabel' | translate }}</span>
+        <strong>{{ templateName() }}</strong>
+      </div>
+      <button type="button" class="btn btn-ghost" (click)="clearTemplate()">
+        {{ 'compose.clearTemplate' | translate }}
+      </button>
+    </section>
+  }
+
   <div class="compose-grid">
     <section class="card">
       <app-compose-recipients
@@ -23,6 +35,78 @@
         (recipientsChange)="onRecipientsChange($event)"
         (removeValid)="onRemoveValidEmail($event)"
       />
+
+      @if (templateId() && validCount() > 0) {
+        <div class="template-recipient-panel">
+          <div class="template-recipient-summary">
+            <div>
+              <span class="summary-label">{{ 'compose.recipientTotal' | translate }}</span>
+              <strong>{{ validCount() }}</strong>
+            </div>
+            <div>
+              <span class="summary-label">{{ 'compose.recipientNewCount' | translate }}</span>
+              <strong class="new">{{ templateNewCount() }}</strong>
+            </div>
+            <div>
+              <span class="summary-label">{{ 'compose.recipientContactedCount' | translate }}</span>
+              <strong class="contacted">{{ templateContactedCount() }}</strong>
+            </div>
+          </div>
+
+          @if (checkingTemplateRecipients()) {
+            <p class="checking-note">{{ 'compose.checkingTemplateRecipients' | translate }}</p>
+          }
+
+          @if (hasTemplateDuplicates()) {
+            <div class="duplicate-warning">
+              <p>{{ 'compose.duplicateWarning' | translate: duplicateWarningParams() }}</p>
+              @if (!allowAlreadyContacted()) {
+                <p class="recommended">{{ 'compose.duplicateRecommended' | translate }}</p>
+              } @else {
+                <p class="keep-note">{{ 'compose.duplicatesKept' | translate }}</p>
+              }
+              <div class="duplicate-actions">
+                <button type="button" class="btn btn-primary" (click)="useRecommendedDuplicateHandling()">
+                  {{ 'compose.removeAlreadyContacted' | translate }}
+                </button>
+                <button type="button" class="btn btn-ghost" (click)="keepDuplicates()">
+                  {{ 'compose.keepDuplicates' | translate }}
+                </button>
+                <button type="button" class="btn btn-ghost" (click)="toggleContactedOnly()">
+                  {{ (showContactedOnly() ? 'compose.viewAllRecipients' : 'compose.viewAlreadyContacted') | translate }}
+                </button>
+              </div>
+            </div>
+          }
+
+          @if (visibleTemplateRecipientRows().length > 0) {
+            <div class="recipient-status-table-wrap">
+              <table class="recipient-status-table">
+                <thead>
+                  <tr>
+                    <th>{{ 'compose.recipientColumn' | translate }}</th>
+                    <th>{{ 'compose.statusColumn' | translate }}</th>
+                    <th>{{ 'compose.previousSendColumn' | translate }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (row of visibleTemplateRecipientRows(); track row.email) {
+                    <tr [class.contacted]="row.alreadyContacted">
+                      <td>{{ row.email }}</td>
+                      <td>
+                        <span class="status-chip" [class.contacted]="row.alreadyContacted">
+                          {{ row.statusLabelKey | translate }}
+                        </span>
+                      </td>
+                      <td>{{ row.previousSendLabel }}</td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          }
+        </div>
+      }
     </section>
 
     <section class="card">
@@ -49,6 +133,14 @@
           <div class="signature-block" [innerHTML]="selectedSignatureHtml()"></div>
         </div>
       }
+    </section>
+
+    <section class="card">
+      <app-email-account-selector
+        [accounts]="emailAccounts()"
+        [selectedId]="selectedEmailAccountId()"
+        (selectionChange)="onEmailAccountChange($event)"
+      />
     </section>
 
     <section class="card">

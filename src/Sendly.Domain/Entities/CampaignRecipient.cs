@@ -16,6 +16,16 @@ public class CampaignRecipient
     [MaxLength(320)]
     public string Email { get; set; } = string.Empty;
 
+    public Guid? ProspectId { get; set; }
+
+    [MaxLength(200)]
+    public string? DisplayName { get; set; }
+
+    [MaxLength(300)]
+    public string? CompanyName { get; set; }
+
+    public string? PersonalizationJson { get; set; }
+
     public RecipientDeliveryStatus Status { get; set; } = RecipientDeliveryStatus.Pending;
 
     public int AttemptCount { get; set; }

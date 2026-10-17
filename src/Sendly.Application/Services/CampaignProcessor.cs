@@ -2,6 +2,7 @@ using Sendly.Application.Abstractions;
 using Sendly.Application.DTOs;
 using Sendly.Domain.Entities;
 using Sendly.Domain.Enums;
+using Sendly.Domain.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -10,27 +11,27 @@ namespace Sendly.Application.Services;
 public class CampaignProcessor
 {
     private readonly ISendlyDbContext _db;
-    private readonly IEmailSender _emailSender;
+    private readonly IEmailDeliveryService _emailDelivery;
     private readonly IAttachmentStore _attachmentStore;
     private readonly ICampaignProgressNotifier _progressNotifier;
-    private readonly SmtpSettingsService _smtpSettingsService;
+    private readonly TemplateRecipientProtectionService _templateRecipientProtection;
     private readonly CampaignCancellationRegistry _cancellationRegistry;
     private readonly ILogger<CampaignProcessor> _logger;
 
     public CampaignProcessor(
         ISendlyDbContext db,
-        IEmailSender emailSender,
+        IEmailDeliveryService emailDelivery,
         IAttachmentStore attachmentStore,
         ICampaignProgressNotifier progressNotifier,
-        SmtpSettingsService smtpSettingsService,
+        TemplateRecipientProtectionService templateRecipientProtection,
         CampaignCancellationRegistry cancellationRegistry,
         ILogger<CampaignProcessor> logger)
     {
         _db = db;
-        _emailSender = emailSender;
+        _emailDelivery = emailDelivery;
         _attachmentStore = attachmentStore;
         _progressNotifier = progressNotifier;
-        _smtpSettingsService = smtpSettingsService;
+        _templateRecipientProtection = templateRecipientProtection;
         _cancellationRegistry = cancellationRegistry;
         _logger = logger;
     }
@@ -46,13 +47,13 @@ public class CampaignProcessor
             return;
         }
 
-        var credentials = await _smtpSettingsService.GetResolvedCredentialsAsync(linked.Token);
-        if (credentials is null)
+        if (!campaign.EmailAccountId.HasValue)
         {
-            await FailCampaignAsync(campaign, "SMTP configuration is incomplete.", linked.Token);
+            await FailCampaignAsync(campaign, "Sending account is missing for this campaign.", linked.Token);
             return;
         }
 
+        var accountId = campaign.EmailAccountId.Value;
         var attachments = await LoadAttachmentsAsync(campaign, linked.Token);
         campaign.Status = CampaignStatus.Running;
         campaign.StartedAtUtc ??= DateTimeOffset.UtcNow;
@@ -68,7 +69,7 @@ public class CampaignProcessor
                 break;
             }
 
-            await ProcessRecipientAsync(campaign, recipient, credentials, attachments, linked.Token);
+            await ProcessRecipientAsync(campaign, recipient, accountId, attachments, linked.Token);
             processedInBatch++;
 
             if (processedInBatch >= campaign.BatchSize)
@@ -93,10 +94,31 @@ public class CampaignProcessor
     private async Task ProcessRecipientAsync(
         Campaign campaign,
         CampaignRecipient recipient,
-        ResolvedSmtpCredentials credentials,
+        Guid accountId,
         IReadOnlyList<EmailAttachmentContent> attachments,
         CancellationToken cancellationToken)
     {
+        if (campaign.TemplateId is not null)
+        {
+            var claimed = await _templateRecipientProtection.TryClaimAsync(
+                campaign.TemplateId.Value,
+                campaign.Id,
+                recipient.Email,
+                campaign.AllowAlreadyContacted,
+                cancellationToken);
+
+            if (!claimed)
+            {
+                recipient.Status = RecipientDeliveryStatus.Cancelled;
+                recipient.FailureReason = "Already contacted for this template.";
+                campaign.CurrentRecipientEmail = recipient.Email;
+                RecalculateCounts(campaign);
+                await _db.SaveChangesAsync(cancellationToken);
+                await NotifyAsync(campaign, recipient, cancellationToken);
+                return;
+            }
+        }
+
         recipient.Status = RecipientDeliveryStatus.Sending;
         campaign.CurrentRecipientEmail = recipient.Email;
         await _db.SaveChangesAsync(cancellationToken);
@@ -111,6 +133,7 @@ public class CampaignProcessor
             {
                 recipient.Status = RecipientDeliveryStatus.Cancelled;
                 recipient.FailureReason = "Cancelled before send completed.";
+                await ReleaseTemplateClaimAsync(campaign, recipient);
                 RecalculateCounts(campaign);
                 await _db.SaveChangesAsync(CancellationToken.None);
                 await NotifyAsync(campaign, recipient, CancellationToken.None);
@@ -120,20 +143,26 @@ public class CampaignProcessor
             recipient.AttemptCount++;
             recipient.LastAttemptAtUtc = DateTimeOffset.UtcNow;
 
-            lastResult = await _emailSender.SendAsync(new EmailSendRequest
+            var mergeValues = TemplateMergeRenderer.BuildValues(
+                recipient.Email,
+                recipient.DisplayName,
+                recipient.CompanyName,
+                null,
+                null,
+                null,
+                null,
+                PersonalizationSerializer.Deserialize(recipient.PersonalizationJson));
+            var subject = TemplateMergeRenderer.Render(campaign.Subject, mergeValues);
+            var htmlBody = TemplateMergeRenderer.Render(campaign.HtmlBody, mergeValues);
+            var plainTextBody = TemplateMergeRenderer.Render(campaign.PlainTextBody, mergeValues);
+
+            lastResult = await _emailDelivery.SendAsync(new EmailDeliveryRequest
             {
+                AccountId = accountId,
                 ToEmail = recipient.Email,
-                Subject = campaign.Subject,
-                HtmlBody = campaign.HtmlBody,
-                PlainTextBody = campaign.PlainTextBody,
-                Host = credentials.Host,
-                Port = credentials.Port,
-                SecurityMode = credentials.SecurityMode,
-                Username = credentials.Username,
-                Password = credentials.Password,
-                SenderEmail = credentials.SenderEmail,
-                SenderDisplayName = credentials.SenderDisplayName,
-                ReplyToEmail = credentials.ReplyToEmail,
+                Subject = subject,
+                HtmlBody = htmlBody,
+                PlainTextBody = plainTextBody,
                 Attachments = attachments
             }, cancellationToken);
 
@@ -142,6 +171,7 @@ public class CampaignProcessor
                 recipient.Status = RecipientDeliveryStatus.Sent;
                 recipient.FailureReason = null;
                 recipient.IsTransientFailure = false;
+                await MarkTemplateSentAsync(campaign, recipient, cancellationToken);
                 RecalculateCounts(campaign);
                 await _db.SaveChangesAsync(cancellationToken);
                 await NotifyAsync(campaign, recipient, cancellationToken);
@@ -157,10 +187,67 @@ public class CampaignProcessor
         recipient.Status = RecipientDeliveryStatus.Failed;
         recipient.FailureReason = SanitizeError(lastResult?.Message);
         recipient.IsTransientFailure = lastResult?.IsTransientFailure ?? false;
+        await MarkTemplateFailedAsync(campaign, recipient, recipient.FailureReason, cancellationToken);
         RecalculateCounts(campaign);
         await _db.SaveChangesAsync(cancellationToken);
         await NotifyAsync(campaign, recipient, cancellationToken);
         _logger.LogWarning("Failed to send campaign {CampaignId} to recipient {RecipientId}", campaign.Id, recipient.Id);
+    }
+
+    private async Task MarkTemplateSentAsync(
+        Campaign campaign,
+        CampaignRecipient recipient,
+        CancellationToken cancellationToken)
+    {
+        if (campaign.TemplateId is null)
+        {
+            return;
+        }
+
+        await _templateRecipientProtection.MarkSentAsync(
+            new MarkTemplateRecipientSentRequest
+            {
+                TemplateId = campaign.TemplateId.Value,
+                CampaignId = campaign.Id,
+                RecipientEmail = recipient.Email,
+                Provider = campaign.Provider,
+                SendingAccountId = campaign.EmailAccountId,
+                SendingAccountEmail = campaign.SendingAccountEmail
+            },
+            cancellationToken);
+    }
+
+    private async Task MarkTemplateFailedAsync(
+        Campaign campaign,
+        CampaignRecipient recipient,
+        string? failureReason,
+        CancellationToken cancellationToken)
+    {
+        if (campaign.TemplateId is null)
+        {
+            return;
+        }
+
+        await _templateRecipientProtection.MarkFailedAsync(
+            campaign.TemplateId.Value,
+            campaign.Id,
+            recipient.Email,
+            failureReason,
+            cancellationToken);
+    }
+
+    private async Task ReleaseTemplateClaimAsync(Campaign campaign, CampaignRecipient recipient)
+    {
+        if (campaign.TemplateId is null)
+        {
+            return;
+        }
+
+        await _templateRecipientProtection.ReleaseClaimAsync(
+            campaign.TemplateId.Value,
+            campaign.Id,
+            recipient.Email,
+            CancellationToken.None);
     }
 
     private async Task CancelRemainingAsync(Campaign campaign, CancellationToken cancellationToken)
@@ -349,7 +436,7 @@ public class CampaignProcessor
     {
         if (string.IsNullOrWhiteSpace(message))
         {
-            return "SMTP send failed.";
+            return "Email send failed.";
         }
 
         var sanitized = message.Replace("password", "****", StringComparison.OrdinalIgnoreCase);

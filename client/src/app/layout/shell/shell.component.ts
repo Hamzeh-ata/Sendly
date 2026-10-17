@@ -1,7 +1,7 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
-import { SmtpApiService } from '../../core/services/smtp-api.service';
+import { EmailAccountApiService } from '../../core/services/email-account-api.service';
 import { NotificationHostComponent } from '../../shared/components/notification-host/notification-host.component';
 
 @Component({
@@ -11,14 +11,14 @@ import { NotificationHostComponent } from '../../shared/components/notification-
   styleUrl: './shell.component.scss'
 })
 export class ShellComponent implements OnInit {
-  private readonly smtpApi = inject(SmtpApiService);
+  private readonly emailAccountApi = inject(EmailAccountApiService);
 
   readonly sidebarOpen = signal(false);
-  readonly smtpConfigured = signal(false);
-  readonly smtpLoading = signal(true);
+  readonly accountsConfigured = signal(false);
+  readonly accountsLoading = signal(true);
 
   ngOnInit(): void {
-    this.loadSmtpStatus();
+    this.loadAccountStatus();
   }
 
   toggleSidebar(): void {
@@ -29,16 +29,16 @@ export class ShellComponent implements OnInit {
     this.sidebarOpen.set(false);
   }
 
-  private loadSmtpStatus(): void {
-    this.smtpLoading.set(true);
-    this.smtpApi.getSettings().subscribe({
-      next: (settings) => {
-        this.smtpConfigured.set(settings.isConfigured && settings.hasPassword);
-        this.smtpLoading.set(false);
+  private loadAccountStatus(): void {
+    this.accountsLoading.set(true);
+    this.emailAccountApi.getStatus().subscribe({
+      next: (status) => {
+        this.accountsConfigured.set(status.isConfigured);
+        this.accountsLoading.set(false);
       },
       error: () => {
-        this.smtpConfigured.set(false);
-        this.smtpLoading.set(false);
+        this.accountsConfigured.set(false);
+        this.accountsLoading.set(false);
       }
     });
   }

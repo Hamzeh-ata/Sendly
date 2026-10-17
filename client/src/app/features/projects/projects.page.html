@@ -1,0 +1,178 @@
+<div class="projects-page">
+  <div class="page-header">
+    <div>
+      <h2>{{ 'projects.title' | translate }}</h2>
+      <p class="page-desc">{{ 'projects.description' | translate }}</p>
+    </div>
+    <button type="button" class="btn btn-primary" (click)="openCreate()">
+      {{ 'projects.create' | translate }}
+    </button>
+  </div>
+
+  @if (tabs().length > 1) {
+    <div class="template-tabs" role="tablist">
+      @for (tab of tabs(); track tab.id ?? 'all') {
+        <button
+          type="button"
+          class="template-tab"
+          role="tab"
+          [class.active]="activeTemplateId() === tab.id"
+          (click)="selectTab(tab.id)"
+        >
+          @if (tab.labelKey) {
+            {{ tab.labelKey | translate }}
+          } @else {
+            {{ tab.label }}
+          }
+        </button>
+      }
+    </div>
+  }
+
+  <div class="toolbar">
+    <input
+      type="search"
+      class="input search-input"
+      [value]="search()"
+      (input)="onSearchChange($any($event.target).value)"
+      [placeholder]="'projects.searchPlaceholder' | translate"
+    />
+  </div>
+
+  @if (loading()) {
+    <app-loading />
+  } @else if (projects().length === 0) {
+    <app-empty-state
+      [titleKey]="'projects.emptyTitle'"
+      [descriptionKey]="'projects.emptyDescription'"
+    />
+  } @else {
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>{{ 'projects.name' | translate }}</th>
+            <th>{{ 'projects.descriptionColumn' | translate }}</th>
+            <th>{{ 'projects.countries' | translate }}</th>
+            <th>{{ 'projects.keywords' | translate }}</th>
+            <th>{{ 'projects.contactMethods' | translate }}</th>
+            <th>{{ 'projects.prospectCount' | translate }}</th>
+            <th>{{ 'projects.qualified' | translate }}</th>
+            <th>{{ 'projects.active' | translate }}</th>
+            <th>{{ 'projects.lastResearch' | translate }}</th>
+            <th>{{ 'projects.actions' | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (project of projects(); track project.id) {
+            <tr>
+              <td class="name">{{ project.name }}</td>
+              <td>{{ project.descriptionLabel }}</td>
+              <td>{{ project.countriesLabel }}</td>
+              <td>{{ project.keywordsLabel }}</td>
+              <td>{{ project.contactMethodsLabel }}</td>
+              <td>{{ project.prospectCount }}</td>
+              <td>{{ project.qualifiedCount }}</td>
+              <td>{{ project.statusLabelKey | translate }}</td>
+              <td>{{ project.lastResearchLabel }}</td>
+              <td class="actions-cell">
+                <button type="button" class="btn btn-ghost btn-sm" (click)="openView(project.id)">
+                  {{ 'projects.view' | translate }}
+                </button>
+                <button type="button" class="btn btn-ghost btn-sm" (click)="openEdit(project.id)">
+                  {{ 'projects.edit' | translate }}
+                </button>
+                <button type="button" class="btn btn-ghost btn-sm" (click)="openResearch(project.id)">
+                  {{ 'projects.runResearch' | translate }}
+                </button>
+                @if (project.isActive) {
+                  <button type="button" class="btn btn-ghost btn-sm" (click)="openDeactivate(project.id)">
+                    {{ 'projects.deactivate' | translate }}
+                  </button>
+                }
+                <button type="button" class="btn btn-danger btn-sm" (click)="openDelete(project.id)">
+                  {{ 'projects.delete' | translate }}
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>
+
+@if (researchProjectId()) {
+  <div class="overlay" (click)="closeResearch()">
+    <div class="dialog" role="dialog" (click)="$event.stopPropagation()">
+      <h2>{{ 'projects.researchTitle' | translate }}</h2>
+      <div class="field">
+        <label>{{ 'projects.requestedProspectCount' | translate }}</label>
+        <input
+          type="number"
+          class="input"
+          min="1"
+          [value]="researchRequestedCount()"
+          (input)="onResearchCountChange($any($event.target).value)"
+        />
+      </div>
+      <label class="toggle-row">
+        <input
+          type="checkbox"
+          [checked]="researchIncludeEmail()"
+          (change)="onResearchEmailChange($any($event.target).checked)"
+        />
+        <span>{{ 'projects.includeEmail' | translate }}</span>
+      </label>
+      <label class="toggle-row">
+        <input
+          type="checkbox"
+          [checked]="researchIncludeWhatsApp()"
+          (change)="onResearchWhatsAppChange($any($event.target).checked)"
+        />
+        <span>{{ 'projects.includeWhatsApp' | translate }}</span>
+      </label>
+      <div class="field">
+        <label>{{ 'projects.minQualificationScore' | translate }}</label>
+        <input
+          type="number"
+          class="input"
+          min="0"
+          max="100"
+          [value]="researchMinScore()"
+          (input)="onResearchMinScoreChange($any($event.target).value)"
+        />
+      </div>
+      <div class="dialog-actions">
+        <button type="button" class="btn btn-ghost" [disabled]="saving()" (click)="closeResearch()">
+          {{ 'common.cancel' | translate }}
+        </button>
+        <button type="button" class="btn btn-primary" [disabled]="saving()" (click)="confirmResearch()">
+          {{ 'projects.startResearch' | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+}
+
+<app-confirm-dialog
+  [visible]="deactivateId() !== null"
+  [titleKey]="'projects.deactivateTitle'"
+  [messageKey]="'projects.deactivateMessage'"
+  [confirmKey]="'projects.deactivate'"
+  [confirmVariant]="'danger'"
+  [loading]="saving()"
+  (confirmed)="confirmDeactivate()"
+  (cancelled)="closeDeactivate()"
+/>
+
+<app-confirm-dialog
+  [visible]="deleteId() !== null"
+  [titleKey]="'projects.deleteTitle'"
+  [messageKey]="'projects.deleteMessage'"
+  [confirmKey]="'projects.delete'"
+  [confirmVariant]="'danger'"
+  [loading]="saving()"
+  (confirmed)="confirmDelete()"
+  (cancelled)="closeDelete()"
+/>

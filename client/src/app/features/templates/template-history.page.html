@@ -1,0 +1,76 @@
+<div class="template-history-page">
+  <div class="breadcrumb">
+    <a routerLink="/templates">{{ 'templates.backToTemplates' | translate }}</a>
+  </div>
+
+  @if (template()) {
+    <div class="page-header">
+      <div>
+        <h2>{{ template()!.name }}</h2>
+        <p class="page-desc">{{ 'templates.historyTitle' | translate }}</p>
+      </div>
+      <input
+        type="search"
+        class="input search-input"
+        [value]="search()"
+        (input)="onSearchChange($any($event.target).value)"
+        [placeholder]="'templates.historySearchPlaceholder' | translate"
+      />
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <span class="stat-label">{{ 'templates.statUnique' | translate }}</span>
+        <span class="stat-value">{{ template()!.uniqueRecipients }}</span>
+      </div>
+      <div class="stat-card success">
+        <span class="stat-label">{{ 'templates.statSent' | translate }}</span>
+        <span class="stat-value">{{ template()!.successfullyContacted }}</span>
+      </div>
+      <div class="stat-card danger">
+        <span class="stat-label">{{ 'templates.statFailed' | translate }}</span>
+        <span class="stat-value">{{ template()!.failedRecipients }}</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">{{ 'templates.statCampaigns' | translate }}</span>
+        <span class="stat-value">{{ template()!.totalCampaigns }}</span>
+      </div>
+    </div>
+  }
+
+  @if (loading()) {
+    <app-loading />
+  } @else if (rows().length === 0) {
+    <app-empty-state
+      [titleKey]="'templates.historyEmptyTitle'"
+      [descriptionKey]="'templates.historyEmptyDescription'"
+    />
+  } @else {
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>{{ 'templates.historyEmail' | translate }}</th>
+            <th>{{ 'templates.historyStatus' | translate }}</th>
+            <th>{{ 'templates.historyLastSent' | translate }}</th>
+            <th>{{ 'templates.historyCampaign' | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of rows(); track row.id) {
+            <tr>
+              <td>{{ row.email }}</td>
+              <td>
+                <span class="status-chip" [class.failed]="row.status === 'failed'" [class.sent]="row.status === 'sent'">
+                  {{ row.statusLabelKey | translate }}
+                </span>
+              </td>
+              <td>{{ row.sentLabel }}</td>
+              <td>{{ row.campaignLabel }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

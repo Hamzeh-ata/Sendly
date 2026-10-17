@@ -1,0 +1,165 @@
+<div class="template-editor-page">
+  <div class="page-header">
+    <h2>{{ pageTitleKey() | translate }}</h2>
+    <div class="header-actions">
+      <button type="button" class="btn btn-ghost" (click)="cancel()">
+        {{ 'common.cancel' | translate }}
+      </button>
+      <button type="button" class="btn btn-primary" [disabled]="!canSave()" (click)="save()">
+        {{ 'templates.save' | translate }}
+      </button>
+    </div>
+  </div>
+
+  @if (loading()) {
+    <app-loading />
+  } @else {
+    <div class="editor-grid">
+      <section class="card">
+        <h3>{{ 'templates.infoSection' | translate }}</h3>
+        <div class="field">
+          <label>{{ 'templates.name' | translate }}</label>
+          <input
+            type="text"
+            class="input"
+            [value]="name()"
+            (input)="onNameChange($any($event.target).value)"
+            [placeholder]="'templates.namePlaceholder' | translate"
+          />
+        </div>
+        <div class="field">
+          <label>{{ 'templates.descriptionLabel' | translate }}</label>
+          <textarea
+            class="textarea"
+            rows="3"
+            [value]="description()"
+            (input)="onDescriptionChange($any($event.target).value)"
+            [placeholder]="'templates.descriptionPlaceholder' | translate"
+          ></textarea>
+        </div>
+        <label class="toggle-row">
+          <input type="checkbox" [checked]="isActive()" (change)="onActiveChange($any($event.target).checked)" />
+          <span>{{ 'templates.markActive' | translate }}</span>
+        </label>
+        <div class="field">
+          <label>{{ 'templates.whatsAppTemplateName' | translate }}</label>
+          <input
+            type="text"
+            class="input"
+            [value]="whatsAppTemplateName()"
+            (input)="onWhatsAppTemplateNameChange($any($event.target).value)"
+          />
+        </div>
+        <div class="field">
+          <label>{{ 'templates.whatsAppTemplateLanguage' | translate }}</label>
+          <input
+            type="text"
+            class="input"
+            [value]="whatsAppTemplateLanguage()"
+            (input)="onWhatsAppTemplateLanguageChange($any($event.target).value)"
+          />
+        </div>
+        <div class="field">
+          <label>{{ 'templates.whatsAppHeaderParameter' | translate }}</label>
+          <input
+            type="text"
+            class="input"
+            [value]="whatsAppHeaderParameter()"
+            (input)="onWhatsAppHeaderParameterChange($any($event.target).value)"
+            [placeholder]="'templates.whatsAppHeaderPlaceholder' | translate"
+          />
+        </div>
+        <div class="field">
+          <label>{{ 'templates.whatsAppButtonSubType' | translate }}</label>
+          <input
+            type="text"
+            class="input"
+            [value]="whatsAppButtonSubType()"
+            (input)="onWhatsAppButtonSubTypeChange($any($event.target).value)"
+            [placeholder]="'templates.whatsAppButtonSubTypePlaceholder' | translate"
+          />
+        </div>
+        <div class="field">
+          <label>{{ 'templates.whatsAppButtonIndex' | translate }}</label>
+          <input
+            type="number"
+            class="input"
+            min="0"
+            [value]="whatsAppButtonIndex()"
+            (input)="onWhatsAppButtonIndexChange($any($event.target).value)"
+          />
+        </div>
+        <div class="field">
+          <label>{{ 'templates.whatsAppButtonParameter' | translate }}</label>
+          <input
+            type="text"
+            class="input"
+            [value]="whatsAppButtonParameter()"
+            (input)="onWhatsAppButtonParameterChange($any($event.target).value)"
+            [placeholder]="'templates.whatsAppButtonParameterPlaceholder' | translate"
+          />
+        </div>
+        <p class="field-hint">{{ 'templates.whatsAppTemplateHint' | translate }}</p>
+      </section>
+
+      <section class="card">
+        <label class="field-label">{{ 'templates.subject' | translate }}</label>
+        <input
+          type="text"
+          class="input"
+          [value]="subject()"
+          (input)="onSubjectChange($any($event.target).value)"
+          [placeholder]="'templates.subjectPlaceholder' | translate"
+        />
+        <p class="field-hint">{{ 'templates.mergeTagsHint' | translate }}</p>
+      </section>
+
+      <section class="card editor-card">
+        <app-compose-editor
+          [htmlBody]="htmlBody()"
+          [previewMode]="previewMode()"
+          (bodyChange)="onBodyChange($event)"
+          (previewToggle)="onPreviewToggle()"
+        />
+        <p class="field-hint">{{ 'templates.mergeTagsHint' | translate }}</p>
+        @if (selectedSignatureHtml()) {
+          <div class="signature-separator">
+            <span>{{ 'compose.signatureBlockLabel' | translate }}</span>
+            <div class="signature-block" [innerHTML]="selectedSignatureHtml()"></div>
+          </div>
+        }
+      </section>
+
+      <section class="card">
+        <app-email-account-selector
+          [accounts]="emailAccounts()"
+          [selectedId]="selectedEmailAccountId()"
+          [labelKey]="'templates.emailAccount'"
+          [allowNone]="true"
+          [noneLabelKey]="'templates.noEmailAccount'"
+          [requireConnected]="false"
+          (selectionChange)="onEmailAccountChange($event)"
+        />
+      </section>
+
+      <section class="card">
+        <app-signature-selector
+          [signatures]="signatures()"
+          [selectedId]="selectedSignatureId()"
+          [signaturesEnabled]="signaturesEnabled()"
+          (selectionChange)="onSignatureChange($event)"
+        />
+      </section>
+
+      <section class="card">
+        <app-compose-attachments
+          [attachments]="attachments()"
+          [totalSizeLabel]="totalAttachmentSizeLabel()"
+          [uploading]="uploading()"
+          (fileSelected)="onFileSelected($event)"
+          (remove)="onRemoveAttachment($event)"
+        />
+      </section>
+    </div>
+  }
+</div>

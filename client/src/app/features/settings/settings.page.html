@@ -1,100 +1,277 @@
 <div class="settings-page">
-  <h2>{{ 'settings.title' | translate }}</h2>
-  <h3 class="smtp-heading">{{ 'settings.smtpTitle' | translate }}</h3>
-
-  @if (loading()) {
-    <app-loading />
-  } @else {
-    @if (isInsecure()) {
-      <div class="warning-banner">
-        {{ 'settings.insecureWarning' | translate }}
-      </div>
+  <div class="page-header">
+    <div>
+      <h2>{{ 'appSettings.pageTitle' | translate }}</h2>
+      <p class="page-desc">{{ 'appSettings.pageDescription' | translate }}</p>
+    </div>
+    @if (showAccountsHeader()) {
+      <button type="button" class="btn btn-primary" [disabled]="connecting()" (click)="openAdd()">
+        {{ 'settings.create' | translate }}
+      </button>
     }
+  </div>
 
-    <form class="settings-form" (submit)="$event.preventDefault()">
-      <section class="card">
-        <h3>{{ 'settings.serverSection' | translate }}</h3>
-        <div class="field-grid">
-          <div class="field">
-            <label>{{ 'settings.host' | translate }}</label>
-            <input type="text" class="input" [value]="host()" (input)="onHostChange($any($event.target).value)" />
-          </div>
-          <div class="field">
-            <label>{{ 'settings.port' | translate }}</label>
-            <input type="number" class="input" [value]="port()" (input)="onPortChange($any($event.target).value)" />
-          </div>
-          <div class="field">
-            <label>{{ 'settings.securityMode' | translate }}</label>
-            <select class="input" [value]="securityMode()" (change)="onSecurityModeChange($any($event.target).value)">
-              @for (mode of securityModeOptions; track mode.value) {
-                <option [value]="mode.value">{{ mode.labelKey | translate }}</option>
+  <div class="settings-tabs" role="tablist">
+    @for (tab of tabs; track tab.id) {
+      <button
+        type="button"
+        class="settings-tab"
+        role="tab"
+        [class.active]="activeTab() === tab.id"
+        (click)="selectTab(tab.id)"
+      >
+        {{ tab.labelKey | translate }}
+      </button>
+    }
+  </div>
+
+  @if (activeTab() === 'accounts') {
+    @if (loading()) {
+      <app-loading />
+    } @else if (accounts().length === 0) {
+      <app-empty-state
+        [titleKey]="'settings.emptyTitle'"
+        [descriptionKey]="'settings.emptyDescription'"
+      />
+    } @else {
+      <div class="profile-list">
+        @for (account of accounts(); track account.id) {
+          <article class="profile-item">
+            <div class="profile-meta">
+              <div class="name-row">
+                <h3>{{ account.displayName }}</h3>
+                @if (account.provider === 'smtp') {
+                  <span class="badge provider">{{ 'provider.smtp' | translate }}</span>
+                } @else {
+                  <span class="badge provider">{{ 'provider.microsoftGraph' | translate }}</span>
+                }
+                @if (account.isDefault) {
+                  <span class="badge default">{{ 'settings.defaultBadge' | translate }}</span>
+                }
+                @if (account.isConnected) {
+                  <span class="badge connected">{{ 'settings.connectedBadge' | translate }}</span>
+                }
+                @if (account.isInsecure) {
+                  <span class="badge warning">{{ 'settings.insecureBadge' | translate }}</span>
+                }
+              </div>
+              <p class="profile-detail">{{ account.emailAddress }}</p>
+              @if (account.provider === 'smtp' && account.host) {
+                <p class="profile-detail muted">{{ account.host }}:{{ account.port }}</p>
               }
-            </select>
-          </div>
-        </div>
-      </section>
-
-      <section class="card">
-        <h3>{{ 'settings.authSection' | translate }}</h3>
-        <div class="field-grid">
-          <div class="field">
-            <label>{{ 'settings.username' | translate }}</label>
-            <input type="text" class="input" [value]="username()" (input)="onUsernameChange($any($event.target).value)" />
-          </div>
-          <div class="field">
-            <label>{{ 'settings.password' | translate }}</label>
-            <div class="password-field">
-              <input
-                [type]="showPassword() ? 'text' : 'password'"
-                class="input"
-                [value]="password()"
-                (input)="onPasswordChange($any($event.target).value)"
-                [placeholder]="passwordPlaceholder()"
-              />
-              <button type="button" class="btn btn-ghost toggle-btn" (click)="togglePassword()">
-                {{ (showPassword() ? 'settings.hidePassword' : 'settings.showPassword') | translate }}
+            </div>
+            <div class="profile-actions">
+              <button
+                type="button"
+                class="btn btn-ghost"
+                [disabled]="testingId() === account.id"
+                (click)="testAccount(account.id)"
+              >
+                {{ 'settings.testConnection' | translate }}
+              </button>
+              @if (account.provider === 'smtp') {
+                <button type="button" class="btn btn-ghost" (click)="openEdit(account)">
+                  {{ 'settings.edit' | translate }}
+                </button>
+              }
+              @if (account.provider === 'microsoftGraph') {
+                <button
+                  type="button"
+                  class="btn btn-ghost"
+                  [disabled]="saving()"
+                  (click)="disconnect(account.id)"
+                >
+                  {{ 'settings.disconnect' | translate }}
+                </button>
+              }
+              @if (!account.isDefault) {
+                <button type="button" class="btn btn-ghost" (click)="setDefault(account.id)">
+                  {{ 'settings.setDefault' | translate }}
+                </button>
+              }
+              <button type="button" class="btn btn-danger" (click)="openDeleteConfirm(account.id)">
+                {{ 'settings.delete' | translate }}
               </button>
             </div>
-          </div>
-        </div>
-      </section>
+          </article>
+        }
+      </div>
+    }
+  }
 
-      <section class="card">
-        <h3>{{ 'settings.senderSection' | translate }}</h3>
-        <div class="field-grid">
-          <div class="field">
-            <label>{{ 'settings.senderEmail' | translate }}</label>
-            <input type="email" class="input" [value]="senderEmail()" (input)="onSenderEmailChange($any($event.target).value)" />
-          </div>
-          <div class="field">
-            <label>{{ 'settings.senderDisplayName' | translate }}</label>
-            <input type="text" class="input" [value]="senderDisplayName()" (input)="onSenderDisplayNameChange($any($event.target).value)" />
-          </div>
-          <div class="field">
-            <label>{{ 'settings.replyToEmail' | translate }}</label>
-            <input type="email" class="input" [value]="replyToEmail()" (input)="onReplyToChange($any($event.target).value)" />
-          </div>
-        </div>
-      </section>
-
-      <section class="card">
-        <h3>{{ 'settings.testingSection' | translate }}</h3>
-        <p class="section-desc">{{ 'settings.testingDescription' | translate }}</p>
-        <div class="actions">
-          <button type="button" class="btn btn-ghost" [disabled]="testing()" (click)="testConnection()">
-            {{ 'settings.testConnection' | translate }}
-          </button>
-          <button type="button" class="btn btn-primary" [disabled]="saving()" (click)="save()">
-            {{ 'settings.save' | translate }}
-          </button>
-          <button type="button" class="btn btn-danger" [disabled]="saving()" (click)="openDeleteConfirm()">
-            {{ 'settings.delete' | translate }}
-          </button>
-        </div>
-      </section>
-    </form>
-
+  @if (activeTab() === 'signatures') {
     <app-signatures-manager />
+  }
+
+  @if (isConfigTab()) {
+    @if (configLoading()) {
+      <app-loading />
+    } @else if (appSettings()) {
+      <app-config-settings-panel
+        [settings]="appSettings()!"
+        [section]="activeTab()"
+        [saving]="configSaving()"
+        [testingBrave]="testingBrave()"
+        [braveConnectionStatus]="braveConnectionStatus()"
+        [braveConnectionMessage]="braveConnectionMessage()"
+        [testingSearXng]="testingSearXng()"
+        [searXngConnectionStatus]="searXngConnectionStatus()"
+        [searXngConnectionMessage]="searXngConnectionMessage()"
+        (saveRequested)="onConfigSave($event)"
+        (testBraveRequested)="onTestBraveConnection()"
+        (testSearXngRequested)="onTestSearXngConnection()"
+      />
+    } @else {
+      <p class="empty-hint">{{ 'appSettings.loadError' | translate }}</p>
+    }
+  }
+
+  @if (showProviderPicker()) {
+    <div class="editor-overlay" (click)="closeProviderPicker()">
+      <div class="editor-dialog picker-dialog" (click)="$event.stopPropagation()">
+        <div class="dialog-header">
+          <h3>{{ 'settings.chooseProviderTitle' | translate }}</h3>
+          <button type="button" class="btn btn-ghost" (click)="closeProviderPicker()">
+            {{ 'common.dismiss' | translate }}
+          </button>
+        </div>
+        <p class="picker-desc">{{ 'settings.chooseProviderDescription' | translate }}</p>
+        <div class="provider-options">
+          <button type="button" class="provider-option" (click)="chooseSmtp()">
+            <span class="provider-option-title">{{ 'provider.smtp' | translate }}</span>
+            <span class="provider-option-desc">{{ 'settings.providerSmtpDescription' | translate }}</span>
+          </button>
+          <button
+            type="button"
+            class="provider-option"
+            [disabled]="connecting()"
+            (click)="chooseMicrosoft()"
+          >
+            <span class="provider-option-title">{{ 'provider.microsoftGraph' | translate }}</span>
+            <span class="provider-option-desc">{{ 'settings.providerMicrosoftDescription' | translate }}</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+
+  @if (showEditor()) {
+    <div class="editor-overlay" (click)="closeEditor()">
+      <div class="editor-dialog" (click)="$event.stopPropagation()">
+        <div class="dialog-header">
+          <h3>{{ editorTitleKey() | translate }}</h3>
+          <button type="button" class="btn btn-ghost" (click)="closeEditor()">
+            {{ 'common.dismiss' | translate }}
+          </button>
+        </div>
+
+        @if (isInsecure()) {
+          <div class="warning-banner">
+            {{ 'settings.insecureWarning' | translate }}
+          </div>
+        }
+
+        <form class="settings-form" (submit)="$event.preventDefault()">
+          <section class="card">
+            <h4>{{ 'settings.profileSection' | translate }}</h4>
+            <div class="field-grid">
+              <div class="field">
+                <label>{{ 'settings.name' | translate }}</label>
+                <input
+                  type="text"
+                  class="input"
+                  [value]="displayName()"
+                  (input)="onDisplayNameChange($any($event.target).value)"
+                  [placeholder]="'settings.namePlaceholder' | translate"
+                />
+              </div>
+              <label class="check-row">
+                <input
+                  type="checkbox"
+                  [checked]="isDefault()"
+                  (change)="onDefaultChange($any($event.target).checked)"
+                />
+                <span>{{ 'settings.markDefault' | translate }}</span>
+              </label>
+            </div>
+          </section>
+
+          <section class="card">
+            <h4>{{ 'settings.serverSection' | translate }}</h4>
+            <div class="field-grid">
+              <div class="field">
+                <label>{{ 'settings.host' | translate }}</label>
+                <input type="text" class="input" [value]="host()" (input)="onHostChange($any($event.target).value)" />
+              </div>
+              <div class="field">
+                <label>{{ 'settings.port' | translate }}</label>
+                <input type="number" class="input" [value]="port()" (input)="onPortChange($any($event.target).value)" />
+              </div>
+              <div class="field">
+                <label>{{ 'settings.securityMode' | translate }}</label>
+                <select class="input" [value]="securityMode()" (change)="onSecurityModeChange($any($event.target).value)">
+                  @for (mode of securityModeOptions; track mode.value) {
+                    <option [value]="mode.value">{{ mode.labelKey | translate }}</option>
+                  }
+                </select>
+              </div>
+            </div>
+          </section>
+
+          <section class="card">
+            <h4>{{ 'settings.authSection' | translate }}</h4>
+            <div class="field-grid">
+              <div class="field">
+                <label>{{ 'settings.username' | translate }}</label>
+                <input type="text" class="input" [value]="username()" (input)="onUsernameChange($any($event.target).value)" />
+              </div>
+              <div class="field">
+                <label>{{ 'settings.password' | translate }}</label>
+                <div class="password-field">
+                  <input
+                    [type]="showPassword() ? 'text' : 'password'"
+                    class="input"
+                    [value]="password()"
+                    (input)="onPasswordChange($any($event.target).value)"
+                    [placeholder]="passwordPlaceholder()"
+                  />
+                  <button type="button" class="btn btn-ghost toggle-btn" (click)="togglePassword()">
+                    {{ (showPassword() ? 'settings.hidePassword' : 'settings.showPassword') | translate }}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="card">
+            <h4>{{ 'settings.senderSection' | translate }}</h4>
+            <div class="field-grid">
+              <div class="field">
+                <label>{{ 'settings.senderEmail' | translate }}</label>
+                <input type="email" class="input" [value]="senderEmail()" (input)="onSenderEmailChange($any($event.target).value)" />
+              </div>
+              <div class="field">
+                <label>{{ 'settings.senderDisplayName' | translate }}</label>
+                <input type="text" class="input" [value]="senderDisplayName()" (input)="onSenderDisplayNameChange($any($event.target).value)" />
+              </div>
+              <div class="field">
+                <label>{{ 'settings.replyToEmail' | translate }}</label>
+                <input type="email" class="input" [value]="replyToEmail()" (input)="onReplyToChange($any($event.target).value)" />
+              </div>
+            </div>
+          </section>
+
+          <div class="dialog-actions">
+            <button type="button" class="btn btn-ghost" [disabled]="testing()" (click)="testDraftConnection()">
+              {{ 'settings.testConnection' | translate }}
+            </button>
+            <button type="button" class="btn btn-primary" [disabled]="saving()" (click)="save()">
+              {{ 'settings.save' | translate }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
   }
 
   <app-confirm-dialog
@@ -104,7 +281,7 @@
     [confirmKey]="'settings.delete'"
     [confirmVariant]="'danger'"
     [loading]="saving()"
-    (confirmed)="deleteSettings()"
+    (confirmed)="deleteAccount()"
     (cancelled)="closeDeleteConfirm()"
   />
 </div>

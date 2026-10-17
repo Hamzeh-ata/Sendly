@@ -1,0 +1,151 @@
+.preview-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 4000;
+  background: rgba(4, 8, 16, 0.82);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+}
+
+.preview-shell {
+  width: min(820px, 100%);
+  max-height: min(90vh, 900px);
+  overflow: auto;
+  background: var(--bg-card, #1a2332);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1.25rem;
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.55);
+}
+
+.preview-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+
+  h3 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+  }
+}
+
+.preview-loading {
+  color: var(--text-muted);
+}
+
+.mail-window {
+  background: #f8fafc;
+  color: #0f172a;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+}
+
+.mail-chrome {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.75rem 1rem;
+  background: #e2e8f0;
+}
+
+.chrome-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #94a3b8;
+}
+
+.chrome-title {
+  margin-inline-start: 0.5rem;
+  font-size: 0.85rem;
+  color: #475569;
+}
+
+.mail-meta {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.meta-row {
+  display: grid;
+  grid-template-columns: 7rem 1fr;
+  gap: 0.75rem;
+  font-size: 0.9rem;
+}
+
+.meta-label {
+  color: #64748b;
+  font-weight: 600;
+}
+
+.meta-value {
+  color: #0f172a;
+  font-weight: 500;
+}
+
+.mail-body {
+  padding: 1.25rem;
+  min-height: 180px;
+  line-height: 1.65;
+  font-size: 0.95rem;
+
+  a {
+    color: #0284c7;
+  }
+
+  img {
+    max-width: 220px;
+    height: auto;
+  }
+}
+
+.mail-attachments {
+  padding: 1rem 1.25rem 1.25rem;
+  border-top: 1px solid #e2e8f0;
+  background: #f1f5f9;
+
+  h4 {
+    margin: 0 0 0.65rem;
+    font-size: 0.85rem;
+    color: #475569;
+  }
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  li {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    padding: 0.65rem 0.75rem;
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+  }
+}
+
+.file-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.file-meta {
+  font-size: 0.78rem;
+  color: #64748b;
+}

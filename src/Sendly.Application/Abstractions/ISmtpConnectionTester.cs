@@ -5,7 +5,7 @@ namespace Sendly.Application.Abstractions;
 
 public interface ISmtpConnectionTester
 {
-    Task<SmtpTestResultDto> TestAsync(SmtpConnectionTestRequest request, CancellationToken cancellationToken);
+    Task<EmailTestResultDto> TestAsync(SmtpConnectionTestRequest request, CancellationToken cancellationToken);
 }
 
 public sealed class SmtpConnectionTestRequest

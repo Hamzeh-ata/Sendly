@@ -15,9 +15,10 @@ public class CampaignService
     private readonly ISendlyDbContext _db;
     private readonly ICampaignQueue _queue;
     private readonly IAttachmentStore _attachmentStore;
-    private readonly IEmailSender _emailSender;
-    private readonly SmtpSettingsService _smtpSettingsService;
+    private readonly IEmailDeliveryService _emailDelivery;
+    private readonly EmailAccountService _emailAccountService;
     private readonly SignatureService _signatureService;
+    private readonly TemplateRecipientProtectionService _templateRecipientProtection;
     private readonly CampaignCancellationRegistry _cancellationRegistry;
     private readonly EmailSendingOptions _sendingOptions;
 
@@ -25,18 +26,20 @@ public class CampaignService
         ISendlyDbContext db,
         ICampaignQueue queue,
         IAttachmentStore attachmentStore,
-        IEmailSender emailSender,
-        SmtpSettingsService smtpSettingsService,
+        IEmailDeliveryService emailDelivery,
+        EmailAccountService emailAccountService,
         SignatureService signatureService,
+        TemplateRecipientProtectionService templateRecipientProtection,
         CampaignCancellationRegistry cancellationRegistry,
         IOptions<EmailSendingOptions> sendingOptions)
     {
         _db = db;
         _queue = queue;
         _attachmentStore = attachmentStore;
-        _emailSender = emailSender;
-        _smtpSettingsService = smtpSettingsService;
+        _emailDelivery = emailDelivery;
+        _emailAccountService = emailAccountService;
         _signatureService = signatureService;
+        _templateRecipientProtection = templateRecipientProtection;
         _cancellationRegistry = cancellationRegistry;
         _sendingOptions = sendingOptions.Value;
     }
@@ -55,39 +58,61 @@ public class CampaignService
 
     public async Task<CampaignDetailDto> CreateAndStartAsync(CreateCampaignRequestDto request, CancellationToken cancellationToken)
     {
-        await EnsureCanSendAsync(cancellationToken);
-        EnsureNoActiveCampaign(await GetActiveCampaignAsync(cancellationToken));
+        await _emailAccountService.EnsureAccountReadyAsync(request.EmailAccountId, cancellationToken);
+        await EnsureCanStartCampaignAsync(cancellationToken);
 
-        if (!string.IsNullOrWhiteSpace(request.IdempotencyKey))
+        var existing = await FindExistingByIdempotencyKeyAsync(request.IdempotencyKey, cancellationToken);
+        if (existing is not null)
         {
-            var existing = await FindByIdempotencyKeyAsync(request.IdempotencyKey, cancellationToken);
-            if (existing is not null)
-            {
-                return await MapDetailAsync(existing.Id, cancellationToken);
-            }
+            return await MapDetailAsync(existing.Id, cancellationToken);
         }
 
-        var parsed = EmailAddressParser.Parse(request.RawRecipients);
-        EnsureValidCampaignInput(request, parsed);
-
-        var signatureHtml = await _signatureService.ResolveSignatureHtmlAsync(request.SignatureId, cancellationToken);
-        var htmlBody = SignatureComposer.Combine(request.HtmlBody, signatureHtml);
-        var campaign = CreateCampaignEntity(request, parsed, htmlBody);
-        _db.Campaigns.Add(campaign);
-        await _db.SaveChangesAsync(cancellationToken);
-
-        if (request.AttachmentIds.Count > 0)
-        {
-            await _attachmentStore.AssignToCampaignAsync(request.AttachmentIds, campaign.Id, cancellationToken);
-        }
-
+        var campaign = await CreateCampaignInternalAsync(request, CampaignStatus.Queued, cancellationToken);
         await _queue.EnqueueAsync(campaign.Id, cancellationToken);
         return await MapDetailAsync(campaign.Id, cancellationToken);
     }
 
-    public async Task<SmtpTestResultDto> SendTestEmailAsync(TestEmailRequestDto request, CancellationToken cancellationToken)
+    public async Task<CampaignDetailDto> CreateDraftAsync(CreateCampaignRequestDto request, CancellationToken cancellationToken)
     {
-        await EnsureCanSendAsync(cancellationToken);
+        await _emailAccountService.EnsureAccountReadyAsync(request.EmailAccountId, cancellationToken);
+
+        var existing = await FindExistingByIdempotencyKeyAsync(request.IdempotencyKey, cancellationToken);
+        if (existing is not null)
+        {
+            return await MapDetailAsync(existing.Id, cancellationToken);
+        }
+
+        var campaign = await CreateCampaignInternalAsync(request, CampaignStatus.Draft, cancellationToken);
+        return await MapDetailAsync(campaign.Id, cancellationToken);
+    }
+
+    public async Task StartAsync(Guid id, CancellationToken cancellationToken)
+    {
+        var campaign = await _db.Campaigns.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+        if (campaign is null)
+        {
+            throw new InvalidOperationException("Campaign was not found.");
+        }
+
+        if (campaign.Status != CampaignStatus.Draft)
+        {
+            throw new InvalidOperationException("Only draft campaigns can be started.");
+        }
+
+        await _emailAccountService.EnsureAccountReadyAsync(campaign.EmailAccountId, cancellationToken);
+        await EnsureCanStartCampaignAsync(cancellationToken);
+
+        campaign.Status = CampaignStatus.Queued;
+        campaign.CompletedAtUtc = null;
+        campaign.StartedAtUtc = null;
+        campaign.CurrentRecipientEmail = null;
+        await _db.SaveChangesAsync(cancellationToken);
+        await _queue.EnqueueAsync(campaign.Id, cancellationToken);
+    }
+
+    public async Task<EmailTestResultDto> SendTestEmailAsync(TestEmailRequestDto request, CancellationToken cancellationToken)
+    {
+        await _emailAccountService.EnsureAccountReadyAsync(request.EmailAccountId, cancellationToken);
 
         if (!EmailAddressParser.IsValidEmail(request.ToEmail))
         {
@@ -104,37 +129,25 @@ public class CampaignService
             throw new InvalidOperationException("Email body is required.");
         }
 
-        var credentials = await _smtpSettingsService.GetResolvedCredentialsAsync(cancellationToken);
-        if (credentials is null)
-        {
-            throw new InvalidOperationException("SMTP configuration is incomplete.");
-        }
-
+        var account = await ResolveAccountSnapshotAsync(request.EmailAccountId, cancellationToken);
         var attachments = await _attachmentStore.LoadAsync(request.AttachmentIds, cancellationToken);
         var signatureHtml = await _signatureService.ResolveSignatureHtmlAsync(request.SignatureId, cancellationToken);
         var htmlBody = SignatureComposer.Combine(request.HtmlBody, signatureHtml);
-        var result = await _emailSender.SendAsync(new EmailSendRequest
+        var result = await _emailDelivery.SendAsync(new EmailDeliveryRequest
         {
+            AccountId = account.AccountId,
             ToEmail = request.ToEmail.Trim(),
             Subject = request.Subject.Trim(),
             HtmlBody = htmlBody,
             PlainTextBody = HtmlToPlainTextConverter.Convert(htmlBody),
-            Host = credentials.Host,
-            Port = credentials.Port,
-            SecurityMode = credentials.SecurityMode,
-            Username = credentials.Username,
-            Password = credentials.Password,
-            SenderEmail = credentials.SenderEmail,
-            SenderDisplayName = credentials.SenderDisplayName,
-            ReplyToEmail = credentials.ReplyToEmail,
             Attachments = attachments
         }, cancellationToken);
 
-        return new SmtpTestResultDto
+        return new EmailTestResultDto
         {
             Success = result.Success,
             Message = result.Success
-                ? "Test email was accepted by the SMTP server."
+                ? "Test email was accepted by the email provider."
                 : SanitizeError(result.Message)
         };
     }
@@ -211,9 +224,6 @@ public class CampaignService
 
     public async Task RetryFailedAsync(Guid id, CancellationToken cancellationToken)
     {
-        await EnsureCanSendAsync(cancellationToken);
-        EnsureNoActiveCampaign(await GetActiveCampaignAsync(cancellationToken));
-
         var campaign = await _db.Campaigns
             .Include(x => x.Recipients)
             .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
@@ -222,6 +232,9 @@ public class CampaignService
         {
             throw new InvalidOperationException("Campaign was not found.");
         }
+
+        await _emailAccountService.EnsureAccountReadyAsync(campaign.EmailAccountId, cancellationToken);
+        await EnsureCanStartCampaignAsync(cancellationToken);
 
         var retryable = GetRetryableRecipients(campaign.Recipients);
         if (retryable.Count == 0)
@@ -259,21 +272,180 @@ public class CampaignService
         return Encoding.UTF8.GetBytes(builder.ToString());
     }
 
-    private async Task EnsureCanSendAsync(CancellationToken cancellationToken)
+    private async Task<ResolvedSendingAccount> ResolveAccountSnapshotAsync(
+        Guid? emailAccountId,
+        CancellationToken cancellationToken)
     {
-        var smtp = await _smtpSettingsService.GetAsync(cancellationToken);
-        if (!smtp.IsConfigured || !smtp.HasPassword)
+        var account = await _emailAccountService.ResolveSendingAccountAsync(emailAccountId, cancellationToken);
+        if (account is null)
         {
-            throw new InvalidOperationException("SMTP configuration is incomplete.");
+            throw new InvalidOperationException("A connected email account is required before sending.");
+        }
+
+        return account;
+    }
+
+    private async Task EnsureCanStartCampaignAsync(CancellationToken cancellationToken)
+    {
+        await RecoverStaleActiveCampaignsAsync(cancellationToken);
+        var active = await GetActiveCampaignAsync(cancellationToken);
+        if (active is null)
+        {
+            return;
+        }
+
+        throw new InvalidOperationException(
+            $"Another campaign is already running ({active.Id}). Open Campaigns to wait or cancel it first.");
+    }
+
+    private async Task RecoverStaleActiveCampaignsAsync(CancellationToken cancellationToken)
+    {
+        var actives = await _db.Campaigns
+            .Include(x => x.Recipients)
+            .Where(x => x.Status == CampaignStatus.Queued || x.Status == CampaignStatus.Running)
+            .ToListAsync(cancellationToken);
+
+        if (actives.Count == 0)
+        {
+            return;
+        }
+
+        var changed = false;
+        foreach (var campaign in actives)
+        {
+            if (CloseIfNoPendingWork(campaign))
+            {
+                changed = true;
+                continue;
+            }
+
+            if (IsOrphanedActiveCampaign(campaign))
+            {
+                AbandonInterruptedCampaign(campaign);
+                changed = true;
+            }
+        }
+
+        if (changed)
+        {
+            await _db.SaveChangesAsync(cancellationToken);
+        }
+
+        foreach (var campaign in actives)
+        {
+            if (campaign.Status is CampaignStatus.Queued or CampaignStatus.Running)
+            {
+                await _queue.EnqueueAsync(campaign.Id, cancellationToken);
+            }
         }
     }
 
-    private static void EnsureNoActiveCampaign(Campaign? active)
+    private static bool CloseIfNoPendingWork(Campaign campaign)
     {
-        if (active is not null)
+        var pending = 0;
+        foreach (var recipient in campaign.Recipients)
         {
-            throw new InvalidOperationException("Another campaign is already running. Wait for it to finish or cancel it first.");
+            if (recipient.Status is RecipientDeliveryStatus.Pending or RecipientDeliveryStatus.Sending)
+            {
+                pending++;
+            }
         }
+
+        if (pending > 0)
+        {
+            return false;
+        }
+
+        FinalizeClosedCampaign(campaign);
+        return true;
+    }
+
+    private static bool IsOrphanedActiveCampaign(Campaign campaign)
+    {
+        if (campaign.Status == CampaignStatus.Queued && campaign.StartedAtUtc is null)
+        {
+            return true;
+        }
+
+        var reference = campaign.StartedAtUtc ?? campaign.CreatedAtUtc;
+        var age = DateTimeOffset.UtcNow - reference;
+        return campaign.Status == CampaignStatus.Running && age > TimeSpan.FromMinutes(30);
+    }
+
+    private static void AbandonInterruptedCampaign(Campaign campaign)
+    {
+        foreach (var recipient in campaign.Recipients)
+        {
+            if (recipient.Status is RecipientDeliveryStatus.Pending or RecipientDeliveryStatus.Sending)
+            {
+                recipient.Status = RecipientDeliveryStatus.Cancelled;
+                recipient.FailureReason = "Campaign interrupted and recovered.";
+            }
+        }
+
+        campaign.Status = CampaignStatus.Cancelled;
+        campaign.CurrentRecipientEmail = null;
+        campaign.CompletedAtUtc = DateTimeOffset.UtcNow;
+        RecountCampaign(campaign);
+        FinalizeClosedCampaign(campaign);
+    }
+
+    private static void FinalizeClosedCampaign(Campaign campaign)
+    {
+        RecountCampaign(campaign);
+        if (campaign.Status == CampaignStatus.Cancelled)
+        {
+            campaign.CompletedAtUtc ??= DateTimeOffset.UtcNow;
+            campaign.CurrentRecipientEmail = null;
+            return;
+        }
+
+        if (campaign.FailedCount > 0 && campaign.SuccessCount > 0)
+        {
+            campaign.Status = CampaignStatus.CompletedWithFailures;
+        }
+        else if (campaign.FailedCount > 0 && campaign.SuccessCount == 0)
+        {
+            campaign.Status = CampaignStatus.Failed;
+        }
+        else
+        {
+            campaign.Status = CampaignStatus.Completed;
+        }
+
+        campaign.CompletedAtUtc ??= DateTimeOffset.UtcNow;
+        campaign.CurrentRecipientEmail = null;
+    }
+
+    private static void RecountCampaign(Campaign campaign)
+    {
+        var success = 0;
+        var failed = 0;
+        var cancelled = 0;
+        var pending = 0;
+        foreach (var recipient in campaign.Recipients)
+        {
+            switch (recipient.Status)
+            {
+                case RecipientDeliveryStatus.Sent:
+                    success++;
+                    break;
+                case RecipientDeliveryStatus.Failed:
+                    failed++;
+                    break;
+                case RecipientDeliveryStatus.Cancelled:
+                    cancelled++;
+                    break;
+                default:
+                    pending++;
+                    break;
+            }
+        }
+
+        campaign.SuccessCount = success;
+        campaign.FailedCount = failed;
+        campaign.CancelledCount = cancelled;
+        campaign.PendingCount = pending;
     }
 
     private async Task<Campaign?> GetActiveCampaignAsync(CancellationToken cancellationToken)
@@ -317,36 +489,208 @@ public class CampaignService
         }
     }
 
+    private async Task<(Guid? TemplateId, string? TemplateName)> ResolveTemplateSnapshotAsync(
+        Guid? templateId,
+        CancellationToken cancellationToken)
+    {
+        if (templateId is null)
+        {
+            return (null, null);
+        }
+
+        var template = await _db.EmailTemplates
+            .AsNoTracking()
+            .FirstOrDefaultAsync(x => x.Id == templateId.Value, cancellationToken);
+
+        if (template is null)
+        {
+            throw new InvalidOperationException("Selected template was not found.");
+        }
+
+        return (template.Id, template.Name);
+    }
+
+    private async Task<List<string>> ResolveSendableEmailsAsync(
+        Guid? templateId,
+        IReadOnlyList<string> emails,
+        bool allowAlreadyContacted,
+        CancellationToken cancellationToken)
+    {
+        if (templateId is null)
+        {
+            return emails.ToList();
+        }
+
+        return await _templateRecipientProtection.FilterSendableEmailsAsync(
+            templateId.Value,
+            emails,
+            allowAlreadyContacted,
+            cancellationToken);
+    }
+
+    private static void EnsureHasSendableRecipients(
+        List<string> sendableEmails,
+        Guid? templateId,
+        bool allowAlreadyContacted)
+    {
+        if (sendableEmails.Count > 0)
+        {
+            return;
+        }
+
+        if (templateId is not null && !allowAlreadyContacted)
+        {
+            throw new InvalidOperationException(
+                "All recipients have already received this template. Remove duplicates or allow already contacted recipients.");
+        }
+
+        throw new InvalidOperationException("At least one valid recipient is required.");
+    }
+
+    private async Task<Campaign?> FindExistingByIdempotencyKeyAsync(
+        string? idempotencyKey,
+        CancellationToken cancellationToken)
+    {
+        if (string.IsNullOrWhiteSpace(idempotencyKey))
+        {
+            return null;
+        }
+
+        return await FindByIdempotencyKeyAsync(idempotencyKey, cancellationToken);
+    }
+
+    private async Task<Campaign> CreateCampaignInternalAsync(
+        CreateCampaignRequestDto request,
+        CampaignStatus status,
+        CancellationToken cancellationToken)
+    {
+        var parsed = ResolveParsedRecipients(request);
+        EnsureValidCampaignInput(request, parsed);
+
+        var signatureHtml = await _signatureService.ResolveSignatureHtmlAsync(request.SignatureId, cancellationToken);
+        var htmlBody = SignatureComposer.Combine(request.HtmlBody, signatureHtml);
+        var templateSnapshot = await ResolveTemplateSnapshotAsync(request.TemplateId, cancellationToken);
+        var accountSnapshot = await ResolveAccountSnapshotAsync(request.EmailAccountId, cancellationToken);
+        var sendableEmails = await ResolveSendableEmailsAsync(
+            templateSnapshot.TemplateId,
+            parsed.ValidEmails,
+            request.AllowAlreadyContacted,
+            cancellationToken);
+        EnsureHasSendableRecipients(sendableEmails, templateSnapshot.TemplateId, request.AllowAlreadyContacted);
+
+        var personalizationMap = BuildPersonalizationMap(request);
+        var campaign = CreateCampaignEntity(
+            request,
+            sendableEmails,
+            htmlBody,
+            templateSnapshot,
+            accountSnapshot,
+            personalizationMap,
+            status);
+        _db.Campaigns.Add(campaign);
+        await _db.SaveChangesAsync(cancellationToken);
+
+        if (request.AttachmentIds.Count > 0)
+        {
+            await _attachmentStore.AssignToCampaignAsync(request.AttachmentIds, campaign.Id, cancellationToken);
+        }
+
+        return campaign;
+    }
+
     private Campaign CreateCampaignEntity(
         CreateCampaignRequestDto request,
-        EmailParseResult parsed,
-        string htmlBody)
+        List<string> sendableEmails,
+        string htmlBody,
+        (Guid? TemplateId, string? TemplateName) templateSnapshot,
+        ResolvedSendingAccount accountSnapshot,
+        Dictionary<string, CreateCampaignRecipientDto> personalizationMap,
+        CampaignStatus status)
     {
         var campaign = new Campaign
         {
             Subject = request.Subject.Trim(),
             HtmlBody = htmlBody,
             PlainTextBody = HtmlToPlainTextConverter.Convert(htmlBody),
-            Status = CampaignStatus.Queued,
-            TotalRecipients = parsed.ValidCount,
-            PendingCount = parsed.ValidCount,
+            Status = status,
+            TotalRecipients = sendableEmails.Count,
+            PendingCount = sendableEmails.Count,
             DelayMilliseconds = request.DelayMilliseconds ?? _sendingOptions.DefaultDelayMilliseconds,
             BatchSize = request.BatchSize ?? _sendingOptions.DefaultBatchSize,
             MaxRetryCount = request.MaxRetryCount ?? _sendingOptions.DefaultMaxRetryCount,
             IdempotencyKey = string.IsNullOrWhiteSpace(request.IdempotencyKey) ? null : request.IdempotencyKey.Trim(),
+            TemplateId = templateSnapshot.TemplateId,
+            TemplateName = templateSnapshot.TemplateName,
+            EmailAccountId = accountSnapshot.AccountId,
+            Provider = accountSnapshot.Provider,
+            SendingAccountName = accountSnapshot.DisplayName,
+            SendingAccountEmail = accountSnapshot.EmailAddress,
+            AllowAlreadyContacted = request.AllowAlreadyContacted,
             CreatedAtUtc = DateTimeOffset.UtcNow
         };
 
-        foreach (var email in parsed.ValidEmails)
+        foreach (var email in sendableEmails)
         {
-            campaign.Recipients.Add(new CampaignRecipient
+            var recipient = new CampaignRecipient
             {
                 Email = email,
                 Status = RecipientDeliveryStatus.Pending
-            });
+            };
+
+            var key = EmailAddressParser.Normalize(email);
+            if (personalizationMap.TryGetValue(key, out var personalized))
+            {
+                recipient.ProspectId = personalized.ProspectId;
+                recipient.DisplayName = TrimOrNull(personalized.DisplayName);
+                recipient.CompanyName = TrimOrNull(personalized.CompanyName);
+                recipient.PersonalizationJson = PersonalizationSerializer.Serialize(personalized.Personalization);
+            }
+
+            campaign.Recipients.Add(recipient);
         }
 
         return campaign;
+    }
+
+    private static EmailParseResult ResolveParsedRecipients(CreateCampaignRequestDto request)
+    {
+        if (request.PersonalizedRecipients.Count > 0)
+        {
+            var emails = new List<string>();
+            foreach (var item in request.PersonalizedRecipients)
+            {
+                if (!string.IsNullOrWhiteSpace(item.Email))
+                {
+                    emails.Add(item.Email);
+                }
+            }
+
+            return EmailAddressParser.Parse(string.Join('\n', emails));
+        }
+
+        return EmailAddressParser.Parse(request.RawRecipients);
+    }
+
+    private static Dictionary<string, CreateCampaignRecipientDto> BuildPersonalizationMap(CreateCampaignRequestDto request)
+    {
+        var map = new Dictionary<string, CreateCampaignRecipientDto>(StringComparer.OrdinalIgnoreCase);
+        foreach (var item in request.PersonalizedRecipients)
+        {
+            if (string.IsNullOrWhiteSpace(item.Email))
+            {
+                continue;
+            }
+
+            var key = EmailAddressParser.Normalize(item.Email);
+            map[key] = item;
+        }
+
+        return map;
+    }
+
+    private static string? TrimOrNull(string? value)
+    {
+        return string.IsNullOrWhiteSpace(value) ? null : value.Trim();
     }
 
     private async Task<CampaignDetailDto> MapDetailAsync(Guid id, CancellationToken cancellationToken)
@@ -376,6 +720,12 @@ public class CampaignService
             CreatedAtUtc = campaign.CreatedAtUtc,
             StartedAtUtc = campaign.StartedAtUtc,
             CompletedAtUtc = campaign.CompletedAtUtc,
+            TemplateId = campaign.TemplateId,
+            TemplateName = campaign.TemplateName,
+            EmailAccountId = campaign.EmailAccountId,
+            Provider = campaign.Provider,
+            SendingAccountName = campaign.SendingAccountName,
+            SendingAccountEmail = campaign.SendingAccountEmail,
             HtmlBody = campaign.HtmlBody
         };
 
@@ -409,7 +759,13 @@ public class CampaignService
             CurrentRecipientEmail = campaign.CurrentRecipientEmail,
             CreatedAtUtc = campaign.CreatedAtUtc,
             StartedAtUtc = campaign.StartedAtUtc,
-            CompletedAtUtc = campaign.CompletedAtUtc
+            CompletedAtUtc = campaign.CompletedAtUtc,
+            TemplateId = campaign.TemplateId,
+            TemplateName = campaign.TemplateName,
+            EmailAccountId = campaign.EmailAccountId,
+            Provider = campaign.Provider,
+            SendingAccountName = campaign.SendingAccountName,
+            SendingAccountEmail = campaign.SendingAccountEmail
         };
     }
 
@@ -444,7 +800,19 @@ public class CampaignService
             return true;
         }
 
-        return campaign.Subject.Contains(search.Trim(), StringComparison.OrdinalIgnoreCase);
+        var term = search.Trim();
+        if (campaign.Subject.Contains(term, StringComparison.OrdinalIgnoreCase))
+        {
+            return true;
+        }
+
+        if (campaign.TemplateName is not null
+            && campaign.TemplateName.Contains(term, StringComparison.OrdinalIgnoreCase))
+        {
+            return true;
+        }
+
+        return false;
     }
 
     private static bool MatchesStatusFilter(RecipientDeliveryStatus status, string? statusFilter)
@@ -529,7 +897,7 @@ public class CampaignService
     {
         if (string.IsNullOrWhiteSpace(message))
         {
-            return "SMTP operation failed.";
+            return "Email send failed.";
         }
 
         var sanitized = message;

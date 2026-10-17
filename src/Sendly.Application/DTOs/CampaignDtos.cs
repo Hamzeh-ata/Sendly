@@ -18,6 +18,19 @@ public class ValidateRecipientsResponseDto
     public int InvalidCount { get; set; }
 }
 
+public class CreateCampaignRecipientDto
+{
+    public string Email { get; set; } = string.Empty;
+
+    public Guid? ProspectId { get; set; }
+
+    public string? DisplayName { get; set; }
+
+    public string? CompanyName { get; set; }
+
+    public Dictionary<string, string> Personalization { get; set; } = new(StringComparer.OrdinalIgnoreCase);
+}
+
 public class CreateCampaignRequestDto
 {
     public string Subject { get; set; } = string.Empty;
@@ -25,6 +38,8 @@ public class CreateCampaignRequestDto
     public string HtmlBody { get; set; } = string.Empty;
 
     public string RawRecipients { get; set; } = string.Empty;
+
+    public List<CreateCampaignRecipientDto> PersonalizedRecipients { get; set; } = [];
 
     public List<Guid> AttachmentIds { get; set; } = [];
 
@@ -37,6 +52,12 @@ public class CreateCampaignRequestDto
     public int? MaxRetryCount { get; set; }
 
     public string? IdempotencyKey { get; set; }
+
+    public Guid? TemplateId { get; set; }
+
+    public bool AllowAlreadyContacted { get; set; }
+
+    public Guid? EmailAccountId { get; set; }
 }
 
 public class TestEmailRequestDto
@@ -50,6 +71,8 @@ public class TestEmailRequestDto
     public List<Guid> AttachmentIds { get; set; } = [];
 
     public Guid? SignatureId { get; set; }
+
+    public Guid? EmailAccountId { get; set; }
 }
 
 public class CampaignSummaryDto
@@ -79,6 +102,18 @@ public class CampaignSummaryDto
     public DateTimeOffset? StartedAtUtc { get; set; }
 
     public DateTimeOffset? CompletedAtUtc { get; set; }
+
+    public Guid? TemplateId { get; set; }
+
+    public string? TemplateName { get; set; }
+
+    public Guid? EmailAccountId { get; set; }
+
+    public EmailProvider? Provider { get; set; }
+
+    public string? SendingAccountName { get; set; }
+
+    public string? SendingAccountEmail { get; set; }
 }
 
 public class CampaignDetailDto : CampaignSummaryDto

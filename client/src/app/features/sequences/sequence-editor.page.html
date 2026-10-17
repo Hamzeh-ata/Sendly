@@ -1,0 +1,186 @@
+<div class="sequence-editor-page">
+  <div class="page-header">
+    <h2>{{ pageTitleKey() | translate }}</h2>
+    <div class="header-actions">
+      <button type="button" class="btn btn-ghost" (click)="cancel()">
+        {{ 'common.cancel' | translate }}
+      </button>
+      <button type="button" class="btn btn-primary" [disabled]="!canSave()" (click)="save()">
+        {{ 'sequences.save' | translate }}
+      </button>
+    </div>
+  </div>
+
+  @if (loading()) {
+    <app-loading />
+  } @else {
+    <div class="editor-grid">
+      <section class="card">
+        <h3>{{ 'sequences.infoSection' | translate }}</h3>
+        @if (showProjectSelect()) {
+          <div class="field">
+            <label>{{ 'sequences.project' | translate }}</label>
+            <select
+              class="input"
+              [value]="projectId()"
+              (change)="onProjectChange($any($event.target).value)"
+            >
+              <option value="">{{ 'sequences.selectProject' | translate }}</option>
+              @for (project of projects(); track project.id) {
+                <option [value]="project.id">{{ project.name }}</option>
+              }
+            </select>
+          </div>
+        }
+        <div class="field">
+          <label>{{ 'sequences.name' | translate }}</label>
+          <input
+            type="text"
+            class="input"
+            [value]="name()"
+            (input)="onNameChange($any($event.target).value)"
+            [placeholder]="'sequences.namePlaceholder' | translate"
+          />
+        </div>
+        <div class="field">
+          <label>{{ 'sequences.descriptionLabel' | translate }}</label>
+          <textarea
+            class="textarea"
+            rows="3"
+            [value]="description()"
+            (input)="onDescriptionChange($any($event.target).value)"
+            [placeholder]="'sequences.descriptionPlaceholder' | translate"
+          ></textarea>
+        </div>
+        <label class="toggle-row">
+          <input
+            type="checkbox"
+            [checked]="isActive()"
+            (change)="onActiveChange($any($event.target).checked)"
+          />
+          <span>{{ 'sequences.markActive' | translate }}</span>
+        </label>
+      </section>
+
+      <section class="card">
+        <div class="section-header">
+          <h3>{{ 'sequences.stepsSection' | translate }}</h3>
+          <button type="button" class="btn btn-ghost btn-sm" (click)="addStep()">
+            {{ 'sequences.addStep' | translate }}
+          </button>
+        </div>
+        <p class="section-hint">{{ 'sequences.stepsHint' | translate }}</p>
+        <p class="section-hint">{{ 'sequences.abHint' | translate }}</p>
+
+        @if (steps().length === 0) {
+          <p class="empty-hint">{{ 'sequences.noSteps' | translate }}</p>
+        } @else {
+          @for (step of steps(); track step.clientKey) {
+            <div class="step-card">
+              <div class="step-header">
+                <span class="step-order">{{ 'sequences.stepOrder' | translate }} {{ step.stepOrder }}</span>
+                <button
+                  type="button"
+                  class="btn btn-danger btn-sm"
+                  (click)="removeStep(step.clientKey)"
+                >
+                  {{ 'sequences.removeStep' | translate }}
+                </button>
+              </div>
+              <div class="field-grid">
+                <div class="field">
+                  <label>{{ 'sequences.stepOrder' | translate }}</label>
+                  <input
+                    type="number"
+                    class="input"
+                    min="1"
+                    [value]="step.stepOrder"
+                    (input)="onStepOrderChange(step.clientKey, $any($event.target).value)"
+                  />
+                </div>
+                <div class="field">
+                  <label>{{ 'sequences.channel' | translate }}</label>
+                  <select
+                    class="input"
+                    [value]="step.channel"
+                    (change)="onStepChannelChange(step.clientKey, $any($event.target).value)"
+                  >
+                    @for (option of channelOptions; track option.value) {
+                      <option [value]="option.value">{{ option.labelKey | translate }}</option>
+                    }
+                  </select>
+                </div>
+                <div class="field">
+                  <label>{{ 'sequences.template' | translate }}</label>
+                  <select
+                    class="input"
+                    [value]="step.templateId"
+                    (change)="onStepTemplateChange(step.clientKey, $any($event.target).value)"
+                  >
+                    <option value="">{{ 'sequences.noTemplate' | translate }}</option>
+                    @for (template of templates(); track template.id) {
+                      <option [value]="template.id">{{ template.name }}</option>
+                    }
+                  </select>
+                </div>
+                <div class="field">
+                  <label>{{ 'sequences.delayHours' | translate }}</label>
+                  <input
+                    type="number"
+                    class="input"
+                    min="0"
+                    [value]="step.delayHoursAfterPrevious"
+                    (input)="onStepDelayChange(step.clientKey, $any($event.target).value)"
+                  />
+                </div>
+                <div class="field">
+                  <label>{{ 'sequences.variantKey' | translate }}</label>
+                  <input
+                    type="text"
+                    class="input"
+                    [value]="step.variantKey"
+                    (input)="onStepVariantChange(step.clientKey, $any($event.target).value)"
+                    [placeholder]="'sequences.variantKeyPlaceholder' | translate"
+                  />
+                </div>
+                <div class="field">
+                  <label>{{ 'sequences.trafficPercent' | translate }}</label>
+                  <input
+                    type="number"
+                    class="input"
+                    min="1"
+                    max="100"
+                    [value]="step.trafficPercent"
+                    (input)="onStepTrafficChange(step.clientKey, $any($event.target).value)"
+                  />
+                </div>
+              </div>
+              @if (step.showWhatsAppFields) {
+                <div class="field-grid">
+                  <div class="field">
+                    <label>{{ 'sequences.whatsAppTemplateName' | translate }}</label>
+                    <input
+                      type="text"
+                      class="input"
+                      [value]="step.whatsAppTemplateName"
+                      (input)="onStepWhatsAppNameChange(step.clientKey, $any($event.target).value)"
+                    />
+                  </div>
+                  <div class="field">
+                    <label>{{ 'sequences.whatsAppTemplateLanguage' | translate }}</label>
+                    <input
+                      type="text"
+                      class="input"
+                      [value]="step.whatsAppTemplateLanguage"
+                      (input)="onStepWhatsAppLanguageChange(step.clientKey, $any($event.target).value)"
+                    />
+                  </div>
+                </div>
+              }
+            </div>
+          }
+        }
+      </section>
+    </div>
+  }
+</div>

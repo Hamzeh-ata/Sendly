@@ -1,0 +1,746 @@
+<section class="config-panel card">
+  @if (section() === 'openai') {
+    <h3>{{ 'appSettings.openaiTitle' | translate }}</h3>
+    <p class="section-hint">{{ 'appSettings.openaiHint' | translate }}</p>
+    <div class="field-grid">
+      <div class="field">
+        <label>{{ 'appSettings.apiKey' | translate }}</label>
+        <input
+          type="password"
+          class="input"
+          [value]="openAiApiKey()"
+          (input)="onOpenAiApiKeyChange($any($event.target).value)"
+          [placeholder]="
+            (openAiApiKeyConfigured()
+              ? 'appSettings.secretKeepExisting'
+              : 'appSettings.apiKeyPlaceholder'
+            ) | translate
+          "
+        />
+      </div>
+      <div class="field">
+        <label>{{ 'appSettings.model' | translate }}</label>
+        <input
+          type="text"
+          class="input"
+          [value]="openAiModel()"
+          (input)="onOpenAiModelChange($any($event.target).value)"
+        />
+      </div>
+      <div class="field">
+        <label>{{ 'appSettings.organizationId' | translate }}</label>
+        <input
+          type="text"
+          class="input"
+          [value]="openAiOrganizationId()"
+          (input)="onOpenAiOrganizationIdChange($any($event.target).value)"
+        />
+      </div>
+      <div class="field">
+        <label>{{ 'appSettings.projectId' | translate }}</label>
+        <input
+          type="text"
+          class="input"
+          [value]="openAiProjectId()"
+          (input)="onOpenAiProjectIdChange($any($event.target).value)"
+        />
+      </div>
+      <div class="field">
+        <label>{{ 'appSettings.baseUrl' | translate }}</label>
+        <input
+          type="text"
+          class="input"
+          [value]="openAiBaseUrl()"
+          (input)="onOpenAiBaseUrlChange($any($event.target).value)"
+        />
+      </div>
+      <div class="field">
+        <label>{{ 'appSettings.timeoutSeconds' | translate }}</label>
+        <input
+          type="number"
+          class="input"
+          min="5"
+          [value]="openAiTimeoutSeconds()"
+          (input)="onOpenAiTimeoutChange($any($event.target).value)"
+        />
+      </div>
+    </div>
+  }
+
+  @if (section() === 'research') {
+    <h3>{{ 'appSettings.researchTitle' | translate }}</h3>
+    <p class="section-hint">{{ 'appSettings.researchHint' | translate }}</p>
+    <div class="toggle-grid">
+      <label class="check-row">
+        <input
+          type="checkbox"
+          [checked]="researchEnableSeed()"
+          (change)="onResearchEnableSeedChange($any($event.target).checked)"
+        />
+        <span>{{ 'appSettings.enableSeedProvider' | translate }}</span>
+      </label>
+      <label class="check-row">
+        <input
+          type="checkbox"
+          [checked]="researchEnableCrawler()"
+          (change)="onResearchEnableCrawlerChange($any($event.target).checked)"
+        />
+        <span>{{ 'appSettings.enableWebsiteCrawler' | translate }}</span>
+      </label>
+      <label class="check-row">
+        <input
+          type="checkbox"
+          [checked]="researchEnableSearch()"
+          (change)="onResearchEnableSearchChange($any($event.target).checked)"
+        />
+        <span>{{ 'appSettings.enableSearchProvider' | translate }}</span>
+      </label>
+      <label class="check-row">
+        <input
+          type="checkbox"
+          [checked]="researchEnableHtmlFallback()"
+          (change)="onResearchEnableHtmlFallbackChange($any($event.target).checked)"
+        />
+        <span>{{ 'appSettings.enableHtmlSearchFallback' | translate }}</span>
+      </label>
+    </div>
+    <div class="field-grid">
+      <div class="field">
+        <label>{{ 'appSettings.maxCandidatesPerRun' | translate }}</label>
+        <input
+          type="number"
+          class="input"
+          [value]="researchMaxCandidates()"
+          (input)="onResearchMaxCandidatesChange($any($event.target).value)"
+        />
+      </div>
+      <div class="field">
+        <label>{{ 'appSettings.defaultMinQualificationScore' | translate }}</label>
+        <input
+          type="number"
+          class="input"
+          [value]="researchMinScore()"
+          (input)="onResearchMinScoreChange($any($event.target).value)"
+        />
+      </div>
+      <div class="field">
+        <label>{{ 'appSettings.defaultRequestedProspectCount' | translate }}</label>
+        <input
+          type="number"
+          class="input"
+          [value]="researchRequestedCount()"
+          (input)="onResearchRequestedCountChange($any($event.target).value)"
+        />
+      </div>
+      <div class="field">
+        <label>{{ 'appSettings.providerTimeoutSeconds' | translate }}</label>
+        <input
+          type="number"
+          class="input"
+          [value]="researchTimeout()"
+          (input)="onResearchTimeoutChange($any($event.target).value)"
+        />
+      </div>
+      <div class="field">
+        <label>{{ 'appSettings.maxPagesPerCrawl' | translate }}</label>
+        <input
+          type="number"
+          class="input"
+          [value]="researchMaxPages()"
+          (input)="onResearchMaxPagesChange($any($event.target).value)"
+        />
+      </div>
+      <div class="field">
+        <label>{{ 'appSettings.maxSearchResults' | translate }}</label>
+        <input
+          type="number"
+          class="input"
+          [value]="researchMaxResults()"
+          (input)="onResearchMaxResultsChange($any($event.target).value)"
+        />
+      </div>
+      <div class="field">
+        <label>{{ 'appSettings.maxSearchQueries' | translate }}</label>
+        <input
+          type="number"
+          class="input"
+          [value]="researchMaxQueries()"
+          (input)="onResearchMaxQueriesChange($any($event.target).value)"
+        />
+      </div>
+      <div class="field">
+        <label>{{ 'appSettings.maxSearchRequests' | translate }}</label>
+        <input
+          type="number"
+          class="input"
+          [value]="researchMaxRequests()"
+          (input)="onResearchMaxRequestsChange($any($event.target).value)"
+        />
+      </div>
+      <div class="field">
+        <label>{{ 'appSettings.maxResearchDurationMinutes' | translate }}</label>
+        <input
+          type="number"
+          class="input"
+          [value]="researchMaxDurationMinutes()"
+          (input)="onResearchMaxDurationMinutesChange($any($event.target).value)"
+        />
+      </div>
+      <div class="field">
+        <label>{{ 'appSettings.discoveryOversampleFactor' | translate }}</label>
+        <input
+          type="number"
+          class="input"
+          [value]="researchOversampleFactor()"
+          (input)="onResearchOversampleFactorChange($any($event.target).value)"
+        />
+      </div>
+      <div class="field">
+        <label>{{ 'appSettings.minSearchRelevanceScore' | translate }}</label>
+        <input
+          type="number"
+          class="input"
+          [value]="researchMinRelevance()"
+          (input)="onResearchMinRelevanceChange($any($event.target).value)"
+        />
+      </div>
+      <div class="field">
+        <label>{{ 'appSettings.bingSearchApiKey' | translate }}</label>
+        <input
+          type="password"
+          class="input"
+          [value]="researchBingKey()"
+          (input)="onResearchBingKeyChange($any($event.target).value)"
+          [placeholder]="
+            (researchBingKeyConfigured()
+              ? 'appSettings.secretKeepExisting'
+              : 'appSettings.apiKeyPlaceholder'
+            ) | translate
+          "
+        />
+      </div>
+      <div class="field">
+        <label>{{ 'appSettings.bingSearchEndpoint' | translate }}</label>
+        <input
+          type="text"
+          class="input"
+          [value]="researchBingEndpoint()"
+          (input)="onResearchBingEndpointChange($any($event.target).value)"
+        />
+      </div>
+      <div class="field">
+        <label>{{ 'appSettings.googleSearchApiKey' | translate }}</label>
+        <input
+          type="password"
+          class="input"
+          [value]="researchGoogleKey()"
+          (input)="onResearchGoogleKeyChange($any($event.target).value)"
+          [placeholder]="
+            (researchGoogleKeyConfigured()
+              ? 'appSettings.secretKeepExisting'
+              : 'appSettings.apiKeyPlaceholder'
+            ) | translate
+          "
+        />
+      </div>
+      <div class="field">
+        <label>{{ 'appSettings.googleSearchEngineId' | translate }}</label>
+        <input
+          type="text"
+          class="input"
+          [value]="researchGoogleCx()"
+          (input)="onResearchGoogleCxChange($any($event.target).value)"
+        />
+      </div>
+    </div>
+
+    <h4>{{ 'appSettings.braveTitle' | translate }}</h4>
+    <p class="section-hint">{{ 'appSettings.braveHint' | translate }}</p>
+    <div class="toggle-grid">
+      <label class="check-row">
+        <input
+          type="checkbox"
+          [checked]="braveEnabled()"
+          (change)="onBraveEnabledChange($any($event.target).checked)"
+        />
+        <span>{{ 'appSettings.braveEnabled' | translate }}</span>
+      </label>
+    </div>
+    <div class="field-grid">
+      <div class="field">
+        <label>{{ 'appSettings.braveApiKey' | translate }}</label>
+        <input
+          type="password"
+          class="input"
+          [value]="braveApiKey()"
+          (input)="onBraveApiKeyChange($any($event.target).value)"
+          [placeholder]="
+            (braveApiKeyConfigured()
+              ? 'appSettings.secretKeepExisting'
+              : 'appSettings.apiKeyPlaceholder'
+            ) | translate
+          "
+        />
+      </div>
+      <div class="field">
+        <label>{{ 'appSettings.braveBaseUrl' | translate }}</label>
+        <input
+          type="text"
+          class="input"
+          [value]="braveBaseUrl()"
+          (input)="onBraveBaseUrlChange($any($event.target).value)"
+        />
+      </div>
+      <div class="field">
+        <label>{{ 'appSettings.braveTimeoutSeconds' | translate }}</label>
+        <input
+          type="number"
+          class="input"
+          [value]="braveTimeout()"
+          (input)="onBraveTimeoutChange($any($event.target).value)"
+        />
+      </div>
+      <div class="field">
+        <label>{{ 'appSettings.braveMaxResultsPerQuery' | translate }}</label>
+        <input
+          type="number"
+          class="input"
+          [value]="braveMaxResults()"
+          (input)="onBraveMaxResultsChange($any($event.target).value)"
+        />
+      </div>
+      <div class="field">
+        <label>{{ 'appSettings.braveMaxRequestsPerRun' | translate }}</label>
+        <input
+          type="number"
+          class="input"
+          [value]="braveMaxRequests()"
+          (input)="onBraveMaxRequestsChange($any($event.target).value)"
+        />
+      </div>
+      <div class="field">
+        <label>{{ 'appSettings.braveRequestDelayMs' | translate }}</label>
+        <input
+          type="number"
+          class="input"
+          [value]="braveRequestDelay()"
+          (input)="onBraveRequestDelayChange($any($event.target).value)"
+        />
+      </div>
+    </div>
+    <div class="brave-status-row">
+      <span class="section-hint">
+        {{ 'appSettings.braveConnectionStatus' | translate }}:
+        {{ braveStatusLabelKey() | translate }}
+      </span>
+      @if (braveConnectionMessage()) {
+        <span class="section-hint">{{ braveConnectionMessage() }}</span>
+      }
+      <button
+        type="button"
+        class="btn btn-ghost"
+        [disabled]="testingBrave() || saving()"
+        (click)="testBraveConnection()"
+      >
+        {{ 'appSettings.braveTestConnection' | translate }}
+      </button>
+    </div>
+
+    <h4>{{ 'appSettings.searxngTitle' | translate }}</h4>
+    <p class="section-hint">{{ 'appSettings.searxngHint' | translate }}</p>
+    <div class="toggle-grid">
+      <label class="check-row">
+        <input
+          type="checkbox"
+          [checked]="searXngEnabled()"
+          (change)="onSearXngEnabledChange($any($event.target).checked)"
+        />
+        <span>{{ 'appSettings.searxngEnabled' | translate }}</span>
+      </label>
+      <label class="check-row">
+        <input
+          type="checkbox"
+          [checked]="searXngAllowPrivateHosts()"
+          (change)="onSearXngAllowPrivateHostsChange($any($event.target).checked)"
+        />
+        <span>{{ 'appSettings.searxngAllowPrivateNetworkHosts' | translate }}</span>
+      </label>
+    </div>
+    <div class="field-grid">
+      <div class="field">
+        <label>{{ 'appSettings.searxngBaseUrl' | translate }}</label>
+        <input
+          type="text"
+          class="input"
+          [value]="searXngBaseUrl()"
+          (input)="onSearXngBaseUrlChange($any($event.target).value)"
+          [placeholder]="'appSettings.searxngBaseUrlPlaceholder' | translate"
+        />
+      </div>
+      <div class="field">
+        <label>{{ 'appSettings.searxngDefaultLanguage' | translate }}</label>
+        <input
+          type="text"
+          class="input"
+          [value]="searXngDefaultLanguage()"
+          (input)="onSearXngDefaultLanguageChange($any($event.target).value)"
+        />
+      </div>
+      <div class="field">
+        <label>{{ 'appSettings.searxngTimeoutSeconds' | translate }}</label>
+        <input
+          type="number"
+          class="input"
+          [value]="searXngTimeout()"
+          (input)="onSearXngTimeoutChange($any($event.target).value)"
+        />
+      </div>
+      <div class="field">
+        <label>{{ 'appSettings.searxngDefaultResultsPerQuery' | translate }}</label>
+        <input
+          type="number"
+          class="input"
+          [value]="searXngDefaultResults()"
+          (input)="onSearXngDefaultResultsChange($any($event.target).value)"
+        />
+      </div>
+      <div class="field">
+        <label>{{ 'appSettings.searxngMaximumPagesPerQuery' | translate }}</label>
+        <input
+          type="number"
+          class="input"
+          [value]="searXngMaxPages()"
+          (input)="onSearXngMaxPagesChange($any($event.target).value)"
+        />
+      </div>
+      <div class="field">
+        <label>{{ 'appSettings.searxngMaxRequestsPerRun' | translate }}</label>
+        <input
+          type="number"
+          class="input"
+          [value]="searXngMaxRequests()"
+          (input)="onSearXngMaxRequestsChange($any($event.target).value)"
+        />
+      </div>
+      <div class="field">
+        <label>{{ 'appSettings.searxngRequestDelayMs' | translate }}</label>
+        <input
+          type="number"
+          class="input"
+          [value]="searXngRequestDelay()"
+          (input)="onSearXngRequestDelayChange($any($event.target).value)"
+        />
+      </div>
+      <div class="field">
+        <label>{{ 'appSettings.searxngBasicAuthUsername' | translate }}</label>
+        <input
+          type="text"
+          class="input"
+          [value]="searXngBasicAuthUsername()"
+          (input)="onSearXngBasicAuthUsernameChange($any($event.target).value)"
+          [placeholder]="
+            (searXngBasicAuthConfigured()
+              ? 'appSettings.secretKeepExisting'
+              : 'appSettings.apiKeyPlaceholder'
+            ) | translate
+          "
+        />
+      </div>
+      <div class="field">
+        <label>{{ 'appSettings.searxngBasicAuthPassword' | translate }}</label>
+        <input
+          type="password"
+          class="input"
+          [value]="searXngBasicAuthPassword()"
+          (input)="onSearXngBasicAuthPasswordChange($any($event.target).value)"
+          [placeholder]="
+            (searXngBasicAuthConfigured()
+              ? 'appSettings.secretKeepExisting'
+              : 'appSettings.apiKeyPlaceholder'
+            ) | translate
+          "
+        />
+      </div>
+    </div>
+    <div class="brave-status-row">
+      <span class="section-hint">
+        {{ 'appSettings.searxngConnectionStatus' | translate }}:
+        {{ searXngStatusLabelKey() | translate }}
+      </span>
+      @if (searXngConnectionMessage()) {
+        <span class="section-hint">{{ searXngConnectionMessage() }}</span>
+      }
+      <button
+        type="button"
+        class="btn btn-ghost"
+        [disabled]="testingSearXng() || saving()"
+        (click)="testSearXngConnection()"
+      >
+        {{ 'appSettings.searxngTestConnection' | translate }}
+      </button>
+    </div>
+
+    <div class="field">
+      <label>{{ 'appSettings.hostDenylist' | translate }}</label>
+      <textarea
+        class="textarea"
+        rows="6"
+        [value]="researchHostDenylistText()"
+        (input)="onResearchHostDenylistChange($any($event.target).value)"
+        [placeholder]="'appSettings.hostDenylistPlaceholder' | translate"
+      ></textarea>
+    </div>
+  }
+
+  @if (section() === 'whatsapp') {
+    <h3>{{ 'appSettings.whatsappTitle' | translate }}</h3>
+    <p class="section-hint">{{ 'appSettings.whatsappHint' | translate }}</p>
+    <div class="field-grid">
+      <div class="field">
+        <label>{{ 'appSettings.accessToken' | translate }}</label>
+        <input
+          type="password"
+          class="input"
+          [value]="whatsAppToken()"
+          (input)="onWhatsAppTokenChange($any($event.target).value)"
+          [placeholder]="
+            (whatsAppTokenConfigured()
+              ? 'appSettings.secretKeepExisting'
+              : 'appSettings.apiKeyPlaceholder'
+            ) | translate
+          "
+        />
+      </div>
+      <div class="field">
+        <label>{{ 'appSettings.phoneNumberId' | translate }}</label>
+        <input
+          type="text"
+          class="input"
+          [value]="whatsAppPhoneNumberId()"
+          (input)="onWhatsAppPhoneNumberIdChange($any($event.target).value)"
+        />
+      </div>
+      <div class="field">
+        <label>{{ 'appSettings.apiVersion' | translate }}</label>
+        <input
+          type="text"
+          class="input"
+          [value]="whatsAppApiVersion()"
+          (input)="onWhatsAppApiVersionChange($any($event.target).value)"
+        />
+      </div>
+      <div class="field">
+        <label>{{ 'appSettings.baseUrl' | translate }}</label>
+        <input
+          type="text"
+          class="input"
+          [value]="whatsAppBaseUrl()"
+          (input)="onWhatsAppBaseUrlChange($any($event.target).value)"
+        />
+      </div>
+      <div class="field">
+        <label>{{ 'appSettings.defaultTemplateLanguage' | translate }}</label>
+        <input
+          type="text"
+          class="input"
+          [value]="whatsAppLanguage()"
+          (input)="onWhatsAppLanguageChange($any($event.target).value)"
+        />
+      </div>
+      <div class="field">
+        <label>{{ 'appSettings.timeoutSeconds' | translate }}</label>
+        <input
+          type="number"
+          class="input"
+          [value]="whatsAppTimeout()"
+          (input)="onWhatsAppTimeoutChange($any($event.target).value)"
+        />
+      </div>
+    </div>
+    <label class="check-row">
+      <input
+        type="checkbox"
+        [checked]="whatsAppPreferTemplate()"
+        (change)="onWhatsAppPreferTemplateChange($any($event.target).checked)"
+      />
+      <span>{{ 'appSettings.preferTemplateMessages' | translate }}</span>
+    </label>
+  }
+
+  @if (section() === 'microsoft') {
+    <h3>{{ 'appSettings.microsoftTitle' | translate }}</h3>
+    <p class="section-hint">{{ 'appSettings.microsoftHint' | translate }}</p>
+    <div class="field-grid">
+      <div class="field">
+        <label>{{ 'appSettings.clientId' | translate }}</label>
+        <input
+          type="text"
+          class="input"
+          [value]="graphClientId()"
+          (input)="onGraphClientIdChange($any($event.target).value)"
+        />
+      </div>
+      <div class="field">
+        <label>{{ 'appSettings.clientSecret' | translate }}</label>
+        <input
+          type="password"
+          class="input"
+          [value]="graphClientSecret()"
+          (input)="onGraphClientSecretChange($any($event.target).value)"
+          [placeholder]="
+            (graphClientSecretConfigured()
+              ? 'appSettings.secretKeepExisting'
+              : 'appSettings.apiKeyPlaceholder'
+            ) | translate
+          "
+        />
+      </div>
+      <div class="field">
+        <label>{{ 'appSettings.tenantId' | translate }}</label>
+        <input
+          type="text"
+          class="input"
+          [value]="graphTenantId()"
+          (input)="onGraphTenantIdChange($any($event.target).value)"
+        />
+      </div>
+      <div class="field">
+        <label>{{ 'appSettings.redirectUri' | translate }}</label>
+        <input
+          type="text"
+          class="input"
+          [value]="graphRedirectUri()"
+          (input)="onGraphRedirectUriChange($any($event.target).value)"
+        />
+      </div>
+      <div class="field">
+        <label>{{ 'appSettings.frontendSuccessUri' | translate }}</label>
+        <input
+          type="text"
+          class="input"
+          [value]="graphSuccessUri()"
+          (input)="onGraphSuccessUriChange($any($event.target).value)"
+        />
+      </div>
+      <div class="field">
+        <label>{{ 'appSettings.frontendErrorUri' | translate }}</label>
+        <input
+          type="text"
+          class="input"
+          [value]="graphErrorUri()"
+          (input)="onGraphErrorUriChange($any($event.target).value)"
+        />
+      </div>
+    </div>
+  }
+
+  @if (section() === 'emailSending') {
+    <h3>{{ 'appSettings.emailSendingTitle' | translate }}</h3>
+    <p class="section-hint">{{ 'appSettings.emailSendingHint' | translate }}</p>
+    <div class="field-grid">
+      <div class="field">
+        <label>{{ 'appSettings.defaultDelayMilliseconds' | translate }}</label>
+        <input
+          type="number"
+          class="input"
+          [value]="emailDelay()"
+          (input)="onEmailDelayChange($any($event.target).value)"
+        />
+      </div>
+      <div class="field">
+        <label>{{ 'appSettings.defaultBatchSize' | translate }}</label>
+        <input
+          type="number"
+          class="input"
+          [value]="emailBatchSize()"
+          (input)="onEmailBatchSizeChange($any($event.target).value)"
+        />
+      </div>
+      <div class="field">
+        <label>{{ 'appSettings.defaultMaxRetryCount' | translate }}</label>
+        <input
+          type="number"
+          class="input"
+          [value]="emailRetries()"
+          (input)="onEmailRetriesChange($any($event.target).value)"
+        />
+      </div>
+      <div class="field">
+        <label>{{ 'appSettings.connectionTimeoutSeconds' | translate }}</label>
+        <input
+          type="number"
+          class="input"
+          [value]="emailTimeout()"
+          (input)="onEmailTimeoutChange($any($event.target).value)"
+        />
+      </div>
+    </div>
+  }
+
+  @if (section() === 'attachments') {
+    <h3>{{ 'appSettings.attachmentsTitle' | translate }}</h3>
+    <p class="section-hint">{{ 'appSettings.attachmentsHint' | translate }}</p>
+    <div class="field-grid">
+      <div class="field">
+        <label>{{ 'appSettings.maxFileSizeBytes' | translate }}</label>
+        <input
+          type="number"
+          class="input"
+          [value]="attachmentMaxFile()"
+          (input)="onAttachmentMaxFileChange($any($event.target).value)"
+        />
+      </div>
+      <div class="field">
+        <label>{{ 'appSettings.maxTotalSizeBytes' | translate }}</label>
+        <input
+          type="number"
+          class="input"
+          [value]="attachmentMaxTotal()"
+          (input)="onAttachmentMaxTotalChange($any($event.target).value)"
+        />
+      </div>
+      <div class="field">
+        <label>{{ 'appSettings.storageRoot' | translate }}</label>
+        <input
+          type="text"
+          class="input"
+          [value]="attachmentStorageRoot()"
+          (input)="onAttachmentStorageRootChange($any($event.target).value)"
+        />
+      </div>
+    </div>
+    <div class="field">
+      <label>{{ 'appSettings.allowedContentTypes' | translate }}</label>
+      <textarea
+        class="textarea"
+        rows="8"
+        [value]="attachmentTypesText()"
+        (input)="onAttachmentTypesChange($any($event.target).value)"
+        [placeholder]="'appSettings.allowedContentTypesPlaceholder' | translate"
+      ></textarea>
+    </div>
+  }
+
+  @if (section() === 'queues') {
+    <h3>{{ 'appSettings.queuesTitle' | translate }}</h3>
+    <p class="section-hint">{{ 'appSettings.queuesHint' | translate }}</p>
+    <div class="field">
+      <label>{{ 'appSettings.queueProvider' | translate }}</label>
+      <select
+        class="input"
+        [value]="queueProvider()"
+        (change)="onQueueProviderChange($any($event.target).value)"
+      >
+        @for (option of queueProviderOptions; track option.value) {
+          <option [value]="option.value">{{ option.labelKey | translate }}</option>
+        }
+      </select>
+    </div>
+  }
+
+  <div class="panel-actions">
+    <button type="button" class="btn btn-primary" [disabled]="saving()" (click)="save()">
+      {{ 'appSettings.save' | translate }}
+    </button>
+  </div>
+</section>

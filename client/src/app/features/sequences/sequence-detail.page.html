@@ -1,0 +1,281 @@
+<div class="sequence-detail-page">
+  <div class="breadcrumb">
+    <a routerLink="/sequences">{{ 'sequences.backToList' | translate }}</a>
+  </div>
+
+  @if (loading()) {
+    <app-loading />
+  } @else if (sequence()) {
+    <div class="page-header">
+      <div>
+        <h2>{{ sequence()!.name }}</h2>
+        <p class="meta">{{ descriptionLabel() }}</p>
+        <p class="meta">
+          <span>{{ 'sequences.project' | translate }}:</span>
+          {{ projectLabel() }}
+        </p>
+        <p class="meta">
+          <span>{{ 'sequences.active' | translate }}:</span>
+          {{ statusLabelKey() | translate }}
+        </p>
+      </div>
+      <div class="header-actions">
+        <button type="button" class="btn btn-ghost" (click)="openEdit()">
+          {{ 'sequences.edit' | translate }}
+        </button>
+        <button type="button" class="btn btn-primary" (click)="openEnroll()">
+          {{ 'sequences.enrollProspects' | translate }}
+        </button>
+      </div>
+    </div>
+
+    <section class="card">
+      <h3>{{ 'sequences.analyticsSection' | translate }}</h3>
+      @if (!analytics()) {
+        <p class="empty-hint">{{ 'sequences.noAnalytics' | translate }}</p>
+      } @else {
+        <div class="stats-grid">
+          <div class="stat-tile">
+            <span class="stat-label">{{ 'sequences.statTotal' | translate }}</span>
+            <strong>{{ analytics()!.totalEnrollments }}</strong>
+          </div>
+          <div class="stat-tile">
+            <span class="stat-label">{{ 'sequences.statActive' | translate }}</span>
+            <strong>{{ analytics()!.activeCount }}</strong>
+          </div>
+          <div class="stat-tile">
+            <span class="stat-label">{{ 'sequences.statCompleted' | translate }}</span>
+            <strong>{{ analytics()!.completedCount }}</strong>
+          </div>
+          <div class="stat-tile">
+            <span class="stat-label">{{ 'sequences.statFailed' | translate }}</span>
+            <strong>{{ analytics()!.failedCount }}</strong>
+          </div>
+          <div class="stat-tile">
+            <span class="stat-label">{{ 'sequences.statCancelled' | translate }}</span>
+            <strong>{{ analytics()!.cancelledCount }}</strong>
+          </div>
+          <div class="stat-tile">
+            <span class="stat-label">{{ 'sequences.statCompletionRate' | translate }}</span>
+            <strong>{{ analytics()!.completionRateLabel }}</strong>
+          </div>
+        </div>
+
+        @if (analytics()!.variants.length > 0) {
+          <h4>{{ 'sequences.variantAnalytics' | translate }}</h4>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>{{ 'sequences.variantKey' | translate }}</th>
+                  <th>{{ 'sequences.statTotal' | translate }}</th>
+                  <th>{{ 'sequences.statActive' | translate }}</th>
+                  <th>{{ 'sequences.statCompleted' | translate }}</th>
+                  <th>{{ 'sequences.statFailed' | translate }}</th>
+                  <th>{{ 'sequences.statCompletionRate' | translate }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (variant of analytics()!.variants; track variant.variantKey) {
+                  <tr>
+                    <td>{{ variant.variantKey }}</td>
+                    <td>{{ variant.enrollmentCount }}</td>
+                    <td>{{ variant.activeCount }}</td>
+                    <td>{{ variant.completedCount }}</td>
+                    <td>{{ variant.failedCount }}</td>
+                    <td>{{ variant.completionRateLabel }}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+
+        @if (analytics()!.steps.length > 0) {
+          <h4>{{ 'sequences.stepAnalytics' | translate }}</h4>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>{{ 'sequences.stepOrder' | translate }}</th>
+                  <th>{{ 'sequences.variantKey' | translate }}</th>
+                  <th>{{ 'sequences.channel' | translate }}</th>
+                  <th>{{ 'sequences.template' | translate }}</th>
+                  <th>{{ 'sequences.trafficPercent' | translate }}</th>
+                  <th>{{ 'sequences.reachedCount' | translate }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (step of analytics()!.steps; track step.stepOrder + '-' + step.variantLabel) {
+                  <tr>
+                    <td>{{ step.stepOrder }}</td>
+                    <td>{{ step.variantLabel }}</td>
+                    <td>{{ step.channelLabelKey | translate }}</td>
+                    <td>{{ step.templateLabel }}</td>
+                    <td>{{ step.trafficPercent }}</td>
+                    <td>{{ step.reachedCount }}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+      }
+    </section>
+
+    <section class="card">
+      <h3>{{ 'sequences.stepsSection' | translate }}</h3>
+      @if (steps().length === 0) {
+        <p class="empty-hint">{{ 'sequences.noSteps' | translate }}</p>
+      } @else {
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>{{ 'sequences.stepOrder' | translate }}</th>
+                <th>{{ 'sequences.variantKey' | translate }}</th>
+                <th>{{ 'sequences.trafficPercent' | translate }}</th>
+                <th>{{ 'sequences.channel' | translate }}</th>
+                <th>{{ 'sequences.template' | translate }}</th>
+                <th>{{ 'sequences.delayHours' | translate }}</th>
+                <th>{{ 'sequences.whatsAppTemplateName' | translate }}</th>
+                <th>{{ 'sequences.whatsAppTemplateLanguage' | translate }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (step of steps(); track step.id ?? (step.stepOrder + '-' + step.variantLabel)) {
+                <tr>
+                  <td>{{ step.stepOrder }}</td>
+                  <td>{{ step.variantLabel }}</td>
+                  <td>{{ step.trafficPercent }}</td>
+                  <td>{{ step.channelLabelKey | translate }}</td>
+                  <td>{{ step.templateLabel }}</td>
+                  <td>{{ step.delayHoursAfterPrevious }}</td>
+                  <td>
+                    @if (step.showWhatsAppFields) {
+                      {{ step.whatsAppTemplateName }}
+                    } @else {
+                      —
+                    }
+                  </td>
+                  <td>
+                    @if (step.showWhatsAppFields) {
+                      {{ step.whatsAppTemplateLanguage }}
+                    } @else {
+                      —
+                    }
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </section>
+
+    <section class="card">
+      <h3>{{ 'sequences.enrollmentsSection' | translate }}</h3>
+      @if (enrollments().length === 0) {
+        <p class="empty-hint">{{ 'sequences.noEnrollments' | translate }}</p>
+      } @else {
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>{{ 'sequences.prospect' | translate }}</th>
+                <th>{{ 'sequences.variantKey' | translate }}</th>
+                <th>{{ 'sequences.enrollmentStatus' | translate }}</th>
+                <th>{{ 'sequences.currentStep' | translate }}</th>
+                <th>{{ 'sequences.nextRun' | translate }}</th>
+                <th>{{ 'sequences.enrolledAt' | translate }}</th>
+                <th>{{ 'sequences.completedAt' | translate }}</th>
+                <th>{{ 'sequences.lastError' | translate }}</th>
+                <th>{{ 'sequences.actions' | translate }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (enrollment of enrollments(); track enrollment.id) {
+                <tr>
+                  <td class="name">{{ enrollment.companyLabel }}</td>
+                  <td>{{ enrollment.variantLabel }}</td>
+                  <td>
+                    <app-status-badge prefix="sequenceStatus" [status]="enrollment.status" />
+                  </td>
+                  <td>{{ enrollment.currentStepOrder }}</td>
+                  <td>{{ enrollment.nextRunLabel }}</td>
+                  <td>{{ enrollment.enrolledLabel }}</td>
+                  <td>{{ enrollment.completedLabel }}</td>
+                  <td>{{ enrollment.errorLabel }}</td>
+                  <td class="actions-cell">
+                    @if (enrollment.canCancel) {
+                      <button
+                        type="button"
+                        class="btn btn-danger btn-sm"
+                        [disabled]="saving()"
+                        (click)="openCancelEnrollment(enrollment.id)"
+                      >
+                        {{ 'sequences.cancelEnrollment' | translate }}
+                      </button>
+                    }
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </section>
+  }
+</div>
+
+@if (enrollOpen()) {
+  <div class="overlay" (click)="closeEnroll()">
+    <div class="dialog dialog-wide" role="dialog" (click)="$event.stopPropagation()">
+      <h2>{{ 'sequences.enrollTitle' | translate }}</h2>
+      <p class="dialog-hint">{{ 'sequences.enrollHint' | translate }}</p>
+      @if (displayProspects().length === 0) {
+        <p class="empty-hint">{{ 'sequences.noProspects' | translate }}</p>
+      } @else {
+        <div class="prospect-list">
+          @for (prospect of displayProspects(); track prospect.id) {
+            <label class="toggle-row">
+              <input
+                type="checkbox"
+                [checked]="prospect.selected"
+                (change)="toggleProspect(prospect.id)"
+              />
+              <span>{{ prospect.label }}</span>
+            </label>
+          }
+        </div>
+      }
+      <div class="dialog-actions">
+        <button type="button" class="btn btn-ghost" [disabled]="saving()" (click)="closeEnroll()">
+          {{ 'common.cancel' | translate }}
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          [disabled]="saving() || !hasProspectSelection()"
+          (click)="confirmEnroll()"
+        >
+          {{ 'sequences.enrollConfirm' | translate }}
+          @if (hasProspectSelection()) {
+            ({{ selectedProspectCount() }})
+          }
+        </button>
+      </div>
+    </div>
+  </div>
+}
+
+<app-confirm-dialog
+  [visible]="cancelEnrollmentId() !== null"
+  [titleKey]="'sequences.cancelEnrollmentTitle'"
+  [messageKey]="'sequences.cancelEnrollmentMessage'"
+  [confirmKey]="'sequences.cancelEnrollment'"
+  [confirmVariant]="'danger'"
+  [loading]="saving()"
+  (confirmed)="confirmCancelEnrollment()"
+  (cancelled)="closeCancelEnrollment()"
+/>

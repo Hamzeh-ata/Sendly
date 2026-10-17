@@ -70,6 +70,20 @@ public class CampaignsController : ControllerBase
         return Ok(recipients);
     }
 
+    [HttpPost("{id:guid}/start")]
+    public async Task<IActionResult> Start(Guid id, CancellationToken cancellationToken)
+    {
+        try
+        {
+            await _campaignService.StartAsync(id, cancellationToken);
+            return Accepted();
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+    }
+
     [HttpPost("{id:guid}/cancel")]
     public async Task<IActionResult> Cancel(Guid id, CancellationToken cancellationToken)
     {

@@ -1,8 +1,17 @@
+:host {
+  display: block;
+}
+
 .signatures-manager {
   margin-top: 1.5rem;
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  box-shadow: var(--shadow-sm);
 }
 
 .section-header {
@@ -10,6 +19,12 @@
   justify-content: space-between;
   gap: 1rem;
   align-items: flex-start;
+
+  h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: var(--text-primary);
+  }
 }
 
 .section-desc {
@@ -40,7 +55,7 @@
   padding: 1rem;
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
-  background: var(--bg-elevated);
+  background: var(--bg-secondary);
 }
 
 .name-row {
@@ -53,6 +68,7 @@
   h4 {
     margin: 0;
     font-size: 1rem;
+    color: var(--text-primary);
   }
 }
 
@@ -95,33 +111,50 @@
 .editor-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(4, 8, 16, 0.72);
+  background: rgba(4, 8, 16, 0.82);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1200;
-  padding: 1rem;
+  z-index: 4000;
+  padding: 1.25rem;
 }
 
 .editor-dialog {
-  width: min(820px, 100%);
-  max-height: 90vh;
+  width: min(760px, 100%);
+  max-height: min(88vh, 860px);
   overflow: auto;
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  background: var(--bg-card, #1a2332);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 14px;
+  padding: 1.35rem 1.5rem;
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.55);
+  color: var(--text-primary);
 }
 
-.dialog-header,
-.dialog-actions {
+.dialog-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 0.75rem;
+
+  h3 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    color: var(--text-primary);
+  }
 }
 
 .dialog-actions {
+  display: flex;
   justify-content: flex-end;
+  align-items: center;
+  gap: 0.75rem;
+  padding-top: 0.25rem;
+  border-top: 1px solid var(--border);
 }
 
 .field {
@@ -149,5 +182,9 @@
   .signature-actions {
     flex-direction: row;
     flex-wrap: wrap;
+  }
+
+  .editor-dialog {
+    padding: 1rem;
   }
 }

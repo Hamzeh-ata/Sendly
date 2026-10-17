@@ -1,4 +1,5 @@
 import { CampaignAttachment } from './attachment.model';
+import { EmailProvider } from './email-account.model';
 
 export type CampaignStatus =
   | 'draft'
@@ -39,6 +40,9 @@ export interface CreateCampaignRequest {
   batchSize: number | null;
   maxRetryCount: number | null;
   idempotencyKey: string | null;
+  templateId: string | null;
+  allowAlreadyContacted: boolean;
+  emailAccountId: string | null;
 }
 
 export interface TestEmailRequest {
@@ -47,6 +51,7 @@ export interface TestEmailRequest {
   htmlBody: string;
   attachmentIds: string[];
   signatureId: string | null;
+  emailAccountId: string | null;
 }
 
 export interface CampaignSummary {
@@ -63,6 +68,12 @@ export interface CampaignSummary {
   createdAtUtc: string;
   startedAtUtc: string | null;
   completedAtUtc: string | null;
+  templateId: string | null;
+  templateName: string | null;
+  emailAccountId: string | null;
+  provider: EmailProvider | null;
+  sendingAccountName: string | null;
+  sendingAccountEmail: string | null;
 }
 
 export interface CampaignDetail extends CampaignSummary {

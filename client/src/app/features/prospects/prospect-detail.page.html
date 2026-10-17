@@ -1,0 +1,220 @@
+<div class="prospect-detail-page">
+  <div class="breadcrumb">
+    <a routerLink="/prospects">{{ 'prospects.backToList' | translate }}</a>
+  </div>
+
+  @if (loading()) {
+    <app-loading />
+  } @else if (prospect()) {
+    <div class="page-header">
+      <div>
+        <h2>{{ prospect()!.companyName }}</h2>
+        <p class="meta">
+          <span>{{ 'prospects.project' | translate }}:</span>
+          {{ prospect()!.projectName || '—' }}
+        </p>
+        <app-status-badge prefix="prospectStatus" [status]="prospect()!.status" />
+      </div>
+      <div class="header-actions">
+        <button type="button" class="btn btn-ghost" [disabled]="saving()" (click)="approve()">
+          {{ 'prospects.approve' | translate }}
+        </button>
+        <button type="button" class="btn btn-ghost" [disabled]="saving()" (click)="reject()">
+          {{ 'prospects.reject' | translate }}
+        </button>
+        <button type="button" class="btn btn-ghost" [disabled]="saving()" (click)="doNotContact()">
+          {{ 'prospects.doNotContact' | translate }}
+        </button>
+        <button type="button" class="btn btn-ghost" [disabled]="saving()" (click)="recommendTemplate()">
+          {{ 'prospects.recommendTemplate' | translate }}
+        </button>
+        <button type="button" class="btn btn-primary" [disabled]="saving()" (click)="openCampaign()">
+          {{ 'prospects.createCampaign' | translate }}
+        </button>
+      </div>
+    </div>
+
+    <div class="info-grid">
+      <section class="card">
+        <h3>{{ 'prospects.companySection' | translate }}</h3>
+        <div class="meta-grid">
+          <div>
+            <span class="meta-label">{{ 'prospects.website' | translate }}</span>
+            <span class="meta-value">{{ prospect()!.website || '—' }}</span>
+          </div>
+          <div>
+            <span class="meta-label">{{ 'prospects.country' | translate }}</span>
+            <span class="meta-value">{{ prospect()!.country || '—' }}</span>
+          </div>
+          <div>
+            <span class="meta-label">{{ 'prospects.city' | translate }}</span>
+            <span class="meta-value">{{ prospect()!.city || '—' }}</span>
+          </div>
+          <div>
+            <span class="meta-label">{{ 'prospects.industry' | translate }}</span>
+            <span class="meta-value">{{ prospect()!.industry || '—' }}</span>
+          </div>
+          <div>
+            <span class="meta-label">{{ 'prospects.companySize' | translate }}</span>
+            <span class="meta-value">{{ prospect()!.companySize || '—' }}</span>
+          </div>
+        </div>
+        <p class="body-text">{{ prospect()!.companyDescription || ('prospects.noDescription' | translate) }}</p>
+      </section>
+
+      <section class="card">
+        <h3>{{ 'prospects.contactSection' | translate }}</h3>
+        <div class="meta-grid">
+          <div>
+            <span class="meta-label">{{ 'prospects.contact' | translate }}</span>
+            <span class="meta-value">{{ prospect()!.contactName || '—' }}</span>
+          </div>
+          <div>
+            <span class="meta-label">{{ 'prospects.role' | translate }}</span>
+            <span class="meta-value">{{ prospect()!.contactRole || '—' }}</span>
+          </div>
+          <div>
+            <span class="meta-label">{{ 'prospects.email' | translate }}</span>
+            <span class="meta-value">{{ prospect()!.email || '—' }}</span>
+          </div>
+          <div>
+            <span class="meta-label">{{ 'prospects.phone' | translate }}</span>
+            <span class="meta-value">{{ prospect()!.phone || '—' }}</span>
+          </div>
+          <div>
+            <span class="meta-label">{{ 'prospects.whatsApp' | translate }}</span>
+            <span class="meta-value">{{ prospect()!.whatsApp || '—' }}</span>
+          </div>
+          <div>
+            <span class="meta-label">{{ 'prospects.linkedIn' | translate }}</span>
+            <span class="meta-value">{{ prospect()!.linkedInUrl || '—' }}</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h3>{{ 'prospects.researchSection' | translate }}</h3>
+        <p class="body-text">{{ prospect()!.researchNotes || ('prospects.noResearchNotes' | translate) }}</p>
+      </section>
+
+      <section class="card">
+        <h3>{{ 'prospects.sourceSection' | translate }}</h3>
+        <div class="meta-grid">
+          <div>
+            <span class="meta-label">{{ 'prospects.sourceType' | translate }}</span>
+            <span class="meta-value">{{ prospect()!.sourceType }}</span>
+          </div>
+          <div>
+            <span class="meta-label">{{ 'prospects.sourceName' | translate }}</span>
+            <span class="meta-value">{{ prospect()!.sourceName || '—' }}</span>
+          </div>
+          <div>
+            <span class="meta-label">{{ 'prospects.sourceUrl' | translate }}</span>
+            <span class="meta-value">{{ prospect()!.sourceUrl || '—' }}</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h3>{{ 'prospects.qualificationSection' | translate }}</h3>
+        <div class="meta-grid">
+          <div>
+            <span class="meta-label">{{ 'prospects.qualification' | translate }}</span>
+            <span class="meta-value">{{ qualificationLabel() }}</span>
+          </div>
+          <div>
+            <span class="meta-label">{{ 'prospects.duplicate' | translate }}</span>
+            <span class="meta-value">{{ duplicateLabelKey() | translate }}</span>
+          </div>
+          <div>
+            <span class="meta-label">{{ 'prospects.emailConfidence' | translate }}</span>
+            <span class="meta-value">{{ prospect()!.emailConfidenceScore ?? '—' }}</span>
+          </div>
+          <div>
+            <span class="meta-label">{{ 'prospects.whatsAppConfidence' | translate }}</span>
+            <span class="meta-value">{{ prospect()!.whatsAppConfidenceScore ?? '—' }}</span>
+          </div>
+        </div>
+        <p class="body-text">{{ prospect()!.qualificationSummary || ('prospects.noQualificationSummary' | translate) }}</p>
+      </section>
+
+      <section class="card">
+        <h3>{{ 'prospects.templateSection' | translate }}</h3>
+        <div class="meta-grid">
+          <div>
+            <span class="meta-label">{{ 'prospects.template' | translate }}</span>
+            <span class="meta-value">{{ templateLabel() }}</span>
+          </div>
+          <div>
+            <span class="meta-label">{{ 'prospects.templateConfidence' | translate }}</span>
+            <span class="meta-value">{{ templateConfidence() }}</span>
+          </div>
+        </div>
+        <p class="body-text">{{ templateReason() }}</p>
+      </section>
+    </div>
+
+    <section class="card">
+      <h3>{{ 'prospects.contactHistorySection' | translate }}</h3>
+      @if (contactHistory().length === 0) {
+        <p class="empty-hint">{{ 'prospects.noContactHistory' | translate }}</p>
+      } @else {
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>{{ 'prospects.channel' | translate }}</th>
+                <th>{{ 'prospects.contactValue' | translate }}</th>
+                <th>{{ 'prospects.contactedAt' | translate }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (item of contactHistory(); track item.id) {
+                <tr>
+                  <td>{{ item.channelLabel }}</td>
+                  <td>{{ item.contactValue }}</td>
+                  <td>{{ item.contactedLabel }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+      <div class="timestamps">
+        <span>{{ 'prospects.created' | translate }}: {{ createdLabel() }}</span>
+        <span>{{ 'prospects.updated' | translate }}: {{ updatedLabel() }}</span>
+      </div>
+    </section>
+  }
+</div>
+
+@if (campaignOpen()) {
+  <div class="overlay" (click)="closeCampaign()">
+    <div class="dialog" role="dialog" (click)="$event.stopPropagation()">
+      <h2>{{ 'prospects.campaignTitle' | translate }}</h2>
+      <div class="field">
+        <label>{{ 'prospects.campaignChannel' | translate }}</label>
+        <select class="input" [value]="campaignChannel()" (change)="onCampaignChannelChange($any($event.target).value)">
+          <option value="email">{{ 'projects.channelEmail' | translate }}</option>
+          <option value="whatsApp">{{ 'projects.channelWhatsApp' | translate }}</option>
+        </select>
+      </div>
+      <label class="toggle-row">
+        <input
+          type="checkbox"
+          [checked]="useAiRecommendedTemplate()"
+          (change)="onUseAiTemplateChange($any($event.target).checked)"
+        />
+        <span>{{ 'prospects.useAiRecommendedTemplate' | translate }}</span>
+      </label>
+      <div class="dialog-actions">
+        <button type="button" class="btn btn-ghost" [disabled]="saving()" (click)="closeCampaign()">
+          {{ 'common.cancel' | translate }}
+        </button>
+        <button type="button" class="btn btn-primary" [disabled]="saving()" (click)="confirmCampaign()">
+          {{ 'prospects.createCampaign' | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+}

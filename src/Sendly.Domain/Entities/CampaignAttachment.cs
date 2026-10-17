@@ -11,6 +11,10 @@ public class CampaignAttachment
 
     public Campaign? Campaign { get; set; }
 
+    public Guid? TemplateId { get; set; }
+
+    public EmailTemplate? Template { get; set; }
+
     [Required]
     [MaxLength(260)]
     public string FileName { get; set; } = string.Empty;

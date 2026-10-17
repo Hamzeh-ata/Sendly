@@ -1,0 +1,49 @@
+<div class="sequences-page">
+  <div class="page-header">
+    <div>
+      <h2>{{ 'sequences.title' | translate }}</h2>
+      <p class="page-desc">{{ 'sequences.description' | translate }}</p>
+    </div>
+    <button type="button" class="btn btn-primary" (click)="openCreate()">
+      {{ 'sequences.create' | translate }}
+    </button>
+  </div>
+
+  @if (loading()) {
+    <app-loading />
+  } @else if (sequences().length === 0) {
+    <app-empty-state
+      [titleKey]="'sequences.emptyTitle'"
+      [descriptionKey]="'sequences.emptyDescription'"
+    />
+  } @else {
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>{{ 'sequences.name' | translate }}</th>
+            <th>{{ 'sequences.project' | translate }}</th>
+            <th>{{ 'sequences.descriptionColumn' | translate }}</th>
+            <th>{{ 'sequences.steps' | translate }}</th>
+            <th>{{ 'sequences.activeEnrollments' | translate }}</th>
+            <th>{{ 'sequences.active' | translate }}</th>
+            <th>{{ 'sequences.created' | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (sequence of sequences(); track sequence.id) {
+            <tr class="clickable" (click)="openDetail(sequence.id)">
+              <td class="name">{{ sequence.name }}</td>
+              <td>{{ sequence.projectLabel }}</td>
+              <td>{{ sequence.descriptionLabel }}</td>
+              <td>{{ sequence.stepCount }}</td>
+              <td>{{ sequence.activeEnrollmentCount }}</td>
+              <td>{{ sequence.statusLabelKey | translate }}</td>
+              <td>{{ sequence.createdLabel }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

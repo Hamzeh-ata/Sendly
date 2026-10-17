@@ -26,3 +26,7 @@ npm-debug.log*
 ## Secrets
 appsettings.*.local.json
 secrets.json
+
+## Local tooling
+.local/
+

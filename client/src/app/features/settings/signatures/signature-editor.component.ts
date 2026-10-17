@@ -1,4 +1,13 @@
-import { Component, ElementRef, inject, input, output, viewChild } from '@angular/core';
+import {
+  Component,
+  effect,
+  ElementRef,
+  inject,
+  input,
+  output,
+  untracked,
+  viewChild
+} from '@angular/core';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -9,6 +18,7 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 })
 export class SignatureEditorComponent {
   private readonly translate = inject(TranslateService);
+  private seeded = false;
 
   readonly htmlContent = input('');
   readonly previewMode = input(false);
@@ -17,6 +27,25 @@ export class SignatureEditorComponent {
   readonly previewToggle = output<void>();
 
   readonly editorRef = viewChild<ElementRef<HTMLDivElement>>('editor');
+
+  constructor() {
+    effect(() => {
+      const preview = this.previewMode();
+      const content = this.htmlContent();
+      const editor = this.editorRef()?.nativeElement;
+      if (preview || !editor) {
+        return;
+      }
+      untracked(() => {
+        if (!this.seeded || editor.innerHTML !== content) {
+          if (!this.seeded || document.activeElement !== editor) {
+            editor.innerHTML = content || '';
+            this.seeded = true;
+          }
+        }
+      });
+    });
+  }
 
   execCommand(command: string, value?: string): void {
     document.execCommand(command, false, value);

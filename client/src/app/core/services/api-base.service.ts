@@ -4,4 +4,5 @@ import { Injectable } from '@angular/core';
 export class ApiBaseService {
   readonly baseUrl = 'http://localhost:5088/api';
   readonly hubUrl = 'http://localhost:5088/hubs/campaigns';
+  readonly researchHubUrl = 'http://localhost:5088/hubs/research';
 }

@@ -39,6 +39,27 @@ public class Campaign
 
     public string? CurrentRecipientEmail { get; set; }
 
+    public Guid? TemplateId { get; set; }
+
+    public EmailTemplate? Template { get; set; }
+
+    [MaxLength(200)]
+    public string? TemplateName { get; set; }
+
+    public Guid? EmailAccountId { get; set; }
+
+    public EmailAccount? EmailAccount { get; set; }
+
+    public EmailProvider? Provider { get; set; }
+
+    [MaxLength(200)]
+    public string? SendingAccountName { get; set; }
+
+    [MaxLength(320)]
+    public string? SendingAccountEmail { get; set; }
+
+    public bool AllowAlreadyContacted { get; set; }
+
     public DateTimeOffset CreatedAtUtc { get; set; } = DateTimeOffset.UtcNow;
 
     public DateTimeOffset? StartedAtUtc { get; set; }

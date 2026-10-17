@@ -1,0 +1,198 @@
+<div class="project-editor-page">
+  <div class="page-header">
+    <h2>{{ pageTitleKey() | translate }}</h2>
+    <div class="header-actions">
+      <button type="button" class="btn btn-ghost" (click)="cancel()">
+        {{ 'common.cancel' | translate }}
+      </button>
+      <button type="button" class="btn btn-primary" [disabled]="!canSave()" (click)="save()">
+        {{ 'projects.save' | translate }}
+      </button>
+    </div>
+  </div>
+
+  @if (loading()) {
+    <app-loading />
+  } @else {
+    <div class="editor-grid">
+      <section class="card">
+        <h3>{{ 'projects.infoSection' | translate }}</h3>
+        <div class="field">
+          <label>{{ 'projects.name' | translate }}</label>
+          <input
+            type="text"
+            class="input"
+            [value]="name()"
+            (input)="onNameChange($any($event.target).value)"
+            [placeholder]="'projects.namePlaceholder' | translate"
+          />
+        </div>
+        <div class="field">
+          <label>{{ 'projects.descriptionLabel' | translate }}</label>
+          <textarea
+            class="textarea"
+            rows="3"
+            [value]="description()"
+            (input)="onDescriptionChange($any($event.target).value)"
+            [placeholder]="'projects.descriptionPlaceholder' | translate"
+          ></textarea>
+        </div>
+        <div class="field">
+          <label>{{ 'projects.researchInstructionsLabel' | translate }}</label>
+          <textarea
+            class="textarea"
+            rows="5"
+            [value]="researchInstructions()"
+            (input)="onResearchInstructionsChange($any($event.target).value)"
+            [placeholder]="'projects.researchInstructionsPlaceholder' | translate"
+          ></textarea>
+          <p class="field-hint">{{ 'projects.researchInstructionsHint' | translate }}</p>
+        </div>
+        <label class="toggle-row">
+          <input type="checkbox" [checked]="isActive()" (change)="onActiveChange($any($event.target).checked)" />
+          <span>{{ 'projects.markActive' | translate }}</span>
+        </label>
+      </section>
+
+      <section class="card">
+        <h3>{{ 'projects.settingsSection' | translate }}</h3>
+        <div class="field-grid">
+          <div class="field">
+            <label>{{ 'projects.minQualificationScore' | translate }}</label>
+            <input
+              type="number"
+              class="input"
+              min="0"
+              max="100"
+              [value]="minQualificationScore()"
+              (input)="onMinScoreChange($any($event.target).value)"
+            />
+          </div>
+          <div class="field">
+            <label>{{ 'projects.duplicateHandling' | translate }}</label>
+            <select
+              class="input"
+              [value]="duplicateHandling()"
+              (change)="onDuplicateHandlingChange($any($event.target).value)"
+            >
+              @for (option of duplicateOptions; track option.value) {
+                <option [value]="option.value">{{ option.labelKey | translate }}</option>
+              }
+            </select>
+          </div>
+          <div class="field">
+            <label>{{ 'projects.defaultRequestedProspectCount' | translate }}</label>
+            <input
+              type="number"
+              class="input"
+              min="1"
+              [value]="defaultRequestedProspectCount()"
+              (input)="onDefaultCountChange($any($event.target).value)"
+            />
+          </div>
+        </div>
+        <label class="toggle-row">
+          <input
+            type="checkbox"
+            [checked]="enableEmail()"
+            (change)="onEnableEmailChange($any($event.target).checked)"
+          />
+          <span>{{ 'projects.enableEmail' | translate }}</span>
+        </label>
+        <label class="toggle-row">
+          <input
+            type="checkbox"
+            [checked]="enableWhatsApp()"
+            (change)="onEnableWhatsAppChange($any($event.target).checked)"
+          />
+          <span>{{ 'projects.enableWhatsApp' | translate }}</span>
+        </label>
+      </section>
+
+      <section class="card">
+        <h3>{{ 'projects.targetingSection' | translate }}</h3>
+        <div class="field">
+          <label>{{ 'projects.keywords' | translate }}</label>
+          <textarea
+            class="textarea"
+            rows="3"
+            [value]="keywordsText()"
+            (input)="onKeywordsChange($any($event.target).value)"
+            [placeholder]="'projects.listPlaceholder' | translate"
+          ></textarea>
+        </div>
+        <div class="field">
+          <label>{{ 'projects.excludedKeywords' | translate }}</label>
+          <textarea
+            class="textarea"
+            rows="3"
+            [value]="excludedKeywordsText()"
+            (input)="onExcludedKeywordsChange($any($event.target).value)"
+            [placeholder]="'projects.listPlaceholder' | translate"
+          ></textarea>
+        </div>
+        <div class="field">
+          <label>{{ 'projects.countries' | translate }}</label>
+          <textarea
+            class="textarea"
+            rows="2"
+            [value]="countriesText()"
+            (input)="onCountriesChange($any($event.target).value)"
+            [placeholder]="'projects.listPlaceholder' | translate"
+          ></textarea>
+        </div>
+        <div class="field">
+          <label>{{ 'projects.industries' | translate }}</label>
+          <textarea
+            class="textarea"
+            rows="2"
+            [value]="industriesText()"
+            (input)="onIndustriesChange($any($event.target).value)"
+            [placeholder]="'projects.listPlaceholder' | translate"
+          ></textarea>
+        </div>
+        <div class="field">
+          <label>{{ 'projects.excludedIndustries' | translate }}</label>
+          <textarea
+            class="textarea"
+            rows="2"
+            [value]="excludedIndustriesText()"
+            (input)="onExcludedIndustriesChange($any($event.target).value)"
+            [placeholder]="'projects.listPlaceholder' | translate"
+          ></textarea>
+        </div>
+        <div class="field">
+          <label>{{ 'projects.targetRoles' | translate }}</label>
+          <textarea
+            class="textarea"
+            rows="2"
+            [value]="targetRolesText()"
+            (input)="onTargetRolesChange($any($event.target).value)"
+            [placeholder]="'projects.listPlaceholder' | translate"
+          ></textarea>
+        </div>
+      </section>
+
+      <section class="card">
+        <h3>{{ 'projects.templatesSection' | translate }}</h3>
+        <p class="section-hint">{{ 'projects.templatesHint' | translate }}</p>
+        @if (templateChecklist().length === 0) {
+          <p class="empty-hint">{{ 'projects.noTemplates' | translate }}</p>
+        } @else {
+          <div class="template-list">
+            @for (template of templateChecklist(); track template.id) {
+              <label class="toggle-row">
+                <input
+                  type="checkbox"
+                  [checked]="template.selected"
+                  (change)="toggleTemplate(template.id)"
+                />
+                <span>{{ template.name }}</span>
+              </label>
+            }
+          </div>
+        }
+      </section>
+    </div>
+  }
+</div>

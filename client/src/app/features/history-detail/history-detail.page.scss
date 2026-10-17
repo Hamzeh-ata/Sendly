@@ -25,6 +25,17 @@
   flex-wrap: wrap;
   gap: 1rem;
 
+  .template-meta {
+    margin: 0 0 0.55rem;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+
+    span {
+      color: var(--text-muted);
+      margin-inline-end: 0.35rem;
+    }
+  }
+
   h2 {
     margin: 0 0 0.5rem;
     font-family: var(--font-display);

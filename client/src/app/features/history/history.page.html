@@ -23,6 +23,7 @@
         <thead>
           <tr>
             <th>{{ 'history.subject' | translate }}</th>
+            <th>{{ 'history.template' | translate }}</th>
             <th>{{ 'history.status' | translate }}</th>
             <th>{{ 'history.recipients' | translate }}</th>
             <th>{{ 'history.success' | translate }}</th>
@@ -35,6 +36,7 @@
           @for (campaign of campaigns(); track campaign.id) {
             <tr class="clickable" (click)="openDetail(campaign.id)">
               <td class="subject">{{ campaign.subject }}</td>
+              <td>{{ campaign.templateLabel }}</td>
               <td><app-status-badge [status]="campaign.status" /></td>
               <td>{{ campaign.totalRecipients }}</td>
               <td>{{ campaign.successCount }}</td>
