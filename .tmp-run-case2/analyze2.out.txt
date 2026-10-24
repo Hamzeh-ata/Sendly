@@ -1,0 +1,293 @@
+﻿=== MADARES EVENTS ===
+[UrlDiscovered/Discovery] Expanded 14 prioritized links from https://madares.sa/faq-ar.html
+  url=https://madares.sa/faq-ar.html data={"reasonCode":"priority.expansion_accepted","internalCount":12,"externalCount":2,"directorySiblingCount":17}
+[DirectorySiblingQueued/Discovery] Queued 17 related directory host link(s) from https://madares.sa/faq-ar.html.
+  url=https://madares.sa/faq-ar.html data={"reasonCode":"investigation.directory_sibling_host","count":17}
+[InvestigationFollowUpQueued/Queue] Queued 30 investigation follow-up URL(s) from https://madares.sa/faq-ar.html.
+  url=https://madares.sa/faq-ar.html data={"reasonCode":"investigation.followups_queued","count":30,"officialDomains":48,"profiles":8,"summary":"role=Directory; page=About; listings=26; followUps=39; candidates=0; orgs=45"}
+[OfficialWebsiteQueued/Queue] Queued likely contact page on official domain for 'العقود والضمانات'.
+  url=https://parents.madares.sa/qr-secreen/contact data={"reasonCode":"investigation.official_contact_guess","organizationKey":"\u0627\u0644\u0639\u0642\u0648\u062F \u0648\u0627\u0644\u0636\u0645\u0627\u0646\u0627\u062A|parents.madares.sa"}
+[OfficialWebsiteQueued/Queue] Queued official website for organization 'العقود والضمانات'.
+  url=https://parents.madares.sa/qr-secreen data={"reasonCode":"investigation.official_website_from_listing","organizationKey":"\u0627\u0644\u0639\u0642\u0648\u062F \u0648\u0627\u0644\u0636\u0645\u0627\u0646\u0627\u062A|parents.madares.sa"}
+[OfficialWebsiteQueued/Queue] Queued likely contact page on official domain for 'رحلة تسجيل ولي الأمر في القسائم التعليمية'.
+  url=https://parents.madares.sa/assets/files/parent_account_guide.pdf/contact data={"reasonCode":"investigation.official_contact_guess","organizationKey":"\u0631\u062D\u0644\u0629 \u062A\u0633\u062C\u064A\u0644 \u0648\u0644\u064A \u0627\u0644\u0623\u0645\u0631 \u0641\u064A \u0627\u0644\u0642\u0633\u0627\u0626\u0645 \u0627\u0644\u062A\u0639\u0644\u064A\u0645\u064A\u0629|parents.madares.sa"}
+[OfficialWebsiteQueued/Queue] Queued official website for organization 'رحلة تسجيل ولي الأمر في القسائم التعليمية'.
+  url=https://parents.madares.sa/assets/files/parent_account_guide.pdf data={"reasonCode":"investigation.official_website_from_listing","organizationKey":"\u0631\u062D\u0644\u0629 \u062A\u0633\u062C\u064A\u0644 \u0648\u0644\u064A \u0627\u0644\u0623\u0645\u0631 \u0641\u064A \u0627\u0644\u0642\u0633\u0627\u0626\u0645 \u0627\u0644\u062A\u0639\u0644\u064A\u0645\u064A\u0629|parents.madares.sa"}
+[OfficialWebsiteQueued/Queue] Queued likely contact page on official domain for 'دليل تسجيل طالب ذو إعاقة في برنامج القسائم التعليمية'.
+  url=https://parents.madares.sa/assets/files/parent_account_guide.pdf/contact data={"reasonCode":"investigation.official_contact_guess","organizationKey":"\u062F\u0644\u064A\u0644 \u062A\u0633\u062C\u064A\u0644 \u0637\u0627\u0644\u0628 \u0630\u0648 \u0625\u0639\u0627\u0642\u0629 \u0641\u064A \u0628\u0631\u0646\u0627\u0645\u062C \u0627\u0644\u0642\u0633\u0627\u0626\u0645 \u0627\u0644\u062A\u0639\u0644\u064A\u0645\u064A\u0629|parents.madares.sa"}
+[OfficialWebsiteQueued/Queue] Queued official website for organization 'دليل تسجيل طالب ذو إعاقة في برنامج القسائم التعليمية'.
+  url=https://parents.madares.sa/assets/files/parent_account_guide.pdf data={"reasonCode":"investigation.official_website_from_listing","organizationKey":"\u062F\u0644\u064A\u0644 \u062A\u0633\u062C\u064A\u0644 \u0637\u0627\u0644\u0628 \u0630\u0648 \u0625\u0639\u0627\u0642\u0629 \u0641\u064A \u0628\u0631\u0646\u0627\u0645\u062C \u0627\u0644\u0642\u0633\u0627\u0626\u0645 \u0627\u0644\u062A\u0639\u0644\u064A\u0645\u064A\u0629|parents.madares.sa"}
+[OfficialWebsiteQueued/Queue] Queued likely contact page on official domain for 'تسجيل الدخول'.
+  url=https://parents.madares.sa/auth/login/otp/contact data={"reasonCode":"investigation.official_contact_guess","organizationKey":"\u062A\u0633\u062C\u064A\u0644 \u0627\u0644\u062F\u062E\u0648\u0644|parents.madares.sa"}
+[OfficialWebsiteQueued/Queue] Queued official website for organization 'تسجيل الدخول'.
+  url=https://parents.madares.sa/auth/login/otp data={"reasonCode":"investigation.official_website_from_listing","organizationKey":"\u062A\u0633\u062C\u064A\u0644 \u0627\u0644\u062F\u062E\u0648\u0644|parents.madares.sa"}
+[OfficialWebsiteQueued/Queue] Queued likely contact page on official domain for 'البحث عن مدرسة'.
+  url=https://parents.madares.sa/school-search/contact data={"reasonCode":"investigation.official_contact_guess","organizationKey":"\u0627\u0644\u0628\u062D\u062B \u0639\u0646 \u0645\u062F\u0631\u0633\u0629|parents.madares.sa"}
+[OfficialWebsiteQueued/Queue] Queued official website for organization 'البحث عن مدرسة'.
+  url=https://parents.madares.sa/school-search data={"reasonCode":"investigation.official_website_from_listing","organizationKey":"\u0627\u0644\u0628\u062D\u062B \u0639\u0646 \u0645\u062F\u0631\u0633\u0629|parents.madares.sa"}
+[ListingOrganizationExtracted/CompanyExtraction] Extracted organization 'طلاب المدارس المسائية' from listing.
+  url=https://madares.sa/faq-ar.html data={"name":"\u0637\u0644\u0627\u0628 \u0627\u0644\u0645\u062F\u0627\u0631\u0633 \u0627\u0644\u0645\u0633\u0627\u0626\u064A\u0629","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block"}
+[ListingOrganizationExtracted/CompanyExtraction] Extracted organization 'العربية' from listing.
+  url=https://madares.sa/faq-ar.html data={"name":"\u0627\u0644\u0639\u0631\u0628\u064A\u0629","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block"}
+[ListingOrganizationExtracted/CompanyExtraction] Extracted organization 'How it works' from listing.
+  url=https://madares.sa/faq-ar.html data={"name":"How it works","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block"}
+[ListingOrganizationExtracted/CompanyExtraction] Extracted organization 'Features' from listing.
+  url=https://madares.sa/faq-ar.html data={"name":"Features","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block"}
+[ListingOrganizationExtracted/CompanyExtraction] Extracted organization 'تسجيل الدخول' from listing.
+  url=https://madares.sa/faq-ar.html data={"name":"\u062A\u0633\u062C\u064A\u0644 \u0627\u0644\u062F\u062E\u0648\u0644","officialWebsite":"https://parents.madares.sa/auth/login/otp","hasEmail":false,"hasPhone":false,"method":"listing.semantic_block"}
+[ListingOrganizationExtracted/CompanyExtraction] Extracted organization 'البحث عن مدرسة' from listing.
+  url=https://madares.sa/faq-ar.html data={"name":"\u0627\u0644\u0628\u062D\u062B \u0639\u0646 \u0645\u062F\u0631\u0633\u0629","officialWebsite":"https://parents.madares.sa/school-search","hasEmail":false,"hasPhone":false,"method":"listing.semantic_block"}
+[ListingOrganizationExtracted/CompanyExtraction] Extracted organization 'كيف تعمل مدارس' from listing.
+  url=https://madares.sa/faq-ar.html data={"name":"\u0643\u064A\u0641 \u062A\u0639\u0645\u0644 \u0645\u062F\u0627\u0631\u0633","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block"}
+[ListingOrganizationExtracted/CompanyExtraction] Extracted organization 'المزايا' from listing.
+  url=https://madares.sa/faq-ar.html data={"name":"\u0627\u0644\u0645\u0632\u0627\u064A\u0627","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block"}
+[ListingOrganizationExtracted/CompanyExtraction] Extracted organization 'القسائم التعليمية' from listing.
+  url=https://madares.sa/faq-ar.html data={"name":"\u0627\u0644\u0642\u0633\u0627\u0626\u0645 \u0627\u0644\u062A\u0639\u0644\u064A\u0645\u064A\u0629","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block"}
+[ListingOrganizationExtracted/CompanyExtraction] Extracted organization 'عن مدارس' from listing.
+  url=https://madares.sa/faq-ar.html data={"name":"\u0639\u0646 \u0645\u062F\u0627\u0631\u0633","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block"}
+[OrganizationProfilesDiscovered/CompanyExtraction] Found 26 organization profile signal(s).
+  url=https://madares.sa/faq-ar.html data={"profiles":8,"listings":26}
+[PageCrawled/Parse] Crawled https://madares.sa/faq-ar.html
+  url=https://madares.sa/faq-ar.html data={"title":"\u0645\u062F\u0627\u0631\u0633 - \u0627\u0644\u0623\u0633\u0626\u0644\u0629 \u0627\u0644\u0634\u0627\u0626\u0639\u0629","contentLengthBytes":252437,"redirectCount":0,"factCount":1}
+[FetchStarted/Fetch] Fetching https://madares.sa/faq-ar.html
+  url=https://madares.sa/faq-ar.html data=None
+[UrlDiscovered/Discovery] Expanded 1 prioritized links from https://onboard.madares.sa/site/create-account-prerequisites/contact
+  url=https://onboard.madares.sa/site/create-account-prerequisites/contact data={"reasonCode":"priority.expansion_accepted","internalCount":1,"externalCount":0,"directorySiblingCount":0}
+[SpaShellDetected/Parse] Client-rendered shell detected on https://onboard.madares.sa/site/create-account-prerequisites/contact; listing HTML was empty and JS was not executed.
+  url=https://onboard.madares.sa/site/create-account-prerequisites/contact data={"reasonCode":"investigation.spa_shell_no_listings","sameOriginLinks":3,"externalLinks":0,"listings":0}
+[InvestigationFollowUpQueued/Queue] Queued 2 investigation follow-up URL(s) from https://onboard.madares.sa/site/create-account-prerequisites/contact.
+  url=https://onboard.madares.sa/site/create-account-prerequisites/contact data={"reasonCode":"investigation.followups_queued","count":2,"officialDomains":0,"profiles":2,"summary":"role=Directory; page=Contact; listings=0; followUps=2; candidates=0; orgs=0"}
+[OrganizationProfilesDiscovered/CompanyExtraction] Found 2 organization profile signal(s).
+  url=https://onboard.madares.sa/site/create-account-prerequisites/contact data={"profiles":2,"listings":0}
+[PageCrawled/Parse] Crawled https://onboard.madares.sa/site/create-account-prerequisites/contact
+  url=https://onboard.madares.sa/site/create-account-prerequisites/contact data={"title":"\u0645\u062F\u0627\u0631\u0633 | Madares","contentLengthBytes":7948,"redirectCount":0,"factCount":2}
+[FetchStarted/Fetch] Fetching https://onboard.madares.sa/site/create-account-prerequisites/contact
+  url=https://onboard.madares.sa/site/create-account-prerequisites/contact data=None
+[FetchFailed/Fetch] Host returned HTTP 403 Forbidden.
+  url=https://business.madares.sa/contact data={"reasonCode":"fetch.forbidden","kind":"Forbidden","retryAppropriate":false,"hostAvoided":true}
+[FetchStarted/Fetch] Fetching https://business.madares.sa/contact
+  url=https://business.madares.sa/contact data=None
+[UrlDiscovered/Discovery] Expanded 1 prioritized links from https://parents.madares.sa/school-search/contact
+  url=https://parents.madares.sa/school-search/contact data={"reasonCode":"priority.expansion_accepted","internalCount":1,"externalCount":0,"directorySiblingCount":0}
+[InvestigationFollowUpQueued/Queue] Queued 7 investigation follow-up URL(s) from https://parents.madares.sa/school-search/contact.
+  url=https://parents.madares.sa/school-search/contact data={"reasonCode":"investigation.followups_queued","count":7,"officialDomains":0,"profiles":7,"summary":"role=Directory; page=Contact; listings=0; followUps=7; candidates=0; orgs=0"}
+[OrganizationProfilesDiscovered/CompanyExtraction] Found 7 organization profile signal(s).
+  url=https://parents.madares.sa/school-search/contact data={"profiles":7,"listings":0}
+[PageCrawled/Parse] Crawled https://parents.madares.sa/school-search/contact
+  url=https://parents.madares.sa/school-search/contact data={"title":"Madares | \u0645\u062F\u0627\u0631\u0633","contentLengthBytes":84159,"redirectCount":0,"factCount":1}
+[FetchStarted/Fetch] Fetching https://parents.madares.sa/school-search/contact
+  url=https://parents.madares.sa/school-search/contact data=None
+[Rejected/Qualification] Rejected: دليل تسجيل طالب ذو إعاقة في برنامج القسائم التعليمية
+  url=https://madares.sa/ data={"company":"\u062F\u0644\u064A\u0644 \u062A\u0633\u062C\u064A\u0644 \u0637\u0627\u0644\u0628 \u0630\u0648 \u0625\u0639\u0627\u0642\u0629 \u0641\u064A \u0628\u0631\u0646\u0627\u0645\u062C \u0627\u0644\u0642\u0633\u0627\u0626\u0645 \u0627\u0644\u062A\u0639\u0644\u064A\u0645\u064A\u0629","score":30,"reason":"Weak company identity","missingCriteria":["officialWebsite","publicBusinessEmail","companyIdentity","targetCountry"],"mandatoryFailures":["officialWebsite","companyIdentity","targetCountry"]}
+[CompanyExtracted/CompanyExtraction] Company candidate: دليل تسجيل طالب ذو إعاقة في برنامج القسائم التعليمية
+  url=https://madares.sa/ data={"company":"\u062F\u0644\u064A\u0644 \u062A\u0633\u062C\u064A\u0644 \u0637\u0627\u0644\u0628 \u0630\u0648 \u0625\u0639\u0627\u0642\u0629 \u0641\u064A \u0628\u0631\u0646\u0627\u0645\u062C \u0627\u0644\u0642\u0633\u0627\u0626\u0645 \u0627\u0644\u062A\u0639\u0644\u064A\u0645\u064A\u0629","source":"DirectoryListingInvestigation"}
+[SpaShellDetected/Parse] Client-rendered shell detected on https://career.kc.edu.sa/apply/admin-staff; listing HTML was empty and JS was not executed.
+  url=https://career.kc.edu.sa/apply/admin-staff data={"reasonCode":"investigation.spa_shell_no_listings","sameOriginLinks":2,"externalLinks":1,"listings":0}
+[UrlDiscovered/Discovery] Expanded 13 prioritized links from https://madares.sa
+  url=https://madares.sa data={"reasonCode":"priority.expansion_accepted","internalCount":11,"externalCount":2,"directorySiblingCount":17}
+[DirectorySiblingQueued/Discovery] Queued 17 related directory host link(s) from https://madares.sa.
+  url=https://madares.sa data={"reasonCode":"investigation.directory_sibling_host","count":17}
+[InvestigationFollowUpQueued/Queue] Queued 30 investigation follow-up URL(s) from https://madares.sa.
+  url=https://madares.sa data={"reasonCode":"investigation.followups_queued","count":30,"officialDomains":57,"profiles":9,"summary":"role=Directory; page=Contact; listings=42; followUps=45; candidates=1; orgs=42"}
+[EvidenceMerged/ProspectMerge] Merged evidence into 1 organization candidate(s).
+  url=https://madares.sa data={"count":1}
+[OfficialWebsiteQueued/Queue] Queued likely contact page on official domain for 'قسائم المدارس المسائية'.
+  url=https://parents.madares.sa/school-search/contact data={"reasonCode":"investigation.official_contact_guess","organizationKey":"\u0642\u0633\u0627\u0626\u0645 \u0627\u0644\u0645\u062F\u0627\u0631\u0633 \u0627\u0644\u0645\u0633\u0627\u0626\u064A\u0629|parents.madares.sa"}
+[OfficialWebsiteQueued/Queue] Queued official website for organization 'قسائم المدارس المسائية'.
+  url=https://parents.madares.sa/school-search data={"reasonCode":"investigation.official_website_from_listing","organizationKey":"\u0642\u0633\u0627\u0626\u0645 \u0627\u0644\u0645\u062F\u0627\u0631\u0633 \u0627\u0644\u0645\u0633\u0627\u0626\u064A\u0629|parents.madares.sa"}
+[OfficialWebsiteQueued/Queue] Queued likely contact page on official domain for 'القسائم التعليمية للتربية الخاصة'.
+  url=https://parents.madares.sa/school-search/contact data={"reasonCode":"investigation.official_contact_guess","organizationKey":"\u0627\u0644\u0642\u0633\u0627\u0626\u0645 \u0627\u0644\u062A\u0639\u0644\u064A\u0645\u064A\u0629 \u0644\u0644\u062A\u0631\u0628\u064A\u0629 \u0627\u0644\u062E\u0627\u0635\u0629|parents.madares.sa"}
+[OfficialWebsiteQueued/Queue] Queued official website for organization 'القسائم التعليمية للتربية الخاصة'.
+  url=https://parents.madares.sa/school-search data={"reasonCode":"investigation.official_website_from_listing","organizationKey":"\u0627\u0644\u0642\u0633\u0627\u0626\u0645 \u0627\u0644\u062A\u0639\u0644\u064A\u0645\u064A\u0629 \u0644\u0644\u062A\u0631\u0628\u064A\u0629 \u0627\u0644\u062E\u0627\u0635\u0629|parents.madares.sa"}
+[OfficialWebsiteQueued/Queue] Queued likely contact page on official domain for 'تسجيل الدخول'.
+  url=https://parents.madares.sa/auth/login/otp/contact data={"reasonCode":"investigation.official_contact_guess","organizationKey":"\u062A\u0633\u062C\u064A\u0644 \u0627\u0644\u062F\u062E\u0648\u0644|parents.madares.sa"}
+[OfficialWebsiteQueued/Queue] Queued official website for organization 'تسجيل الدخول'.
+  url=https://parents.madares.sa/auth/login/otp data={"reasonCode":"investigation.official_website_from_listing","organizationKey":"\u062A\u0633\u062C\u064A\u0644 \u0627\u0644\u062F\u062E\u0648\u0644|parents.madares.sa"}
+[OfficialWebsiteQueued/Queue] Queued likely contact page on official domain for 'مدارس أعمال'.
+  url=https://business.madares.sa/contact data={"reasonCode":"investigation.official_contact_guess","organizationKey":"\u0645\u062F\u0627\u0631\u0633 \u0623\u0639\u0645\u0627\u0644|business.madares.sa"}
+[OfficialWebsiteQueued/Queue] Queued official website for organization 'مدارس أعمال'.
+  url=https://business.madares.sa data={"reasonCode":"investigation.official_website_from_listing","organizationKey":"\u0645\u062F\u0627\u0631\u0633 \u0623\u0639\u0645\u0627\u0644|business.madares.sa"}
+[OfficialWebsiteQueued/Queue] Queued likely contact page on official domain for 'البحث عن مدرسة'.
+  url=https://parents.madares.sa/school-search/contact data={"reasonCode":"investigation.official_contact_guess","organizationKey":"\u0627\u0644\u0628\u062D\u062B \u0639\u0646 \u0645\u062F\u0631\u0633\u0629|parents.madares.sa"}
+[OfficialWebsiteQueued/Queue] Queued official website for organization 'البحث عن مدرسة'.
+  url=https://parents.madares.sa/school-search data={"reasonCode":"investigation.official_website_from_listing","organizationKey":"\u0627\u0644\u0628\u062D\u062B \u0639\u0646 \u0645\u062F\u0631\u0633\u0629|parents.madares.sa"}
+[ListingOrganizationExtracted/CompanyExtraction] Extracted organization 'العربية' from listing.
+  url=https://madares.sa data={"name":"\u0627\u0644\u0639\u0631\u0628\u064A\u0629","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block"}
+[ListingOrganizationExtracted/CompanyExtraction] Extracted organization 'How it works' from listing.
+  url=https://madares.sa data={"name":"How it works","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block"}
+[ListingOrganizationExtracted/CompanyExtraction] Extracted organization 'Features' from listing.
+  url=https://madares.sa data={"name":"Features","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block"}
+[ListingOrganizationExtracted/CompanyExtraction] Extracted organization 'تسجيل الدخول' from listing.
+  url=https://madares.sa data={"name":"\u062A\u0633\u062C\u064A\u0644 \u0627\u0644\u062F\u062E\u0648\u0644","officialWebsite":"https://parents.madares.sa/auth/login/otp","hasEmail":false,"hasPhone":false,"method":"listing.semantic_block"}
+[ListingOrganizationExtracted/CompanyExtraction] Extracted organization 'مدارس أعمال' from listing.
+  url=https://madares.sa data={"name":"\u0645\u062F\u0627\u0631\u0633 \u0623\u0639\u0645\u0627\u0644","officialWebsite":"https://business.madares.sa","hasEmail":false,"hasPhone":false,"method":"listing.semantic_block"}
+[ListingOrganizationExtracted/CompanyExtraction] Extracted organization 'البحث عن مدرسة' from listing.
+  url=https://madares.sa data={"name":"\u0627\u0644\u0628\u062D\u062B \u0639\u0646 \u0645\u062F\u0631\u0633\u0629","officialWebsite":"https://parents.madares.sa/school-search","hasEmail":false,"hasPhone":false,"method":"listing.semantic_block"}
+[ListingOrganizationExtracted/CompanyExtraction] Extracted organization 'كيف تعمل مدارس' from listing.
+  url=https://madares.sa data={"name":"\u0643\u064A\u0641 \u062A\u0639\u0645\u0644 \u0645\u062F\u0627\u0631\u0633","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block"}
+[ListingOrganizationExtracted/CompanyExtraction] Extracted organization 'المزايا' from listing.
+  url=https://madares.sa data={"name":"\u0627\u0644\u0645\u0632\u0627\u064A\u0627","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block"}
+[ListingOrganizationExtracted/CompanyExtraction] Extracted organization 'القسائم التعليمية' from listing.
+  url=https://madares.sa data={"name":"\u0627\u0644\u0642\u0633\u0627\u0626\u0645 \u0627\u0644\u062A\u0639\u0644\u064A\u0645\u064A\u0629","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block"}
+[ListingOrganizationExtracted/CompanyExtraction] Extracted organization 'عن مدارس' from listing.
+  url=https://madares.sa data={"name":"\u0639\u0646 \u0645\u062F\u0627\u0631\u0633","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block"}
+[OrganizationProfilesDiscovered/CompanyExtraction] Found 42 organization profile signal(s).
+  url=https://madares.sa data={"profiles":9,"listings":42}
+[PageCrawled/Parse] Crawled https://madares.sa
+  url=https://madares.sa data={"title":"\u0645\u062F\u0627\u0631\u0633","contentLengthBytes":288922,"redirectCount":0,"factCount":2}
+[FetchStarted/Fetch] Fetching https://madares.sa
+  url=https://madares.sa data=None
+[UrlDiscovered/Discovery] Expanded 1 prioritized links from https://parents.madares.sa/school-search
+  url=https://parents.madares.sa/school-search data={"reasonCode":"priority.expansion_accepted","internalCount":1,"externalCount":0,"directorySiblingCount":0}
+[InvestigationFollowUpQueued/Queue] Queued 1 investigation follow-up URL(s) from https://parents.madares.sa/school-search.
+  url=https://parents.madares.sa/school-search data={"reasonCode":"investigation.followups_queued","count":1,"officialDomains":0,"profiles":1,"summary":"role=Directory; page=Category; listings=0; followUps=1; candidates=0; orgs=0"}
+[OrganizationProfilesDiscovered/CompanyExtraction] Found 1 organization profile signal(s).
+  url=https://parents.madares.sa/school-search data={"profiles":1,"listings":0}
+[DirectoryCategoryDiscovered/Parse] Discovered directory category structure on https://parents.madares.sa/school-search.
+  url=https://parents.madares.sa/school-search data={"pageKind":"Category","categoryLinks":0,"summary":"role=Directory; page=Category; listings=0; followUps=1; candidates=0; orgs=0"}
+[PageCrawled/Parse] Crawled https://parents.madares.sa/school-search
+  url=https://parents.madares.sa/school-search data={"title":"Madares | \u0645\u062F\u0627\u0631\u0633","contentLengthBytes":84159,"redirectCount":0,"factCount":1}
+[FetchStarted/Fetch] Fetching https://parents.madares.sa/school-search
+  url=https://parents.madares.sa/school-search data=None
+
+=== BAD LISTING NAMES ===
+Extracted organization 'Visit Our Campus' from listing. | {"name":"Visit Our Campus","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block"}
+Extracted organization 'Tuition Fees' from listing. | {"name":"Tuition Fees","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block"}
+Extracted organization 'Register Online' from listing. | {"name":"Register Online","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block"}
+Extracted organization 'Admissions' from listing. | {"name":"Admissions","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block"}
+Extracted organization 'Why Choose SIS' from listing. | {"name":"Why Choose SIS","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block"}
+Extracted organization 'Our Location' from listing. | {"name":"Our Location","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block"}
+Extracted organization 'Our Team' from listing. | {"name":"Our Team","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block"}
+Extracted organization 'Our Campus and Facilities' from listing. | {"name":"Our Campus and Facilities","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block"}
+Extracted organization 'Vision, Mission and Core Values' from listing. | {"name":"Vision, Mission and Core Values","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block"}
+Extracted organization 'Welcome Message' from listing. | {"name":"Welcome Message","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block"}
+Extracted organization 'طلاب المدارس المسائية' from listing. | {"name":"\u0637\u0644\u0627\u0628 \u0627\u0644\u0645\u062F\u0627\u0631\u0633 \u0627\u0644\u0645\u0633\u0627\u0626\u064A\u0629","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block"}
+Extracted organization 'العربية' from listing. | {"name":"\u0627\u0644\u0639\u0631\u0628\u064A\u0629","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block"}
+Extracted organization 'How it works' from listing. | {"name":"How it works","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block"}
+Extracted organization 'Features' from listing. | {"name":"Features","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block"}
+Extracted organization 'تسجيل الدخول' from listing. | {"name":"\u062A\u0633\u062C\u064A\u0644 \u0627\u0644\u062F\u062E\u0648\u0644","officialWebsite":"https://parents.madares.sa/auth/login/otp","hasEmail":false,"hasPhone":false,"method":"listing.semantic_block"}
+Extracted organization 'البحث عن مدرسة' from listing. | {"name":"\u0627\u0644\u0628\u062D\u062B \u0639\u0646 \u0645\u062F\u0631\u0633\u0629","officialWebsite":"https://parents.madares.sa/school-search","hasEmail":false,"hasPhone":false,"method":"listing.semantic_block"}
+Extracted organization 'كيف تعمل مدارس' from listing. | {"name":"\u0643\u064A\u0641 \u062A\u0639\u0645\u0644 \u0645\u062F\u0627\u0631\u0633","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block"}
+Extracted organization 'المزايا' from listing. | {"name":"\u0627\u0644\u0645\u0632\u0627\u064A\u0627","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block"}
+Extracted organization 'القسائم التعليمية' from listing. | {"name":"\u0627\u0644\u0642\u0633\u0627\u0626\u0645 \u0627\u0644\u062A\u0639\u0644\u064A\u0645\u064A\u0629","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block"}
+Extracted organization 'عن مدارس' from listing. | {"name":"\u0639\u0646 \u0645\u062F\u0627\u0631\u0633","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block"}
+Extracted organization 'سجل الان تواصل معنا' from listing. | {"name":"\u0633\u062C\u0644 \u0627\u0644\u0627\u0646 \u062A\u0648\u0627\u0635\u0644 \u0645\u0639\u0646\u0627","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block"}
+Extracted organization 'Arabic' from listing. | {"name":"Arabic","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block"}
+Extracted organization 'Career' from listing. | {"name":"Career","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block"}
+Extracted organization 'Photo Gallery & video' from listing. | {"name":"Photo Gallery \u0026 video","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block"}
+Extracted organization 'Awards and medals' from listing. | {"name":"Awards and medals","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block"}
+Extracted organization 'Admission' from listing. | {"name":"Admission","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block"}
+Extracted organization 'February 21, 2022' from listing. | {"name":"February 21, 2022","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block"}
+Extracted organization 'News & Updates' from listing. | {"name":"News \u0026 Updates","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block"}
+Extracted organization 'Login Now' from listing. | {"name":"Login Now","officialWebsite":"https://www.office.com","hasEmail":false,"hasPhone":false,"method":"listing.semantic_block"}
+Extracted organization 'Request For Email Password Reset' from listing. | {"name":"Request For Email Password Reset","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block"}
+Extracted organization 'How To Use' from listing. | {"name":"How To Use","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block"}
+Extracted organization 'Online Class By MS Teams' from listing. | {"name":"Online Class By MS Teams","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block"}
+Extracted organization 'How to Use MS Teams' from listing. | {"name":"How to Use MS Teams","officialWebsite":"http://185.108.243.77/E-Registration/en","hasEmail":false,"hasPhone":false,"method":"listing.semantic_block"}
+Extracted organization 'MISSION' from listing. | {"name":"MISSION","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block"}
+Extracted organization 'Calendar' from listing. | {"name":"Calendar","officialWebsite":null,"hasEmail":false,"hasPhone":true,"method":"listing.semantic_block"}
+Extracted organization '[email protected]' from listing. | {"name":"[email protected]","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block"}
+Extracted organization 'العربية' from listing. | {"name":"\u0627\u0644\u0639\u0631\u0628\u064A\u0629","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block"}
+Extracted organization 'How it works' from listing. | {"name":"How it works","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block"}
+Extracted organization 'Features' from listing. | {"name":"Features","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block"}
+Extracted organization 'تسجيل الدخول' from listing. | {"name":"\u062A\u0633\u062C\u064A\u0644 \u0627\u0644\u062F\u062E\u0648\u0644","officialWebsite":"https://parents.madares.sa/auth/login/otp","hasEmail":false,"hasPhone":false,"method":"listing.semantic_block"}
+Extracted organization 'مدارس أعمال' from listing. | {"name":"\u0645\u062F\u0627\u0631\u0633 \u0623\u0639\u0645\u0627\u0644","officialWebsite":"https://business.madares.sa","hasEmail":false,"hasPhone":false,"method":"listing.semantic_block"}
+Extracted organization 'البحث عن مدرسة' from listing. | {"name":"\u0627\u0644\u0628\u062D\u062B \u0639\u0646 \u0645\u062F\u0631\u0633\u0629","officialWebsite":"https://parents.madares.sa/school-search","hasEmail":false,"hasPhone":false,"method":"listing.semantic_block"}
+Extracted organization 'كيف تعمل مدارس' from listing. | {"name":"\u0643\u064A\u0641 \u062A\u0639\u0645\u0644 \u0645\u062F\u0627\u0631\u0633","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block"}
+Extracted organization 'المزايا' from listing. | {"name":"\u0627\u0644\u0645\u0632\u0627\u064A\u0627","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block"}
+Extracted organization 'القسائم التعليمية' from listing. | {"name":"\u0627\u0644\u0642\u0633\u0627\u0626\u0645 \u0627\u0644\u062A\u0639\u0644\u064A\u0645\u064A\u0629","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block"}
+Extracted organization 'عن مدارس' from listing. | {"name":"\u0639\u0646 \u0645\u062F\u0627\u0631\u0633","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block"}
+
+=== MADARES URLS ===
+Pending d=2 parent= https://madares.sa/faq-ar.html reason= investigation.directory_sibling_host https://parents.madares.sa/en-us/redirect-register
+Pending d=2 parent= https://madares.sa/faq-ar.html reason= priority.internal_expansion https://madares.sa/faq.html
+Pending d=2 parent= https://madares.sa/faq-ar.html reason= priority.internal_expansion https://madares.sa/index-ar.html
+Pending d=2 parent= https://madares.sa/faq-ar.html reason= investigation.official_contact_guess https://parents.madares.sa/site/create-account-prerequisites/contact
+Pending d=2 parent= https://madares.sa/faq-ar.html reason= investigation.official_website_from_listing https://parents.madares.sa/site/create-account-prerequisites
+Pending d=2 parent= https://madares.sa/faq-ar.html reason= investigation.official_contact_guess https://parents.madares.sa/site/request-enquery/contact
+Pending d=2 parent= https://madares.sa/faq-ar.html reason= investigation.official_website_from_listing https://parents.madares.sa/site/request-enquery
+Pending d=2 parent= https://madares.sa/faq-ar.html reason= investigation.official_contact_guess https://parents.madares.sa/qr-secreen/contact
+Pending d=2 parent= https://madares.sa/faq-ar.html reason= investigation.official_website_from_listing https://parents.madares.sa/qr-secreen
+Pending d=2 parent= https://onboard.madares.sa/site/create-account-prerequisites/contact reason= priority.internal_expansion https://onboard.madares.sa/
+Pending d=1 parent= https://madares.sa reason= investigation.directory_sibling_host https://parents.madares.sa/communication_Channel
+Pending d=1 parent= https://madares.sa reason= investigation.directory_sibling_host https://parents.madares.sa/service_Level_Agreement
+Pending d=1 parent= https://madares.sa reason= investigation.directory_sibling_host https://parents.madares.sa/app/ar-sa/redirect-register
+Crawled d=1 parent= https://madares.sa reason= priority.internal_expansion https://madares.sa/faq-ar.html
+Pending d=1 parent= https://madares.sa reason= priority.internal_expansion https://madares.sa/index-en.html
+Pending d=1 parent= https://madares.sa reason= priority.internal_expansion https://madares.sa/index.html
+Crawled d=1 parent= https://madares.sa reason= investigation.official_contact_guess https://onboard.madares.sa/site/create-account-prerequisites/contact
+Pending d=1 parent= https://madares.sa reason= investigation.official_website_from_listing https://onboard.madares.sa/site/create-account-prerequisites
+Pending d=1 parent= https://madares.sa reason= investigation.official_contact_guess https://onboard.madares.sa/site/request-enquery/contact
+Pending d=1 parent= https://madares.sa reason= investigation.official_website_from_listing https://onboard.madares.sa/site/request-enquery
+Pending d=1 parent= https://madares.sa reason= investigation.official_contact_guess https://parents.madares.sa/app/ar-sa/qr-secreen/contact
+Pending d=1 parent= https://madares.sa reason= investigation.official_website_from_listing https://parents.madares.sa/app/ar-sa/qr-secreen
+Pending d=1 parent= https://madares.sa reason= investigation.profile_from_listing https://madares.sa/register-ar.html
+Pending d=1 parent= https://madares.sa reason= investigation.official_contact_guess https://parents.madares.sa/auth/login/otp/contact
+Pending d=1 parent= https://madares.sa reason= investigation.official_website_from_listing https://parents.madares.sa/auth/login/otp
+Failed d=1 parent= https://madares.sa reason= investigation.official_contact_guess https://business.madares.sa/contact
+Pending d=1 parent= https://madares.sa reason= investigation.official_website_from_listing https://business.madares.sa
+Crawled d=1 parent= https://madares.sa reason= investigation.official_contact_guess https://parents.madares.sa/school-search/contact
+Pending d=1 parent= https://parents.madares.sa/school-search reason= priority.internal_expansion https://parents.madares.sa/
+Crawled d=0 parent= None reason= Madares Parent Search https://parents.madares.sa/school-search
+Crawled d=0 parent= None reason= Madares Saudi Schools https://madares.sa
+
+=== PROSPECTS ===
+identityVerified 9 emailReady 2 pages 37 pending 290
+--- rejected score 46
+  name: Copyright All Right Reserved 2025, Energy Project Support Company LTD
+  email: None site: http://185.108.243.77/E-Registration/en
+  source: https://asiaschool.com.sa/
+--- rejected score 30
+  name: دليل تسجيل طالب ذو إعاقة في برنامج القسائم التعليمية
+  email: None site: https://youtu.be/N_1XzZFU3dg
+  source: https://madares.sa/
+--- readyForOutreach score 83
+  name: الأرقام التي نفخر بها
+  email: info@maarif.sa site: https://maarif.sa
+  source: https://maarif.sa/ar/contact-us
+--- needsReview score 80
+  name: Almadinah International School
+  email: None site: https://www.mis.edu.sa
+  source: https://www.mis.edu.sa/en/
+--- rejected score 59
+  name: Abdulrahman Fakieh School for Girls
+  email: None site: https://www.afsg.edu.sa
+  source: https://www.afsg.edu.sa/about-us
+--- needsReview score 80
+  name: Global English School
+  email: info@ges.edu.sa site: https://ges.edu.sa
+  source: https://ges.edu.sa/
+--- readyForOutreach score 85
+  name: Samha International School
+  email: info@samhaschools.com site: https://samhaschools.com
+  source: https://samhaschools.com/
+--- needsReview score 79
+  name: مدارس علوم جازان العالمية
+  email: None site: https://js.edu.sa
+  source: https://js.edu.sa/
+--- needsReview score 83
+  name: أفضل مدارس خميس مشيط 2026
+  email: hello@kc.edu.sa site: https://kc.edu.sa
+  source: https://kc.edu.sa/blog/أفضل-مدارس-خميس-مشيط-2026-دليل-شامل-للمقار
+--- needsReview score 79
+  name: مدارس الذكر النموذجية أفضل مدارس أهلية في خميس مشيط
+  email: info@ibnroshd.edu.sa site: https://ibnroshd.edu.sa
+  source: https://ibnroshd.edu.sa/blog/mdars-althkr-alnmothgy-afdl-mdars-ahly-fy-khmys-mshyt
+
+=== QUALIFIED EVENTS ===
+Qualified Qualified: Maarif {"company":"Maarif","score":83,"status":"ReadyForOutreach"}
+CompanyExtracted Company candidate: Maarif {"company":"Maarif","source":"investigation.contact_page \u002B DirectoryListingInvestigation"}
+CompanyExtracted Company candidate: MIS {"company":"MIS","source":"Prior research database"}
+Rejected Rejected: مدارس عبدالرحمن فقيه للبنات {"company":"\u0645\u062F\u0627\u0631\u0633 \u0639\u0628\u062F\u0627\u0644\u0631\u062D\u0645\u0646 \u0641\u0642\u064A\u0647 \u0644\u0644\u0628\u0646\u0627\u062A","score":59,"reason":"Excluded by criteria","missingCriteria":["publicBusinessEmail","exclusionCriteria"],"mandatoryFailures":["exclusionCriteria"]}
+CompanyExtracted Company candidate: مدارس عبدالرحمن فقيه للبنات {"company":"\u0645\u062F\u0627\u0631\u0633 \u0639\u0628\u062F\u0627\u0644\u0631\u062D\u0645\u0646 \u0641\u0642\u064A\u0647 \u0644\u0644\u0628\u0646\u0627\u062A","source":"Prior research database"}
+CompanyExtracted Company candidate: Maarif {"company":"Maarif","source":"Prior research database"}
+CompanyExtracted Company candidate: مدينة المعرفة للتعليم {"company":"\u0645\u062F\u064A\u0646\u0629 \u0627\u0644\u0645\u0639\u0631\u0641\u0629 \u0644\u0644\u062A\u0639\u0644\u064A\u0645","source":"Prior research database"}
+CompanyExtracted Company candidate: مدارس علوم جازان العالمية {"company":"\u0645\u062F\u0627\u0631\u0633 \u0639\u0644\u0648\u0645 \u062C\u0627\u0632\u0627\u0646 \u0627\u0644\u0639\u0627\u0644\u0645\u064A\u0629","source":"Prior research database"}
+CompanyExtracted Company candidate: شركة ابن رشد التعليمية القابضة {"company":"\u0634\u0631\u0643\u0629 \u0627\u0628\u0646 \u0631\u0634\u062F \u0627\u0644\u062A\u0639\u0644\u064A\u0645\u064A\u0629 \u0627\u0644\u0642\u0627\u0628\u0636\u0629","source":"Prior research database"}
+CompanyExtracted Company candidate: GES {"company":"GES","source":"Prior research database"}
+Qualified Qualified: Samha International School {"company":"Samha International School","score":85,"status":"ReadyForOutreach"}
+CompanyExtracted Company candidate: Samha International School {"company":"Samha International School","source":"Prior research database"}
+Rejected Rejected: Copyright All Right Reserved 2025, Energy Project Support Company LTD {"company":"Copyright All Right Reserved 2025, Energy Project Support Company LTD","score":46,"reason":"Outside target country","missingCriteria":["publicBusinessEmail","targetCountry","targetIndustry","keywords"],"mandatoryFailures":["targetCountry","targetIndustry"]}
+CompanyExtracted Company candidate: Copyright All Right Reserved 2025, Energy Project Support Company LTD {"company":"Copyright All Right Reserved 2025, Energy Project Support Company LTD","source":"DirectoryListingInvestigation"}
+Rejected Rejected: دليل تسجيل طالب ذو إعاقة في برنامج القسائم التعليمية {"company":"\u062F\u0644\u064A\u0644 \u062A\u0633\u062C\u064A\u0644 \u0637\u0627\u0644\u0628 \u0630\u0648 \u0625\u0639\u0627\u0642\u0629 \u0641\u064A \u0628\u0631\u0646\u0627\u0645\u062C \u0627\u0644\u0642\u0633\u0627\u0626\u0645 \u0627\u0644\u062A\u0639\u0644\u064A\u0645\u064A\u0629","score":30,"reason":"Weak company identity","missingCriteria":["officialWebsite","publicBusinessEmail","companyIdentity","targetCountry"],"mandatoryFailures":["officialWebsite","companyIdentity","targetCountry"]}
+CompanyExtracted Company candidate: دليل تسجيل طالب ذو إعاقة في برنامج القسائم التعليمية {"company":"\u062F\u0644\u064A\u0644 \u062A\u0633\u062C\u064A\u0644 \u0637\u0627\u0644\u0628 \u0630\u0648 \u0625\u0639\u0627\u0642\u0629 \u0641\u064A \u0628\u0631\u0646\u0627\u0645\u062C \u0627\u0644\u0642\u0633\u0627\u0626\u0645 \u0627\u0644\u062A\u0639\u0644\u064A\u0645\u064A\u0629","source":"DirectoryListingInvestigation"}

@@ -15,6 +15,7 @@ export interface EmailAccount {
   securityMode: SmtpSecurityMode | null;
   username: string | null;
   hasPassword: boolean;
+  password: string | null;
   senderEmail: string | null;
   senderDisplayName: string | null;
   replyToEmail: string | null;

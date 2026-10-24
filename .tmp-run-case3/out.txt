@@ -1,0 +1,62 @@
+﻿=== RUN ===
+status running pages 64 urls 573 qualified 0 companies 93
+identityVerified 18 emailReady 1 contacts 14 pending 470 fetches 64 / 80
+stop None None
+
+=== PROSPECTS ===
+- rejected score=59 email=admissions@fau.edu
+  name=Florida Atlantic University
+  site=https://fau.edu src=https://www.fau.edu/about/contact/
+- rejected score=59 email=None
+  name=Inspire
+  site=https://inspirear.com src=https://inspirear.com/
+- rejected score=59 email=None
+  name=Book a Visit →
+  site=https://fau.libcal.com/appointments src=https://business.fau.edu/executive-education/contacts-and-directions/
+- rejected score=46 email=None
+  name=Corporate Finance and Restructuring
+  site=https://www.fticonsulting.com/careers src=https://fticonsult.referrals.selectminds.com/
+- rejected score=59 email=None
+  name=ISSA Scholars
+  site=https://issacharities.org/ways-to-give src=https://www.issa.com/
+- readyForOutreach score=83 email=info@empowercharter.org
+  name=Empower Language Academy
+  site=https://empowercharter.org src=https://empowercharter.org/guide-to-charter-schools-in-san-diego-california/
+- needsReview score=79 email=None
+  name=by local moms for local moms
+  site=https://dallasmoms.com src=https://dallasmoms.com/guide-to-public-and-charter-schools-in-dallas/
+- rejected score=14 email=None
+  name=Career
+  site=https://personnel.lausd.org src=https://personnel.lausd.org/apps/pages/index.jsp?uREC_ID=4427582&type=d&pREC_ID=2664854
+- rejected score=59 email=blue-flower@2x.webp
+  name=DISTRICT
+  site=https://districtcannabis.us src=https://districtcannabis.us/
+- needsReview score=59 email=None
+  name=Rodney Harper
+  site=https://douglasma.org src=https://douglasma.org/places/how-much-does-los-angeles-spend-on-education-per-student
+- rejected score=59 email=contact@kids-kab.com
+  name=Kids
+  site=http://www.kids-kab.com src=http://www.kids-kab.com/
+- rejected score=21 email=None
+  name=Team
+  site=https://collegepossible.org src=https://collegepossible.org/locations/chicago/our-team/
+
+=== EVENT TYPES ===
+python : Traceback (most recent call last):
+At C:\Users\User\AppData\Local\Temp\ps-script-5b7821c2-fd5e-4683-9ce1-8a5f483f92ba.ps1:83 char:1
++ python .tmp-run-case3/analyze.py 2>&1 | Out-File .tmp-run-case3/out.t ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Traceback (most recent call last)::String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  File "C:\Users\User\source\repos\BulkMail\.tmp-run-case3\analyze.py", line 34, in <module>
+    for k,v in Counter(x.get('eventType') for x in e).most_common(30):
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python312\Lib\collections\__init__.py", line 607, in __init__
+    self.update(iterable, **kwds)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python312\Lib\collections\__init__.py", line 699, in update
+    _count_elements(self, iterable)
+  File "C:\Users\User\source\repos\BulkMail\.tmp-run-case3\analyze.py", line 34, in <genexpr>
+    for k,v in Counter(x.get('eventType') for x in e).most_common(30):
+                       ^^^^^
+AttributeError: 'str' object has no attribute 'get'

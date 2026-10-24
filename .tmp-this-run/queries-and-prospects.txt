@@ -1,0 +1,242 @@
+﻿STARTED 149
+---ALL SEARCH QUERIES---
+1. [NoResults hits=0 accepted=0] primary school in Sharjah United Arab Emirates
+2. [Healthy hits=10 accepted=10] primary school in Ras Al Khaimah United Arab Emirates
+3. [Healthy hits=8 accepted=8] primary school in Fujairah United Arab Emirates
+4. [Healthy hits=3 accepted=3] primary school in Dubai United Arab Emirates
+5. [Healthy hits=9 accepted=9] primary school in Al Ain United Arab Emirates
+6. [Healthy hits=8 accepted=8] primary school in Ajman United Arab Emirates
+7. [Healthy hits=10 accepted=10] primary school in Abu Dhabi United Arab Emirates
+8. [NoResults hits=0 accepted=0] nursery school in Sharjah United Arab Emirates
+9. [NoResults hits=0 accepted=0] nursery school in Ras Al Khaimah United Arab Emirates
+10. [Healthy hits=5 accepted=5] nursery school in Fujairah United Arab Emirates
+11. [Healthy hits=10 accepted=10] nursery school in Dubai United Arab Emirates
+12. [Healthy hits=2 accepted=2] nursery school in Al Ain United Arab Emirates
+13. [NoResults hits=0 accepted=0] nursery school in Ajman United Arab Emirates
+14. [Healthy hits=1 accepted=1] nursery school in Abu Dhabi United Arab Emirates
+15. [NoResults hits=0 accepted=0] local school in Sharjah United Arab Emirates
+16. [Healthy hits=7 accepted=7] local school in Dubai United Arab Emirates
+17. [Healthy hits=9 accepted=9] local school in Abu Dhabi United Arab Emirates
+18. [Healthy hits=10 accepted=10] kindergartens in Sharjah United Arab Emirates
+19. [NoResults hits=0 accepted=0] kindergartens in Ras Al Khaimah United Arab Emirates
+20. [Healthy hits=10 accepted=10] kindergartens in Fujairah United Arab Emirates
+21. [NoResults hits=0 accepted=0] kindergartens in Dubai United Arab Emirates
+22. [NoResults hits=0 accepted=0] kindergartens in Al Ain United Arab Emirates
+23. [NoResults hits=0 accepted=0] kindergartens in Ajman United Arab Emirates
+24. [NoResults hits=0 accepted=0] kindergartens in Abu Dhabi United Arab Emirates
+25. [Healthy hits=5 accepted=5] K-12 school in Sharjah United Arab Emirates
+26. [NoResults hits=0 accepted=0] K-12 school in Ras Al Khaimah United Arab Emirates
+27. [NoResults hits=0 accepted=0] K-12 school in Fujairah United Arab Emirates
+28. [NoResults hits=0 accepted=0] K-12 school in Dubai United Arab Emirates
+29. [Healthy hits=7 accepted=7] K-12 school in Al Ain United Arab Emirates
+30. [Healthy hits=10 accepted=10] K-12 school in Ajman United Arab Emirates
+31. [Healthy hits=10 accepted=10] K-12 school in Abu Dhabi United Arab Emirates
+32. [Healthy hits=8 accepted=8] independent school in Sharjah United Arab Emirates
+33. [NoResults hits=0 accepted=0] independent school in Dubai United Arab Emirates
+34. [Healthy hits=8 accepted=8] independent school in Abu Dhabi United Arab Emirates
+35. [Healthy hits=8 accepted=8] high school in Sharjah United Arab Emirates
+36. [Healthy hits=2 accepted=2] high school in Ras Al Khaimah United Arab Emirates
+37. [Healthy hits=10 accepted=10] high school in Fujairah United Arab Emirates
+38. [NoResults hits=0 accepted=0] high school in Dubai United Arab Emirates
+39. [NoResults hits=0 accepted=0] high school in Al Ain United Arab Emirates
+40. [Healthy hits=10 accepted=10] high school in Ajman United Arab Emirates
+41. [Healthy hits=10 accepted=10] high school in Abu Dhabi United Arab Emirates
+42. [NoResults hits=0 accepted=0] best school in Sharjah United Arab Emirates
+43. [Healthy hits=2 accepted=2] best school in Dubai United Arab Emirates
+44. [NoResults hits=0 accepted=0] best school in Abu Dhabi United Arab Emirates
+45. [NoResults hits=0 accepted=0] private secondary school Dubai parent communication
+46. [NoResults hits=0 accepted=0] private school Dubai school management software
+47. [Healthy hits=10 accepted=10] private primary school Abu Dhabi school administration
+48. [NoResults hits=0 accepted=0] private high school Ras Al Khaimah school management platform
+49. [Healthy hits=7 accepted=7] private elementary school Fujairah school management software
+50. [NoResults hits=0 accepted=0] private boarding school Dubai student management
+51. [Healthy hits=2 accepted=2] international school Dubai student information system
+52. [Healthy hits=9 accepted=9] international college Al Ain student follow-up
+53. [NoResults hits=0 accepted=0] independent senior school Dubai fee paying schools
+54. [NoResults hits=0 accepted=0] independent school Abu Dhabi parent portal
+55. [Healthy hits=10 accepted=10] independent preparatory school Sharjah school management
+56. [NoResults hits=0 accepted=0] مدرسة عجمان
+57. [Healthy hits=8 accepted=8] مدرسة دولية عجمان
+58. [Healthy hits=10 accepted=10] مدرسة خاصة عجمان
+59. [Healthy hits=10 accepted=10] مدرسة أهلية عجمان
+60. [Healthy hits=7 accepted=7] Independent Boarding School in Sharjah UAE
+61. [Healthy hits=10 accepted=10] مدرسة رأس الخيمة
+62. [Healthy hits=10 accepted=10] مدرسة دولية رأس الخيمة
+63. [NoResults hits=0 accepted=0] مدرسة خاصة رأس الخيمة
+64. [NoResults hits=0 accepted=0] مدرسة أهلية رأس الخيمة
+65. [NoResults hits=0 accepted=0] Private High School in Sharjah UAE
+66. [NoResults hits=0 accepted=0] Independent Boarding School in Dubai UAE
+67. [Healthy hits=2 accepted=2] مدرسة دولية دبي
+68. [Healthy hits=10 accepted=10] مدرسة دبي
+69. [NoResults hits=0 accepted=0] مدرسة خاصة دبي
+70. [NoResults hits=0 accepted=0] مدرسة أهلية دبي
+71. [NoResults hits=0 accepted=0] Private Secondary School in Sharjah UAE
+72. [Healthy hits=10 accepted=10] Private High School in Dubai UAE
+73. [Healthy hits=10 accepted=10] International College in Sharjah UAE
+74. [Healthy hits=4 accepted=4] Independent Boarding School in Ajman UAE
+75. [NoResults hits=0 accepted=0] مدرسة دولية الفجيرة
+76. [NoResults hits=0 accepted=0] primary school in Sharjah United Arab Emirates
+77. [Healthy hits=10 accepted=10] primary school in Ras Al Khaimah United Arab Emirates
+78. [Healthy hits=8 accepted=8] primary school in Fujairah United Arab Emirates
+79. [Healthy hits=3 accepted=3] primary school in Dubai United Arab Emirates
+80. [Healthy hits=9 accepted=9] primary school in Al Ain United Arab Emirates
+81. [Healthy hits=8 accepted=8] primary school in Ajman United Arab Emirates
+82. [Healthy hits=10 accepted=10] primary school in Abu Dhabi United Arab Emirates
+83. [NoResults hits=0 accepted=0] nursery school in Sharjah United Arab Emirates
+84. [NoResults hits=0 accepted=0] nursery school in Ras Al Khaimah United Arab Emirates
+85. [Healthy hits=5 accepted=5] nursery school in Fujairah United Arab Emirates
+86. [Healthy hits=10 accepted=10] nursery school in Dubai United Arab Emirates
+87. [Healthy hits=2 accepted=2] nursery school in Al Ain United Arab Emirates
+88. [NoResults hits=0 accepted=0] nursery school in Ajman United Arab Emirates
+89. [Healthy hits=1 accepted=1] nursery school in Abu Dhabi United Arab Emirates
+90. [NoResults hits=0 accepted=0] local school in Sharjah United Arab Emirates
+91. [Healthy hits=7 accepted=7] local school in Dubai United Arab Emirates
+92. [Healthy hits=9 accepted=9] local school in Abu Dhabi United Arab Emirates
+93. [Healthy hits=10 accepted=10] kindergartens in Sharjah United Arab Emirates
+94. [NoResults hits=0 accepted=0] kindergartens in Ras Al Khaimah United Arab Emirates
+95. [Healthy hits=10 accepted=10] kindergartens in Fujairah United Arab Emirates
+96. [NoResults hits=0 accepted=0] kindergartens in Dubai United Arab Emirates
+97. [NoResults hits=0 accepted=0] kindergartens in Al Ain United Arab Emirates
+98. [NoResults hits=0 accepted=0] kindergartens in Ajman United Arab Emirates
+99. [NoResults hits=0 accepted=0] kindergartens in Abu Dhabi United Arab Emirates
+100. [Healthy hits=5 accepted=5] K-12 school in Sharjah United Arab Emirates
+101. [NoResults hits=0 accepted=0] K-12 school in Ras Al Khaimah United Arab Emirates
+102. [NoResults hits=0 accepted=0] K-12 school in Fujairah United Arab Emirates
+103. [NoResults hits=0 accepted=0] K-12 school in Dubai United Arab Emirates
+104. [Healthy hits=7 accepted=7] K-12 school in Al Ain United Arab Emirates
+105. [Healthy hits=10 accepted=10] K-12 school in Ajman United Arab Emirates
+106. [Healthy hits=10 accepted=10] K-12 school in Abu Dhabi United Arab Emirates
+107. [Healthy hits=8 accepted=8] independent school in Sharjah United Arab Emirates
+108. [NoResults hits=0 accepted=0] independent school in Dubai United Arab Emirates
+109. [Healthy hits=8 accepted=8] independent school in Abu Dhabi United Arab Emirates
+110. [Healthy hits=8 accepted=8] high school in Sharjah United Arab Emirates
+111. [Healthy hits=2 accepted=2] high school in Ras Al Khaimah United Arab Emirates
+112. [Healthy hits=10 accepted=10] high school in Fujairah United Arab Emirates
+113. [NoResults hits=0 accepted=0] high school in Dubai United Arab Emirates
+114. [NoResults hits=0 accepted=0] high school in Al Ain United Arab Emirates
+115. [Healthy hits=10 accepted=10] high school in Ajman United Arab Emirates
+116. [Healthy hits=10 accepted=10] high school in Abu Dhabi United Arab Emirates
+117. [NoResults hits=0 accepted=0] best school in Sharjah United Arab Emirates
+118. [Healthy hits=2 accepted=2] best school in Dubai United Arab Emirates
+119. [NoResults hits=0 accepted=0] best school in Abu Dhabi United Arab Emirates
+120. [NoResults hits=0 accepted=0] private secondary school Dubai parent communication
+121. [NoResults hits=0 accepted=0] private school Dubai school management software
+122. [Healthy hits=10 accepted=10] private primary school Abu Dhabi school administration
+123. [NoResults hits=0 accepted=0] private high school Ras Al Khaimah school management platform
+124. [Healthy hits=7 accepted=7] private elementary school Fujairah school management software
+125. [NoResults hits=0 accepted=0] private boarding school Dubai student management
+126. [Healthy hits=2 accepted=2] international school Dubai student information system
+127. [Healthy hits=9 accepted=9] international college Al Ain student follow-up
+128. [NoResults hits=0 accepted=0] independent senior school Dubai fee paying schools
+129. [NoResults hits=0 accepted=0] independent school Abu Dhabi parent portal
+130. [Healthy hits=10 accepted=10] independent preparatory school Sharjah school management
+131. [NoResults hits=0 accepted=0] مدرسة عجمان
+132. [Healthy hits=8 accepted=8] مدرسة دولية عجمان
+133. [Healthy hits=10 accepted=10] مدرسة خاصة عجمان
+134. [Healthy hits=10 accepted=10] مدرسة أهلية عجمان
+135. [Healthy hits=7 accepted=7] Independent Boarding School in Sharjah UAE
+136. [Healthy hits=10 accepted=10] مدرسة رأس الخيمة
+137. [Healthy hits=10 accepted=10] مدرسة دولية رأس الخيمة
+138. [NoResults hits=0 accepted=0] مدرسة خاصة رأس الخيمة
+139. [NoResults hits=0 accepted=0] مدرسة أهلية رأس الخيمة
+140. [NoResults hits=0 accepted=0] Private High School in Sharjah UAE
+141. [NoResults hits=0 accepted=0] Independent Boarding School in Dubai UAE
+142. [Healthy hits=2 accepted=2] مدرسة دولية دبي
+143. [Healthy hits=10 accepted=10] مدرسة دبي
+144. [NoResults hits=0 accepted=0] مدرسة خاصة دبي
+145. [NoResults hits=0 accepted=0] مدرسة أهلية دبي
+146. [NoResults hits=0 accepted=0] Private Secondary School in Sharjah UAE
+147. [Healthy hits=10 accepted=10] Private High School in Dubai UAE
+148. [Healthy hits=10 accepted=10] International College in Sharjah UAE
+149. [Healthy hits=4 accepted=4] Independent Boarding School in Ajman UAE
+---PROSPECTS---
+{
+  "id": "f1e69b1e-ad58-4d49-a3e7-dbf310cad558",
+  "companyName": "Mofradat",
+  "website": "https://mofradat.com",
+  "city": null,
+  "country": null,
+  "email": null,
+  "whatsApp": null,
+  "sourceUrl": "https://www.mofradat.com/أش",
+  "qualificationScore": 44,
+  "status": "discovered",
+  "isQualified": false,
+  "createdAtUtc": "2026-10-23T11:55:21.4687888+00:00"
+}
+---
+{
+  "id": "d7fd4674-9698-4fea-833a-7a72266778e7",
+  "companyName": "لسانا",
+  "website": "https://lesana.co",
+  "city": null,
+  "country": null,
+  "email": "saud@lesana.co",
+  "whatsApp": "+966545215395",
+  "sourceUrl": "https://www.lesana.co/meaning",
+  "qualificationScore": 54,
+  "status": "discovered",
+  "isQualified": false,
+  "createdAtUtc": "2026-10-23T11:54:58.2927331+00:00"
+}
+---
+{
+  "id": "e47ed78c-788f-4cc3-bc4a-8cf0dd54581d",
+  "companyName": "مواقيت الصلاة في مدن الأردن",
+  "website": "https://timesprayer.com",
+  "city": null,
+  "country": null,
+  "email": null,
+  "whatsApp": null,
+  "sourceUrl": "https://timesprayer.com/prayer-times-cities-jordan.html",
+  "qualificationScore": 44,
+  "status": "discovered",
+  "isQualified": false,
+  "createdAtUtc": "2026-10-23T11:54:54.8674201+00:00"
+}
+---
+{
+  "id": "de4bf4f5-2ace-4ad5-b68e-1c9b62c93fa6",
+  "companyName": "About Capify",
+  "website": "https://capify.ai",
+  "city": null,
+  "country": null,
+  "email": null,
+  "whatsApp": null,
+  "sourceUrl": "https://capify.ai/about",
+  "qualificationScore": 44,
+  "status": "discovered",
+  "isQualified": false,
+  "createdAtUtc": "2026-10-23T11:54:52.1372876+00:00"
+}
+---
+{
+  "id": "c35b4cbf-0774-4b39-a5b8-70d9c0d4b233",
+  "companyName": "Platinum Academy",
+  "website": "https://platinumacademyeg.com/",
+  "city": null,
+  "country": "United Arab Emirates",
+  "email": null,
+  "whatsApp": null,
+  "sourceUrl": "https://platinumacademyeg.com/",
+  "qualificationScore": 0,
+  "status": "discovered",
+  "isQualified": false,
+  "createdAtUtc": "2026-10-23T11:53:07.6678299+00:00"
+}
+---
+{
+  "id": "05390c9f-54cc-4493-9b2d-eb9a6b25ac0d",
+  "companyName": "متجر جو أكاديمي",
+  "website": "https://store.joacademy.com",
+  "city": null,
+  "country": "Jordan",
+  "email": "E.store@joacademy.com",
+  "whatsApp": "0782878776",
+  "sourceUrl": "https://store.joacademy.com/about-us",
+  "qualificationScore": 59,
+  "status": "discovered",
+  "isQualified": false,
+  "createdAtUtc": "2026-10-23T11:33:29.6078637+00:00"
+}
+---

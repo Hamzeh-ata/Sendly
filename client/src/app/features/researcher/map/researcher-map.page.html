@@ -1,0 +1,432 @@
+<div class="researcher-page map-page">
+  <div class="page-header">
+    <div>
+      <h2>{{ 'researcher.map.title' | translate }}</h2>
+      <p class="subtitle">{{ 'researcher.map.subtitle' | translate }}</p>
+    </div>
+    <div class="header-actions map-actions">
+      <label class="map-field">
+        <span>{{ 'researcher.map.project' | translate }}</span>
+        <select
+          class="input project-select"
+          [value]="projectId()"
+          (change)="onProjectChange($any($event.target).value)"
+        >
+          <option value="">{{ 'researcher.map.selectProject' | translate }}</option>
+          @for (project of projects(); track project.id) {
+            <option [value]="project.id" [selected]="project.id === projectId()">{{ project.name }}</option>
+          }
+        </select>
+      </label>
+      <label class="map-field map-field-count">
+        <span>{{ 'researcher.map.requestedCount' | translate }}</span>
+        <input
+          class="input"
+          type="number"
+          min="1"
+          [value]="requestedProspectCount()"
+          (input)="onRequestedCountChange($any($event.target).value)"
+        />
+      </label>
+      <button
+        type="button"
+        class="btn btn-primary"
+        [disabled]="!canStart() || actionLoading()"
+        (click)="startRun()"
+      >
+        {{ 'researcher.map.start' | translate }}
+      </button>
+      <button
+        type="button"
+        class="btn btn-ghost"
+        [disabled]="!canResume() || actionLoading()"
+        (click)="resumeRun()"
+      >
+        {{ 'researcher.map.resume' | translate }}
+      </button>
+      <button
+        type="button"
+        class="btn btn-danger"
+        [disabled]="!canCancel() || actionLoading()"
+        (click)="cancelRun()"
+      >
+        {{ 'researcher.map.cancel' | translate }}
+      </button>
+    </div>
+  </div>
+
+  @if (loading()) {
+    <div class="rc-skeleton">
+      <div class="bone"></div>
+      <div class="bone"></div>
+    </div>
+  } @else if (!hasProject()) {
+    <app-empty-state
+      titleKey="researcher.map.emptyProjectTitle"
+      descriptionKey="researcher.map.emptyProjectDescription"
+    />
+  } @else {
+    <section class="rc-panel map-status-bar">
+      <div class="map-status-main">
+        <span class="map-status-label">{{ 'researcher.map.activeRun' | translate }}</span>
+        @if (hasActiveRunStatus()) {
+          <app-status-badge prefix="researchStatus" [status]="activeRunBadgeStatus()" />
+        }
+        <span class="rc-mono">{{ runStatusLabelKey() | translate }}</span>
+      </div>
+      <div class="map-status-progress">
+        <span>{{ 'researcher.map.progress' | translate }}</span>
+        <strong class="rc-mono">{{ progressLabel() }}</strong>
+      </div>
+      @if (hasUnsupportedCategories()) {
+        <div class="map-unsupported">
+          <span>{{ 'researcher.map.unsupportedCategories' | translate }}</span>
+          <span class="rc-muted">{{ unsupportedCategoriesLabel() }}</span>
+        </div>
+      }
+    </section>
+
+    @if (hasOverview()) {
+      <section class="rc-grid metrics">
+        @for (tile of metricTiles(); track tile.labelKey) {
+          <app-metric-tile [labelKey]="tile.labelKey" [value]="tile.value" [tone]="tile.tone" />
+        }
+      </section>
+    }
+
+    <section class="rc-panel map-filters">
+      <label class="map-field">
+        <span>{{ 'researcher.map.statusFilter' | translate }}</span>
+        <select
+          class="input"
+          [value]="statusFilter()"
+          (change)="onStatusFilterChange($any($event.target).value)"
+        >
+          @for (option of statusFilterOptions(); track option.value) {
+            <option [value]="option.value">{{ option.labelKey | translate }}</option>
+          }
+        </select>
+      </label>
+      <label class="map-check">
+        <input
+          type="checkbox"
+          [checked]="qualifiedOnly()"
+          (change)="onQualifiedOnlyChange($any($event.target).checked)"
+        />
+        <span>{{ 'researcher.map.qualifiedOnly' | translate }}</span>
+      </label>
+      <span class="map-filter-count rc-mono">
+        {{ 'researcher.map.visibleMarkers' | translate }}: {{ filteredMarkersCountLabel() }}
+      </span>
+    </section>
+
+    <section class="map-workspace">
+      <div class="map-canvas" #mapHost></div>
+
+      <aside class="map-side-panel rc-panel">
+        @if (selectedMarker(); as marker) {
+          <div class="map-panel-header">
+            <div>
+              <h3>{{ marker.companyName }}</h3>
+              <p class="rc-muted">{{ marker.locationLabel }}</p>
+            </div>
+            <button type="button" class="btn btn-ghost" (click)="closePanel()">
+              {{ 'researcher.map.closePanel' | translate }}
+            </button>
+          </div>
+
+          <div class="map-detail-grid">
+            <div>
+              <span class="map-detail-label">{{ 'researcher.map.detailStatus' | translate }}</span>
+              <span>{{ marker.statusLabelKey | translate }}</span>
+            </div>
+            <div>
+              <span class="map-detail-label">{{ 'researcher.map.detailQualified' | translate }}</span>
+              <span>{{ marker.qualifiedLabelKey | translate }}</span>
+            </div>
+            <div>
+              <span class="map-detail-label">{{ 'researcher.map.detailScore' | translate }}</span>
+              <span class="rc-mono">{{ marker.scoreLabel }}</span>
+            </div>
+            <div>
+              <span class="map-detail-label">{{ 'researcher.map.detailIndustry' | translate }}</span>
+              <span>{{ marker.industryLabel }}</span>
+            </div>
+            <div>
+              <span class="map-detail-label">{{ 'researcher.map.detailFax' | translate }}</span>
+              <span>{{ marker.faxLabel }}</span>
+            </div>
+            <div>
+              <span class="map-detail-label">{{ 'researcher.map.detailWebsite' | translate }}</span>
+              <span>{{ marker.websiteLabel }}</span>
+            </div>
+            <div>
+              <span class="map-detail-label">{{ 'researcher.map.detailAddress' | translate }}</span>
+              <span>{{ marker.streetAddressLabel }}</span>
+            </div>
+            <div>
+              <span class="map-detail-label">{{ 'researcher.map.detailHours' | translate }}</span>
+              <span>{{ marker.openingHoursLabel }}</span>
+            </div>
+            <div>
+              <span class="map-detail-label">{{ 'researcher.map.detailSource' | translate }}</span>
+              <span>{{ marker.sourceNameLabel }}</span>
+            </div>
+            <div>
+              <span class="map-detail-label">{{ 'researcher.map.detailCategories' | translate }}</span>
+              <span>{{ marker.categoryTagsLabel }}</span>
+            </div>
+          </div>
+
+          <div class="map-contacts">
+            <h4>{{ 'researcher.map.contactsSection' | translate }}</h4>
+            @if (!marker.hasFetchedContacts) {
+              <p class="rc-muted">{{ 'researcher.map.noFetchedContacts' | translate }}</p>
+            } @else {
+              @if (marker.hasFetchedEmails) {
+                <div class="map-contact-block">
+                  <span class="map-detail-label">{{ 'researcher.map.fetchedEmails' | translate }}</span>
+                  <ul class="map-contact-list">
+                    @for (email of marker.emailRows; track email) {
+                      <li>{{ email }}</li>
+                    }
+                  </ul>
+                </div>
+              }
+              @if (marker.hasFetchedPhones) {
+                <div class="map-contact-block">
+                  <span class="map-detail-label">{{ 'researcher.map.fetchedPhones' | translate }}</span>
+                  <ul class="map-contact-list">
+                    @for (phone of marker.phoneRows; track phone) {
+                      <li>{{ phone }}</li>
+                    }
+                  </ul>
+                </div>
+              }
+            }
+            <div class="map-result-actions">
+              <a class="map-source-link" [routerLink]="marker.prospectDetailUrl">
+                {{ 'researcher.map.openProspect' | translate }}
+              </a>
+              @if (selectedHasMissingContacts()) {
+                <button
+                  type="button"
+                  class="btn btn-ghost"
+                  [disabled]="selectedIsExtracting() || batchExtractLoading()"
+                  (click)="extractContactsWithOpenAi(marker.prospectId)"
+                >
+                  @if (selectedIsExtracting()) {
+                    {{ 'researcher.map.extractingOpenAi' | translate }}
+                  } @else {
+                    {{ 'researcher.map.extractOpenAi' | translate }}
+                  }
+                </button>
+              }
+            </div>
+          </div>
+
+          @if (marker.hasSourceUrl) {
+            <a
+              class="map-source-link"
+              [href]="marker.sourceUrl"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {{ 'researcher.map.openSourceEvidence' | translate }}
+            </a>
+          }
+
+          @if (marker.hasProvenance) {
+            <div class="map-provenance">
+              <h4>{{ 'researcher.map.fieldProvenance' | translate }}</h4>
+              @for (row of marker.provenanceRows; track row.fieldLabelKey + row.valueLabel) {
+                <div class="map-provenance-row">
+                  <strong>{{ row.fieldLabelKey | translate }}</strong>
+                  <span>{{ row.valueLabel }}</span>
+                  <span class="rc-muted">{{ row.methodLabelKey | translate }} · {{ row.statusLabelKey | translate }}</span>
+                  @if (row.hasExcerpt) {
+                    <span class="rc-muted">{{ row.excerptLabel }}</span>
+                  }
+                  @if (row.hasSourceUrl) {
+                    <a
+                      class="map-source-link"
+                      [href]="row.sourceUrl"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {{ 'researcher.map.openFieldSource' | translate }}
+                    </a>
+                  }
+                </div>
+              }
+            </div>
+          }
+
+          <div class="map-missing">
+            <h4>{{ 'researcher.map.missingFields' | translate }}</h4>
+            @if (marker.hasMissingFields) {
+              <ul>
+                @for (field of marker.missingFields; track field) {
+                  <li>{{ field }}</li>
+                }
+              </ul>
+            } @else {
+              <p class="rc-muted">{{ 'researcher.map.noMissingFields' | translate }}</p>
+            }
+          </div>
+        } @else {
+          <div class="map-panel-empty">
+            <h3>{{ 'researcher.map.panelEmptyTitle' | translate }}</h3>
+            <p class="rc-muted">{{ 'researcher.map.panelEmptyDescription' | translate }}</p>
+          </div>
+        }
+      </aside>
+    </section>
+
+    @if (showResultsSection()) {
+      <section class="rc-panel map-results">
+        <div class="map-results-header">
+          <div>
+            <h3>{{ 'researcher.map.resultsTitle' | translate }}</h3>
+            <p class="rc-muted">
+              {{ 'researcher.map.missingContactsCount' | translate }}:
+              <span class="rc-mono">{{ missingContactsCountLabel() }}</span>
+            </p>
+          </div>
+          <div class="map-results-actions">
+            <label class="map-check">
+              <input
+                type="checkbox"
+                [checked]="missingContactsOnly()"
+                (change)="onMissingContactsOnlyChange($any($event.target).checked)"
+              />
+              <span>{{ 'researcher.map.missingContactsOnly' | translate }}</span>
+            </label>
+            @if (canOpenMapProspects()) {
+              <a
+                class="btn btn-ghost"
+                routerLink="/prospects"
+                [queryParams]="prospectsListQuery()"
+              >
+                {{ 'researcher.map.openProspectsList' | translate }}
+              </a>
+            } @else {
+              <button type="button" class="btn btn-ghost" disabled>
+                {{ 'researcher.map.openProspectsList' | translate }}
+              </button>
+            }
+            <button
+              type="button"
+              class="btn btn-primary"
+              [disabled]="!canExtractMissing()"
+              (click)="extractMissingWithOpenAi()"
+            >
+              {{ 'researcher.map.extractMissingOpenAi' | translate }}
+            </button>
+          </div>
+        </div>
+
+        @if (!hasResultRows()) {
+          <p class="rc-muted">{{ 'researcher.map.noResults' | translate }}</p>
+        } @else {
+          <div class="map-table-wrap">
+            <table class="rc-table">
+              <thead>
+                <tr>
+                  <th>{{ 'researcher.map.resultCompany' | translate }}</th>
+                  <th>{{ 'researcher.map.resultLocation' | translate }}</th>
+                  <th>{{ 'researcher.map.detailEmail' | translate }}</th>
+                  <th>{{ 'researcher.map.detailPhone' | translate }}</th>
+                  <th>{{ 'researcher.map.detailWebsite' | translate }}</th>
+                  <th>{{ 'researcher.map.detailStatus' | translate }}</th>
+                  <th>{{ 'researcher.map.missingFields' | translate }}</th>
+                  <th>{{ 'researcher.map.resultActions' | translate }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (row of resultRows(); track row.prospectId) {
+                  <tr>
+                    <td>
+                      <button
+                        type="button"
+                        class="map-result-link"
+                        (click)="selectResultRow(row.prospectId)"
+                      >
+                        {{ row.companyName }}
+                      </button>
+                    </td>
+                    <td>{{ row.locationLabel }}</td>
+                    <td>{{ row.emailLabel }}</td>
+                    <td>{{ row.phoneLabel }}</td>
+                    <td>{{ row.websiteLabel }}</td>
+                    <td>{{ row.statusLabelKey | translate }}</td>
+                    <td>{{ row.missingLabel }}</td>
+                    <td>
+                      <div class="map-result-actions">
+                        <a class="map-source-link" [routerLink]="row.prospectDetailUrl">
+                          {{ 'researcher.map.openProspect' | translate }}
+                        </a>
+                        @if (row.hasMissingContacts) {
+                          <button
+                            type="button"
+                            class="btn btn-ghost"
+                            [disabled]="row.extracting || batchExtractLoading()"
+                            (click)="extractContactsWithOpenAi(row.prospectId)"
+                          >
+                            @if (row.extracting) {
+                              {{ 'researcher.map.extractingOpenAi' | translate }}
+                            } @else {
+                              {{ 'researcher.map.extractOpenAi' | translate }}
+                            }
+                          </button>
+                        }
+                      </div>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+      </section>
+    }
+
+    <section class="rc-panel">
+      <h3>{{ 'researcher.map.regionsTitle' | translate }}</h3>
+      @if (!hasRegions()) {
+        <p class="rc-muted">{{ 'researcher.map.noRegions' | translate }}</p>
+      } @else {
+        <div class="map-table-wrap">
+          <table class="rc-table">
+            <thead>
+              <tr>
+                <th>{{ 'researcher.map.regionLabel' | translate }}</th>
+                <th>{{ 'researcher.map.regionCountry' | translate }}</th>
+                <th>{{ 'researcher.map.regionKeyword' | translate }}</th>
+                <th>{{ 'researcher.map.regionSource' | translate }}</th>
+                <th>{{ 'researcher.map.regionStatusHeader' | translate }}</th>
+                <th>{{ 'researcher.map.regionRecords' | translate }}</th>
+                <th>{{ 'researcher.map.regionUnique' | translate }}</th>
+                <th>{{ 'researcher.map.regionError' | translate }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (row of regionRows(); track row.id) {
+                <tr>
+                  <td>{{ row.regionLabel }}</td>
+                  <td class="rc-mono">{{ row.countryCodeLabel }}</td>
+                  <td>{{ row.keywordFamilyKey }}</td>
+                  <td>{{ row.sourceName }}</td>
+                  <td>{{ row.statusLabelKey | translate }}</td>
+                  <td class="rc-mono">{{ row.recordsFound }}</td>
+                  <td class="rc-mono">{{ row.uniqueRecordsFound }}</td>
+                  <td>{{ row.lastErrorLabel }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </section>
+  }
+</div>

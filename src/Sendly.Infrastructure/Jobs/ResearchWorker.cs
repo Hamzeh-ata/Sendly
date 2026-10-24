@@ -1,5 +1,6 @@
 using Sendly.Application.Abstractions;
 using Sendly.Application.Services;
+using Sendly.Application.Services.MapResearch;
 using Sendly.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -33,8 +34,21 @@ public class ResearchWorker : BackgroundService
             try
             {
                 using var scope = _scopeFactory.CreateScope();
-                var processor = scope.ServiceProvider.GetRequiredService<ResearchProcessor>();
-                await processor.ProcessAsync(researchRunId, stoppingToken);
+                var db = scope.ServiceProvider.GetRequiredService<ISendlyDbContext>();
+                var runMode = await db.ResearchRuns
+                    .Where(x => x.Id == researchRunId)
+                    .Select(x => (ResearchMode?)x.Mode)
+                    .FirstOrDefaultAsync(stoppingToken);
+                if (runMode == ResearchMode.Map)
+                {
+                    var mapProcessor = scope.ServiceProvider.GetRequiredService<MapResearchProcessor>();
+                    await mapProcessor.ProcessAsync(researchRunId, stoppingToken);
+                }
+                else
+                {
+                    var processor = scope.ServiceProvider.GetRequiredService<ResearchProcessor>();
+                    await processor.ProcessAsync(researchRunId, stoppingToken);
+                }
             }
             catch (OperationCanceledException) when (stoppingToken.IsCancellationRequested)
             {

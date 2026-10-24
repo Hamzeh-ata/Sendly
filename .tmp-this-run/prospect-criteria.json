@@ -1,0 +1,547 @@
+﻿[
+    {
+        "criteria":  {
+                         "value":  [
+                                       {
+                                           "id":  "4a9cffac-cf61-4a4b-8cf7-d378d2605ef9",
+                                           "criterionKey":  "companyIdentity",
+                                           "criterionLabel":  "Company identity",
+                                           "isMandatory":  true,
+                                           "passed":  true,
+                                           "scoreContribution":  15,
+                                           "reason":  "Company name accepted (identity.named_with_website).",
+                                           "evidenceIds":  [
+
+                                                           ],
+                                           "evaluatedAtUtc":  "2026-10-20T07:53:25.3819019+00:00"
+                                       },
+                                       {
+                                           "id":  "5d027b74-ae54-4c41-8d93-e5ac1beb98b3",
+                                           "criterionKey":  "entityType",
+                                           "criterionLabel":  "Entity type",
+                                           "isMandatory":  true,
+                                           "passed":  true,
+                                           "scoreContribution":  20,
+                                           "reason":  "Entity type \u0027TargetBusiness\u0027 is an allowed target.",
+                                           "evidenceIds":  [
+
+                                                           ],
+                                           "evaluatedAtUtc":  "2026-10-20T07:53:25.3818844+00:00"
+                                       },
+                                       {
+                                           "id":  "43e320e5-dfdd-40d0-8579-c19fdc39761f",
+                                           "criterionKey":  "exclusionCriteria",
+                                           "criterionLabel":  "Exclusion criteria",
+                                           "isMandatory":  true,
+                                           "passed":  true,
+                                           "scoreContribution":  10,
+                                           "reason":  "No exclusion criteria matched.",
+                                           "evidenceIds":  [
+
+                                                           ],
+                                           "evaluatedAtUtc":  "2026-10-20T07:53:25.3822246+00:00"
+                                       },
+                                       {
+                                           "id":  "ca8a50c9-2aa1-4a86-8b28-0a2f56568517",
+                                           "criterionKey":  "keywords",
+                                           "criterionLabel":  "Keywords",
+                                           "isMandatory":  false,
+                                           "passed":  true,
+                                           "scoreContribution":  5,
+                                           "reason":  "Matched keywords: sailing center",
+                                           "evidenceIds":  [
+
+                                                           ],
+                                           "evaluatedAtUtc":  "2026-10-20T07:53:25.3822276+00:00"
+                                       },
+                                       {
+                                           "id":  "3ffd82d0-7892-4024-9388-4f91efd3cf46",
+                                           "criterionKey":  "officialWebsite",
+                                           "criterionLabel":  "Official website",
+                                           "isMandatory":  true,
+                                           "passed":  true,
+                                           "scoreContribution":  20,
+                                           "reason":  "Official website URL was found.",
+                                           "evidenceIds":  [
+
+                                                           ],
+                                           "evaluatedAtUtc":  "2026-10-20T07:53:25.3818145+00:00"
+                                       },
+                                       {
+                                           "id":  "602b4970-93e2-418d-9a87-8f654a2d786f",
+                                           "criterionKey":  "publicBusinessEmail",
+                                           "criterionLabel":  "Public business email",
+                                           "isMandatory":  false,
+                                           "passed":  false,
+                                           "scoreContribution":  0,
+                                           "reason":  "No public business email was found (gates outreach readiness, not target relevance).",
+                                           "evidenceIds":  [
+
+                                                           ],
+                                           "evaluatedAtUtc":  "2026-10-20T07:53:25.3818151+00:00"
+                                       },
+                                       {
+                                           "id":  "98c7e765-9cba-448f-90c6-223805b7258b",
+                                           "criterionKey":  "targetCountry",
+                                           "criterionLabel":  "Target country",
+                                           "isMandatory":  true,
+                                           "passed":  true,
+                                           "scoreContribution":  20,
+                                           "reason":  "Organization location evidence matched target country \u0027United Arab Emirates\u0027. Evidence: official_website_host:gjproperties.ae; source_url_host:gjproperties.ae.",
+                                           "evidenceIds":  [
+
+                                                           ],
+                                           "evaluatedAtUtc":  "2026-10-20T07:53:25.3819315+00:00"
+                                       },
+                                       {
+                                           "id":  "89c0caa9-db57-4aeb-ba7b-086b28e2003d",
+                                           "criterionKey":  "targetIndustry",
+                                           "criterionLabel":  "Target industry",
+                                           "isMandatory":  true,
+                                           "passed":  true,
+                                           "scoreContribution":  20,
+                                           "reason":  "Industry or services text matched target industry (\u0027Sailing Center\u0027).",
+                                           "evidenceIds":  [
+
+                                                           ],
+                                           "evaluatedAtUtc":  "2026-10-20T07:53:25.3822204+00:00"
+                                       }
+                                   ],
+                         "Count":  8
+                     },
+        "name":  "١٠ من أفضل المدارس البريطانية في عجمان",
+        "id":  "7685cac6-0f74-49d3-9c6e-171e419713a9"
+    },
+    {
+        "criteria":  {
+                         "value":  [
+                                       {
+                                           "id":  "900c8c53-871f-4af6-b154-746ea2c6abff",
+                                           "criterionKey":  "companyIdentity",
+                                           "criterionLabel":  "Company identity",
+                                           "isMandatory":  true,
+                                           "passed":  true,
+                                           "scoreContribution":  15,
+                                           "reason":  "Company name accepted (identity.named_with_website).",
+                                           "evidenceIds":  [
+
+                                                           ],
+                                           "evaluatedAtUtc":  "2026-10-20T07:53:21.6347206+00:00"
+                                       },
+                                       {
+                                           "id":  "33a3637b-694b-4e76-8470-66613a5846f3",
+                                           "criterionKey":  "contactAttribution",
+                                           "criterionLabel":  "Contact attribution",
+                                           "isMandatory":  true,
+                                           "passed":  true,
+                                           "scoreContribution":  10,
+                                           "reason":  "Contact attribution accepted (contact.same_domain).",
+                                           "evidenceIds":  [
+
+                                                           ],
+                                           "evaluatedAtUtc":  "2026-10-20T07:53:21.6350975+00:00"
+                                       },
+                                       {
+                                           "id":  "ff64a640-0620-48c3-894b-5dd122297683",
+                                           "criterionKey":  "entityType",
+                                           "criterionLabel":  "Entity type",
+                                           "isMandatory":  true,
+                                           "passed":  true,
+                                           "scoreContribution":  20,
+                                           "reason":  "Entity type \u0027TargetBusiness\u0027 is an allowed target.",
+                                           "evidenceIds":  [
+
+                                                           ],
+                                           "evaluatedAtUtc":  "2026-10-20T07:53:21.6347047+00:00"
+                                       },
+                                       {
+                                           "id":  "e365dc83-c9c5-4b0d-b435-847fe1cc5fa8",
+                                           "criterionKey":  "exclusionCriteria",
+                                           "criterionLabel":  "Exclusion criteria",
+                                           "isMandatory":  true,
+                                           "passed":  true,
+                                           "scoreContribution":  10,
+                                           "reason":  "No exclusion criteria matched.",
+                                           "evidenceIds":  [
+
+                                                           ],
+                                           "evaluatedAtUtc":  "2026-10-20T07:53:21.6351026+00:00"
+                                       },
+                                       {
+                                           "id":  "668ed336-d54c-4fda-897b-d32278fad61e",
+                                           "criterionKey":  "keywords",
+                                           "criterionLabel":  "Keywords",
+                                           "isMandatory":  false,
+                                           "passed":  true,
+                                           "scoreContribution":  5,
+                                           "reason":  "Matched keywords: sailing center",
+                                           "evidenceIds":  [
+
+                                                           ],
+                                           "evaluatedAtUtc":  "2026-10-20T07:53:21.6351063+00:00"
+                                       },
+                                       {
+                                           "id":  "3a11c5fe-7888-4b27-8c80-e80af590b01c",
+                                           "criterionKey":  "officialWebsite",
+                                           "criterionLabel":  "Official website",
+                                           "isMandatory":  true,
+                                           "passed":  true,
+                                           "scoreContribution":  20,
+                                           "reason":  "Official website URL was found.",
+                                           "evidenceIds":  [
+
+                                                           ],
+                                           "evaluatedAtUtc":  "2026-10-20T07:53:21.6346401+00:00"
+                                       },
+                                       {
+                                           "id":  "39b6ec1c-2cec-42d7-b0ad-530b9f1815ef",
+                                           "criterionKey":  "publicBusinessEmail",
+                                           "criterionLabel":  "Public business email",
+                                           "isMandatory":  false,
+                                           "passed":  true,
+                                           "scoreContribution":  25,
+                                           "reason":  "Public business email was extracted from crawled pages.",
+                                           "evidenceIds":  [
+
+                                                           ],
+                                           "evaluatedAtUtc":  "2026-10-20T07:53:21.6346406+00:00"
+                                       },
+                                       {
+                                           "id":  "d444ec25-0519-4565-a093-ce9fcc7319ca",
+                                           "criterionKey":  "targetCountry",
+                                           "criterionLabel":  "Target country",
+                                           "isMandatory":  true,
+                                           "passed":  true,
+                                           "scoreContribution":  20,
+                                           "reason":  "Organization location evidence matched target country \u0027United Arab Emirates\u0027. Evidence: text_mention:United Arab Emirates.",
+                                           "evidenceIds":  [
+
+                                                           ],
+                                           "evaluatedAtUtc":  "2026-10-20T07:53:21.6347552+00:00"
+                                       },
+                                       {
+                                           "id":  "9a544c7d-a70a-4f7f-9b78-82c0e9c8742c",
+                                           "criterionKey":  "targetIndustry",
+                                           "criterionLabel":  "Target industry",
+                                           "isMandatory":  true,
+                                           "passed":  true,
+                                           "scoreContribution":  20,
+                                           "reason":  "Industry or services text matched target industry (\u0027Sailing Center\u0027).",
+                                           "evidenceIds":  [
+
+                                                           ],
+                                           "evaluatedAtUtc":  "2026-10-20T07:53:21.6350688+00:00"
+                                       }
+                                   ],
+                         "Count":  9
+                     },
+        "name":  "Deutsche Internationale Schule Sharjah",
+        "id":  "1d4a58a1-09f2-430f-a1c1-bf58c81f0941"
+    },
+    {
+        "criteria":  {
+                         "value":  [
+
+                                   ],
+                         "Count":  0
+                     },
+        "name":  "مدارس نجد الأهلية",
+        "id":  "ea5695f4-9065-4316-8e1d-e9fa4119bce5"
+    },
+    {
+        "criteria":  {
+                         "value":  [
+
+                                   ],
+                         "Count":  0
+                     },
+        "name":  "مدرسة منارة الشارقة الخاصة",
+        "id":  "a924ce16-2b1b-4728-992b-d8678193b4db"
+    },
+    {
+        "criteria":  {
+                         "value":  [
+
+                                   ],
+                         "Count":  0
+                     },
+        "name":  "مدرسة اللؤلؤة الابتدائية في أبوظبي",
+        "id":  "ef2c835b-7281-4fc1-8916-84e812ac94b7"
+    },
+    {
+        "criteria":  {
+                         "value":  [
+
+                                   ],
+                         "Count":  0
+                     },
+        "name":  "مدارس تربية خاصة و دمج في دبي",
+        "id":  "538be75f-de5e-4920-93b8-bca7135f0de5"
+    },
+    {
+        "criteria":  {
+                         "value":  [
+
+                                   ],
+                         "Count":  0
+                     },
+        "name":  "المدارس السعودية ( عالمي",
+        "id":  "7f1babd0-cc10-470a-840e-0c150c347a3b"
+    },
+    {
+        "criteria":  {
+                         "value":  [
+                                       {
+                                           "id":  "c34e8696-7bab-4d59-be2d-614c8f29a51a",
+                                           "criterionKey":  "companyIdentity",
+                                           "criterionLabel":  "Company identity",
+                                           "isMandatory":  true,
+                                           "passed":  true,
+                                           "scoreContribution":  15,
+                                           "reason":  "Company name accepted (identity.named_with_website).",
+                                           "evidenceIds":  [
+
+                                                           ],
+                                           "evaluatedAtUtc":  "2026-10-20T07:53:06.5301387+00:00"
+                                       },
+                                       {
+                                           "id":  "c31d2134-1409-47de-8f65-1f8bdec345d3",
+                                           "criterionKey":  "entityType",
+                                           "criterionLabel":  "Entity type",
+                                           "isMandatory":  true,
+                                           "passed":  true,
+                                           "scoreContribution":  20,
+                                           "reason":  "Entity type \u0027TargetBusiness\u0027 is an allowed target.",
+                                           "evidenceIds":  [
+
+                                                           ],
+                                           "evaluatedAtUtc":  "2026-10-20T07:53:06.5301228+00:00"
+                                       },
+                                       {
+                                           "id":  "dec65be1-ba84-41e4-889f-aa06b365479c",
+                                           "criterionKey":  "exclusionCriteria",
+                                           "criterionLabel":  "Exclusion criteria",
+                                           "isMandatory":  true,
+                                           "passed":  true,
+                                           "scoreContribution":  10,
+                                           "reason":  "No exclusion criteria matched.",
+                                           "evidenceIds":  [
+
+                                                           ],
+                                           "evaluatedAtUtc":  "2026-10-20T07:53:06.5304602+00:00"
+                                       },
+                                       {
+                                           "id":  "e0330f8b-822a-4a7b-a016-9f9afa875f7d",
+                                           "criterionKey":  "keywords",
+                                           "criterionLabel":  "Keywords",
+                                           "isMandatory":  false,
+                                           "passed":  true,
+                                           "scoreContribution":  5,
+                                           "reason":  "Matched keywords: sailing center",
+                                           "evidenceIds":  [
+
+                                                           ],
+                                           "evaluatedAtUtc":  "2026-10-20T07:53:06.5304634+00:00"
+                                       },
+                                       {
+                                           "id":  "0f8b4805-ec96-48b6-b5ce-36eda391cf92",
+                                           "criterionKey":  "officialWebsite",
+                                           "criterionLabel":  "Official website",
+                                           "isMandatory":  true,
+                                           "passed":  true,
+                                           "scoreContribution":  20,
+                                           "reason":  "Official website URL was found.",
+                                           "evidenceIds":  [
+
+                                                           ],
+                                           "evaluatedAtUtc":  "2026-10-20T07:53:06.5300544+00:00"
+                                       },
+                                       {
+                                           "id":  "e9fe9b04-c8a8-4170-8bb6-8c331b31c0fe",
+                                           "criterionKey":  "publicBusinessEmail",
+                                           "criterionLabel":  "Public business email",
+                                           "isMandatory":  false,
+                                           "passed":  false,
+                                           "scoreContribution":  0,
+                                           "reason":  "No public business email was found (gates outreach readiness, not target relevance).",
+                                           "evidenceIds":  [
+
+                                                           ],
+                                           "evaluatedAtUtc":  "2026-10-20T07:53:06.5300549+00:00"
+                                       },
+                                       {
+                                           "id":  "d9fff1df-d7bb-4553-b711-395b852f9f49",
+                                           "criterionKey":  "targetCountry",
+                                           "criterionLabel":  "Target country",
+                                           "isMandatory":  true,
+                                           "passed":  true,
+                                           "scoreContribution":  20,
+                                           "reason":  "Organization location evidence matched target country \u0027United Arab Emirates\u0027. Evidence: official_website_host:www.alainbritishacademy.ae; source_url_host:www.alainbritishacademy.ae; additional_source_host:www.alainbritishacademy.ae.",
+                                           "evidenceIds":  [
+
+                                                           ],
+                                           "evaluatedAtUtc":  "2026-10-20T07:53:06.5301642+00:00"
+                                       },
+                                       {
+                                           "id":  "71b4a06d-1075-423e-85ee-56c694d28f8f",
+                                           "criterionKey":  "targetIndustry",
+                                           "criterionLabel":  "Target industry",
+                                           "isMandatory":  true,
+                                           "passed":  true,
+                                           "scoreContribution":  20,
+                                           "reason":  "Industry or services text matched target industry (\u0027Sailing Center\u0027).",
+                                           "evidenceIds":  [
+
+                                                           ],
+                                           "evaluatedAtUtc":  "2026-10-20T07:53:06.5304557+00:00"
+                                       }
+                                   ],
+                         "Count":  8
+                     },
+        "name":  "نبذة عن أكاديمية العين البريطانية",
+        "id":  "8e6441b6-9da4-4f62-98b2-456c723fa2e8"
+    },
+    {
+        "criteria":  {
+                         "value":  [
+
+                                   ],
+                         "Count":  0
+                     },
+        "name":  "مدرسة الامارات الخاصة الفجيرة",
+        "id":  "703c5486-3100-4f47-bd46-3d5c8c366aec"
+    },
+    {
+        "criteria":  {
+                         "value":  [
+                                       {
+                                           "id":  "5634c45f-d381-4cd4-9096-5f401fd63683",
+                                           "criterionKey":  "companyIdentity",
+                                           "criterionLabel":  "Company identity",
+                                           "isMandatory":  true,
+                                           "passed":  true,
+                                           "scoreContribution":  15,
+                                           "reason":  "Company name accepted (identity.named_with_website).",
+                                           "evidenceIds":  [
+
+                                                           ],
+                                           "evaluatedAtUtc":  "2026-10-20T07:53:01.0404812+00:00"
+                                       },
+                                       {
+                                           "id":  "f69f5210-6cbe-49af-9304-86ae7be0becd",
+                                           "criterionKey":  "entityType",
+                                           "criterionLabel":  "Entity type",
+                                           "isMandatory":  true,
+                                           "passed":  true,
+                                           "scoreContribution":  20,
+                                           "reason":  "Entity type \u0027TargetBusiness\u0027 is an allowed target.",
+                                           "evidenceIds":  [
+
+                                                           ],
+                                           "evaluatedAtUtc":  "2026-10-20T07:53:01.0404661+00:00"
+                                       },
+                                       {
+                                           "id":  "9a814980-b569-42c7-800e-d4e1023056c5",
+                                           "criterionKey":  "exclusionCriteria",
+                                           "criterionLabel":  "Exclusion criteria",
+                                           "isMandatory":  true,
+                                           "passed":  true,
+                                           "scoreContribution":  10,
+                                           "reason":  "No exclusion criteria matched.",
+                                           "evidenceIds":  [
+
+                                                           ],
+                                           "evaluatedAtUtc":  "2026-10-20T07:53:01.0408066+00:00"
+                                       },
+                                       {
+                                           "id":  "b7245680-9b6a-49dd-a175-878a0dc7daf3",
+                                           "criterionKey":  "keywords",
+                                           "criterionLabel":  "Keywords",
+                                           "isMandatory":  false,
+                                           "passed":  true,
+                                           "scoreContribution":  5,
+                                           "reason":  "Matched keywords: sailing center",
+                                           "evidenceIds":  [
+
+                                                           ],
+                                           "evaluatedAtUtc":  "2026-10-20T07:53:01.0408094+00:00"
+                                       },
+                                       {
+                                           "id":  "291b56ab-25c9-4827-b896-fd2c107cca2e",
+                                           "criterionKey":  "officialWebsite",
+                                           "criterionLabel":  "Official website",
+                                           "isMandatory":  true,
+                                           "passed":  true,
+                                           "scoreContribution":  20,
+                                           "reason":  "Official website URL was found.",
+                                           "evidenceIds":  [
+
+                                                           ],
+                                           "evaluatedAtUtc":  "2026-10-20T07:53:01.0403993+00:00"
+                                       },
+                                       {
+                                           "id":  "f20dd484-8213-4864-8d1e-29a4bf6957eb",
+                                           "criterionKey":  "publicBusinessEmail",
+                                           "criterionLabel":  "Public business email",
+                                           "isMandatory":  false,
+                                           "passed":  false,
+                                           "scoreContribution":  0,
+                                           "reason":  "No public business email was found (gates outreach readiness, not target relevance).",
+                                           "evidenceIds":  [
+
+                                                           ],
+                                           "evaluatedAtUtc":  "2026-10-20T07:53:01.0404004+00:00"
+                                       },
+                                       {
+                                           "id":  "9cc88352-424d-4bd1-969a-e4e8f7fe8359",
+                                           "criterionKey":  "targetCountry",
+                                           "criterionLabel":  "Target country",
+                                           "isMandatory":  true,
+                                           "passed":  true,
+                                           "scoreContribution":  20,
+                                           "reason":  "Organization location evidence matched target country \u0027United Arab Emirates\u0027. Evidence: official_website_host:spea.shj.ae; source_url_host:spea.shj.ae.",
+                                           "evidenceIds":  [
+
+                                                           ],
+                                           "evaluatedAtUtc":  "2026-10-20T07:53:01.0405075+00:00"
+                                       },
+                                       {
+                                           "id":  "3781d708-f4d5-40b0-8b95-61fbfefb9414",
+                                           "criterionKey":  "targetIndustry",
+                                           "criterionLabel":  "Target industry",
+                                           "isMandatory":  true,
+                                           "passed":  true,
+                                           "scoreContribution":  20,
+                                           "reason":  "Industry or services text matched target industry (\u0027Sailing Center\u0027).",
+                                           "evidenceIds":  [
+
+                                                           ],
+                                           "evaluatedAtUtc":  "2026-10-20T07:53:01.0408028+00:00"
+                                       }
+                                   ],
+                         "Count":  8
+                     },
+        "name":  "هيئة الشارقة للتعليم الخاص",
+        "id":  "248f7c06-66bb-4cc6-b60b-61ea0283f168"
+    },
+    {
+        "criteria":  {
+                         "value":  [
+
+                                   ],
+                         "Count":  0
+                     },
+        "name":  "IMPORTANT INFORMATION AND WHO WE ARE",
+        "id":  "9793af8f-a46d-4bb4-bec5-851a0d3fac09"
+    },
+    {
+        "criteria":  {
+                         "value":  [
+
+                                   ],
+                         "Count":  0
+                     },
+        "name":  "Make offer Your offer must be higher than the seller’s minimum price.",
+        "id":  "5b221527-6c92-4b83-8d78-3d3635f5e8a8"
+    }
+]

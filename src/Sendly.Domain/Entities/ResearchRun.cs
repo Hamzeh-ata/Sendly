@@ -12,7 +12,35 @@ public class ResearchRun
 
     public OutreachProject? Project { get; set; }
 
+    public Guid? ResearchQueryId { get; set; }
+
+    public ResearchQuery? ResearchQuery { get; set; }
+
+    public Guid? ResearchQueryVersionId { get; set; }
+
+    public ResearchQueryVersion? ResearchQueryVersion { get; set; }
+
     public ResearchRunStatus Status { get; set; } = ResearchRunStatus.Pending;
+
+    public ResearchMode Mode { get; set; } = ResearchMode.Web;
+
+    [MaxLength(64000)]
+    public string? MapPlanJson { get; set; }
+
+    [MaxLength(8000)]
+    public string? MapCoverageSummaryJson { get; set; }
+
+    public int MapRegionsCompleted { get; set; }
+
+    public int MapRegionsTotal { get; set; }
+
+    public int MapPlacesDiscovered { get; set; }
+
+    public int UrlsDiscovered { get; set; }
+
+    public int PagesCrawled { get; set; }
+
+    public int CrawlErrors { get; set; }
 
     public int RequestedProspectCount { get; set; }
 
@@ -60,7 +88,7 @@ public class ResearchRun
     [MaxLength(8000)]
     public string? RejectionReasonsJson { get; set; }
 
-    [MaxLength(4000)]
+    [MaxLength(64000)]
     public string? SearchProviderDiagnosticsJson { get; set; }
 
     [MaxLength(2000)]
@@ -76,4 +104,16 @@ public class ResearchRun
     public DateTimeOffset? CompletedAtUtc { get; set; }
 
     public ICollection<Prospect> Prospects { get; set; } = new List<Prospect>();
+
+    public ICollection<DiscoveredUrl> DiscoveredUrls { get; set; } = new List<DiscoveredUrl>();
+
+    public ICollection<CrawledPage> CrawledPages { get; set; } = new List<CrawledPage>();
+
+    public ICollection<ResearchEvidence> EvidenceItems { get; set; } = new List<ResearchEvidence>();
+
+    public ICollection<QualificationCriterionResult> QualificationResults { get; set; } = new List<QualificationCriterionResult>();
+
+    public ICollection<ResearchRunEvent> Events { get; set; } = new List<ResearchRunEvent>();
+
+    public ICollection<MapCoverageRegion> MapCoverageRegions { get; set; } = new List<MapCoverageRegion>();
 }

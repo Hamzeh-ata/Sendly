@@ -1,0 +1,47 @@
+.error-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.error-card {
+  padding: 0.85rem;
+  border: 1px solid var(--rc-border);
+  border-radius: var(--radius-md);
+  background: rgba(15, 23, 42, 0.45);
+}
+
+.error-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  align-items: baseline;
+}
+
+.error-head h3 {
+  margin: 0;
+}
+
+.count {
+  color: #f87171;
+}
+
+.sample {
+  margin: 0.5rem 0;
+  color: var(--text-secondary);
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 0.5rem;
+}
+
+.remediation {
+  margin: 0 0 0.5rem;
+  font-size: 0.875rem;
+  color: #fde68a;
+}

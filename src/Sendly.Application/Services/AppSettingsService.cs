@@ -22,6 +22,7 @@ public class AppSettingsService
     private readonly ResearchOptions _research;
     private readonly BraveSearchOptions _braveSearch;
     private readonly SearXngOptions _searXng;
+    private readonly OllamaOptions _ollama;
     private readonly WhatsAppBusinessOptions _whatsApp;
     private readonly MicrosoftGraphOptions _microsoftGraph;
     private readonly EmailSendingOptions _emailSending;
@@ -36,6 +37,7 @@ public class AppSettingsService
         IOptions<ResearchOptions> research,
         IOptions<BraveSearchOptions> braveSearch,
         IOptions<SearXngOptions> searXng,
+        IOptions<OllamaOptions> ollama,
         IOptions<WhatsAppBusinessOptions> whatsApp,
         IOptions<MicrosoftGraphOptions> microsoftGraph,
         IOptions<EmailSendingOptions> emailSending,
@@ -49,6 +51,7 @@ public class AppSettingsService
         _research = research.Value;
         _braveSearch = braveSearch.Value;
         _searXng = searXng.Value;
+        _ollama = ollama.Value;
         _whatsApp = whatsApp.Value;
         _microsoftGraph = microsoftGraph.Value;
         _emailSending = emailSending.Value;
@@ -69,6 +72,7 @@ public class AppSettingsService
 
         LoadBraveApiKeyFromSecretStore();
         SyncSearchProviderEnabledFlag();
+        MigrateLegacySearchSettings();
 
         _logger.LogInformation("Hydrated {Count} app configuration sections from store", entries.Count);
     }
@@ -81,6 +85,7 @@ public class AppSettingsService
             Research = MapResearch(),
             BraveSearch = MapBraveSearch(),
             SearXng = MapSearXng(),
+            Ollama = MapOllama(),
             WhatsApp = MapWhatsApp(),
             MicrosoftGraph = MapMicrosoftGraph(),
             EmailSending = MapEmailSending(),
@@ -95,6 +100,7 @@ public class AppSettingsService
         ApplyResearch(request.Research);
         ApplyBraveSearch(request.BraveSearch);
         ApplySearXng(request.SearXng);
+        ApplyOllama(request.Ollama);
         ApplyWhatsApp(request.WhatsApp);
         ApplyMicrosoftGraph(request.MicrosoftGraph);
         ApplyEmailSending(request.EmailSending);
@@ -106,6 +112,7 @@ public class AppSettingsService
         await PersistSectionAsync(ResearchOptions.SectionName, BuildResearchStore(), cancellationToken);
         await PersistSectionAsync(BraveSearchOptions.SectionName, BuildBraveSearchStore(), cancellationToken);
         await PersistSectionAsync(SearXngOptions.SectionName, BuildSearXngStore(), cancellationToken);
+        await PersistSectionAsync(OllamaOptions.SectionName, BuildOllamaStore(), cancellationToken);
         await PersistSectionAsync(WhatsAppBusinessOptions.SectionName, BuildWhatsAppStore(), cancellationToken);
         await PersistSectionAsync(MicrosoftGraphOptions.SectionName, BuildMicrosoftGraphStore(), cancellationToken);
         await PersistSectionAsync(EmailSendingOptions.SectionName, BuildEmailSendingStore(), cancellationToken);
@@ -183,6 +190,17 @@ public class AppSettingsService
             if (dto is not null)
             {
                 ApplySearXng(dto, allowBlankSecrets: false);
+            }
+
+            return;
+        }
+
+        if (string.Equals(section, OllamaOptions.SectionName, StringComparison.OrdinalIgnoreCase))
+        {
+            var dto = JsonSerializer.Deserialize<OllamaSettingsDto>(json, JsonOptions);
+            if (dto is not null)
+            {
+                ApplyOllama(dto);
             }
 
             return;
@@ -267,6 +285,7 @@ public class AppSettingsService
             EnableSeedProvider = _research.EnableSeedProvider,
             EnableWebsiteCrawler = _research.EnableWebsiteCrawler,
             EnableSearchProvider = _research.EnableSearchProvider,
+            EnableIndependentCrawler = _research.EnableIndependentCrawler,
             EnableHtmlSearchFallback = _research.EnableHtmlSearchFallback,
             MaxPagesPerCrawl = _research.MaxPagesPerCrawl,
             MaxSearchResults = _research.MaxSearchResults,
@@ -304,10 +323,9 @@ public class AppSettingsService
 
     private SearXngSettingsDto MapSearXng()
     {
-        var configured = !string.IsNullOrWhiteSpace(_searXng.BaseUrl);
         return new SearXngSettingsDto
         {
-            Enabled = _searXng.Enabled,
+            Enabled = false,
             BaseUrl = _searXng.BaseUrl,
             DefaultLanguage = _searXng.DefaultLanguage,
             RequestTimeoutSeconds = _searXng.RequestTimeoutSeconds,
@@ -319,7 +337,51 @@ public class AppSettingsService
             BasicAuthUsername = null,
             BasicAuthPassword = null,
             BasicAuthConfigured = !string.IsNullOrWhiteSpace(_searXng.BasicAuthUsername),
-            ConnectionStatus = configured ? "Configured" : "NotConfigured"
+            ConnectionStatus = "Disabled"
+        };
+    }
+
+    private OllamaSettingsDto MapOllama()
+    {
+        return new OllamaSettingsDto
+        {
+            Enabled = _ollama.Enabled,
+            BaseUrl = _ollama.BaseUrl,
+            Model = _ollama.Model,
+            TimeoutSeconds = _ollama.TimeoutSeconds,
+            MaxRetries = _ollama.MaxRetries,
+            ConnectionStatus = _ollama.Enabled ? "NotChecked" : "Disabled"
+        };
+    }
+
+    private void ApplyOllama(OllamaSettingsDto dto)
+    {
+        _ollama.Enabled = dto.Enabled;
+        if (!string.IsNullOrWhiteSpace(dto.BaseUrl))
+        {
+            _ollama.BaseUrl = dto.BaseUrl.Trim();
+        }
+
+        if (!string.IsNullOrWhiteSpace(dto.Model))
+        {
+            _ollama.Model = dto.Model.Trim();
+        }
+
+        _ollama.TimeoutSeconds = Math.Clamp(dto.TimeoutSeconds, 5, 300);
+        _ollama.MaxRetries = Math.Clamp(dto.MaxRetries, 0, 3);
+    }
+
+    private object BuildOllamaStore()
+    {
+        return new
+        {
+            enabled = _ollama.Enabled,
+            baseUrl = _ollama.BaseUrl,
+            model = _ollama.Model,
+            timeoutSeconds = _ollama.TimeoutSeconds,
+            maxRetries = _ollama.MaxRetries,
+            maxInputCharacters = _ollama.MaxInputCharacters,
+            maxQueriesPerRequest = _ollama.MaxQueriesPerRequest
         };
     }
 
@@ -416,8 +478,9 @@ public class AppSettingsService
         _research.EnableSeedProvider = dto.EnableSeedProvider;
         _research.EnableWebsiteCrawler = dto.EnableWebsiteCrawler;
         _research.EnableSearchProvider = dto.EnableSearchProvider;
+        _research.EnableIndependentCrawler = dto.EnableIndependentCrawler;
         _research.EnableHtmlSearchFallback = dto.EnableHtmlSearchFallback;
-        _research.MaxPagesPerCrawl = Math.Clamp(dto.MaxPagesPerCrawl, 1, 20);
+        _research.MaxPagesPerCrawl = Math.Clamp(dto.MaxPagesPerCrawl, 1, 50);
         _research.MaxSearchResults = Math.Clamp(dto.MaxSearchResults, 1, 50);
         _research.MaxSearchQueries = Math.Clamp(dto.MaxSearchQueries, 1, 200);
         _research.MaxSearchRequests = Math.Clamp(dto.MaxSearchRequests, 1, 500);
@@ -471,22 +534,8 @@ public class AppSettingsService
 
     private void ApplySearXng(SearXngSettingsDto dto, bool allowBlankSecrets = true)
     {
-        _searXng.Enabled = dto.Enabled;
-        var baseUrl = (dto.BaseUrl ?? string.Empty).Trim();
-        if (_searXng.Enabled || !string.IsNullOrWhiteSpace(baseUrl))
-        {
-            if (string.IsNullOrWhiteSpace(baseUrl))
-            {
-                throw new InvalidOperationException("SearXNG base URL is required when SearXNG is enabled.");
-            }
-
-            SearXngUrlSafety.ValidateAndNormalizeBaseUrl(baseUrl, dto.AllowPrivateNetworkHosts);
-            _searXng.BaseUrl = baseUrl.TrimEnd('/');
-        }
-        else
-        {
-            _searXng.BaseUrl = string.Empty;
-        }
+        _searXng.Enabled = false;
+        _searXng.BaseUrl = string.Empty;
 
         if (!string.IsNullOrWhiteSpace(dto.DefaultLanguage))
         {
@@ -518,12 +567,21 @@ public class AppSettingsService
 
     private void SyncSearchProviderEnabledFlag()
     {
-        var braveReady = _braveSearch.Enabled && !string.IsNullOrWhiteSpace(_braveSearch.ApiKey);
-        var searXngReady = _searXng.Enabled && !string.IsNullOrWhiteSpace(_searXng.BaseUrl);
-        if (braveReady || searXngReady)
+        _searXng.Enabled = false;
+        _searXng.BaseUrl = string.Empty;
+    }
+
+    private void MigrateLegacySearchSettings()
+    {
+        if (_research.EnableSearchProvider || _research.EnableHtmlSearchFallback)
         {
-            _research.EnableSearchProvider = true;
+            return;
         }
+
+        _research.EnableSearchProvider = true;
+        _research.EnableHtmlSearchFallback = true;
+        _logger.LogInformation(
+            "Migrated legacy research settings: SearXNG is disabled and zero-budget public HTML search is enabled");
     }
 
     private void LoadBraveApiKeyFromSecretStore()
@@ -665,6 +723,7 @@ public class AppSettingsService
             enableSeedProvider = _research.EnableSeedProvider,
             enableWebsiteCrawler = _research.EnableWebsiteCrawler,
             enableSearchProvider = _research.EnableSearchProvider,
+            enableIndependentCrawler = _research.EnableIndependentCrawler,
             enableHtmlSearchFallback = _research.EnableHtmlSearchFallback,
             maxPagesPerCrawl = _research.MaxPagesPerCrawl,
             maxSearchResults = _research.MaxSearchResults,

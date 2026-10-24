@@ -53,7 +53,9 @@ export type ProviderConnectionStatus =
   | 'NotConfigured'
   | 'Configured'
   | 'ConnectionSuccessful'
-  | 'ConnectionFailed';
+  | 'ConnectionFailed'
+  | 'Disabled'
+  | 'NotChecked';
 
 export type BraveConnectionStatus = ProviderConnectionStatus;
 
@@ -83,6 +85,24 @@ export interface SearXngSettings {
   basicAuthPassword: string | null;
   basicAuthConfigured: boolean;
   connectionStatus: ProviderConnectionStatus;
+}
+
+export interface OllamaSettings {
+  enabled: boolean;
+  baseUrl: string;
+  model: string;
+  timeoutSeconds: number;
+  maxRetries: number;
+  connectionStatus: ProviderConnectionStatus;
+}
+
+export interface OllamaHealthResult {
+  isReachable: boolean;
+  modelAvailable: boolean;
+  model: string;
+  baseUrl: string;
+  availableModels: string[];
+  errorSummary: string | null;
 }
 
 export interface ProviderConnectionTestResult {
@@ -135,6 +155,7 @@ export interface AppSettings {
   research: ResearchSettings;
   braveSearch: BraveSearchSettings;
   searXng: SearXngSettings;
+  ollama: OllamaSettings;
   whatsApp: WhatsAppSettings;
   microsoftGraph: MicrosoftGraphSettings;
   emailSending: EmailSendingSettings;

@@ -1,0 +1,602 @@
+﻿{
+    "prospects":  [
+                      {
+                          "id":  "0fd7291c-2691-4928-986c-f594fe82cc05",
+                          "companyName":  "Florida Atlantic University",
+                          "website":  "https://fau.edu",
+                          "city":  null,
+                          "country":  "United States",
+                          "email":  "admissions@fau.edu",
+                          "whatsApp":  "5612976101",
+                          "sourceUrl":  "https://www.fau.edu/about/contact/",
+                          "qualificationScore":  59,
+                          "status":  "rejected",
+                          "isQualified":  false,
+                          "createdAtUtc":  "2026-10-19T10:41:01.442328+00:00"
+                      },
+                      {
+                          "id":  "38cd0fb6-9fa7-4229-9bed-f570ef7e2d1f",
+                          "companyName":  "Inspire",
+                          "website":  "https://inspirear.com",
+                          "city":  null,
+                          "country":  "United States",
+                          "email":  null,
+                          "whatsApp":  "14238566222",
+                          "sourceUrl":  "https://inspirear.com/",
+                          "qualificationScore":  59,
+                          "status":  "rejected",
+                          "isQualified":  false,
+                          "createdAtUtc":  "2026-10-19T10:40:57.3841549+00:00"
+                      },
+                      {
+                          "id":  "184da7d9-aa0d-4aa9-86d0-85e27a70374b",
+                          "companyName":  "Book a Visit →",
+                          "website":  "https://fau.libcal.com/appointments",
+                          "city":  null,
+                          "country":  "United States",
+                          "email":  null,
+                          "whatsApp":  null,
+                          "sourceUrl":  "https://business.fau.edu/executive-education/contacts-and-directions/",
+                          "qualificationScore":  59,
+                          "status":  "rejected",
+                          "isQualified":  false,
+                          "createdAtUtc":  "2026-10-19T10:40:48.4883357+00:00"
+                      },
+                      {
+                          "id":  "dc2a4821-230a-4935-9762-f27057335c43",
+                          "companyName":  "Corporate Finance and Restructuring",
+                          "website":  "https://www.fticonsulting.com/careers",
+                          "city":  null,
+                          "country":  null,
+                          "email":  null,
+                          "whatsApp":  null,
+                          "sourceUrl":  "https://fticonsult.referrals.selectminds.com/",
+                          "qualificationScore":  46,
+                          "status":  "rejected",
+                          "isQualified":  false,
+                          "createdAtUtc":  "2026-10-19T10:40:22.4295002+00:00"
+                      },
+                      {
+                          "id":  "7a8a7dd1-69f8-42cc-a35e-c831cb4c2aac",
+                          "companyName":  "ISSA Scholars",
+                          "website":  "https://issacharities.org/ways-to-give",
+                          "city":  null,
+                          "country":  "United States",
+                          "email":  null,
+                          "whatsApp":  "847-982-6408",
+                          "sourceUrl":  "https://www.issa.com/",
+                          "qualificationScore":  59,
+                          "status":  "rejected",
+                          "isQualified":  false,
+                          "createdAtUtc":  "2026-10-19T10:40:13.6365362+00:00"
+                      },
+                      {
+                          "id":  "1215ff95-aefb-447b-9486-7c80ec90e5db",
+                          "companyName":  "Empower Language Academy",
+                          "website":  "https://empowercharter.org",
+                          "city":  "San Diego",
+                          "country":  "United States",
+                          "email":  "info@empowercharter.org",
+                          "whatsApp":  "1858291304",
+                          "sourceUrl":  "https://empowercharter.org/guide-to-charter-schools-in-san-diego-california/",
+                          "qualificationScore":  83,
+                          "status":  "readyForOutreach",
+                          "isQualified":  true,
+                          "createdAtUtc":  "2026-10-08T11:11:03.2996103+00:00"
+                      },
+                      {
+                          "id":  "7787a680-35ae-48ec-93c0-e79369ee7137",
+                          "companyName":  "by local moms for local moms",
+                          "website":  "https://dallasmoms.com",
+                          "city":  "Dallas",
+                          "country":  "United States",
+                          "email":  null,
+                          "whatsApp":  null,
+                          "sourceUrl":  "https://dallasmoms.com/guide-to-public-and-charter-schools-in-dallas/",
+                          "qualificationScore":  79,
+                          "status":  "needsReview",
+                          "isQualified":  false,
+                          "createdAtUtc":  "2026-10-08T11:04:31.7044535+00:00"
+                      },
+                      {
+                          "id":  "b07a1737-c19e-47db-aa4a-cf61526673fe",
+                          "companyName":  "Career",
+                          "website":  "https://personnel.lausd.org",
+                          "city":  "Los Angeles",
+                          "country":  "United States",
+                          "email":  null,
+                          "whatsApp":  null,
+                          "sourceUrl":  "https://personnel.lausd.org/apps/pages/index.jsp?uREC_ID=4427582\u0026type=d\u0026pREC_ID=2664854",
+                          "qualificationScore":  14,
+                          "status":  "rejected",
+                          "isQualified":  false,
+                          "createdAtUtc":  "2026-10-08T10:58:22.3955465+00:00"
+                      },
+                      {
+                          "id":  "ed79d311-78dc-4085-b6af-b38fc53c18a8",
+                          "companyName":  "DISTRICT",
+                          "website":  "https://districtcannabis.us",
+                          "city":  null,
+                          "country":  "United States",
+                          "email":  "blue-flower@2x.webp",
+                          "whatsApp":  null,
+                          "sourceUrl":  "https://districtcannabis.us/",
+                          "qualificationScore":  59,
+                          "status":  "rejected",
+                          "isQualified":  false,
+                          "createdAtUtc":  "2026-10-08T10:58:19.3592599+00:00"
+                      },
+                      {
+                          "id":  "1027e3c8-d1b1-4de2-aad5-02c9b7668aff",
+                          "companyName":  "Rodney Harper",
+                          "website":  "https://douglasma.org",
+                          "city":  null,
+                          "country":  "United States",
+                          "email":  null,
+                          "whatsApp":  null,
+                          "sourceUrl":  "https://douglasma.org/places/how-much-does-los-angeles-spend-on-education-per-student",
+                          "qualificationScore":  59,
+                          "status":  "needsReview",
+                          "isQualified":  false,
+                          "createdAtUtc":  "2026-10-08T10:57:59.9235162+00:00"
+                      },
+                      {
+                          "id":  "78638e3c-eb35-47fe-a287-454b564828c4",
+                          "companyName":  "Kids",
+                          "website":  "http://www.kids-kab.com",
+                          "city":  "Chicago",
+                          "country":  "Chicago",
+                          "email":  "contact@kids-kab.com",
+                          "whatsApp":  "6304939543",
+                          "sourceUrl":  "http://www.kids-kab.com/",
+                          "qualificationScore":  59,
+                          "status":  "rejected",
+                          "isQualified":  false,
+                          "createdAtUtc":  "2026-10-08T10:43:23.5223248+00:00"
+                      },
+                      {
+                          "id":  "40322c92-39e6-41b8-bed8-338189af9c60",
+                          "companyName":  "Team",
+                          "website":  "https://collegepossible.org",
+                          "city":  "Chicago",
+                          "country":  "Chicago",
+                          "email":  null,
+                          "whatsApp":  null,
+                          "sourceUrl":  "https://collegepossible.org/locations/chicago/our-team/",
+                          "qualificationScore":  21,
+                          "status":  "rejected",
+                          "isQualified":  false,
+                          "createdAtUtc":  "2026-10-08T10:41:00.3127351+00:00"
+                      }
+                  ],
+    "id":  "87bda16d-ca99-489a-959b-a9ecb511c6c5",
+    "projectId":  "c61ef480-d3b7-4f77-8d5e-25335228c0e5",
+    "projectName":  "School Watch - USA",
+    "researchQueryId":  "9988834f-7fc3-4a96-8935-40374881f663",
+    "researchQueryVersionId":  "09c54e42-8ea6-432f-bdd9-d63abaee7138",
+    "researchQueryName":  null,
+    "urlsDiscovered":  573,
+    "pagesCrawled":  64,
+    "crawlErrors":  9,
+    "status":  "running",
+    "requestedProspectCount":  50,
+    "includeEmail":  true,
+    "includeWhatsApp":  false,
+    "minQualificationScore":  60,
+    "progressPercent":  22,
+    "companiesFound":  93,
+    "contactsFound":  0,
+    "validEmails":  0,
+    "validWhatsApp":  0,
+    "duplicatesFound":  20,
+    "rejectedCount":  22,
+    "qualifiedCount":  0,
+    "searchQueriesExecuted":  0,
+    "searchResultsReceived":  0,
+    "candidatesDiscovered":  93,
+    "candidatesAfterDeduplication":  0,
+    "candidatesValidated":  24,
+    "prospectsSaved":  5,
+    "prospectsSkippedAsDuplicates":  0,
+    "researchLimitsReached":  false,
+    "researchLimitsReachedReason":  null,
+    "rejectionReasons":  {
+                             "Weak company identity":  6,
+                             "Excluded by criteria":  4,
+                             "Industry mismatch":  10,
+                             "Outside target country":  2
+                         },
+    "searchProviderDiagnostics":  {
+                                      "provider":  "IndependentCrawler",
+                                      "queriesExecuted":  0,
+                                      "requestsSuccessful":  0,
+                                      "requestsFailed":  0,
+                                      "resultsReceived":  0,
+                                      "http401":  0,
+                                      "http429":  0,
+                                      "http5xx":  0,
+                                      "timeouts":  0,
+                                      "automaticDiscoverySummary":  "Automatic discovery collected 83 candidate URLs (83 domains; fresh=3, prior=80) from 4/4 providers across 1 stage(s), recovery stages: 0 (duplicates removed: 2, rejected unsafe: 0, filtered: 2, zero-return providers: 2).",
+                                      "automaticDiscoveryDuplicatesRemoved":  2,
+                                      "automaticDiscoveryRejectedUnsafe":  0,
+                                      "discoveryPlanSummary":  "Plan: 14 industries (+8 synonyms), 1 countries, 5 providers, budget 200 URLs / 100 domains / 3 stages.",
+                                      "uniqueDomainsDiscovered":  83,
+                                      "recoveryAttempts":  0,
+                                      "discoveryStopReason":  "None",
+                                      "recoveryStrategies":  [
+
+                                                             ],
+                                      "sourcesReused":  2,
+                                      "sourcesAdded":  2,
+                                      "sourcesSkipped":  0,
+                                      "sourcesUnavailable":  0,
+                                      "urlsAccessible":  64,
+                                      "urlsParsed":  64,
+                                      "urlsUnavailable":  9,
+                                      "urlsRobotsBlocked":  0,
+                                      "companiesIdentified":  93,
+                                      "publicContactsExtracted":  14,
+                                      "liveVerifiedCompanies":  18,
+                                      "prospectsQualified":  5,
+                                      "urlsRejectedFiltered":  175,
+                                      "urlsAdmitted":  374,
+                                      "urlsReusedFromCache":  2,
+                                      "urlsSkippedKnownProspect":  2,
+                                      "usefulPendingUrls":  470,
+                                      "usefulUrlsLeftPendingAtStop":  0,
+                                      "newlyDiscoveredProspects":  0,
+                                      "previouslyKnownProspects":  4,
+                                      "previouslyContactedProspects":  0,
+                                      "newlyOutreachEligibleProspects":  0,
+                                      "identityVerifiedBusinesses":  18,
+                                      "emailReadyProspects":  1,
+                                      "contactableProspects":  9,
+                                      "pagesFetched":  64,
+                                      "pagesQueued":  498,
+                                      "pagesSkipped":  33,
+                                      "fetchBudgetConsumed":  64,
+                                      "fetchBudgetLimit":  80,
+                                      "requestedFetchBudget":  80,
+                                      "configuredBatchSize":  20,
+                                      "batchesStarted":  4,
+                                      "batchesCompleted":  4,
+                                      "fetchesAttempted":  73,
+                                      "fetchesSucceeded":  64,
+                                      "fetchesFailed":  9,
+                                      "fetchesSkipped":  2,
+                                      "budgetReserved":  6,
+                                      "budgetRemaining":  16,
+                                      "eligiblePendingUrls":  481,
+                                      "deferredUrls":  0,
+                                      "moreEligibleWorkRemained":  true,
+                                      "lastBudgetStopReason":  null,
+                                      "searchLimitsExhausted":  false,
+                                      "searchLimitsExhaustedReason":  null,
+                                      "limitsExhausted":  false,
+                                      "limitsExhaustedReason":  null,
+                                      "stageDurationsMs":  {
+                                                               "parseExtract":  129,
+                                                               "investigation":  153,
+                                                               "queueSchedule":  218,
+                                                               "source.IndependentCrawler":  170844,
+                                                               "discoveryBatch":  170849,
+                                                               "qualification":  50553
+                                                           },
+                                      "urlRejectionReasons":  {
+                                                                  "url.media_asset":  148,
+                                                                  "url.script_asset":  6,
+                                                                  "url.api_endpoint":  21
+                                                              },
+                                      "fetchFailureReasons":  {
+                                                                  "fetch.client_error":  4,
+                                                                  "fetch.unavailable":  1,
+                                                                  "fetch.forbidden":  4
+                                                              },
+                                      "discoveryStages":  [
+                                                              {
+                                                                  "stageNumber":  1,
+                                                                  "stageName":  "Primary registry and prior research",
+                                                                  "providersAttempted":  [
+                                                                                             "SeedUrls",
+                                                                                             "PriorResearchUrls",
+                                                                                             "DirectoryCatalog",
+                                                                                             "IndustryAssociationCatalog"
+                                                                                         ],
+                                                                  "candidatesAdded":  427,
+                                                                  "recoveryTriggered":  false,
+                                                                  "notes":  null
+                                                              }
+                                                          ],
+                                      "discoveryProviders":  [
+                                                                 {
+                                                                     "providerName":  "SeedUrls",
+                                                                     "attempted":  true,
+                                                                     "succeeded":  true,
+                                                                     "producedUsefulCandidates":  false,
+                                                                     "candidatesReturned":  0,
+                                                                     "stageNumber":  1,
+                                                                     "error":  null,
+                                                                     "zeroYieldReason":  "Catalog/provider had no eligible entries for the requested country/industry scope."
+                                                                 },
+                                                                 {
+                                                                     "providerName":  "PriorResearchUrls",
+                                                                     "attempted":  true,
+                                                                     "succeeded":  true,
+                                                                     "producedUsefulCandidates":  true,
+                                                                     "candidatesReturned":  424,
+                                                                     "stageNumber":  1,
+                                                                     "error":  null,
+                                                                     "zeroYieldReason":  null
+                                                                 },
+                                                                 {
+                                                                     "providerName":  "DirectoryCatalog",
+                                                                     "attempted":  true,
+                                                                     "succeeded":  true,
+                                                                     "producedUsefulCandidates":  true,
+                                                                     "candidatesReturned":  3,
+                                                                     "stageNumber":  1,
+                                                                     "error":  null,
+                                                                     "zeroYieldReason":  null
+                                                                 },
+                                                                 {
+                                                                     "providerName":  "IndustryAssociationCatalog",
+                                                                     "attempted":  true,
+                                                                     "succeeded":  true,
+                                                                     "producedUsefulCandidates":  false,
+                                                                     "candidatesReturned":  0,
+                                                                     "stageNumber":  1,
+                                                                     "error":  null,
+                                                                     "zeroYieldReason":  "All returned URLs were filtered as unsafe, duplicate, or non-admissible."
+                                                                 }
+                                                             ],
+                                      "topPendingUrls":  [
+                                                             {
+                                                                 "url":  "https://www.fau.edu/about/contact/",
+                                                                 "priority":  96,
+                                                                 "pagePurpose":  "Contact",
+                                                                 "host":  "fau.edu",
+                                                                 "sourceType":  "LinkExpansion",
+                                                                 "reason":  "priority=90 source=14 relevance=0 purpose=40 gain=44 cost=-8 page=Contact; preserved persisted score"
+                                                             },
+                                                             {
+                                                                 "url":  "https://districtcannabis.us/products/weed-the-people-tee-xl/",
+                                                                 "priority":  96,
+                                                                 "pagePurpose":  "Team",
+                                                                 "host":  "districtcannabis.us",
+                                                                 "sourceType":  "Sitemap",
+                                                                 "reason":  "priority=87 source=24 relevance=12 purpose=26 gain=34 cost=-9 page=Team; preserved persisted score"
+                                                             },
+                                                             {
+                                                                 "url":  "https://dallasmoms.com/social-media-team/",
+                                                                 "priority":  92,
+                                                                 "pagePurpose":  "Team",
+                                                                 "host":  "dallasmoms.com",
+                                                                 "sourceType":  "LinkExpansion",
+                                                                 "reason":  "priority=65 source=14 relevance=0 purpose=26 gain=34 cost=-9 page=Team; preserved persisted score"
+                                                             },
+                                                             {
+                                                                 "url":  "https://collegepossible.org/about/leadership/",
+                                                                 "priority":  90,
+                                                                 "pagePurpose":  "About",
+                                                                 "host":  "collegepossible.org",
+                                                                 "sourceType":  "LinkExpansion",
+                                                                 "reason":  "priority=61 source=14 relevance=0 purpose=22 gain=34 cost=-9 page=About; preserved persisted score"
+                                                             },
+                                                             {
+                                                                 "url":  "https://firststudentinc.com/about-us/",
+                                                                 "priority":  90,
+                                                                 "pagePurpose":  "About",
+                                                                 "host":  "firststudentinc.com",
+                                                                 "sourceType":  "LinkExpansion",
+                                                                 "reason":  "priority=61 source=14 relevance=0 purpose=22 gain=34 cost=-9 page=About; preserved persisted score"
+                                                             },
+                                                             {
+                                                                 "url":  "https://chiul.org/2026/08/21/chicago-urban-league-announces-2027-class-of-impact-leadership-development-program/",
+                                                                 "priority":  88,
+                                                                 "pagePurpose":  "Team",
+                                                                 "host":  "chiul.org",
+                                                                 "sourceType":  "LinkExpansion",
+                                                                 "reason":  "priority=61 source=14 relevance=0 purpose=22 gain=34 cost=-9 page=Team; preserved persisted score"
+                                                             },
+                                                             {
+                                                                 "url":  "https://empowercharter.org/staff/",
+                                                                 "priority":  88,
+                                                                 "pagePurpose":  "Team",
+                                                                 "host":  "empowercharter.org",
+                                                                 "sourceType":  "LinkExpansion",
+                                                                 "reason":  "priority=64 source=14 relevance=0 purpose=22 gain=34 cost=-6 page=Team; preserved persisted score"
+                                                             },
+                                                             {
+                                                                 "url":  "https://business.fau.edu/our-college/leadership-team/advisory-board/",
+                                                                 "priority":  84,
+                                                                 "pagePurpose":  "Team",
+                                                                 "host":  "business.fau.edu",
+                                                                 "sourceType":  "LinkExpansion",
+                                                                 "reason":  "priority=63 source=14 relevance=0 purpose=26 gain=34 cost=-11 page=Team; preserved persisted score"
+                                                             },
+                                                             {
+                                                                 "url":  "https://dcschools.com/schools/the-school-for-ethics-and-global-leadership",
+                                                                 "priority":  80,
+                                                                 "pagePurpose":  "Team",
+                                                                 "host":  "dcschools.com",
+                                                                 "sourceType":  "Sitemap",
+                                                                 "reason":  "priority=71 source=24 relevance=0 purpose=22 gain=34 cost=-9 page=Team; preserved persisted score"
+                                                             },
+                                                             {
+                                                                 "url":  "https://www.bscai.org/About/Board-of-Directors",
+                                                                 "priority":  76,
+                                                                 "pagePurpose":  "DirectoryListing",
+                                                                 "host":  "bscai.org",
+                                                                 "sourceType":  "LinkExpansion",
+                                                                 "reason":  "priority=42 source=14 relevance=0 purpose=20 gain=25 cost=-17 page=DirectoryListing; preserved persisted score"
+                                                             }
+                                                         ],
+                                      "deferredHighScoreUrls":  [
+                                                                    {
+                                                                        "url":  "https://opencorporates.com/case-studies",
+                                                                        "priority":  72,
+                                                                        "pagePurpose":  "DirectoryListing",
+                                                                        "host":  "opencorporates.com",
+                                                                        "sourceType":  "LinkExpansion",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=72 batchSize=20"
+                                                                    },
+                                                                    {
+                                                                        "url":  "https://opencorporates.com/legal-entity-data-principles",
+                                                                        "priority":  72,
+                                                                        "pagePurpose":  "DirectoryListing",
+                                                                        "host":  "opencorporates.com",
+                                                                        "sourceType":  "LinkExpansion",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=72 batchSize=20"
+                                                                    },
+                                                                    {
+                                                                        "url":  "https://opencorporates.com/legal-information/",
+                                                                        "priority":  72,
+                                                                        "pagePurpose":  "DirectoryListing",
+                                                                        "host":  "opencorporates.com",
+                                                                        "sourceType":  "LinkExpansion",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=72 batchSize=20"
+                                                                    },
+                                                                    {
+                                                                        "url":  "https://opencorporates.com/pricing/",
+                                                                        "priority":  72,
+                                                                        "pagePurpose":  "DirectoryListing",
+                                                                        "host":  "opencorporates.com",
+                                                                        "sourceType":  "LinkExpansion",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=72 batchSize=20"
+                                                                    },
+                                                                    {
+                                                                        "url":  "https://opencorporates.com/purpose",
+                                                                        "priority":  72,
+                                                                        "pagePurpose":  "DirectoryListing",
+                                                                        "host":  "opencorporates.com",
+                                                                        "sourceType":  "LinkExpansion",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=72 batchSize=20"
+                                                                    },
+                                                                    {
+                                                                        "url":  "https://opencorporates.com/use-cases/business-discovery/",
+                                                                        "priority":  72,
+                                                                        "pagePurpose":  "DirectoryListing",
+                                                                        "host":  "opencorporates.com",
+                                                                        "sourceType":  "LinkExpansion",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=72 batchSize=20"
+                                                                    },
+                                                                    {
+                                                                        "url":  "https://opencorporates.com/use-cases/data-management/",
+                                                                        "priority":  72,
+                                                                        "pagePurpose":  "DirectoryListing",
+                                                                        "host":  "opencorporates.com",
+                                                                        "sourceType":  "LinkExpansion",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=72 batchSize=20"
+                                                                    },
+                                                                    {
+                                                                        "url":  "https://opencorporates.com/use-cases/entity-verification/",
+                                                                        "priority":  72,
+                                                                        "pagePurpose":  "DirectoryListing",
+                                                                        "host":  "opencorporates.com",
+                                                                        "sourceType":  "LinkExpansion",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=72 batchSize=20"
+                                                                    },
+                                                                    {
+                                                                        "url":  "https://opencorporates.com/use-cases/financial-services/",
+                                                                        "priority":  72,
+                                                                        "pagePurpose":  "DirectoryListing",
+                                                                        "host":  "opencorporates.com",
+                                                                        "sourceType":  "LinkExpansion",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=72 batchSize=20"
+                                                                    },
+                                                                    {
+                                                                        "url":  "https://opencorporates.com/use-cases/investigations/",
+                                                                        "priority":  72,
+                                                                        "pagePurpose":  "DirectoryListing",
+                                                                        "host":  "opencorporates.com",
+                                                                        "sourceType":  "LinkExpansion",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=72 batchSize=20"
+                                                                    },
+                                                                    {
+                                                                        "url":  "https://opencorporates.com/use-cases/ngos",
+                                                                        "priority":  72,
+                                                                        "pagePurpose":  "DirectoryListing",
+                                                                        "host":  "opencorporates.com",
+                                                                        "sourceType":  "LinkExpansion",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=72 batchSize=20"
+                                                                    },
+                                                                    {
+                                                                        "url":  "https://opencorporates.com/use-cases/third-party-risk-management/",
+                                                                        "priority":  72,
+                                                                        "pagePurpose":  "DirectoryListing",
+                                                                        "host":  "opencorporates.com",
+                                                                        "sourceType":  "LinkExpansion",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=72 batchSize=20"
+                                                                    },
+                                                                    {
+                                                                        "url":  "https://www.bscai.org/CEOSeminar/Education",
+                                                                        "priority":  72,
+                                                                        "pagePurpose":  "DirectoryListing",
+                                                                        "host":  "bscai.org",
+                                                                        "sourceType":  "LinkExpansion",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=72 batchSize=20"
+                                                                    },
+                                                                    {
+                                                                        "url":  "https://www.bscai.org/CEOSeminar/Speakers",
+                                                                        "priority":  72,
+                                                                        "pagePurpose":  "DirectoryListing",
+                                                                        "host":  "bscai.org",
+                                                                        "sourceType":  "LinkExpansion",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=72 batchSize=20"
+                                                                    },
+                                                                    {
+                                                                        "url":  "https://www.bscai.org/Education/Executive-Leadership-Academy",
+                                                                        "priority":  72,
+                                                                        "pagePurpose":  "DirectoryListing",
+                                                                        "host":  "bscai.org",
+                                                                        "sourceType":  "LinkExpansion",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=72 batchSize=20"
+                                                                    },
+                                                                    {
+                                                                        "url":  "https://www.bscai.org/Events/CEO-Seminar/Agenda",
+                                                                        "priority":  72,
+                                                                        "pagePurpose":  "DirectoryListing",
+                                                                        "host":  "bscai.org",
+                                                                        "sourceType":  "LinkExpansion",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=72 batchSize=20"
+                                                                    },
+                                                                    {
+                                                                        "url":  "https://www.bscai.org/Events/Company-Search",
+                                                                        "priority":  72,
+                                                                        "pagePurpose":  "DirectoryListing",
+                                                                        "host":  "bscai.org",
+                                                                        "sourceType":  "LinkExpansion",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=72 batchSize=20"
+                                                                    },
+                                                                    {
+                                                                        "url":  "https://www.bscai.org/Events/In-Person-Events/Executive-Management-Conference",
+                                                                        "priority":  72,
+                                                                        "pagePurpose":  "DirectoryListing",
+                                                                        "host":  "bscai.org",
+                                                                        "sourceType":  "LinkExpansion",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=72 batchSize=20"
+                                                                    },
+                                                                    {
+                                                                        "url":  "https://www.bscai.org/Membership/Digital-Badging",
+                                                                        "priority":  72,
+                                                                        "pagePurpose":  "DirectoryListing",
+                                                                        "host":  "bscai.org",
+                                                                        "sourceType":  "LinkExpansion",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=72 batchSize=20"
+                                                                    },
+                                                                    {
+                                                                        "url":  "https://www.bscai.org/Membership/Education",
+                                                                        "priority":  72,
+                                                                        "pagePurpose":  "DirectoryListing",
+                                                                        "host":  "bscai.org",
+                                                                        "sourceType":  "LinkExpansion",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=72 batchSize=20"
+                                                                    }
+                                                                ]
+                                  },
+    "error":  null,
+    "warning":  null,
+    "createdAtUtc":  "2026-10-19T10:38:02.6881369+00:00",
+    "startedAtUtc":  "2026-10-19T10:38:02.7054324+00:00",
+    "completedAtUtc":  null
+}

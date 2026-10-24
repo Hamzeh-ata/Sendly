@@ -262,6 +262,373 @@ namespace Sendly.Infrastructure.Persistence.Migrations
                     b.ToTable("CampaignRecipients");
                 });
 
+            modelBuilder.Entity("Sendly.Domain.Entities.CrawledPage", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("BlockedBySsrf")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("CanonicalUrl")
+                        .HasMaxLength(500)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ContentHash")
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT");
+
+                    b.Property<long?>("ContentLengthBytes")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("ContentType")
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("CrawlDepth")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTimeOffset>("CrawledAtUtc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("DiscoveredUrlId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("DurationMs")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Error")
+                        .HasMaxLength(1000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ExternalLinksJson")
+                        .HasMaxLength(8000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("FinalUrl")
+                        .HasMaxLength(500)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("HttpStatusCode")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("NormalizedDomain")
+                        .HasMaxLength(255)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("NormalizedUrl")
+                        .IsRequired()
+                        .HasMaxLength(2000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PagePurpose")
+                        .HasMaxLength(64)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ProjectId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("RedirectCount")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("ResearchRunId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("RobotsAllowed")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("TextExcerpt")
+                        .HasMaxLength(8000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Title")
+                        .HasMaxLength(2000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasMaxLength(2000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("WasRedirected")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ContentHash");
+
+                    b.HasIndex("DiscoveredUrlId");
+
+                    b.HasIndex("NormalizedDomain");
+
+                    b.HasIndex("ResearchRunId", "NormalizedUrl")
+                        .IsUnique();
+
+                    b.ToTable("CrawledPages");
+                });
+
+            modelBuilder.Entity("Sendly.Domain.Entities.DiscoveredUrl", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("AssociatedIndustry")
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("AssociatedLocation")
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("AssociatedOrganizationName")
+                        .HasMaxLength(300)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Depth")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTimeOffset>("DiscoveredAtUtc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("DiscoveryReason")
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("DiscoverySourceId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("ExpectedDiscoveryValue")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("LastError")
+                        .HasMaxLength(1000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("LiveVerificationStatus")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTimeOffset?>("LiveVerifiedAtUtc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("NormalizedDomain")
+                        .HasMaxLength(255)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("NormalizedUrl")
+                        .IsRequired()
+                        .HasMaxLength(2000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PagePurpose")
+                        .HasMaxLength(80)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ParentDiscoveredUrlId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("PriorityScore")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTimeOffset?>("ProcessedAtUtc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ProjectId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("RejectionReasonCode")
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ResearchRunId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("RetryCount")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("SchedulingReason")
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("SourceName")
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("SourceType")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasMaxLength(2000)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DiscoverySourceId");
+
+                    b.HasIndex("NormalizedDomain");
+
+                    b.HasIndex("ParentDiscoveredUrlId");
+
+                    b.HasIndex("ResearchRunId", "NormalizedUrl")
+                        .IsUnique();
+
+                    b.HasIndex("ResearchRunId", "Status");
+
+                    b.ToTable("DiscoveredUrls");
+                });
+
+            modelBuilder.Entity("Sendly.Domain.Entities.DiscoverySource", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("AdapterKey")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("AttemptCount")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("AutomatedAccessPermitted")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("BaseUrl")
+                        .IsRequired()
+                        .HasMaxLength(2000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("CandidatesDiscovered")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("ConfigurationJson")
+                        .HasMaxLength(4000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CountriesJson")
+                        .HasMaxLength(2000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTimeOffset>("CreatedAtUtc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("DuplicateHits")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("FailureCount")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<double>("FreshnessScore")
+                        .HasColumnType("REAL");
+
+                    b.Property<string>("IndustriesJson")
+                        .HasMaxLength(2000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsSystemManaged")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTimeOffset?>("LastAttemptedAtUtc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTimeOffset?>("LastCheckedAtUtc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("LastError")
+                        .HasMaxLength(1000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTimeOffset?>("LastFreshnessAssessedAtUtc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTimeOffset?>("LastSucceededAtUtc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("LiveVerifiedCompanies")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTimeOffset?>("NextEligibleRetryAtUtc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("NormalizedBaseUrl")
+                        .IsRequired()
+                        .HasMaxLength(2000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("NormalizedDomain")
+                        .HasMaxLength(255)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("PagesAccessible")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("PagesParsed")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("ParentDiscoverySourceId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ProvenanceNotes")
+                        .HasMaxLength(2000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("PublicContactsExtracted")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("QualifiedProspectsYielded")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<double>("RelevanceScore")
+                        .HasColumnType("REAL");
+
+                    b.Property<int>("RelevantCompaniesDiscovered")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("SourceType")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("SuccessCount")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<long>("TotalProcessingMs")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("UniqueCompaniesDiscovered")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTimeOffset>("UpdatedAtUtc")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedBaseUrl")
+                        .IsUnique();
+
+                    b.HasIndex("ParentDiscoverySourceId");
+
+                    b.HasIndex("Status");
+
+                    b.ToTable("DiscoverySources");
+                });
+
             modelBuilder.Entity("Sendly.Domain.Entities.EmailAccount", b =>
                 {
                     b.Property<string>("Id")
@@ -449,6 +816,174 @@ namespace Sendly.Infrastructure.Persistence.Migrations
                     b.HasIndex("SignatureId");
 
                     b.ToTable("EmailTemplates");
+                });
+
+            modelBuilder.Entity("Sendly.Domain.Entities.InvestigationContact", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("AttributionEvidence")
+                        .HasMaxLength(1000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Confidence")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("ContactType")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTimeOffset>("DiscoveredAtUtc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ExactValue")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("NormalizedValue")
+                        .HasMaxLength(500)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("OrganizationName")
+                        .HasMaxLength(300)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PageTitle")
+                        .HasMaxLength(500)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ProjectId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ProspectId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ResearchRunId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ReviewStatus")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("SourceUrl")
+                        .HasMaxLength(2000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("SurroundingText")
+                        .HasMaxLength(1000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ValidationStatus")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ResearchRunId");
+
+                    b.HasIndex("ProspectId", "NormalizedValue");
+
+                    b.ToTable("InvestigationContacts");
+                });
+
+            modelBuilder.Entity("Sendly.Domain.Entities.MapCoverageRegion", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("AttemptCount")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTimeOffset?>("CompletedAtUtc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CountryCode")
+                        .HasMaxLength(8)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CoverageNotes")
+                        .HasMaxLength(500)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTimeOffset>("CreatedAtUtc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<double>("East")
+                        .HasColumnType("REAL");
+
+                    b.Property<string>("KeywordFamilyKey")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("LastError")
+                        .HasMaxLength(1000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<double>("North")
+                        .HasColumnType("REAL");
+
+                    b.Property<string>("ParentRegionId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ProjectId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("RecordsFound")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("RegionLabel")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ResearchRunId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("SourceCategoriesJson")
+                        .HasMaxLength(2000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("SourceName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<double>("South")
+                        .HasColumnType("REAL");
+
+                    b.Property<DateTimeOffset?>("StartedAtUtc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("UniqueRecordsFound")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<double>("West")
+                        .HasColumnType("REAL");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProjectId", "CountryCode");
+
+                    b.HasIndex("ResearchRunId", "Status");
+
+                    b.HasIndex("ResearchRunId", "SourceName", "KeywordFamilyKey");
+
+                    b.ToTable("MapCoverageRegions");
                 });
 
             modelBuilder.Entity("Sendly.Domain.Entities.OutreachContactHistory", b =>
@@ -771,6 +1306,10 @@ namespace Sendly.Infrastructure.Persistence.Migrations
                         .HasMaxLength(2000)
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("CategoryTagsJson")
+                        .HasMaxLength(2000)
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("City")
                         .HasMaxLength(100)
                         .HasColumnType("TEXT");
@@ -813,6 +1352,10 @@ namespace Sendly.Infrastructure.Persistence.Migrations
                     b.Property<int?>("EmailConfidenceScore")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("Fax")
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Industry")
                         .HasMaxLength(200)
                         .HasColumnType("TEXT");
@@ -820,9 +1363,15 @@ namespace Sendly.Infrastructure.Persistence.Migrations
                     b.Property<bool>("IsQualified")
                         .HasColumnType("INTEGER");
 
+                    b.Property<double?>("Latitude")
+                        .HasColumnType("REAL");
+
                     b.Property<string>("LinkedInUrl")
                         .HasMaxLength(500)
                         .HasColumnType("TEXT");
+
+                    b.Property<double?>("Longitude")
+                        .HasColumnType("REAL");
 
                     b.Property<string>("NormalizedCity")
                         .HasMaxLength(100)
@@ -849,6 +1398,18 @@ namespace Sendly.Infrastructure.Persistence.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("OpeningHours")
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("OsmElementId")
+                        .HasMaxLength(80)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("OsmElementType")
+                        .HasMaxLength(40)
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("OutreachCampaignId")
                         .HasColumnType("TEXT");
 
@@ -868,6 +1429,9 @@ namespace Sendly.Infrastructure.Persistence.Migrations
 
                     b.Property<string>("QualificationSummary")
                         .HasMaxLength(1000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("RawOsmTagsJson")
                         .HasColumnType("TEXT");
 
                     b.Property<int?>("RecommendedTemplateConfidence")
@@ -891,6 +1455,10 @@ namespace Sendly.Infrastructure.Persistence.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("SourceObjectKey")
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("SourceType")
                         .HasColumnType("INTEGER");
 
@@ -904,6 +1472,10 @@ namespace Sendly.Infrastructure.Persistence.Migrations
 
                     b.Property<int>("Status")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("StreetAddress")
+                        .HasMaxLength(500)
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTimeOffset>("UpdatedAtUtc")
                         .HasColumnType("TEXT");
@@ -940,6 +1512,8 @@ namespace Sendly.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("ProjectId", "NormalizedWhatsApp")
                         .IsUnique();
+
+                    b.HasIndex("ProjectId", "SourceObjectKey");
 
                     b.ToTable("Prospects");
                 });
@@ -997,6 +1571,275 @@ namespace Sendly.Infrastructure.Persistence.Migrations
                     b.ToTable("ProspectSequenceEnrollments");
                 });
 
+            modelBuilder.Entity("Sendly.Domain.Entities.QualificationCriterionResult", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CriterionKey")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CriterionLabel")
+                        .HasMaxLength(300)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTimeOffset>("EvaluatedAtUtc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("EvidenceIdsJson")
+                        .HasMaxLength(4000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsMandatory")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("Passed")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("ProjectId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ProspectId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Reason")
+                        .HasMaxLength(1000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ResearchRunId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("ScoreContribution")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ResearchRunId");
+
+                    b.HasIndex("ProspectId", "CriterionKey")
+                        .IsUnique();
+
+                    b.ToTable("QualificationCriterionResults");
+                });
+
+            modelBuilder.Entity("Sendly.Domain.Entities.ResearchEvidence", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("ConfidenceKind")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("CrawledPageId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("FactType")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("FactValue")
+                        .HasMaxLength(4000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTimeOffset>("FirstDiscoveredAtUtc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTimeOffset>("LastVerifiedAtUtc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Notes")
+                        .HasMaxLength(1000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ProjectId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ProspectId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ResearchRunId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("SourceUrl")
+                        .HasMaxLength(2000)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CrawledPageId");
+
+                    b.HasIndex("ResearchRunId");
+
+                    b.HasIndex("ProspectId", "FactType");
+
+                    b.ToTable("ResearchEvidenceItems");
+                });
+
+            modelBuilder.Entity("Sendly.Domain.Entities.ResearchQuery", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ActiveVersionId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTimeOffset>("CreatedAtUtc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(2000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsArchived")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ProjectId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTimeOffset>("UpdatedAtUtc")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProjectId", "Name")
+                        .IsUnique();
+
+                    b.ToTable("ResearchQueries");
+                });
+
+            modelBuilder.Entity("Sendly.Domain.Entities.ResearchQueryVersion", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("BusinessCategoriesJson")
+                        .HasMaxLength(2000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CitiesJson")
+                        .HasMaxLength(2000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CompanySizesJson")
+                        .HasMaxLength(2000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CompanyTypesJson")
+                        .HasMaxLength(2000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTimeOffset>("CreatedAtUtc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("DiscoveryStrategiesJson")
+                        .HasMaxLength(2000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("EnableDirectoryDiscovery")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("EnableLinkExpansion")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("EnablePriorResearchUrls")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("EnableSitemapDiscovery")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("ExclusionCriteriaJson")
+                        .HasMaxLength(4000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("MaxConcurrentRequests")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("MaxCrawlDepth")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("MaxPagesPerDomain")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("MaxUrlsPerRun")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("PlainLanguageBrief")
+                        .HasMaxLength(8000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("RegionsJson")
+                        .HasMaxLength(2000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("RequestTimeoutSeconds")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("RequestsPerDomainPerMinute")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("RequireOfficialWebsite")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("RequirePublicBusinessEmail")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("RequiredContactInfoJson")
+                        .HasMaxLength(2000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("RequiredCriteriaJson")
+                        .HasMaxLength(4000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("RequiredEvidenceJson")
+                        .HasMaxLength(2000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ResearchQueryId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("StructuredDefinitionJson")
+                        .HasMaxLength(16000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("TargetCountry")
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("TargetIndustry")
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("VersionNumber")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ResearchQueryId", "VersionNumber")
+                        .IsUnique();
+
+                    b.ToTable("ResearchQueryVersions");
+                });
+
             modelBuilder.Entity("Sendly.Domain.Entities.ResearchRun", b =>
                 {
                     b.Property<string>("Id")
@@ -1021,6 +1864,9 @@ namespace Sendly.Infrastructure.Persistence.Migrations
                     b.Property<int>("ContactsFound")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("CrawlErrors")
+                        .HasColumnType("INTEGER");
+
                     b.Property<DateTimeOffset>("CreatedAtUtc")
                         .HasColumnType("TEXT");
 
@@ -1037,7 +1883,30 @@ namespace Sendly.Infrastructure.Persistence.Migrations
                     b.Property<bool>("IncludeWhatsApp")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("MapCoverageSummaryJson")
+                        .HasMaxLength(8000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("MapPlacesDiscovered")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("MapPlanJson")
+                        .HasMaxLength(64000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("MapRegionsCompleted")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("MapRegionsTotal")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("MinQualificationScore")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Mode")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("PagesCrawled")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("ProgressPercent")
@@ -1073,8 +1942,14 @@ namespace Sendly.Infrastructure.Persistence.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("ResearchQueryId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ResearchQueryVersionId")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("SearchProviderDiagnosticsJson")
-                        .HasMaxLength(4000)
+                        .HasMaxLength(64000)
                         .HasColumnType("TEXT");
 
                     b.Property<int>("SearchQueriesExecuted")
@@ -1087,6 +1962,9 @@ namespace Sendly.Infrastructure.Persistence.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Status")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("UrlsDiscovered")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("ValidEmails")
@@ -1103,7 +1981,125 @@ namespace Sendly.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("ProjectId");
 
+                    b.HasIndex("ResearchQueryId");
+
+                    b.HasIndex("ResearchQueryVersionId");
+
                     b.ToTable("ResearchRuns");
+                });
+
+            modelBuilder.Entity("Sendly.Domain.Entities.ResearchRunEvent", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTimeOffset>("CreatedAtUtc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("DataJson")
+                        .HasMaxLength(8000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Domain")
+                        .HasMaxLength(255)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("DurationMs")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("EventType")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("HttpStatusCode")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Message")
+                        .HasMaxLength(1000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Provider")
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("RelatedEntityId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("RelatedEntityKind")
+                        .HasMaxLength(32)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ResearchRunId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Severity")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Stage")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Url")
+                        .HasMaxLength(2000)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ResearchRunId", "CreatedAtUtc");
+
+                    b.HasIndex("ResearchRunId", "Severity");
+
+                    b.HasIndex("ResearchRunId", "Stage");
+
+                    b.ToTable("ResearchRunEvents");
+                });
+
+            modelBuilder.Entity("Sendly.Domain.Entities.ResearchSeedUrl", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTimeOffset>("CreatedAtUtc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Label")
+                        .HasMaxLength(500)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("NormalizedDomain")
+                        .HasMaxLength(255)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("NormalizedUrl")
+                        .IsRequired()
+                        .HasMaxLength(2000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ProjectId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ResearchQueryId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasMaxLength(2000)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProjectId", "NormalizedUrl");
+
+                    b.HasIndex("ResearchQueryId", "NormalizedUrl")
+                        .IsUnique();
+
+                    b.ToTable("ResearchSeedUrls");
                 });
 
             modelBuilder.Entity("Sendly.Domain.Entities.SignatureSettings", b =>
@@ -1226,6 +2222,55 @@ namespace Sendly.Infrastructure.Persistence.Migrations
                     b.Navigation("Campaign");
                 });
 
+            modelBuilder.Entity("Sendly.Domain.Entities.CrawledPage", b =>
+                {
+                    b.HasOne("Sendly.Domain.Entities.DiscoveredUrl", "DiscoveredUrl")
+                        .WithMany("CrawledPages")
+                        .HasForeignKey("DiscoveredUrlId");
+
+                    b.HasOne("Sendly.Domain.Entities.ResearchRun", "ResearchRun")
+                        .WithMany("CrawledPages")
+                        .HasForeignKey("ResearchRunId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("DiscoveredUrl");
+
+                    b.Navigation("ResearchRun");
+                });
+
+            modelBuilder.Entity("Sendly.Domain.Entities.DiscoveredUrl", b =>
+                {
+                    b.HasOne("Sendly.Domain.Entities.DiscoverySource", "DiscoverySource")
+                        .WithMany()
+                        .HasForeignKey("DiscoverySourceId");
+
+                    b.HasOne("Sendly.Domain.Entities.DiscoveredUrl", "ParentDiscoveredUrl")
+                        .WithMany()
+                        .HasForeignKey("ParentDiscoveredUrlId");
+
+                    b.HasOne("Sendly.Domain.Entities.ResearchRun", "ResearchRun")
+                        .WithMany("DiscoveredUrls")
+                        .HasForeignKey("ResearchRunId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("DiscoverySource");
+
+                    b.Navigation("ParentDiscoveredUrl");
+
+                    b.Navigation("ResearchRun");
+                });
+
+            modelBuilder.Entity("Sendly.Domain.Entities.DiscoverySource", b =>
+                {
+                    b.HasOne("Sendly.Domain.Entities.DiscoverySource", "ParentDiscoverySource")
+                        .WithMany()
+                        .HasForeignKey("ParentDiscoverySourceId");
+
+                    b.Navigation("ParentDiscoverySource");
+                });
+
             modelBuilder.Entity("Sendly.Domain.Entities.EmailTemplate", b =>
                 {
                     b.HasOne("Sendly.Domain.Entities.EmailAccount", "EmailAccount")
@@ -1239,6 +2284,34 @@ namespace Sendly.Infrastructure.Persistence.Migrations
                     b.Navigation("EmailAccount");
 
                     b.Navigation("Signature");
+                });
+
+            modelBuilder.Entity("Sendly.Domain.Entities.InvestigationContact", b =>
+                {
+                    b.HasOne("Sendly.Domain.Entities.Prospect", "Prospect")
+                        .WithMany()
+                        .HasForeignKey("ProspectId");
+
+                    b.HasOne("Sendly.Domain.Entities.ResearchRun", "ResearchRun")
+                        .WithMany()
+                        .HasForeignKey("ResearchRunId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Prospect");
+
+                    b.Navigation("ResearchRun");
+                });
+
+            modelBuilder.Entity("Sendly.Domain.Entities.MapCoverageRegion", b =>
+                {
+                    b.HasOne("Sendly.Domain.Entities.ResearchRun", "ResearchRun")
+                        .WithMany("MapCoverageRegions")
+                        .HasForeignKey("ResearchRunId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ResearchRun");
                 });
 
             modelBuilder.Entity("Sendly.Domain.Entities.OutreachProjectCountry", b =>
@@ -1368,6 +2441,70 @@ namespace Sendly.Infrastructure.Persistence.Migrations
                     b.Navigation("Sequence");
                 });
 
+            modelBuilder.Entity("Sendly.Domain.Entities.QualificationCriterionResult", b =>
+                {
+                    b.HasOne("Sendly.Domain.Entities.Prospect", "Prospect")
+                        .WithMany("QualificationResults")
+                        .HasForeignKey("ProspectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Sendly.Domain.Entities.ResearchRun", "ResearchRun")
+                        .WithMany("QualificationResults")
+                        .HasForeignKey("ResearchRunId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Prospect");
+
+                    b.Navigation("ResearchRun");
+                });
+
+            modelBuilder.Entity("Sendly.Domain.Entities.ResearchEvidence", b =>
+                {
+                    b.HasOne("Sendly.Domain.Entities.CrawledPage", "CrawledPage")
+                        .WithMany()
+                        .HasForeignKey("CrawledPageId");
+
+                    b.HasOne("Sendly.Domain.Entities.Prospect", "Prospect")
+                        .WithMany("EvidenceItems")
+                        .HasForeignKey("ProspectId");
+
+                    b.HasOne("Sendly.Domain.Entities.ResearchRun", "ResearchRun")
+                        .WithMany("EvidenceItems")
+                        .HasForeignKey("ResearchRunId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CrawledPage");
+
+                    b.Navigation("Prospect");
+
+                    b.Navigation("ResearchRun");
+                });
+
+            modelBuilder.Entity("Sendly.Domain.Entities.ResearchQuery", b =>
+                {
+                    b.HasOne("Sendly.Domain.Entities.OutreachProject", "Project")
+                        .WithMany("ResearchQueries")
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Project");
+                });
+
+            modelBuilder.Entity("Sendly.Domain.Entities.ResearchQueryVersion", b =>
+                {
+                    b.HasOne("Sendly.Domain.Entities.ResearchQuery", "ResearchQuery")
+                        .WithMany("Versions")
+                        .HasForeignKey("ResearchQueryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ResearchQuery");
+                });
+
             modelBuilder.Entity("Sendly.Domain.Entities.ResearchRun", b =>
                 {
                     b.HasOne("Sendly.Domain.Entities.OutreachProject", "Project")
@@ -1376,7 +2513,49 @@ namespace Sendly.Infrastructure.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Sendly.Domain.Entities.ResearchQuery", "ResearchQuery")
+                        .WithMany()
+                        .HasForeignKey("ResearchQueryId");
+
+                    b.HasOne("Sendly.Domain.Entities.ResearchQueryVersion", "ResearchQueryVersion")
+                        .WithMany()
+                        .HasForeignKey("ResearchQueryVersionId");
+
                     b.Navigation("Project");
+
+                    b.Navigation("ResearchQuery");
+
+                    b.Navigation("ResearchQueryVersion");
+                });
+
+            modelBuilder.Entity("Sendly.Domain.Entities.ResearchRunEvent", b =>
+                {
+                    b.HasOne("Sendly.Domain.Entities.ResearchRun", "ResearchRun")
+                        .WithMany("Events")
+                        .HasForeignKey("ResearchRunId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ResearchRun");
+                });
+
+            modelBuilder.Entity("Sendly.Domain.Entities.ResearchSeedUrl", b =>
+                {
+                    b.HasOne("Sendly.Domain.Entities.OutreachProject", "Project")
+                        .WithMany("SeedUrls")
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Sendly.Domain.Entities.ResearchQuery", "ResearchQuery")
+                        .WithMany("SeedUrls")
+                        .HasForeignKey("ResearchQueryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Project");
+
+                    b.Navigation("ResearchQuery");
                 });
 
             modelBuilder.Entity("Sendly.Domain.Entities.TemplateRecipientHistory", b =>
@@ -1405,6 +2584,11 @@ namespace Sendly.Infrastructure.Persistence.Migrations
                     b.Navigation("Recipients");
                 });
 
+            modelBuilder.Entity("Sendly.Domain.Entities.DiscoveredUrl", b =>
+                {
+                    b.Navigation("CrawledPages");
+                });
+
             modelBuilder.Entity("Sendly.Domain.Entities.EmailTemplate", b =>
                 {
                     b.Navigation("Attachments");
@@ -1420,7 +2604,11 @@ namespace Sendly.Infrastructure.Persistence.Migrations
 
                     b.Navigation("Prospects");
 
+                    b.Navigation("ResearchQueries");
+
                     b.Navigation("ResearchRuns");
+
+                    b.Navigation("SeedUrls");
 
                     b.Navigation("TargetRoles");
 
@@ -1434,9 +2622,35 @@ namespace Sendly.Infrastructure.Persistence.Migrations
                     b.Navigation("Steps");
                 });
 
+            modelBuilder.Entity("Sendly.Domain.Entities.Prospect", b =>
+                {
+                    b.Navigation("EvidenceItems");
+
+                    b.Navigation("QualificationResults");
+                });
+
+            modelBuilder.Entity("Sendly.Domain.Entities.ResearchQuery", b =>
+                {
+                    b.Navigation("SeedUrls");
+
+                    b.Navigation("Versions");
+                });
+
             modelBuilder.Entity("Sendly.Domain.Entities.ResearchRun", b =>
                 {
+                    b.Navigation("CrawledPages");
+
+                    b.Navigation("DiscoveredUrls");
+
+                    b.Navigation("Events");
+
+                    b.Navigation("EvidenceItems");
+
+                    b.Navigation("MapCoverageRegions");
+
                     b.Navigation("Prospects");
+
+                    b.Navigation("QualificationResults");
                 });
 #pragma warning restore 612, 618
         }

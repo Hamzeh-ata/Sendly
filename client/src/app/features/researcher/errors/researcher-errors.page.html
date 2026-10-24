@@ -1,0 +1,55 @@
+<div class="researcher-page">
+  <div class="page-header">
+    <div>
+      <h2>{{ 'researcher.errors.title' | translate }}</h2>
+      <p class="subtitle">{{ 'researcher.errors.subtitle' | translate }}</p>
+    </div>
+  </div>
+
+  @if (loading()) {
+    <div class="rc-skeleton">
+      <div class="bone"></div>
+      <div class="bone"></div>
+    </div>
+  } @else if (!hasRows()) {
+    <app-empty-state
+      titleKey="researcher.errors.emptyTitle"
+      descriptionKey="researcher.errors.emptyDescription"
+    />
+  } @else {
+    <section class="rc-panel">
+      <div class="error-cards">
+        @for (item of rows(); track item.category + item.lastLabel + item.count) {
+          <article class="error-card">
+            <div class="error-head">
+              <h3>{{ item.category }}</h3>
+              <span class="count rc-mono">×{{ item.count }}</span>
+            </div>
+            <p class="sample">{{ item.sampleMessage }}</p>
+            <div class="meta">
+              <span>{{ 'researcher.errors.first' | translate }}: {{ item.firstLabel }}</span>
+              <span>{{ 'researcher.errors.last' | translate }}: {{ item.lastLabel }}</span>
+              @if (item.stage) {
+                <span>{{ 'researcher.errors.stage' | translate }}: {{ item.stage }}</span>
+              }
+              @if (item.domain) {
+                <span class="rc-mono">{{ item.domain }}</span>
+              }
+            </div>
+            @if (item.hasRemediation) {
+              <p class="remediation">
+                <strong>{{ 'researcher.errors.remediation' | translate }}:</strong>
+                {{ item.remediation }}
+              </p>
+            }
+            @if (item.hasRunLink) {
+              <a [routerLink]="['/researcher/live', item.researchRunId]">
+                {{ 'researcher.errors.openRun' | translate }}
+              </a>
+            }
+          </article>
+        }
+      </div>
+    </section>
+  }
+</div>

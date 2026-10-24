@@ -7,8 +7,10 @@ import {
   ProjectTemplateLink,
   UpsertOutreachProject
 } from '../../core/models/prospecting.model';
+import { UpsertResearchQuery } from '../../core/models/research-query.model';
 import { ProjectTemplateOption } from '../../core/models/project-row.model';
 import { ProjectApiService } from '../../core/services/project-api.service';
+import { ResearchQueryApiService } from '../../core/services/research-query-api.service';
 import { TemplateApiService } from '../../core/services/template-api.service';
 import { NotificationService } from '../../core/services/notification.service';
 import { LoadingComponent } from '../../shared/components/loading/loading.component';
@@ -23,6 +25,7 @@ export class ProjectEditorPage implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly projectApi = inject(ProjectApiService);
+  private readonly researchQueryApi = inject(ResearchQueryApiService);
   private readonly templateApi = inject(TemplateApiService);
   private readonly notification = inject(NotificationService);
   private readonly translate = inject(TranslateService);
@@ -30,6 +33,7 @@ export class ProjectEditorPage implements OnInit {
   readonly loading = signal(true);
   readonly saving = signal(false);
   readonly editingId = signal<string | null>(null);
+  readonly researchQueryId = signal<string | null>(null);
   readonly name = signal('');
   readonly description = signal('');
   readonly researchInstructions = signal('');
@@ -45,6 +49,19 @@ export class ProjectEditorPage implements OnInit {
   readonly industriesText = signal('');
   readonly excludedIndustriesText = signal('');
   readonly targetRolesText = signal('');
+  readonly queryName = signal('');
+  readonly plainLanguageBrief = signal('');
+  readonly targetIndustry = signal('');
+  readonly targetCountry = signal('');
+  readonly maxPagesPerDomain = signal(5);
+  readonly maxCrawlDepth = signal(2);
+  readonly maxUrlsPerRun = signal(200);
+  readonly requireOfficialWebsite = signal(true);
+  readonly requirePublicBusinessEmail = signal(true);
+  readonly enableDirectoryDiscovery = signal(true);
+  readonly enableSitemapDiscovery = signal(true);
+  readonly enableLinkExpansion = signal(true);
+  readonly enablePriorResearchUrls = signal(true);
   readonly templateOptions = signal<ProjectTemplateOption[]>([]);
   readonly selectedTemplateIds = signal<string[]>([]);
 
@@ -142,6 +159,58 @@ export class ProjectEditorPage implements OnInit {
     this.targetRolesText.set(value);
   }
 
+  onQueryNameChange(value: string): void {
+    this.queryName.set(value);
+  }
+
+  onPlainLanguageBriefChange(value: string): void {
+    this.plainLanguageBrief.set(value);
+  }
+
+  onTargetIndustryChange(value: string): void {
+    this.targetIndustry.set(value);
+  }
+
+  onTargetCountryChange(value: string): void {
+    this.targetCountry.set(value);
+  }
+
+  onMaxPagesPerDomainChange(value: string): void {
+    this.maxPagesPerDomain.set(Number(value) || 1);
+  }
+
+  onMaxCrawlDepthChange(value: string): void {
+    this.maxCrawlDepth.set(Number(value) || 0);
+  }
+
+  onMaxUrlsPerRunChange(value: string): void {
+    this.maxUrlsPerRun.set(Number(value) || 1);
+  }
+
+  onRequireOfficialWebsiteChange(checked: boolean): void {
+    this.requireOfficialWebsite.set(checked);
+  }
+
+  onRequirePublicBusinessEmailChange(checked: boolean): void {
+    this.requirePublicBusinessEmail.set(checked);
+  }
+
+  onEnableDirectoryDiscoveryChange(checked: boolean): void {
+    this.enableDirectoryDiscovery.set(checked);
+  }
+
+  onEnableSitemapDiscoveryChange(checked: boolean): void {
+    this.enableSitemapDiscovery.set(checked);
+  }
+
+  onEnableLinkExpansionChange(checked: boolean): void {
+    this.enableLinkExpansion.set(checked);
+  }
+
+  onEnablePriorResearchUrlsChange(checked: boolean): void {
+    this.enablePriorResearchUrls.set(checked);
+  }
+
   toggleTemplate(id: string): void {
     this.selectedTemplateIds.update((ids) => {
       if (ids.includes(id)) {
@@ -193,9 +262,11 @@ export class ProjectEditorPage implements OnInit {
 
     request$.subscribe({
       next: (project) => {
-        this.saving.set(false);
-        this.notification.success(this.translate.instant('projects.saveSuccess'));
-        this.router.navigate(['/projects', project.id]);
+        this.saveResearchQuery(project.id, () => {
+          this.saving.set(false);
+          this.notification.success(this.translate.instant('projects.saveSuccess'));
+          this.router.navigate(['/projects', project.id]);
+        });
       },
       error: (err: HttpErrorResponse) => {
         this.saving.set(false);
@@ -222,12 +293,15 @@ export class ProjectEditorPage implements OnInit {
         this.industriesText.set(this.joinList(project.industries));
         this.excludedIndustriesText.set(this.joinList(project.excludedIndustries));
         this.targetRolesText.set(this.joinList(project.targetRoles));
+        this.queryName.set(project.name);
+        this.targetCountry.set(this.joinList(project.countries).split('\n')[0] ?? '');
+        this.targetIndustry.set(this.joinList(project.industries).split('\n')[0] ?? '');
         const selectedIds: string[] = [];
         for (const link of project.templates) {
           selectedIds.push(link.templateId);
         }
         this.selectedTemplateIds.set(selectedIds);
-        this.loading.set(false);
+        this.loadResearchQuery(id);
       },
       error: (err: HttpErrorResponse) => {
         this.loading.set(false);
@@ -235,6 +309,94 @@ export class ProjectEditorPage implements OnInit {
         this.router.navigate(['/projects']);
       }
     });
+  }
+
+  private loadResearchQuery(projectId: string): void {
+    this.researchQueryApi.list(projectId).subscribe({
+      next: (queries) => {
+        const first = queries[0];
+        if (!first) {
+          this.loading.set(false);
+          return;
+        }
+        this.researchQueryApi.get(projectId, first.id).subscribe({
+          next: (detail) => {
+            this.researchQueryId.set(detail.id);
+            this.queryName.set(detail.name);
+            const version = detail.activeVersion;
+            if (version) {
+              this.plainLanguageBrief.set(version.plainLanguageBrief ?? '');
+              this.targetIndustry.set(version.targetIndustry ?? '');
+              this.targetCountry.set(version.targetCountry ?? '');
+              this.maxPagesPerDomain.set(version.maxPagesPerDomain);
+              this.maxCrawlDepth.set(version.maxCrawlDepth);
+              this.maxUrlsPerRun.set(version.maxUrlsPerRun);
+              this.requireOfficialWebsite.set(version.requireOfficialWebsite);
+              this.requirePublicBusinessEmail.set(version.requirePublicBusinessEmail);
+              this.enableDirectoryDiscovery.set(version.enableDirectoryDiscovery);
+              this.enableSitemapDiscovery.set(version.enableSitemapDiscovery);
+              this.enableLinkExpansion.set(version.enableLinkExpansion);
+              this.enablePriorResearchUrls.set(version.enablePriorResearchUrls);
+            }
+            this.loading.set(false);
+          },
+          error: () => this.loading.set(false)
+        });
+      },
+      error: () => this.loading.set(false)
+    });
+  }
+
+  private saveResearchQuery(projectId: string, onDone: () => void): void {
+    const payload = this.buildResearchQueryPayload();
+    const existingId = this.researchQueryId();
+    const request$ = existingId
+      ? this.researchQueryApi.update(projectId, existingId, payload)
+      : this.researchQueryApi.create(projectId, payload);
+
+    request$.subscribe({
+      next: () => onDone(),
+      error: (err: HttpErrorResponse) => {
+        this.saving.set(false);
+        this.notifyError(err);
+      }
+    });
+  }
+
+  private buildResearchQueryPayload(): UpsertResearchQuery {
+    return {
+      name: this.queryName().trim() || this.name().trim() || 'Automatic discovery',
+      description: this.description().trim() || null,
+      plainLanguageBrief: this.plainLanguageBrief().trim() || null,
+      targetIndustry: this.targetIndustry().trim() || this.parseList(this.industriesText())[0] || null,
+      businessCategories: this.parseList(this.industriesText()),
+      targetCountry: this.targetCountry().trim() || this.parseList(this.countriesText())[0] || null,
+      regions: [],
+      cities: [],
+      companyTypes: [],
+      companySizes: [],
+      requiredCriteria: this.parseList(this.keywordsText()),
+      exclusionCriteria: [
+        ...this.parseList(this.excludedKeywordsText()),
+        ...this.parseList(this.excludedIndustriesText())
+      ],
+      requiredContactInfo: this.enableEmail() ? ['email'] : [],
+      requiredEvidence: [],
+      discoveryStrategies: ['directory', 'priorResearch', 'webArchive', 'sitemap', 'linkExpansion'],
+      maxPagesPerDomain: this.maxPagesPerDomain(),
+      maxCrawlDepth: this.maxCrawlDepth(),
+      requestTimeoutSeconds: 30,
+      maxConcurrentRequests: 2,
+      requestsPerDomainPerMinute: 10,
+      maxUrlsPerRun: this.maxUrlsPerRun(),
+      requireOfficialWebsite: this.requireOfficialWebsite(),
+      requirePublicBusinessEmail: this.requirePublicBusinessEmail(),
+      enableDirectoryDiscovery: this.enableDirectoryDiscovery(),
+      enableSitemapDiscovery: this.enableSitemapDiscovery(),
+      enableLinkExpansion: this.enableLinkExpansion(),
+      enablePriorResearchUrls: this.enablePriorResearchUrls(),
+      seedUrls: []
+    };
   }
 
   private loadTemplates(): void {

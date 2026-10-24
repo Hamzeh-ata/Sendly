@@ -1,7 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
-import { AppSettings, ProviderConnectionTestResult } from '../models/app-settings.model';
+import {
+  AppSettings,
+  OllamaHealthResult,
+  ProviderConnectionTestResult
+} from '../models/app-settings.model';
 import { ApiBaseService } from './api-base.service';
 
 @Injectable({ providedIn: 'root' })
@@ -27,6 +31,13 @@ export class AppSettingsApiService {
   testSearXng(): Observable<ProviderConnectionTestResult> {
     return this.http.post<ProviderConnectionTestResult>(
       `${this.api.baseUrl}/app-settings/searxng/test`,
+      {}
+    );
+  }
+
+  testOllama(): Observable<OllamaHealthResult> {
+    return this.http.post<OllamaHealthResult>(
+      `${this.api.baseUrl}/app-settings/ollama/test`,
       {}
     );
   }

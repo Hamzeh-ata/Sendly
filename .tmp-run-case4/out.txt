@@ -1,0 +1,437 @@
+﻿=== RUN ===
+id 0422e254-99be-4f80-b2b8-3fb7b7e66f0b
+status completed
+project School Watch - USA c61ef480-d3b7-4f77-8d5e-25335228c0e5
+query None 9988834f-7fc3-4a96-8935-40374881f663
+pages 80 urls 182 qualified 0
+companiesFound 259 rejected 23 duplicates 21
+started 2026-10-19T11:09:17.4841656+00:00 completed 2026-10-19T11:10:57.5520313+00:00
+error None warning 50 requested, 0 qualified. The research budget or duration limit was exhausted before sufficient coverage was achieved.
+
+=== DIAG ===
+automaticDiscoverySummary=Automatic discovery collected 3 candidate URLs (3 domains; fresh=3, prior=0) from 3/4 providers across 1 stage(s), recovery stages: 0 (duplicates removed: 2, rejected unsafe: 0, filtered: 0, zero-return providers: 2).
+discoveryPlanSummary=Plan: 14 industries (+8 synonyms), 1 countries, 5 providers, budget 200 URLs / 100 domains / 3 stages.
+uniqueDomainsDiscovered=3
+companiesIdentified=259
+identityVerifiedBusinesses=5
+emailReadyProspects=0
+publicContactsExtracted=6
+pagesFetched=80
+fetchBudgetLimit=80
+usefulPendingUrls=97
+fetchesSucceeded=80
+fetchesFailed=5
+lastBudgetStopReason=fetch.run_budget_exhausted
+urlsRejectedFiltered=63
+urlsAdmitted=169
+previouslyKnownProspects=0
+newlyDiscoveredProspects=0
+sourcesReused=2
+sourcesAdded=1
+recoveryAttempts=0
+urlRejectionReasons {'url.media_asset': 60, 'url.api_endpoint': 3}
+fetchFailureReasons {'fetch.client_error': 1, 'fetch.unsupported_content': 4}
+
+=== PROSPECTS ===
+- rejected score=21 email=None
+  name=tel:+61417740156
+  site=https://issa.jotform.com/252646617812966/prefill/019977f252087bb28b4a03b598e4a0616c70
+  src=https://www.issa.com/cdn-cgi/l/email-protection
+- rejected score=46 email=None
+  name=Cleaning for a Reason
+  site=https://cleaningforareason.org
+  src=https://issacharities.org/cleanitforward/
+- rejected score=59 email=None
+  name=AR Training & Validation
+  site=https://inspirear.com
+  src=https://inspirear.com/
+- rejected score=59 email=None
+  name=ISSA Charities
+  site=https://issacharities.org/ways-to-give
+  src=https://www.issa.com/
+- needsReview score=70 email=None
+  name=Partners
+  site=https://schools.cometoboston.com
+  src=https://schools.cometoboston.com/list-of-private-schools-in-the-boston-area
+
+=== EVENT TYPES ===
+183 ListingOrganizationExtracted
+82 OfficialWebsiteQueued
+54 UrlDiscovered
+29 FetchStarted
+26 PageCrawled
+22 ContactExtracted
+18 DirectorySiblingQueued
+18 InvestigationFollowUpQueued
+18 OrganizationProfilesDiscovered
+12 EvidenceMerged
+10 Rejected
+10 CompanyExtracted
+9 Warning
+4 RedirectFollowed
+3 FetchFailed
+1 Completed
+1 StageCompleted
+
+=== QUALIFIED / REJECTED / COMPANY ===
+Completed Research run finished with status Completed
+  {"status":"Completed","qualified":0,"requested":50,"pagesCrawled":80,"crawlErrors":5}
+Rejected Rejected: Partners
+  {"company":"Partners","score":21,"reason":"Weak company identity","missingCriteria":["officialWebsite","publicBusinessEmail","companyIdentity","targetCountry","targetIndustry","keywords"],"mandatoryFailures":["officialWe
+CompanyExtracted Company candidate: Partners
+  {"company":"Partners","source":"DirectoryListingInvestigation"}
+Rejected Rejected: ISSA Charities
+  {"company":"ISSA Charities","score":30,"reason":"Weak company identity","missingCriteria":["officialWebsite","publicBusinessEmail","companyIdentity"],"mandatoryFailures":["officialWebsite","companyIdentity"]}
+CompanyExtracted Company candidate: ISSA Charities
+  {"company":"ISSA Charities","source":"DirectoryListingInvestigation \u002B priority.internal_expansion"}
+Warning Deferred yield recovery because eligible queued URLs remain to fetch.
+  {"reasonCode":"recovery.deferred_for_queued_work","eligibleScheduled":102,"usefulPending":102,"pagesFetched":74,"topUrl":"https://www.bscai.org/Events/In-Person-Events","topPriority":52}
+Rejected Rejected: tel:+61417740156
+  {"company":"tel:\u002B61417740156","score":21,"reason":"Weak company identity","missingCriteria":["officialWebsite","publicBusinessEmail","companyIdentity","targetCountry","targetIndustry","keywords"],"mandatoryFailures"
+CompanyExtracted Company candidate: tel:+61417740156
+  {"company":"tel:\u002B61417740156","source":"DirectoryListingInvestigation"}
+Rejected Rejected: Partners
+  {"company":"Partners","score":21,"reason":"Weak company identity","missingCriteria":["officialWebsite","publicBusinessEmail","companyIdentity","targetCountry","targetIndustry","keywords"],"mandatoryFailures":["officialWe
+CompanyExtracted Company candidate: Partners
+  {"company":"Partners","source":"DirectoryListingInvestigation"}
+Rejected Rejected: ISSA Charities
+  {"company":"ISSA Charities","score":30,"reason":"Weak company identity","missingCriteria":["officialWebsite","publicBusinessEmail","companyIdentity","targetIndustry","keywords"],"mandatoryFailures":["officialWebsite","co
+CompanyExtracted Company candidate: ISSA Charities
+  {"company":"ISSA Charities","source":"DirectoryListingInvestigation \u002B priority.internal_expansion"}
+Warning Deferred yield recovery because eligible queued URLs remain to fetch.
+  {"reasonCode":"recovery.deferred_for_queued_work","eligibleScheduled":107,"usefulPending":107,"pagesFetched":66,"topUrl":"https://www.bscai.org/Events/Company-Search","topPriority":52}
+Rejected Rejected: Partners
+  {"company":"Partners","score":21,"reason":"Weak company identity","missingCriteria":["officialWebsite","publicBusinessEmail","companyIdentity","targetCountry","targetIndustry","keywords"],"mandatoryFailures":["officialWe
+CompanyExtracted Company candidate: Partners
+  {"company":"Partners","source":"DirectoryListingInvestigation"}
+Rejected Rejected: Clean Homes for Cancer Patients
+  {"company":"Clean Homes for Cancer Patients","score":21,"reason":"Weak company identity","missingCriteria":["officialWebsite","publicBusinessEmail","companyIdentity","targetCountry","targetIndustry","keywords"],"mandator
+CompanyExtracted Company candidate: Clean Homes for Cancer Patients
+  {"company":"Clean Homes for Cancer Patients","source":"DirectoryListingInvestigation"}
+Warning Deferred yield recovery because eligible queued URLs remain to fetch.
+  {"reasonCode":"recovery.deferred_for_queued_work","eligibleScheduled":112,"usefulPending":112,"pagesFetched":59,"topUrl":"https://www.bscai.org/Events/CEO-Seminar/Hotel","topPriority":52}
+Rejected Rejected: Cleaning for a Reason
+  {"company":"Cleaning for a Reason","score":46,"reason":"Outside target country","missingCriteria":["publicBusinessEmail","targetCountry","targetIndustry","keywords"],"mandatoryFailures":["targetCountry","targetIndustry"]
+CompanyExtracted Company candidate: Cleaning for a Reason
+  {"company":"Cleaning for a Reason","source":"DirectoryListingInvestigation"}
+Rejected Rejected: Partners
+  {"company":"Partners","score":21,"reason":"Weak company identity","missingCriteria":["officialWebsite","publicBusinessEmail","companyIdentity","targetCountry","targetIndustry","keywords"],"mandatoryFailures":["officialWe
+CompanyExtracted Company candidate: Partners
+  {"company":"Partners","source":"DirectoryListingInvestigation"}
+Rejected Rejected: Clean Homes for Cancer Patients
+  {"company":"Clean Homes for Cancer Patients","score":21,"reason":"Weak company identity","missingCriteria":["officialWebsite","publicBusinessEmail","companyIdentity","targetCountry","targetIndustry","keywords"],"mandator
+CompanyExtracted Company candidate: Clean Homes for Cancer Patients
+  {"company":"Clean Homes for Cancer Patients","source":"DirectoryListingInvestigation"}
+
+=== URL STATUS / SOURCE ===
+status Counter({'Pending': 97, 'Crawled': 80, 'Failed': 5})
+sourceType Counter({'LinkExpansion': 179, 'DirectoryCatalog': 3})
+pending hosts [('issa.com', 31), ('opencorporates.com', 28), ('bscai.org', 22), ('cleaningforareason.org', 7), ('hygieianetwork.org', 5), ('issacharities.org', 4)]
+crawled hosts [('bscai.org', 19), ('issa.com', 18), ('issacharities.org', 10), ('hygieianetwork.org', 10), ('cleaningforareason.org', 9), ('opencorporates.com', 9), ('inspirear.com', 3), ('opencorporates.recruitee.com', 2)]
+
+=== CRAWLED TITLES (sample) ===
+200 BSCAI | Home https://www.bscai.org
+200 ISSA | The Association for Cleaning & Facility Solutions https://www.issa.com
+200 OpenCorporates https://opencorporates.com
+200 Contact - ISSA HYGIEIA NETWORK https://hygieianetwork.org/contact
+200 Inspire: Revolutionize Cleaning Crew Training with AR https://inspirear.com/contact
+200 Contact Us - ISSA Charities https://issacharities.org/ways-to-give/contact
+200 Contact - Cleaning for a Reason https://cleaningforareason.org/contact
+200 Homepage https://opencorporates.recruitee.com/contact
+200 BSCAI | About BSCAI https://www.bscai.org/About/About-BSCAI
+200 Advocacy - ISSA | The Association for Cleaning & Facility So https://www.issa.com/advocacy/
+404  https://opencorporates.com/comments/feed/
+200 Home - ISSA HYGIEIA NETWORK https://hygieianetwork.org
+200 Inspire: Revolutionize Cleaning Crew Training with AR https://inspirear.com
+200 Ways To Give - ISSA Charities https://issacharities.org/ways-to-give
+200 Home - Cleaning for a Reason https://cleaningforareason.org
+200 Homepage https://opencorporates.recruitee.com
+200 BSCAI | BSCAI Partners https://www.bscai.org/About/BSCAI-Partners
+200 Advocacy Action Center - ISSA | The Association for Cleaning https://www.issa.com/advocacy/action-center/?vvsrc=%2fSurveys%2f5372%2fRespond
+200 Contact Us - ISSA Charities https://issacharities.org/contact-us/
+200 About Us - ISSA HYGIEIA NETWORK https://hygieianetwork.org/about/
+
+=== LISTING / OFFICIAL / SPA SAMPLE ===
+[DirectorySiblingQueued] Queued 2 related directory host link(s) from https://www.bscai.org/Events/In-Person-Events/CEO-Seminar/Optional-Events.
+[ListingOrganizationExtracted] Extracted organization 'Company Search' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Digital Badging' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Renew Membership' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Member Resource Center' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Membership' from listing.
+[ListingOrganizationExtracted] Extracted organization 'BSCAI Partners' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Staff' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Committees' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Board of Directors' from listing.
+[ListingOrganizationExtracted] Extracted organization 'About BSCAI' from listing.
+[DirectorySiblingQueued] Queued 15 related directory host link(s) from https://opencorporates.com/purpose.
+[OfficialWebsiteQueued] Queued likely contact page on official domain for 'Partners'.
+[OfficialWebsiteQueued] Queued official website for organization 'Partners'.
+[ListingOrganizationExtracted] Extracted organization 'Case studies' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Getting started' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Legal-Entity Data Principles' from listing.
+[ListingOrganizationExtracted] Extracted organization 'NGOs' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Financial services' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Business discovery' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Data management' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Investigations' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Third-party risk management' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Entity verification' from listing.
+[DirectorySiblingQueued] Queued 38 related directory host link(s) from https://www.issa.com/membership/levels/.
+[OfficialWebsiteQueued] Queued likely contact page on official domain for 'Explore CMM'.
+[OfficialWebsiteQueued] Queued official website for organization 'Explore CMM'.
+[OfficialWebsiteQueued] Queued likely contact page on official domain for 'AR Training & Validation'.
+[OfficialWebsiteQueued] Queued official website for organization 'AR Training & Validation'.
+[OfficialWebsiteQueued] Queued likely contact page on official domain for 'Advancing Women in the Industry'.
+[OfficialWebsiteQueued] Queued official website for organization 'Advancing Women in the Industry'.
+[OfficialWebsiteQueued] Queued likely contact page on official domain for 'Clean Homes for Cancer Patients'.
+[OfficialWebsiteQueued] Queued official website for organization 'Clean Homes for Cancer Patients'.
+[OfficialWebsiteQueued] Queued likely contact page on official domain for 'Charities'.
+[OfficialWebsiteQueued] Queued official website for organization 'Charities'.
+[ListingOrganizationExtracted] Extracted organization 'Lifetime Benefits' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Global Trade Shows' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Industry Research' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Education & Events' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Membership' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Search for:' from listing.
+[ListingOrganizationExtracted] Extracted organization 'My Account' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Charities' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Store' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Events' from listing.
+[DirectorySiblingQueued] Queued 2 related directory host link(s) from https://www.bscai.org/Events/In-Person-Events.
+[ListingOrganizationExtracted] Extracted organization 'Company Search' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Digital Badging' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Renew Membership' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Member Resource Center' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Membership' from listing.
+[ListingOrganizationExtracted] Extracted organization 'BSCAI Partners' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Staff' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Committees' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Board of Directors' from listing.
+[ListingOrganizationExtracted] Extracted organization 'About BSCAI' from listing.
+[DirectorySiblingQueued] Queued 34 related directory host link(s) from https://www.issa.com/membership/faq/.
+[OfficialWebsiteQueued] Queued likely contact page on official domain for 'Explore CMM'.
+[OfficialWebsiteQueued] Queued official website for organization 'Explore CMM'.
+[OfficialWebsiteQueued] Queued likely contact page on official domain for 'AR Training & Validation'.
+[OfficialWebsiteQueued] Queued official website for organization 'AR Training & Validation'.
+[OfficialWebsiteQueued] Queued likely contact page on official domain for 'Advancing Women in the Industry'.
+[OfficialWebsiteQueued] Queued official website for organization 'Advancing Women in the Industry'.
+[OfficialWebsiteQueued] Queued likely contact page on official domain for 'Clean Homes for Cancer Patients'.
+[OfficialWebsiteQueued] Queued official website for organization 'Clean Homes for Cancer Patients'.
+[OfficialWebsiteQueued] Queued likely contact page on official domain for 'Charities'.
+[OfficialWebsiteQueued] Queued official website for organization 'Charities'.
+[ListingOrganizationExtracted] Extracted organization 'Lifetime Benefits' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Global Trade Shows' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Industry Research' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Education & Events' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Membership' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Search for:' from listing.
+[ListingOrganizationExtracted] Extracted organization 'My Account' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Charities' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Store' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Events' from listing.
+[DirectorySiblingQueued] Queued 2 related directory host link(s) from https://www.bscai.org/Events/Events-Calendar.
+[ListingOrganizationExtracted] Extracted organization 'Company Search' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Digital Badging' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Renew Membership' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Member Resource Center' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Membership' from listing.
+[ListingOrganizationExtracted] Extracted organization 'BSCAI Partners' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Staff' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Committees' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Board of Directors' from listing.
+[ListingOrganizationExtracted] Extracted organization 'About BSCAI' from listing.
+[DirectorySiblingQueued] Queued 7 related directory host link(s) from https://opencorporates.com/public-records-privacy-policy/.
+[OfficialWebsiteQueued] Queued likely contact page on official domain for 'Partners'.
+[OfficialWebsiteQueued] Queued official website for organization 'Partners'.
+[ListingOrganizationExtracted] Extracted organization 'Case studies' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Getting started' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Legal-Entity Data Principles' from listing.
+[ListingOrganizationExtracted] Extracted organization 'NGOs' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Financial services' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Business discovery' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Data management' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Investigations' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Third-party risk management' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Entity verification' from listing.
+[DirectorySiblingQueued] Queued 35 related directory host link(s) from https://www.issa.com/membership/benefits/industry-research/.
+[OfficialWebsiteQueued] Queued likely contact page on official domain for 'Explore CMM'.
+[OfficialWebsiteQueued] Queued official website for organization 'Explore CMM'.
+[OfficialWebsiteQueued] Queued likely contact page on official domain for 'AR Training & Validation'.
+[OfficialWebsiteQueued] Queued official website for organization 'AR Training & Validation'.
+[OfficialWebsiteQueued] Queued likely contact page on official domain for 'Advancing Women in the Industry'.
+[OfficialWebsiteQueued] Queued official website for organization 'Advancing Women in the Industry'.
+[OfficialWebsiteQueued] Queued likely contact page on official domain for 'Clean Homes for Cancer Patients'.
+[OfficialWebsiteQueued] Queued official website for organization 'Clean Homes for Cancer Patients'.
+[OfficialWebsiteQueued] Queued likely contact page on official domain for 'Charities'.
+[OfficialWebsiteQueued] Queued official website for organization 'Charities'.
+[ListingOrganizationExtracted] Extracted organization 'Lifetime Benefits' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Global Trade Shows' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Industry Research' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Education & Events' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Membership' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Search for:' from listing.
+[ListingOrganizationExtracted] Extracted organization 'My Account' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Charities' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Store' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Events' from listing.
+[DirectorySiblingQueued] Queued 2 related directory host link(s) from https://www.bscai.org/Events/Company-Search.
+[ListingOrganizationExtracted] Extracted organization 'Company Search' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Digital Badging' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Renew Membership' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Member Resource Center' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Membership' from listing.
+[ListingOrganizationExtracted] Extracted organization 'BSCAI Partners' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Staff' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Committees' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Board of Directors' from listing.
+[ListingOrganizationExtracted] Extracted organization 'About BSCAI' from listing.
+[DirectorySiblingQueued] Queued 37 related directory host link(s) from https://www.issa.com/membership/benefits/education-and-events/.
+[OfficialWebsiteQueued] Queued likely contact page on official domain for 'Explore CMM'.
+[OfficialWebsiteQueued] Queued official website for organization 'Explore CMM'.
+[OfficialWebsiteQueued] Queued likely contact page on official domain for 'AR Training & Validation'.
+[OfficialWebsiteQueued] Queued official website for organization 'AR Training & Validation'.
+[OfficialWebsiteQueued] Queued likely contact page on official domain for 'Advancing Women in the Industry'.
+[OfficialWebsiteQueued] Queued official website for organization 'Advancing Women in the Industry'.
+[OfficialWebsiteQueued] Queued likely contact page on official domain for 'Clean Homes for Cancer Patients'.
+[OfficialWebsiteQueued] Queued official website for organization 'Clean Homes for Cancer Patients'.
+[OfficialWebsiteQueued] Queued likely contact page on official domain for 'Charities'.
+[OfficialWebsiteQueued] Queued official website for organization 'Charities'.
+[ListingOrganizationExtracted] Extracted organization 'Lifetime Benefits' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Global Trade Shows' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Industry Research' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Education & Events' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Membership' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Search for:' from listing.
+[ListingOrganizationExtracted] Extracted organization 'My Account' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Charities' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Store' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Events' from listing.
+[DirectorySiblingQueued] Queued 2 related directory host link(s) from https://www.bscai.org/Events/CEO-Seminar/Registration.
+[ListingOrganizationExtracted] Extracted organization 'Company Search' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Digital Badging' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Renew Membership' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Member Resource Center' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Membership' from listing.
+[ListingOrganizationExtracted] Extracted organization 'BSCAI Partners' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Staff' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Committees' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Board of Directors' from listing.
+[ListingOrganizationExtracted] Extracted organization 'About BSCAI' from listing.
+[DirectorySiblingQueued] Queued 8 related directory host link(s) from https://opencorporates.com/pricing/.
+[OfficialWebsiteQueued] Queued likely contact page on official domain for 'Partners'.
+[OfficialWebsiteQueued] Queued official website for organization 'Partners'.
+[ListingOrganizationExtracted] Extracted organization 'Case studies' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Getting started' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Legal-Entity Data Principles' from listing.
+[ListingOrganizationExtracted] Extracted organization 'NGOs' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Financial services' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Business discovery' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Data management' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Investigations' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Third-party risk management' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Entity verification' from listing.
+[DirectorySiblingQueued] Queued 37 related directory host link(s) from https://www.issa.com/membership.
+[OfficialWebsiteQueued] Queued likely contact page on official domain for 'Explore CMM'.
+[OfficialWebsiteQueued] Queued official website for organization 'Explore CMM'.
+[OfficialWebsiteQueued] Queued likely contact page on official domain for 'AR Training & Validation'.
+[OfficialWebsiteQueued] Queued official website for organization 'AR Training & Validation'.
+[OfficialWebsiteQueued] Queued likely contact page on official domain for 'Advancing Women in the Industry'.
+[OfficialWebsiteQueued] Queued official website for organization 'Advancing Women in the Industry'.
+[OfficialWebsiteQueued] Queued likely contact page on official domain for 'Clean Homes for Cancer Patients'.
+[OfficialWebsiteQueued] Queued official website for organization 'Clean Homes for Cancer Patients'.
+[OfficialWebsiteQueued] Queued likely contact page on official domain for 'Charities'.
+[OfficialWebsiteQueued] Queued official website for organization 'Charities'.
+[ListingOrganizationExtracted] Extracted organization 'Lifetime Benefits' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Global Trade Shows' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Industry Research' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Education & Events' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Membership' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Search for:' from listing.
+[ListingOrganizationExtracted] Extracted organization 'My Account' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Charities' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Store' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Events' from listing.
+[DirectorySiblingQueued] Queued 2 related directory host link(s) from https://www.bscai.org/Events/CEO-Seminar/Hotel.
+[ListingOrganizationExtracted] Extracted organization 'Company Search' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Digital Badging' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Renew Membership' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Member Resource Center' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Membership' from listing.
+[ListingOrganizationExtracted] Extracted organization 'BSCAI Partners' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Staff' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Committees' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Board of Directors' from listing.
+[ListingOrganizationExtracted] Extracted organization 'About BSCAI' from listing.
+[DirectorySiblingQueued] Queued 34 related directory host link(s) from https://www.issa.com/industry-news/government-affairs/.
+[OfficialWebsiteQueued] Queued likely contact page on official domain for 'Explore CMM'.
+[OfficialWebsiteQueued] Queued official website for organization 'Explore CMM'.
+[OfficialWebsiteQueued] Queued likely contact page on official domain for 'AR Training & Validation'.
+[OfficialWebsiteQueued] Queued official website for organization 'AR Training & Validation'.
+[OfficialWebsiteQueued] Queued likely contact page on official domain for 'Advancing Women in the Industry'.
+[OfficialWebsiteQueued] Queued official website for organization 'Advancing Women in the Industry'.
+[OfficialWebsiteQueued] Queued likely contact page on official domain for 'Clean Homes for Cancer Patients'.
+[OfficialWebsiteQueued] Queued official website for organization 'Clean Homes for Cancer Patients'.
+[OfficialWebsiteQueued] Queued likely contact page on official domain for 'Charities'.
+[OfficialWebsiteQueued] Queued official website for organization 'Charities'.
+[ListingOrganizationExtracted] Extracted organization 'Lifetime Benefits' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Global Trade Shows' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Industry Research' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Education & Events' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Membership' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Search for:' from listing.
+[ListingOrganizationExtracted] Extracted organization 'My Account' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Charities' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Store' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Events' from listing.
+[DirectorySiblingQueued] Queued 2 related directory host link(s) from https://www.bscai.org/Events/CEO-Seminar/Agenda.
+[ListingOrganizationExtracted] Extracted organization 'Company Search' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Digital Badging' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Renew Membership' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Member Resource Center' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Membership' from listing.
+[ListingOrganizationExtracted] Extracted organization 'BSCAI Partners' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Staff' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Committees' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Board of Directors' from listing.
+[ListingOrganizationExtracted] Extracted organization 'About BSCAI' from listing.
+[OfficialWebsiteQueued] Queued likely contact page on official domain for 'ISSA Hygieia Network'.
+[OfficialWebsiteQueued] Queued official website for organization 'ISSA Hygieia Network'.
+[OfficialWebsiteQueued] Queued likely contact page on official domain for 'Cleaning for a Reason'.
+[OfficialWebsiteQueued] Queued official website for organization 'Cleaning for a Reason'.
+[ListingOrganizationExtracted] Extracted organization 'Ways To Give' from listing.
+[ListingOrganizationExtracted] Extracted organization 'ISSA Hygieia Network' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Cleaning for a Reason' from listing.
+[ListingOrganizationExtracted] Extracted organization 'ISSA Scholars' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Board of Directors' from listing.
+[DirectorySiblingQueued] Queued 10 related directory host link(s) from https://opencorporates.com/partners.
+[OfficialWebsiteQueued] Queued likely contact page on official domain for 'Partners'.
+[OfficialWebsiteQueued] Queued official website for organization 'Partners'.
+[ListingOrganizationExtracted] Extracted organization 'Case studies' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Getting started' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Legal-Entity Data Principles' from listing.
+[ListingOrganizationExtracted] Extracted organization 'NGOs' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Financial services' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Business discovery' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Data management' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Investigations' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Third-party risk management' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Entity verification' from listing.
+[DirectorySiblingQueued] Queued 36 related directory host link(s) from https://www.issa.com/education/issa-cleaning-times/.
+[OfficialWebsiteQueued] Queued likely contact page on official domain for 'Explore CMM'.
+[OfficialWebsiteQueued] Queued official website for organization 'Explore CMM'.
+[OfficialWebsiteQueued] Queued likely contact page on official domain for 'AR Training & Validation'.
+[OfficialWebsiteQueued] Queued official website for organization 'AR Training & Validation'.
+[OfficialWebsiteQueued] Queued likely contact page on official domain for 'Advancing Women in the Industry'.
+[OfficialWebsiteQueued] Queued official website for organization 'Advancing Women in the Industry'.
+[OfficialWebsiteQueued] Queued likely contact page on official domain for 'Clean Homes for Cancer Patients'.
+[OfficialWebsiteQueued] Queued official website for organization 'Clean Homes for Cancer Patients'.
+[OfficialWebsiteQueued] Queued likely contact page on official domain for 'Charities'.
+[OfficialWebsiteQueued] Queued official website for organization 'Charities'.
+[ListingOrganizationExtracted] Extracted organization 'Lifetime Benefits' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Global Trade Shows' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Industry Research' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Education & Events' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Membership' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Search for:' from listing.
+[ListingOrganizationExtracted] Extracted organization 'My Account' from listing.
+[ListingOrganizationExtracted] Extracted organization 'Charities' from listing.

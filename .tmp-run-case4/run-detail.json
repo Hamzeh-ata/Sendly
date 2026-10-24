@@ -1,0 +1,343 @@
+﻿{
+    "prospects":  [
+                      {
+                          "id":  "faaf2cc5-8d77-4dc5-b4bf-c736af86bf93",
+                          "companyName":  "tel:+61417740156",
+                          "website":  "https://issa.jotform.com/252646617812966/prefill/019977f252087bb28b4a03b598e4a0616c70",
+                          "city":  null,
+                          "country":  null,
+                          "email":  null,
+                          "whatsApp":  null,
+                          "sourceUrl":  "https://www.issa.com/cdn-cgi/l/email-protection",
+                          "qualificationScore":  21,
+                          "status":  "rejected",
+                          "isQualified":  false,
+                          "createdAtUtc":  "2026-10-19T11:10:51.659286+00:00"
+                      },
+                      {
+                          "id":  "87545016-0948-49e3-8f0a-c38d3ca4484e",
+                          "companyName":  "Cleaning for a Reason",
+                          "website":  "https://cleaningforareason.org",
+                          "city":  null,
+                          "country":  null,
+                          "email":  null,
+                          "whatsApp":  null,
+                          "sourceUrl":  "https://issacharities.org/cleanitforward/",
+                          "qualificationScore":  46,
+                          "status":  "rejected",
+                          "isQualified":  false,
+                          "createdAtUtc":  "2026-10-19T11:10:34.5459442+00:00"
+                      },
+                      {
+                          "id":  "38cd0fb6-9fa7-4229-9bed-f570ef7e2d1f",
+                          "companyName":  "AR Training \u0026 Validation",
+                          "website":  "https://inspirear.com",
+                          "city":  null,
+                          "country":  "United States",
+                          "email":  null,
+                          "whatsApp":  "14238566222",
+                          "sourceUrl":  "https://inspirear.com/",
+                          "qualificationScore":  59,
+                          "status":  "rejected",
+                          "isQualified":  false,
+                          "createdAtUtc":  "2026-10-19T10:40:57.3841549+00:00"
+                      },
+                      {
+                          "id":  "7a8a7dd1-69f8-42cc-a35e-c831cb4c2aac",
+                          "companyName":  "ISSA Charities",
+                          "website":  "https://issacharities.org/ways-to-give",
+                          "city":  null,
+                          "country":  "United States",
+                          "email":  null,
+                          "whatsApp":  "847-982-6408",
+                          "sourceUrl":  "https://www.issa.com/",
+                          "qualificationScore":  59,
+                          "status":  "rejected",
+                          "isQualified":  false,
+                          "createdAtUtc":  "2026-10-19T10:40:13.6365362+00:00"
+                      },
+                      {
+                          "id":  "34c7ecaf-914c-4be7-8a0a-b6e6275e5e40",
+                          "companyName":  "Partners",
+                          "website":  "https://schools.cometoboston.com",
+                          "city":  "Boston",
+                          "country":  "United States",
+                          "email":  null,
+                          "whatsApp":  null,
+                          "sourceUrl":  "https://schools.cometoboston.com/list-of-private-schools-in-the-boston-area",
+                          "qualificationScore":  70,
+                          "status":  "needsReview",
+                          "isQualified":  false,
+                          "createdAtUtc":  "2026-10-08T11:20:15.5925634+00:00"
+                      }
+                  ],
+    "id":  "0422e254-99be-4f80-b2b8-3fb7b7e66f0b",
+    "projectId":  "c61ef480-d3b7-4f77-8d5e-25335228c0e5",
+    "projectName":  "School Watch - USA",
+    "researchQueryId":  "9988834f-7fc3-4a96-8935-40374881f663",
+    "researchQueryVersionId":  "09c54e42-8ea6-432f-bdd9-d63abaee7138",
+    "researchQueryName":  null,
+    "urlsDiscovered":  182,
+    "pagesCrawled":  80,
+    "crawlErrors":  5,
+    "status":  "completed",
+    "requestedProspectCount":  50,
+    "includeEmail":  true,
+    "includeWhatsApp":  false,
+    "minQualificationScore":  60,
+    "progressPercent":  100,
+    "companiesFound":  259,
+    "contactsFound":  0,
+    "validEmails":  0,
+    "validWhatsApp":  0,
+    "duplicatesFound":  21,
+    "rejectedCount":  23,
+    "qualifiedCount":  0,
+    "searchQueriesExecuted":  0,
+    "searchResultsReceived":  0,
+    "candidatesDiscovered":  259,
+    "candidatesAfterDeduplication":  0,
+    "candidatesValidated":  23,
+    "prospectsSaved":  2,
+    "prospectsSkippedAsDuplicates":  0,
+    "researchLimitsReached":  true,
+    "researchLimitsReachedReason":  "Maximum page fetch budget reached with 97 useful URL(s) still pending.",
+    "rejectionReasons":  {
+                             "Weak company identity":  18,
+                             "Industry mismatch":  4,
+                             "Outside target country":  1
+                         },
+    "searchProviderDiagnostics":  {
+                                      "provider":  "IndependentCrawler",
+                                      "queriesExecuted":  0,
+                                      "requestsSuccessful":  0,
+                                      "requestsFailed":  0,
+                                      "resultsReceived":  0,
+                                      "http401":  0,
+                                      "http429":  0,
+                                      "http5xx":  0,
+                                      "timeouts":  0,
+                                      "automaticDiscoverySummary":  "Automatic discovery collected 3 candidate URLs (3 domains; fresh=3, prior=0) from 3/4 providers across 1 stage(s), recovery stages: 0 (duplicates removed: 2, rejected unsafe: 0, filtered: 0, zero-return providers: 2).",
+                                      "automaticDiscoveryDuplicatesRemoved":  2,
+                                      "automaticDiscoveryRejectedUnsafe":  0,
+                                      "discoveryPlanSummary":  "Plan: 14 industries (+8 synonyms), 1 countries, 5 providers, budget 200 URLs / 100 domains / 3 stages.",
+                                      "uniqueDomainsDiscovered":  3,
+                                      "recoveryAttempts":  0,
+                                      "discoveryStopReason":  "BudgetExhausted",
+                                      "recoveryStrategies":  [
+
+                                                             ],
+                                      "sourcesReused":  2,
+                                      "sourcesAdded":  1,
+                                      "sourcesSkipped":  0,
+                                      "sourcesUnavailable":  1,
+                                      "urlsAccessible":  80,
+                                      "urlsParsed":  80,
+                                      "urlsUnavailable":  5,
+                                      "urlsRobotsBlocked":  0,
+                                      "companiesIdentified":  259,
+                                      "publicContactsExtracted":  6,
+                                      "liveVerifiedCompanies":  12,
+                                      "prospectsQualified":  2,
+                                      "urlsRejectedFiltered":  63,
+                                      "urlsAdmitted":  169,
+                                      "urlsReusedFromCache":  0,
+                                      "urlsSkippedKnownProspect":  0,
+                                      "usefulPendingUrls":  97,
+                                      "usefulUrlsLeftPendingAtStop":  97,
+                                      "newlyDiscoveredProspects":  0,
+                                      "previouslyKnownProspects":  0,
+                                      "previouslyContactedProspects":  0,
+                                      "newlyOutreachEligibleProspects":  0,
+                                      "identityVerifiedBusinesses":  5,
+                                      "emailReadyProspects":  0,
+                                      "contactableProspects":  0,
+                                      "pagesFetched":  80,
+                                      "pagesQueued":  97,
+                                      "pagesSkipped":  20,
+                                      "fetchBudgetConsumed":  80,
+                                      "fetchBudgetLimit":  80,
+                                      "requestedFetchBudget":  80,
+                                      "configuredBatchSize":  20,
+                                      "batchesStarted":  10,
+                                      "batchesCompleted":  10,
+                                      "fetchesAttempted":  85,
+                                      "fetchesSucceeded":  80,
+                                      "fetchesFailed":  5,
+                                      "fetchesSkipped":  0,
+                                      "budgetReserved":  0,
+                                      "budgetRemaining":  0,
+                                      "eligiblePendingUrls":  102,
+                                      "deferredUrls":  0,
+                                      "moreEligibleWorkRemained":  true,
+                                      "lastBudgetStopReason":  "fetch.run_budget_exhausted",
+                                      "searchLimitsExhausted":  false,
+                                      "searchLimitsExhaustedReason":  null,
+                                      "limitsExhausted":  true,
+                                      "limitsExhaustedReason":  "Maximum page fetch budget reached with 97 useful URL(s) still pending.",
+                                      "stageDurationsMs":  {
+                                                               "parseExtract":  183,
+                                                               "investigation":  620,
+                                                               "queueSchedule":  239,
+                                                               "source.IndependentCrawler":  49184,
+                                                               "discoveryBatch":  49196,
+                                                               "qualification":  50768,
+                                                               "source.WebSearch":  0
+                                                           },
+                                      "urlRejectionReasons":  {
+                                                                  "url.media_asset":  60,
+                                                                  "url.api_endpoint":  3
+                                                              },
+                                      "fetchFailureReasons":  {
+                                                                  "fetch.client_error":  1,
+                                                                  "fetch.unsupported_content":  4
+                                                              },
+                                      "discoveryStages":  [
+                                                              {
+                                                                  "stageNumber":  1,
+                                                                  "stageName":  "Primary registry and prior research",
+                                                                  "providersAttempted":  [
+                                                                                             "SeedUrls",
+                                                                                             "PriorResearchUrls",
+                                                                                             "DirectoryCatalog",
+                                                                                             "IndustryAssociationCatalog"
+                                                                                         ],
+                                                                  "candidatesAdded":  3,
+                                                                  "recoveryTriggered":  false,
+                                                                  "notes":  "Primary providers returned enough diverse candidates to begin crawling."
+                                                              }
+                                                          ],
+                                      "discoveryProviders":  [
+                                                                 {
+                                                                     "providerName":  "SeedUrls",
+                                                                     "attempted":  true,
+                                                                     "succeeded":  true,
+                                                                     "producedUsefulCandidates":  false,
+                                                                     "candidatesReturned":  0,
+                                                                     "stageNumber":  1,
+                                                                     "error":  null,
+                                                                     "zeroYieldReason":  "Catalog/provider had no eligible entries for the requested country/industry scope."
+                                                                 },
+                                                                 {
+                                                                     "providerName":  "PriorResearchUrls",
+                                                                     "attempted":  true,
+                                                                     "succeeded":  false,
+                                                                     "producedUsefulCandidates":  false,
+                                                                     "candidatesReturned":  0,
+                                                                     "stageNumber":  1,
+                                                                     "error":  "Discovery provider failed.",
+                                                                     "zeroYieldReason":  "Provider threw an exception during discovery."
+                                                                 },
+                                                                 {
+                                                                     "providerName":  "DirectoryCatalog",
+                                                                     "attempted":  true,
+                                                                     "succeeded":  true,
+                                                                     "producedUsefulCandidates":  true,
+                                                                     "candidatesReturned":  3,
+                                                                     "stageNumber":  1,
+                                                                     "error":  null,
+                                                                     "zeroYieldReason":  null
+                                                                 },
+                                                                 {
+                                                                     "providerName":  "IndustryAssociationCatalog",
+                                                                     "attempted":  true,
+                                                                     "succeeded":  true,
+                                                                     "producedUsefulCandidates":  false,
+                                                                     "candidatesReturned":  0,
+                                                                     "stageNumber":  1,
+                                                                     "error":  null,
+                                                                     "zeroYieldReason":  "All returned URLs were filtered as unsafe, duplicate, or non-admissible."
+                                                                 }
+                                                             ],
+                                      "topPendingUrls":  [
+                                                             {
+                                                                 "url":  "https://www.bscai.org/Events/In-Person-Events",
+                                                                 "priority":  52,
+                                                                 "pagePurpose":  "DirectoryListing",
+                                                                 "host":  "bscai.org",
+                                                                 "sourceType":  "LinkExpansion",
+                                                                 "reason":  "priority=15 source=14 relevance=0 purpose=16 gain=25 cost=-40 page=DirectoryListing; preserved persisted score"
+                                                             },
+                                                             {
+                                                                 "url":  "https://www.issa.com/membership/levels/",
+                                                                 "priority":  52,
+                                                                 "pagePurpose":  "DirectoryListing",
+                                                                 "host":  "issa.com",
+                                                                 "sourceType":  "LinkExpansion",
+                                                                 "reason":  "priority=15 source=14 relevance=0 purpose=16 gain=25 cost=-40 page=DirectoryListing; preserved persisted score"
+                                                             },
+                                                             {
+                                                                 "url":  "https://opencorporates.com/purpose",
+                                                                 "priority":  25,
+                                                                 "pagePurpose":  "DirectoryListing",
+                                                                 "host":  "opencorporates.com",
+                                                                 "sourceType":  "LinkExpansion",
+                                                                 "reason":  "priority=0 source=14 relevance=0 purpose=16 gain=25 cost=-110 page=DirectoryListing; preserved persisted score"
+                                                             },
+                                                             {
+                                                                 "url":  "https://hygieianetwork.org/mentoring/",
+                                                                 "priority":  19,
+                                                                 "pagePurpose":  "CompanyProfile",
+                                                                 "host":  "hygieianetwork.org",
+                                                                 "sourceType":  "LinkExpansion",
+                                                                 "reason":  "priority=0 source=14 relevance=0 purpose=12 gain=15 cost=-59 page=CompanyProfile; preserved persisted score"
+                                                             },
+                                                             {
+                                                                 "url":  "https://issacharities.org/issa-scholars/",
+                                                                 "priority":  19,
+                                                                 "pagePurpose":  "CompanyProfile",
+                                                                 "host":  "issacharities.org",
+                                                                 "sourceType":  "LinkExpansion",
+                                                                 "reason":  "priority=0 source=14 relevance=0 purpose=12 gain=15 cost=-59 page=CompanyProfile; preserved persisted score"
+                                                             },
+                                                             {
+                                                                 "url":  "https://cleaningforareason.org/feed/",
+                                                                 "priority":  0,
+                                                                 "pagePurpose":  "CompanyProfile",
+                                                                 "host":  "cleaningforareason.org",
+                                                                 "sourceType":  "LinkExpansion",
+                                                                 "reason":  "priority=0 source=14 relevance=0 purpose=12 gain=15 cost=-79 page=CompanyProfile"
+                                                             },
+                                                             {
+                                                                 "url":  "https://www.bscai.org/Events/In-Person-Events/CEO-Seminar/Optional-Events",
+                                                                 "priority":  52,
+                                                                 "pagePurpose":  "DirectoryListing",
+                                                                 "host":  "bscai.org",
+                                                                 "sourceType":  "LinkExpansion",
+                                                                 "reason":  "priority=15 source=14 relevance=0 purpose=16 gain=25 cost=-40 page=DirectoryListing; preserved persisted score"
+                                                             },
+                                                             {
+                                                                 "url":  "https://www.issa.com/membership/lifetime-benefits/",
+                                                                 "priority":  52,
+                                                                 "pagePurpose":  "DirectoryListing",
+                                                                 "host":  "issa.com",
+                                                                 "sourceType":  "LinkExpansion",
+                                                                 "reason":  "priority=15 source=14 relevance=0 purpose=16 gain=25 cost=-40 page=DirectoryListing; preserved persisted score"
+                                                             },
+                                                             {
+                                                                 "url":  "https://opencorporates.com/terms-of-use-2/",
+                                                                 "priority":  25,
+                                                                 "pagePurpose":  "DirectoryListing",
+                                                                 "host":  "opencorporates.com",
+                                                                 "sourceType":  "LinkExpansion",
+                                                                 "reason":  "priority=0 source=14 relevance=0 purpose=16 gain=25 cost=-145 page=DirectoryListing; preserved persisted score"
+                                                             },
+                                                             {
+                                                                 "url":  "https://hygieianetwork.org/regional-meet-greets/",
+                                                                 "priority":  19,
+                                                                 "pagePurpose":  "CompanyProfile",
+                                                                 "host":  "hygieianetwork.org",
+                                                                 "sourceType":  "LinkExpansion",
+                                                                 "reason":  "priority=0 source=14 relevance=0 purpose=12 gain=15 cost=-59 page=CompanyProfile; preserved persisted score"
+                                                             }
+                                                         ],
+                                      "deferredHighScoreUrls":  [
+
+                                                                ]
+                                  },
+    "error":  null,
+    "warning":  "50 requested, 0 qualified. The research budget or duration limit was exhausted before sufficient coverage was achieved.",
+    "createdAtUtc":  "2026-10-19T11:09:17.3072225+00:00",
+    "startedAtUtc":  "2026-10-19T11:09:17.4841656+00:00",
+    "completedAtUtc":  "2026-10-19T11:10:57.5520313+00:00"
+}

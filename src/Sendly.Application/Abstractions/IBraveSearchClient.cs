@@ -48,6 +48,12 @@ public class ProviderConnectionTestResult
     public string Status { get; set; } = "NotConfigured";
 
     public string? Message { get; set; }
+
+    public string? HealthState { get; set; }
+
+    public int ResultCount { get; set; }
+
+    public List<string> UnresponsiveEngines { get; set; } = [];
 }
 
 public interface IBraveSearchClient

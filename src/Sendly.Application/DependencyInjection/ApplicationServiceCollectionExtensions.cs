@@ -1,6 +1,7 @@
 using Sendly.Application.Abstractions;
 using Sendly.Application.Options;
 using Sendly.Application.Services;
+using Sendly.Application.Services.MapResearch;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -17,6 +18,7 @@ public static class ApplicationServiceCollectionExtensions
         services.Configure<OpenAiOptions>(configuration.GetSection(OpenAiOptions.SectionName));
         services.Configure<ResearchOptions>(configuration.GetSection(ResearchOptions.SectionName));
         services.Configure<BraveSearchOptions>(configuration.GetSection(BraveSearchOptions.SectionName));
+        services.Configure<OllamaOptions>(configuration.GetSection(OllamaOptions.SectionName));
         services.Configure<SearXngOptions>(configuration.GetSection(SearXngOptions.SectionName));
         services.Configure<WhatsAppBusinessOptions>(configuration.GetSection(WhatsAppBusinessOptions.SectionName));
         services.Configure<BackgroundQueueOptions>(configuration.GetSection(BackgroundQueueOptions.SectionName));
@@ -34,7 +36,23 @@ public static class ApplicationServiceCollectionExtensions
         services.AddScoped<ProspectDuplicateService>();
         services.AddScoped<OutreachProjectService>();
         services.AddScoped<ResearchRunService>();
+        services.AddScoped<ResearchQueryService>();
+        services.AddScoped<ResearchDiagnosticsService>();
+        services.AddScoped<ProspectJunkAuditService>();
+        services.AddScoped<IResearchEventRecorder, ResearchEventRecorder>();
+        services.AddScoped<DiscoverySourceRegistryService>();
+        services.AddScoped<DiscoverySourceExpansionService>();
+        services.AddScoped<CrawlRetentionService>();
+        services.AddScoped<AdaptiveResearchPlanner>();
+        services.AddScoped<MapResearchPlanBuilder>();
+        services.AddScoped<MapOsmContactBootstrapper>();
+        services.AddScoped<MapContactEnrichmentService>();
+        services.AddScoped<MapOpenAiContactExtractionService>();
+        services.AddScoped<MapContactDiagnosticsService>();
+        services.AddScoped<MapResearchProcessor>();
+        services.AddScoped<MapResearchService>();
         services.AddScoped<ResearchProcessor>();
+        services.AddScoped<ProspectQualificationService>();
         services.AddScoped<ProspectService>();
         services.AddScoped<OutreachSequenceService>();
         services.AddScoped<SequenceProcessor>();

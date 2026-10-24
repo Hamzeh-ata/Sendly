@@ -4,7 +4,7 @@ public class SearXngOptions
 {
     public const string SectionName = "SearXng";
 
-    public bool Enabled { get; set; } = true;
+    public bool Enabled { get; set; }
 
     public string BaseUrl { get; set; } = string.Empty;
 

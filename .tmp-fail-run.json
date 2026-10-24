@@ -1,0 +1,228 @@
+﻿{
+    "prospects":  [
+
+                  ],
+    "id":  "a8574bf4-a1cc-4bf4-90da-86e5a58024de",
+    "projectId":  "9fc94c32-b0ce-4e88-a1af-5b2aa9a1d06a",
+    "projectName":  "Gym Watch – United States",
+    "researchQueryId":  "c105effc-c7ff-4f65-8570-d8962264588c",
+    "researchQueryVersionId":  "7ced01c0-7a84-4e1d-b8af-6b9468e83d13",
+    "researchQueryName":  null,
+    "urlsDiscovered":  0,
+    "pagesCrawled":  0,
+    "crawlErrors":  0,
+    "status":  "completedWithFailures",
+    "requestedProspectCount":  50,
+    "includeEmail":  true,
+    "includeWhatsApp":  false,
+    "minQualificationScore":  60,
+    "progressPercent":  100,
+    "companiesFound":  0,
+    "contactsFound":  0,
+    "validEmails":  0,
+    "validWhatsApp":  0,
+    "duplicatesFound":  0,
+    "rejectedCount":  0,
+    "qualifiedCount":  0,
+    "searchQueriesExecuted":  0,
+    "searchResultsReceived":  0,
+    "candidatesDiscovered":  0,
+    "candidatesAfterDeduplication":  0,
+    "candidatesValidated":  0,
+    "prospectsSaved":  0,
+    "prospectsSkippedAsDuplicates":  0,
+    "researchLimitsReached":  true,
+    "researchLimitsReachedReason":  "No discovery sources matched the target industry and country. Country-only catalog fallback is disabled; alternative providers were attempted or reported as unavailable.",
+    "rejectionReasons":  {
+
+                         },
+    "searchProviderDiagnostics":  {
+                                      "provider":  "IndependentCrawler",
+                                      "queriesExecuted":  0,
+                                      "requestsSuccessful":  0,
+                                      "requestsFailed":  0,
+                                      "resultsReceived":  0,
+                                      "http401":  0,
+                                      "http429":  0,
+                                      "http5xx":  0,
+                                      "timeouts":  0,
+                                      "automaticDiscoverySummary":  "Automatic discovery found no candidates after 3 stage(s). Providers attempted: 6, succeeded: 5, failed: 1, zero-return: 4. Filtered: 0. Relevant industry sources: 0. Stop reason: NoRelevantDiscoverySources.",
+                                      "automaticDiscoveryDuplicatesRemoved":  0,
+                                      "automaticDiscoveryRejectedUnsafe":  0,
+                                      "discoveryPlanSummary":  "Plan: 18 industries (+8 synonyms), 1 countries, 5 providers, budget 200 URLs / 100 domains / 3 stages.",
+                                      "uniqueDomainsDiscovered":  0,
+                                      "recoveryAttempts":  2,
+                                      "discoveryStopReason":  "NoRelevantDiscoverySources",
+                                      "recoveryStrategies":  [
+                                                                 "SynonymAndArchiveRecovery",
+                                                                 "SynonymAndArchiveRecovery"
+                                                             ],
+                                      "sourcesReused":  4,
+                                      "sourcesAdded":  1,
+                                      "sourcesSkipped":  8,
+                                      "sourcesUnavailable":  1,
+                                      "urlsAccessible":  0,
+                                      "urlsParsed":  0,
+                                      "urlsUnavailable":  0,
+                                      "urlsRobotsBlocked":  0,
+                                      "companiesIdentified":  0,
+                                      "publicContactsExtracted":  0,
+                                      "liveVerifiedCompanies":  0,
+                                      "prospectsQualified":  0,
+                                      "urlsRejectedFiltered":  0,
+                                      "urlsAdmitted":  0,
+                                      "urlsReusedFromCache":  0,
+                                      "urlsSkippedKnownProspect":  0,
+                                      "usefulPendingUrls":  0,
+                                      "usefulUrlsLeftPendingAtStop":  0,
+                                      "newlyDiscoveredProspects":  0,
+                                      "previouslyKnownProspects":  0,
+                                      "previouslyContactedProspects":  0,
+                                      "newlyOutreachEligibleProspects":  0,
+                                      "identityVerifiedBusinesses":  0,
+                                      "emailReadyProspects":  0,
+                                      "contactableProspects":  0,
+                                      "pagesFetched":  0,
+                                      "pagesQueued":  0,
+                                      "pagesSkipped":  0,
+                                      "fetchBudgetConsumed":  0,
+                                      "fetchBudgetLimit":  80,
+                                      "requestedFetchBudget":  80,
+                                      "configuredBatchSize":  20,
+                                      "batchesStarted":  1,
+                                      "batchesCompleted":  1,
+                                      "fetchesAttempted":  0,
+                                      "fetchesSucceeded":  0,
+                                      "fetchesFailed":  0,
+                                      "fetchesSkipped":  0,
+                                      "budgetReserved":  0,
+                                      "budgetRemaining":  0,
+                                      "eligiblePendingUrls":  0,
+                                      "deferredUrls":  0,
+                                      "moreEligibleWorkRemained":  false,
+                                      "lastBudgetStopReason":  "discovery.no_relevant_sources",
+                                      "searchLimitsExhausted":  false,
+                                      "searchLimitsExhaustedReason":  null,
+                                      "limitsExhausted":  true,
+                                      "limitsExhaustedReason":  "No discovery sources matched the target industry and country. Country-only catalog fallback is disabled; alternative providers were attempted or reported as unavailable.",
+                                      "stageDurationsMs":  {
+                                                               "source.IndependentCrawler":  7751,
+                                                               "source.WebSearch":  0,
+                                                               "discoveryBatch":  7751
+                                                           },
+                                      "urlRejectionReasons":  {
+
+                                                              },
+                                      "fetchFailureReasons":  {
+
+                                                              },
+                                      "discoveryStages":  [
+                                                              {
+                                                                  "stageNumber":  1,
+                                                                  "stageName":  "Primary registry and prior research",
+                                                                  "providersAttempted":  [
+                                                                                             "SeedUrls",
+                                                                                             "PriorResearchUrls",
+                                                                                             "DirectoryCatalog",
+                                                                                             "IndustryAssociationCatalog"
+                                                                                         ],
+                                                                  "candidatesAdded":  1,
+                                                                  "recoveryTriggered":  true,
+                                                                  "notes":  "SynonymAndArchiveRecovery: Candidate coverage below recovery threshold."
+                                                              },
+                                                              {
+                                                                  "stageNumber":  2,
+                                                                  "stageName":  "Synonym expansion and secondary providers",
+                                                                  "providersAttempted":  [
+                                                                                             "CommonCrawlIndex"
+                                                                                         ],
+                                                                  "candidatesAdded":  0,
+                                                                  "recoveryTriggered":  true,
+                                                                  "notes":  "SynonymAndArchiveRecovery: Candidate coverage below recovery threshold."
+                                                              },
+                                                              {
+                                                                  "stageNumber":  3,
+                                                                  "stageName":  "Archive and recovery providers",
+                                                                  "providersAttempted":  [
+                                                                                             "CommonCrawlIndex"
+                                                                                         ],
+                                                                  "candidatesAdded":  0,
+                                                                  "recoveryTriggered":  false,
+                                                                  "notes":  null
+                                                              }
+                                                          ],
+                                      "discoveryProviders":  [
+                                                                 {
+                                                                     "providerName":  "SeedUrls",
+                                                                     "attempted":  true,
+                                                                     "succeeded":  true,
+                                                                     "producedUsefulCandidates":  false,
+                                                                     "candidatesReturned":  0,
+                                                                     "stageNumber":  1,
+                                                                     "error":  null,
+                                                                     "zeroYieldReason":  "Catalog/provider had no eligible entries for the requested country/industry scope."
+                                                                 },
+                                                                 {
+                                                                     "providerName":  "PriorResearchUrls",
+                                                                     "attempted":  true,
+                                                                     "succeeded":  false,
+                                                                     "producedUsefulCandidates":  false,
+                                                                     "candidatesReturned":  0,
+                                                                     "stageNumber":  1,
+                                                                     "error":  "Discovery provider failed.",
+                                                                     "zeroYieldReason":  "Provider threw an exception during discovery."
+                                                                 },
+                                                                 {
+                                                                     "providerName":  "DirectoryCatalog",
+                                                                     "attempted":  true,
+                                                                     "succeeded":  true,
+                                                                     "producedUsefulCandidates":  true,
+                                                                     "candidatesReturned":  1,
+                                                                     "stageNumber":  1,
+                                                                     "error":  null,
+                                                                     "zeroYieldReason":  null
+                                                                 },
+                                                                 {
+                                                                     "providerName":  "IndustryAssociationCatalog",
+                                                                     "attempted":  true,
+                                                                     "succeeded":  true,
+                                                                     "producedUsefulCandidates":  false,
+                                                                     "candidatesReturned":  0,
+                                                                     "stageNumber":  1,
+                                                                     "error":  null,
+                                                                     "zeroYieldReason":  "Catalog/provider had no eligible entries for the requested country/industry scope."
+                                                                 },
+                                                                 {
+                                                                     "providerName":  "CommonCrawlIndex",
+                                                                     "attempted":  true,
+                                                                     "succeeded":  true,
+                                                                     "producedUsefulCandidates":  false,
+                                                                     "candidatesReturned":  0,
+                                                                     "stageNumber":  2,
+                                                                     "error":  null,
+                                                                     "zeroYieldReason":  "Catalog/provider had no eligible entries for the requested country/industry scope."
+                                                                 },
+                                                                 {
+                                                                     "providerName":  "CommonCrawlIndex",
+                                                                     "attempted":  true,
+                                                                     "succeeded":  true,
+                                                                     "producedUsefulCandidates":  false,
+                                                                     "candidatesReturned":  0,
+                                                                     "stageNumber":  3,
+                                                                     "error":  null,
+                                                                     "zeroYieldReason":  "Catalog/provider had no eligible entries for the requested country/industry scope."
+                                                                 }
+                                                             ],
+                                      "topPendingUrls":  [
+
+                                                         ],
+                                      "deferredHighScoreUrls":  [
+
+                                                                ]
+                                  },
+    "error":  null,
+    "warning":  "50 requested, 0 qualified. No discovery sources matched the target industry and country. Country-only catalog fallback is disabled; alternative providers were attempted or reported as unavailable.",
+    "createdAtUtc":  "2026-10-19T16:31:53.4917119+00:00",
+    "startedAtUtc":  "2026-10-19T16:31:53.4978196+00:00",
+    "completedAtUtc":  "2026-10-19T16:32:01.2527692+00:00"
+}

@@ -11,11 +11,19 @@ public static class ResearchDirectoryCatalog
         new(
             ["Saudi Arabia", "SA", "KSA"],
             ["Education", "School", "Schools", "Private School"],
-            ["madares.sa", "parents.madares.sa"],
+            [
+                "madares.sa",
+                "parents.madares.sa",
+                "ksaschools.com",
+                "yaschools.com",
+                "educationmarket.sa"
+            ],
             [
                 "site:madares.sa",
                 "site:parents.madares.sa",
-                "site:parents.madares.sa/school-search"
+                "site:parents.madares.sa/school-search",
+                "site:ksaschools.com",
+                "site:yaschools.com"
             ])
     ];
 

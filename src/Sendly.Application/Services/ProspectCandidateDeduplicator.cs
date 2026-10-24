@@ -101,8 +101,9 @@ public static class ProspectCandidateDeduplicator
 
     private static ProspectCandidate Merge(ProspectCandidate target, ProspectCandidate incoming)
     {
-        target.CompanyName = PreferLonger(target.CompanyName, incoming.CompanyName) ?? target.CompanyName;
+        MergeIdentityFields(target, incoming);
         target.Website = PreferFilled(target.Website, incoming.Website);
+        target.OfficialDomain = PreferFilled(target.OfficialDomain, incoming.OfficialDomain);
         target.Country = PreferFilled(target.Country, incoming.Country);
         target.City = PreferFilled(target.City, incoming.City);
         target.Industry = PreferFilled(target.Industry, incoming.Industry);
@@ -112,6 +113,7 @@ public static class ProspectCandidateDeduplicator
         target.ContactRole = PreferFilled(target.ContactRole, incoming.ContactRole);
         MergeEmailFields(target, incoming);
         MergePhoneFields(target, incoming);
+        MergeAttributionFields(target, incoming);
         target.LinkedInUrl = PreferFilled(target.LinkedInUrl, incoming.LinkedInUrl);
         MergeSourceFields(target, incoming);
 
@@ -122,6 +124,87 @@ public static class ProspectCandidateDeduplicator
 
         target.ResearchNotes = MergeNotes(target.ResearchNotes, incoming.ResearchNotes);
         return target;
+    }
+
+    private static void MergeIdentityFields(ProspectCandidate target, ProspectCandidate incoming)
+    {
+        var targetGeneric = CompanyIdentityResolver.IsGenericName(target.CompanyName);
+        var incomingGeneric = CompanyIdentityResolver.IsGenericName(incoming.CompanyName);
+        if (targetGeneric && !incomingGeneric)
+        {
+            ApplyIdentity(target, incoming);
+            return;
+        }
+
+        if (!targetGeneric && incomingGeneric)
+        {
+            return;
+        }
+
+        if (incoming.NameConfidence > target.NameConfidence)
+        {
+            ApplyIdentity(target, incoming);
+            return;
+        }
+
+        if (incoming.NameConfidence == target.NameConfidence
+            && !string.IsNullOrWhiteSpace(incoming.CompanyName)
+            && (string.IsNullOrWhiteSpace(target.CompanyName)
+                || incoming.CompanyName.Trim().Length > target.CompanyName.Trim().Length))
+        {
+            target.CompanyName = incoming.CompanyName.Trim();
+            if (!string.IsNullOrWhiteSpace(incoming.NameReasonCode))
+            {
+                target.NameReasonCode = incoming.NameReasonCode;
+            }
+        }
+
+        if (incoming.EntityTypeConfidence > target.EntityTypeConfidence)
+        {
+            target.EntityType = incoming.EntityType;
+            target.EntityTypeConfidence = incoming.EntityTypeConfidence;
+            target.EntityTypeReasonCode = PreferFilled(target.EntityTypeReasonCode, incoming.EntityTypeReasonCode);
+        }
+    }
+
+    private static void ApplyIdentity(ProspectCandidate target, ProspectCandidate incoming)
+    {
+        if (!string.IsNullOrWhiteSpace(incoming.CompanyName))
+        {
+            target.CompanyName = incoming.CompanyName.Trim();
+        }
+
+        target.NameConfidence = incoming.NameConfidence;
+        target.NameReasonCode = PreferFilled(incoming.NameReasonCode, target.NameReasonCode);
+        if (incoming.EntityTypeConfidence >= target.EntityTypeConfidence)
+        {
+            target.EntityType = incoming.EntityType;
+            target.EntityTypeConfidence = incoming.EntityTypeConfidence;
+            target.EntityTypeReasonCode = PreferFilled(incoming.EntityTypeReasonCode, target.EntityTypeReasonCode);
+        }
+    }
+
+    private static void MergeAttributionFields(ProspectCandidate target, ProspectCandidate incoming)
+    {
+        if (incoming.ContactAttributionConfidence > target.ContactAttributionConfidence
+            || (incoming.ContactAttributionState == ContactAttributionState.SameDomain
+                && target.ContactAttributionState != ContactAttributionState.SameDomain))
+        {
+            target.ContactAttributionState = incoming.ContactAttributionState;
+            target.ContactAttributionConfidence = incoming.ContactAttributionConfidence;
+            target.ContactAttributionReasonCode = PreferFilled(
+                incoming.ContactAttributionReasonCode,
+                target.ContactAttributionReasonCode);
+            target.ContactEvidenceUrl = PreferFilled(incoming.ContactEvidenceUrl, target.ContactEvidenceUrl);
+            target.ContactPageDomain = PreferFilled(incoming.ContactPageDomain, target.ContactPageDomain);
+            return;
+        }
+
+        target.ContactEvidenceUrl = PreferFilled(target.ContactEvidenceUrl, incoming.ContactEvidenceUrl);
+        target.ContactPageDomain = PreferFilled(target.ContactPageDomain, incoming.ContactPageDomain);
+        target.ContactAttributionReasonCode = PreferFilled(
+            target.ContactAttributionReasonCode,
+            incoming.ContactAttributionReasonCode);
     }
 
     private static string? ResolveComparableWebsite(ProspectCandidate candidate)
@@ -373,6 +456,7 @@ public static class ProspectCandidateDeduplicator
         {
             CompanyName = source.CompanyName,
             Website = source.Website,
+            OfficialDomain = source.OfficialDomain,
             Country = source.Country,
             City = source.City,
             Industry = source.Industry,
@@ -390,7 +474,17 @@ public static class ProspectCandidateDeduplicator
             AdditionalSourceUrls = [..source.AdditionalSourceUrls],
             SourceType = source.SourceType,
             SourceName = source.SourceName,
-            ResearchNotes = source.ResearchNotes
+            ResearchNotes = source.ResearchNotes,
+            EntityType = source.EntityType,
+            EntityTypeConfidence = source.EntityTypeConfidence,
+            EntityTypeReasonCode = source.EntityTypeReasonCode,
+            NameConfidence = source.NameConfidence,
+            NameReasonCode = source.NameReasonCode,
+            ContactEvidenceUrl = source.ContactEvidenceUrl,
+            ContactPageDomain = source.ContactPageDomain,
+            ContactAttributionState = source.ContactAttributionState,
+            ContactAttributionConfidence = source.ContactAttributionConfidence,
+            ContactAttributionReasonCode = source.ContactAttributionReasonCode
         };
     }
 

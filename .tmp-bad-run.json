@@ -1,0 +1,370 @@
+﻿{
+    "prospects":  [
+                      {
+                          "id":  "126bda83-ce22-4af6-9c48-0683c91f1d09",
+                          "companyName":  "ISSA Charities",
+                          "website":  "http://www.issacharities.org",
+                          "city":  null,
+                          "country":  "United States",
+                          "email":  null,
+                          "whatsApp":  "847-982-6408",
+                          "sourceUrl":  "https://cleaningforareason.org/about/",
+                          "qualificationScore":  59,
+                          "status":  "rejected",
+                          "isQualified":  false,
+                          "createdAtUtc":  "2026-10-19T15:14:56.7326389+00:00"
+                      },
+                      {
+                          "id":  "fa54a052-91e8-49e1-a284-a034c3716933",
+                          "companyName":  "AR Training \u0026 Validation",
+                          "website":  "https://inspirear.com",
+                          "city":  null,
+                          "country":  "United States",
+                          "email":  null,
+                          "whatsApp":  "14238566222",
+                          "sourceUrl":  "https://inspirear.com/",
+                          "qualificationScore":  83,
+                          "status":  "readyForOutreach",
+                          "isQualified":  true,
+                          "createdAtUtc":  "2026-10-19T15:14:43.6940219+00:00"
+                      },
+                      {
+                          "id":  "8ab6343a-1ebf-4a17-8b63-83bfdee58398",
+                          "companyName":  "Clean Homes for Cancer Patients",
+                          "website":  "https://cleaningforareason.org",
+                          "city":  null,
+                          "country":  null,
+                          "email":  null,
+                          "whatsApp":  null,
+                          "sourceUrl":  "https://www.issa.com/",
+                          "qualificationScore":  17,
+                          "status":  "rejected",
+                          "isQualified":  false,
+                          "createdAtUtc":  "2026-10-19T15:14:24.2479987+00:00"
+                      },
+                      {
+                          "id":  "aa0b6303-108b-40cc-aa5f-41ac25c4f2e6",
+                          "companyName":  "Team Partners Careers",
+                          "website":  "https://opencorporates.recruitee.com",
+                          "city":  null,
+                          "country":  null,
+                          "email":  null,
+                          "whatsApp":  null,
+                          "sourceUrl":  "https://opencorporates.com/partners",
+                          "qualificationScore":  17,
+                          "status":  "rejected",
+                          "isQualified":  false,
+                          "createdAtUtc":  "2026-10-19T15:14:21.9108294+00:00"
+                      }
+                  ],
+    "id":  "4d7868b1-e0c0-421f-aa02-56a3e6d5f3de",
+    "projectId":  "9fc94c32-b0ce-4e88-a1af-5b2aa9a1d06a",
+    "projectName":  "Gym Watch – United States",
+    "researchQueryId":  "c105effc-c7ff-4f65-8570-d8962264588c",
+    "researchQueryVersionId":  "7ced01c0-7a84-4e1d-b8af-6b9468e83d13",
+    "researchQueryName":  null,
+    "urlsDiscovered":  389,
+    "pagesCrawled":  80,
+    "crawlErrors":  5,
+    "status":  "completed",
+    "requestedProspectCount":  80,
+    "includeEmail":  true,
+    "includeWhatsApp":  true,
+    "minQualificationScore":  60,
+    "progressPercent":  100,
+    "companiesFound":  163,
+    "contactsFound":  3,
+    "validEmails":  0,
+    "validWhatsApp":  1,
+    "duplicatesFound":  15,
+    "rejectedCount":  18,
+    "qualifiedCount":  1,
+    "searchQueriesExecuted":  0,
+    "searchResultsReceived":  0,
+    "candidatesDiscovered":  163,
+    "candidatesAfterDeduplication":  3,
+    "candidatesValidated":  19,
+    "prospectsSaved":  4,
+    "prospectsSkippedAsDuplicates":  0,
+    "researchLimitsReached":  true,
+    "researchLimitsReachedReason":  "Maximum page fetch budget reached with 295 useful URL(s) still pending.",
+    "rejectionReasons":  {
+                             "Weak company identity":  14,
+                             "Outside target country":  1,
+                             "Industry mismatch":  3
+                         },
+    "searchProviderDiagnostics":  {
+                                      "provider":  "IndependentCrawler",
+                                      "queriesExecuted":  0,
+                                      "requestsSuccessful":  0,
+                                      "requestsFailed":  0,
+                                      "resultsReceived":  0,
+                                      "http401":  0,
+                                      "http429":  0,
+                                      "http5xx":  0,
+                                      "timeouts":  0,
+                                      "automaticDiscoverySummary":  "Automatic discovery collected 13 candidate URLs (6 domains; fresh=13, prior=0; relevant=2, secondary=1) from 5/6 providers across 3 stage(s), recovery stages: 2 (duplicates removed: 2, rejected unsafe: 0, filtered: 3, zero-return providers: 3).",
+                                      "automaticDiscoveryDuplicatesRemoved":  2,
+                                      "automaticDiscoveryRejectedUnsafe":  0,
+                                      "discoveryPlanSummary":  "Plan: 18 industries (+14 synonyms), 1 countries, 5 providers, budget 200 URLs / 100 domains / 3 stages.",
+                                      "uniqueDomainsDiscovered":  6,
+                                      "recoveryAttempts":  2,
+                                      "discoveryStopReason":  "BudgetExhausted",
+                                      "recoveryStrategies":  [
+                                                                 "PreferOfficialCompanyDomains",
+                                                                 "PreferOfficialCompanyDomains"
+                                                             ],
+                                      "sourcesReused":  3,
+                                      "sourcesAdded":  2,
+                                      "sourcesSkipped":  8,
+                                      "sourcesUnavailable":  1,
+                                      "urlsAccessible":  80,
+                                      "urlsParsed":  80,
+                                      "urlsUnavailable":  5,
+                                      "urlsRobotsBlocked":  0,
+                                      "companiesIdentified":  163,
+                                      "publicContactsExtracted":  5,
+                                      "liveVerifiedCompanies":  7,
+                                      "prospectsQualified":  4,
+                                      "urlsRejectedFiltered":  422,
+                                      "urlsAdmitted":  251,
+                                      "urlsReusedFromCache":  2,
+                                      "urlsSkippedKnownProspect":  2,
+                                      "usefulPendingUrls":  295,
+                                      "usefulUrlsLeftPendingAtStop":  295,
+                                      "newlyDiscoveredProspects":  1,
+                                      "previouslyKnownProspects":  2,
+                                      "previouslyContactedProspects":  0,
+                                      "newlyOutreachEligibleProspects":  1,
+                                      "identityVerifiedBusinesses":  5,
+                                      "emailReadyProspects":  0,
+                                      "contactableProspects":  0,
+                                      "pagesFetched":  80,
+                                      "pagesQueued":  295,
+                                      "pagesSkipped":  39,
+                                      "fetchBudgetConsumed":  80,
+                                      "fetchBudgetLimit":  80,
+                                      "requestedFetchBudget":  80,
+                                      "configuredBatchSize":  20,
+                                      "batchesStarted":  7,
+                                      "batchesCompleted":  7,
+                                      "fetchesAttempted":  85,
+                                      "fetchesSucceeded":  80,
+                                      "fetchesFailed":  5,
+                                      "fetchesSkipped":  9,
+                                      "budgetReserved":  0,
+                                      "budgetRemaining":  0,
+                                      "eligiblePendingUrls":  286,
+                                      "deferredUrls":  2,
+                                      "moreEligibleWorkRemained":  true,
+                                      "lastBudgetStopReason":  "fetch.run_budget_exhausted",
+                                      "searchLimitsExhausted":  false,
+                                      "searchLimitsExhaustedReason":  null,
+                                      "limitsExhausted":  true,
+                                      "limitsExhaustedReason":  "Maximum page fetch budget reached with 295 useful URL(s) still pending.",
+                                      "stageDurationsMs":  {
+                                                               "parseExtract":  202,
+                                                               "investigation":  527,
+                                                               "queueSchedule":  518,
+                                                               "source.IndependentCrawler":  90141,
+                                                               "discoveryBatch":  90149,
+                                                               "qualification":  44308,
+                                                               "source.WebSearch":  0
+                                                           },
+                                      "urlRejectionReasons":  {
+                                                                  "url.media_asset":  395,
+                                                                  "url.api_endpoint":  27
+                                                              },
+                                      "fetchFailureReasons":  {
+                                                                  "fetch.forbidden":  3,
+                                                                  "fetch.client_error":  2
+                                                              },
+                                      "discoveryStages":  [
+                                                              {
+                                                                  "stageNumber":  1,
+                                                                  "stageName":  "Primary registry and prior research",
+                                                                  "providersAttempted":  [
+                                                                                             "SeedUrls",
+                                                                                             "PriorResearchUrls",
+                                                                                             "DirectoryCatalog",
+                                                                                             "IndustryAssociationCatalog"
+                                                                                         ],
+                                                                  "candidatesAdded":  3,
+                                                                  "recoveryTriggered":  true,
+                                                                  "notes":  "PreferOfficialCompanyDomains: High directory/listicle entity rate relative to target businesses."
+                                                              },
+                                                              {
+                                                                  "stageNumber":  2,
+                                                                  "stageName":  "Synonym expansion and secondary providers",
+                                                                  "providersAttempted":  [
+                                                                                             "CommonCrawlIndex"
+                                                                                         ],
+                                                                  "candidatesAdded":  10,
+                                                                  "recoveryTriggered":  true,
+                                                                  "notes":  "PreferOfficialCompanyDomains: High directory/listicle entity rate relative to target businesses."
+                                                              },
+                                                              {
+                                                                  "stageNumber":  3,
+                                                                  "stageName":  "Archive and recovery providers",
+                                                                  "providersAttempted":  [
+                                                                                             "CommonCrawlIndex"
+                                                                                         ],
+                                                                  "candidatesAdded":  0,
+                                                                  "recoveryTriggered":  false,
+                                                                  "notes":  null
+                                                              }
+                                                          ],
+                                      "discoveryProviders":  [
+                                                                 {
+                                                                     "providerName":  "SeedUrls",
+                                                                     "attempted":  true,
+                                                                     "succeeded":  true,
+                                                                     "producedUsefulCandidates":  false,
+                                                                     "candidatesReturned":  0,
+                                                                     "stageNumber":  1,
+                                                                     "error":  null,
+                                                                     "zeroYieldReason":  "Catalog/provider had no eligible entries for the requested country/industry scope."
+                                                                 },
+                                                                 {
+                                                                     "providerName":  "PriorResearchUrls",
+                                                                     "attempted":  true,
+                                                                     "succeeded":  false,
+                                                                     "producedUsefulCandidates":  false,
+                                                                     "candidatesReturned":  0,
+                                                                     "stageNumber":  1,
+                                                                     "error":  "Discovery provider failed.",
+                                                                     "zeroYieldReason":  "Provider threw an exception during discovery."
+                                                                 },
+                                                                 {
+                                                                     "providerName":  "DirectoryCatalog",
+                                                                     "attempted":  true,
+                                                                     "succeeded":  true,
+                                                                     "producedUsefulCandidates":  true,
+                                                                     "candidatesReturned":  3,
+                                                                     "stageNumber":  1,
+                                                                     "error":  null,
+                                                                     "zeroYieldReason":  null
+                                                                 },
+                                                                 {
+                                                                     "providerName":  "IndustryAssociationCatalog",
+                                                                     "attempted":  true,
+                                                                     "succeeded":  true,
+                                                                     "producedUsefulCandidates":  false,
+                                                                     "candidatesReturned":  0,
+                                                                     "stageNumber":  1,
+                                                                     "error":  null,
+                                                                     "zeroYieldReason":  "All returned URLs were filtered as unsafe, duplicate, or non-admissible."
+                                                                 },
+                                                                 {
+                                                                     "providerName":  "CommonCrawlIndex",
+                                                                     "attempted":  true,
+                                                                     "succeeded":  true,
+                                                                     "producedUsefulCandidates":  true,
+                                                                     "candidatesReturned":  10,
+                                                                     "stageNumber":  2,
+                                                                     "error":  null,
+                                                                     "zeroYieldReason":  null
+                                                                 },
+                                                                 {
+                                                                     "providerName":  "CommonCrawlIndex",
+                                                                     "attempted":  true,
+                                                                     "succeeded":  true,
+                                                                     "producedUsefulCandidates":  false,
+                                                                     "candidatesReturned":  0,
+                                                                     "stageNumber":  3,
+                                                                     "error":  null,
+                                                                     "zeroYieldReason":  "Catalog/provider had no eligible entries for the requested country/industry scope."
+                                                                 }
+                                                             ],
+                                      "topPendingUrls":  [
+                                                             {
+                                                                 "url":  "https://opencorporates.com/use-cases/professional-services",
+                                                                 "priority":  52,
+                                                                 "pagePurpose":  "DirectoryListing",
+                                                                 "host":  "opencorporates.com",
+                                                                 "sourceType":  "LinkExpansion",
+                                                                 "reason":  "priority=0 source=14 relevance=0 purpose=16 gain=25 cost=-65 page=DirectoryListing; preserved persisted score"
+                                                             },
+                                                             {
+                                                                 "url":  "https://www.bscai.org/Events/Events-Calendar",
+                                                                 "priority":  52,
+                                                                 "pagePurpose":  "DirectoryListing",
+                                                                 "host":  "bscai.org",
+                                                                 "sourceType":  "LinkExpansion",
+                                                                 "reason":  "priority=15 source=14 relevance=0 purpose=16 gain=25 cost=-40 page=DirectoryListing; preserved persisted score"
+                                                             },
+                                                             {
+                                                                 "url":  "https://www.issa.com/education/issa-clean-standards/",
+                                                                 "priority":  52,
+                                                                 "pagePurpose":  "DirectoryListing",
+                                                                 "host":  "issa.com",
+                                                                 "sourceType":  "LinkExpansion",
+                                                                 "reason":  "priority=15 source=14 relevance=0 purpose=16 gain=25 cost=-40 page=DirectoryListing; preserved persisted score"
+                                                             },
+                                                             {
+                                                                 "url":  "https://cleanfax.com/topics/",
+                                                                 "priority":  44,
+                                                                 "pagePurpose":  "CompanyProfile",
+                                                                 "host":  "cleanfax.com",
+                                                                 "sourceType":  "LinkExpansion",
+                                                                 "reason":  "priority=7 source=14 relevance=0 purpose=12 gain=15 cost=-34 page=CompanyProfile; preserved persisted score"
+                                                             },
+                                                             {
+                                                                 "url":  "https://cleaningforareason.org/in-honor-in-memory/",
+                                                                 "priority":  42,
+                                                                 "pagePurpose":  "CompanyProfile",
+                                                                 "host":  "cleaningforareason.org",
+                                                                 "sourceType":  "LinkExpansion",
+                                                                 "reason":  "priority=5 source=14 relevance=0 purpose=12 gain=15 cost=-36 page=CompanyProfile; preserved persisted score"
+                                                             },
+                                                             {
+                                                                 "url":  "https://www.hugedomains.com/case-studies.cfm",
+                                                                 "priority":  33,
+                                                                 "pagePurpose":  "CompanyProfile",
+                                                                 "host":  "hugedomains.com",
+                                                                 "sourceType":  "LinkExpansion",
+                                                                 "reason":  "priority=0 source=14 relevance=0 purpose=12 gain=15 cost=-51 page=CompanyProfile; preserved persisted score"
+                                                             },
+                                                             {
+                                                                 "url":  "https://hygieianetwork.org/?p=9143",
+                                                                 "priority":  29,
+                                                                 "pagePurpose":  "CompanyProfile",
+                                                                 "host":  "hygieianetwork.org",
+                                                                 "sourceType":  "LinkExpansion",
+                                                                 "reason":  "priority=5 source=14 relevance=0 purpose=12 gain=15 cost=-36 page=CompanyProfile; preserved persisted score"
+                                                             },
+                                                             {
+                                                                 "url":  "https://cmmonline.com/events/issa-show-north-america-2026",
+                                                                 "priority":  28,
+                                                                 "pagePurpose":  "Unknown",
+                                                                 "host":  "cmmonline.com",
+                                                                 "sourceType":  "LinkExpansion",
+                                                                 "reason":  "priority=0 source=14 relevance=0 purpose=0 gain=15 cost=-93 page=Unknown; preserved persisted score"
+                                                             },
+                                                             {
+                                                                 "url":  "https://issacharities.org/board-of-directors/",
+                                                                 "priority":  15,
+                                                                 "pagePurpose":  "CompanyProfile",
+                                                                 "host":  "issacharities.org",
+                                                                 "sourceType":  "LinkExpansion",
+                                                                 "reason":  "priority=3 source=14 relevance=0 purpose=12 gain=15 cost=-38 page=CompanyProfile; preserved persisted score"
+                                                             },
+                                                             {
+                                                                 "url":  "https://opencorporates.com/contact/",
+                                                                 "priority":  47,
+                                                                 "pagePurpose":  "DirectoryListing",
+                                                                 "host":  "opencorporates.com",
+                                                                 "sourceType":  "LinkExpansion",
+                                                                 "reason":  "priority=0 source=14 relevance=0 purpose=24 gain=25 cost=-65 page=DirectoryListing; preserved persisted score"
+                                                             }
+                                                         ],
+                                      "deferredHighScoreUrls":  [
+
+                                                                ]
+                                  },
+    "error":  null,
+    "warning":  "80 requested, 1 qualified. The research budget or duration limit was exhausted before sufficient coverage was achieved.",
+    "createdAtUtc":  "2026-10-19T15:13:32.137112+00:00",
+    "startedAtUtc":  "2026-10-19T15:13:32.1513985+00:00",
+    "completedAtUtc":  "2026-10-19T15:15:46.6524945+00:00"
+}

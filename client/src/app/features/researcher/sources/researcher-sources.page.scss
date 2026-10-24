@@ -1,0 +1,14 @@
+.clickable {
+  cursor: pointer;
+}
+
+.clickable:hover,
+.clickable.selected {
+  background: rgba(56, 189, 248, 0.08);
+}
+
+.detail-name {
+  margin: 0 0 0.75rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+}

@@ -1,0 +1,70 @@
+<div class="researcher-page">
+  <div class="page-header">
+    <div>
+      <h2>{{ 'researcher.coverage.title' | translate }}</h2>
+      <p class="subtitle">{{ 'researcher.coverage.subtitle' | translate }}</p>
+    </div>
+  </div>
+
+  @if (loading()) {
+    <div class="rc-skeleton">
+      <div class="bone"></div>
+      <div class="bone"></div>
+    </div>
+  } @else if (!hasData()) {
+    <app-empty-state
+      titleKey="researcher.coverage.emptyTitle"
+      descriptionKey="researcher.coverage.emptyDescription"
+    />
+  } @else {
+    <section class="rc-panel">
+      <h3>{{ 'researcher.coverage.measuredTitle' | translate }}</h3>
+      <div class="rc-grid metrics">
+        @for (tile of coverageTiles(); track tile.labelKey) {
+          <app-metric-tile [labelKey]="tile.labelKey" [value]="tile.value" [tone]="tile.tone" />
+        }
+      </div>
+    </section>
+
+    <section class="rc-panel">
+      <h3>{{ 'researcher.coverage.unavailableTitle' | translate }}</h3>
+      <div class="rc-grid metrics">
+        @for (tile of unavailableTiles(); track tile.labelKey) {
+          <app-metric-tile [labelKey]="tile.labelKey" [value]="tile.value" />
+        }
+      </div>
+    </section>
+
+    <section class="rc-panel">
+      <h3>{{ 'researcher.coverage.sourceMetricsTitle' | translate }}</h3>
+      @if (sourceRows().length === 0) {
+        <p class="rc-muted">{{ 'researcher.overview.noSources' | translate }}</p>
+      } @else {
+        <table class="rc-table">
+          <thead>
+            <tr>
+              <th>{{ 'researcher.sources.name' | translate }}</th>
+              <th>{{ 'researcher.sources.candidates' | translate }}</th>
+              <th>{{ 'researcher.sources.verified' | translate }}</th>
+              <th>{{ 'researcher.sources.qualified' | translate }}</th>
+              <th>{{ 'researcher.sources.avgFetch' | translate }}</th>
+              <th>{{ 'researcher.sources.failureRate' | translate }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (source of sourceRows(); track source.id) {
+              <tr>
+                <td>{{ source.name }}</td>
+                <td class="rc-mono">{{ source.candidatesDiscovered }}</td>
+                <td class="rc-mono">{{ source.liveVerifiedCompanies }}</td>
+                <td class="rc-mono">{{ source.qualifiedProspectsYielded }}</td>
+                <td class="rc-mono">{{ source.averageFetchLabel }}</td>
+                <td class="rc-mono">{{ source.failureRateLabel }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      }
+    </section>
+  }
+</div>

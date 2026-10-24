@@ -59,6 +59,9 @@
               @if (account.provider === 'smtp' && account.host) {
                 <p class="profile-detail muted">{{ account.host }}:{{ account.port }}</p>
               }
+              @if (account.provider === 'smtp' && account.password) {
+                <p class="profile-detail">{{ 'settings.password' | translate }}: {{ account.password }}</p>
+              }
             </div>
             <div class="profile-actions">
               <button
@@ -117,9 +120,12 @@
         [testingSearXng]="testingSearXng()"
         [searXngConnectionStatus]="searXngConnectionStatus()"
         [searXngConnectionMessage]="searXngConnectionMessage()"
+        [testingOllama]="testingOllama()"
+        [ollamaConnectionMessage]="ollamaConnectionMessage()"
         (saveRequested)="onConfigSave($event)"
         (testBraveRequested)="onTestBraveConnection()"
         (testSearXngRequested)="onTestSearXngConnection()"
+        (testOllamaRequested)="onTestOllamaConnection()"
       />
     } @else {
       <p class="empty-hint">{{ 'appSettings.loadError' | translate }}</p>
@@ -227,18 +233,13 @@
               </div>
               <div class="field">
                 <label>{{ 'settings.password' | translate }}</label>
-                <div class="password-field">
-                  <input
-                    [type]="showPassword() ? 'text' : 'password'"
-                    class="input"
-                    [value]="password()"
-                    (input)="onPasswordChange($any($event.target).value)"
-                    [placeholder]="passwordPlaceholder()"
-                  />
-                  <button type="button" class="btn btn-ghost toggle-btn" (click)="togglePassword()">
-                    {{ (showPassword() ? 'settings.hidePassword' : 'settings.showPassword') | translate }}
-                  </button>
-                </div>
+                <input
+                  type="text"
+                  class="input"
+                  [value]="password()"
+                  (input)="onPasswordChange($any($event.target).value)"
+                  [placeholder]="'settings.passwordPlaceholder' | translate"
+                />
               </div>
             </div>
           </section>

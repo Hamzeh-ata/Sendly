@@ -1,0 +1,403 @@
+================================================================================
+this-run b9276d24 event count 468
+eventTypes: {'Completed': 1, 'Qualified': 4, 'CompanyExtracted': 19, 'DuplicateSkipped': 6, 'Rejected': 1, 'UrlDiscovered': 58, 'DirectorySiblingQueued': 18, 'InvestigationFollowUpQueued': 19, 'EvidenceMerged': 4, 'ListingOrganizationExtracted': 189, 'OrganizationProfilesDiscovered': 20, 'PageCrawled': 20, 'FetchStarted': 34, 'RedirectFollowed': 8, 'ContactExtracted': 4, 'FetchFailed': 14, 'DiscoveryCoverageDecision': 1, 'SourceEligibilityEvaluated': 47, 'Started': 1}
+stages: {'RunLifecycle': 2, 'Qualification': 12, 'CompanyExtraction': 221, 'ProspectMerge': 10, 'Discovery': 124, 'Queue': 19, 'Parse': 20, 'Fetch': 56, 'ContactExtraction': 4}
+severities: {'Warning': 1, 'Info': 453, 'Error': 14}
+--- first sample of each eventType ---
+  Completed | stage=RunLifecycle sev=Warning provider=None
+    Research run finished with status CompletedWithFailures
+    dataJson={"status":"CompletedWithFailures","qualified":4,"requested":50,"pagesCrawled":20,"crawlErrors":14}
+  Qualified | stage=Qualification sev=Info provider=None
+    Qualified (needs review): ١٠ من أفضل المدارس البريطانية في عجمان
+    dataJson={"company":"\u0661\u0660 \u0645\u0646 \u0623\u0641\u0636\u0644 \u0627\u0644\u0645\u062F\u0627\u0631\u0633 \u0627\u0644\u0628\u0631\u064A\u0637\u0627\u0646\u064A\u0629 \u0641\u064A \u0639\u062C\u0645\u0627\u0646","score":79,"status":"NeedsReview"}
+  CompanyExtracted | stage=CompanyExtraction sev=Info provider=None
+    Company candidate: ١٠ من أفضل المدارس البريطانية في عجمان
+    dataJson={"company":"\u0661\u0660 \u0645\u0646 \u0623\u0641\u0636\u0644 \u0627\u0644\u0645\u062F\u0627\u0631\u0633 \u0627\u0644\u0628\u0631\u064A\u0637\u0627\u0646\u064A\u0629 \u0641\u064A \u0639\u062C\u0645\u0627\u0646","source":"SearXNG"}
+  DuplicateSkipped | stage=ProspectMerge sev=Info provider=None
+    Duplicate skipped: مدارس الفيصلية الأهلية بجدة — تعليم متميز منذ 1980 (EmailContacted)
+    dataJson={"company":"\u0645\u062F\u0627\u0631\u0633 \u0627\u0644\u0641\u064A\u0635\u0644\u064A\u0629 \u0627\u0644\u0623\u0647\u0644\u064A\u0629 \u0628\u062C\u062F\u0629 \u2014 \u062A\u0639\u0644\u064A\u0645 \u0645\u062A\u0645\u064A\u0632 \u0645\u0646\u0630 1980","kind":"EmailContacted"}
+  Rejected | stage=Qualification sev=Info provider=None
+    Rejected: مدارس تربية خاصة و دمج في دبي
+    dataJson={"company":"\u0645\u062F\u0627\u0631\u0633 \u062A\u0631\u0628\u064A\u0629 \u062E\u0627\u0635\u0629 \u0648 \u062F\u0645\u062C \u0641\u064A \u062F\u0628\u064A","score":30,"reason":"Non-target entity type","missingCriteria":["officialWebsite","entityType","companyIdentity","targetCo
+  UrlDiscovered | stage=Discovery sev=Info provider=IndependentCrawler
+    Expanded 25 prioritized links from https://opencorporates.com/pricing/
+    dataJson={"reasonCode":"priority.expansion_accepted","internalCount":25,"externalCount":0,"directorySiblingCount":8}
+  DirectorySiblingQueued | stage=Discovery sev=Info provider=IndependentCrawler
+    Queued 8 related directory host link(s) from https://opencorporates.com/pricing/.
+    dataJson={"reasonCode":"investigation.directory_sibling_host","count":8}
+  InvestigationFollowUpQueued | stage=Queue sev=Info provider=IndependentCrawler
+    Queued 30 investigation follow-up URL(s) from https://opencorporates.com/pricing/.
+    dataJson={"reasonCode":"investigation.followups_queued","count":30,"officialDomains":0,"profiles":56,"summary":"role=Directory; page=Contact; listings=25; followUps=47; candidates=9; orgs=35"}
+  EvidenceMerged | stage=ProspectMerge sev=Info provider=IndependentCrawler
+    Merged evidence into 9 organization candidate(s).
+    dataJson={"count":9}
+  ListingOrganizationExtracted | stage=CompanyExtraction sev=Info provider=IndependentCrawler
+    Extracted organization 'Up to 200 API calls/day' from listing.
+    dataJson={"name":"Up to 200 API calls/day","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block","confidence":55}
+  OrganizationProfilesDiscovered | stage=CompanyExtraction sev=Info provider=IndependentCrawler
+    Found 56 organization profile signal(s).
+    dataJson={"profiles":56,"listings":25}
+  PageCrawled | stage=Parse sev=Info provider=IndependentCrawler
+    Crawled https://opencorporates.com/pricing/
+    dataJson={"title":"Pricing \u2013 OpenCorporates","contentLengthBytes":149229,"redirectCount":0,"factCount":3}
+  FetchStarted | stage=Fetch sev=Info provider=IndependentCrawler
+    Fetching https://opencorporates.com/pricing/
+  RedirectFollowed | stage=Fetch sev=Info provider=IndependentCrawler
+    Followed 1 redirect(s) to https://opencorporates.com/plug-in-our-data/
+    dataJson={"redirectCount":1,"finalUrl":"https://opencorporates.com/plug-in-our-data/"}
+  ContactExtracted | stage=ContactExtraction sev=Info provider=IndependentCrawler
+    Extracted 1 public contact(s) from https://opencorporates.com/user-privacy-policy/
+    dataJson={"contacts":["email"]}
+  FetchFailed | stage=Fetch sev=Error provider=IndependentCrawler
+    Host returned HTTP 404.
+    dataJson={"reasonCode":"fetch.client_error","kind":"Unavailable","retryAppropriate":false,"hostAvoided":true}
+  DiscoveryCoverageDecision | stage=Discovery sev=Info provider=IndependentCrawler
+    Automatic discovery collected 15 candidate URLs (2 domains; fresh=15, prior=0; relevant=0, secondary=1) from 5/6 providers across 3 stage(s), recovery stages: 2 (duplicates removed: 0, rejected unsafe: 0, filtered: 2, ze
+    dataJson={"stopReason":"NoRelevantDiscoverySources","relevantIndustrySources":0,"secondaryRegistries":1,"candidateCount":15,"uniqueDomains":2}
+  SourceEligibilityEvaluated | stage=Discovery sev=Info provider=IndependentCrawler
+    Independent Schools Council: Ineligible — Source country coverage does not include the target country.
+    dataJson={"sourceName":"Independent Schools Council","sourceUrl":"https://www.isc.co.uk/schools/","sourceKind":"Association","state":"Ineligible","reasonCode":"source.country_mismatch","explanation":"Source country coverage does not include the target country.","countryMatched":false,"ind
+  Started | stage=RunLifecycle sev=Info provider=None
+    Research run started for ExperienceOps – UAE
+    dataJson={"projectId":"188b202c-faf2-40ea-bcde-5293f2f161f6","requested":50}
+--- search-like events ---
+count 35
+parsed query texts 10
+  0x Research run finished with status CompletedWithFailures
+  0x Extracted organization 'Advanced search' from listing.
+  0x Expanded 25 prioritized links from https://opencorporates.com/advanced-search/
+  0x Queued 7 related directory host link(s) from https://opencorporates.com/advanced-search/.
+  0x Queued 30 investigation follow-up URL(s) from https://opencorporates.com/advanced-search/.
+  0x Crawled https://opencorporates.com/advanced-search/
+  0x Fetching https://opencorporates.com/advanced-search/
+  0x OpenCorporates Search Hub: EligibleSecondary — Generic registry may reveal target organizations but is not a relevant industry directory. Matched via 'Archery Club↔fitness club'.
+  0x Madares Parent Search: Ineligible — Source country coverage does not include the target country.
+  0x Research run started for ExperienceOps – UAE
+--- first 20 searchish ---
+  Completed | RunLifecycle | Research run finished with status CompletedWithFailures | provider= None
+    dataJson {"status":"CompletedWithFailures","qualified":4,"requested":50,"pagesCrawled":20,"crawlErrors":14}
+  CompanyExtracted | CompanyExtraction | Company candidate: ١٠ من أفضل المدارس البريطانية في عجمان | provider= None
+    dataJson {"company":"\u0661\u0660 \u0645\u0646 \u0623\u0641\u0636\u0644 \u0627\u0644\u0645\u062F\u0627\u0631\u0633 \u0627\u0644\u0628\u0631\u064A\u0637\u0627\u0646\u064A\u0629 \u0641\u064A \u0639\u062C\u0645\u0627\u0646","source":"SearXNG"}
+  CompanyExtracted | CompanyExtraction | Company candidate: Deutsche Internationale Schule Sharjah | provider= None
+    dataJson {"company":"Deutsche Internationale Schule Sharjah","source":"SearXNG \u002B Web search (\u0627\u0644\u0645\u062F\u0631\u0633\u0629 \u0627\u0644\u0623\u0644\u0645\u0627\u0646\u064A\u0629 \u0627\u0644\u062F\u0648\u0644\u064A\u0629 \u0628\u0627\u0644\u0634\u0627\u0631\u0642\u0629 - Deutsche Schule Sharjah)"}
+  CompanyExtracted | CompanyExtraction | Company candidate: مدارس نجد الأهلية | provider= None
+    dataJson {"company":"\u0645\u062F\u0627\u0631\u0633 \u0646\u062C\u062F \u0627\u0644\u0623\u0647\u0644\u064A\u0629","source":"SearXNG \u002B Web search (\u0645\u062F\u0627\u0631\u0633 \u0646\u062C\u062F \u0627\u0644\u0623\u0647\u0644\u064A\u0629)"}
+  CompanyExtracted | CompanyExtraction | Company candidate: مدرسة منارة الشارقة الخاصة | provider= None
+    dataJson {"company":"\u0645\u062F\u0631\u0633\u0629 \u0645\u0646\u0627\u0631\u0629 \u0627\u0644\u0634\u0627\u0631\u0642\u0629 \u0627\u0644\u062E\u0627\u0635\u0629","source":"SearXNG \u002B Web search (\u0645\u062F\u0631\u0633\u0629 \u0645\u0646\u0627\u0631\u0629 \u0627\u0644\u0634\u0627\u0631\u0642\u0629 \u0627\u0644\u062E\u062
+  CompanyExtracted | CompanyExtraction | Company candidate: مدرسة اللؤلؤة الابتدائية في أبوظبي | provider= None
+    dataJson {"company":"\u0645\u062F\u0631\u0633\u0629 \u0627\u0644\u0644\u0624\u0644\u0624\u0629 \u0627\u0644\u0627\u0628\u062A\u062F\u0627\u0626\u064A\u0629 \u0641\u064A \u0623\u0628\u0648\u0638\u0628\u064A","source":"SearXNG \u002B Web search (\u0623\u0639\u0644\u0649 \u0627\u0644\u0645\u062F\u0627\u0631\u0633 \u0641\u064A \u06
+  CompanyExtracted | CompanyExtraction | Company candidate: مدارس تربية خاصة و دمج في دبي | provider= None
+    dataJson {"company":"\u0645\u062F\u0627\u0631\u0633 \u062A\u0631\u0628\u064A\u0629 \u062E\u0627\u0635\u0629 \u0648 \u062F\u0645\u062C \u0641\u064A \u062F\u0628\u064A","source":"SearXNG \u002B Web search (\u0645\u062F\u0627\u0631\u0633 \u062A\u0631\u0628\u064A\u0629 \u062E\u0627\u0635\u0629 \u0648 \u062F\u0645\u062C \u0641\u064A
+  CompanyExtracted | CompanyExtraction | Company candidate: المدارس السعودية ( عالمي | provider= None
+    dataJson {"company":"\u0627\u0644\u0645\u062F\u0627\u0631\u0633 \u0627\u0644\u0633\u0639\u0648\u062F\u064A\u0629 ( \u0639\u0627\u0644\u0645\u064A","source":"SearXNG"}
+  CompanyExtracted | CompanyExtraction | Company candidate: نبذة عن أكاديمية العين البريطانية | provider= None
+    dataJson {"company":"\u0646\u0628\u0630\u0629 \u0639\u0646 \u0623\u0643\u0627\u062F\u064A\u0645\u064A\u0629 \u0627\u0644\u0639\u064A\u0646 \u0627\u0644\u0628\u0631\u064A\u0637\u0627\u0646\u064A\u0629","source":"SearXNG \u002B Web search (\u0646\u0628\u0630\u0629 \u0639\u0646 \u0623\u0643\u0627\u062F\u064A\u0645\u064A\u0629 \u06
+  CompanyExtracted | CompanyExtraction | Company candidate: مدرسة الامارات الخاصة الفجيرة | provider= None
+    dataJson {"company":"\u0645\u062F\u0631\u0633\u0629 \u0627\u0644\u0627\u0645\u0627\u0631\u0627\u062A \u0627\u0644\u062E\u0627\u0635\u0629 \u0627\u0644\u0641\u062C\u064A\u0631\u0629","source":"SearXNG \u002B Web search (\u0645\u062F\u0631\u0633\u0629 \u0627\u0644\u0627\u0645\u0627\u0631\u0627\u062A \u0627\u0644\u062E\u0627\u0635
+  CompanyExtracted | CompanyExtraction | Company candidate: هيئة الشارقة للتعليم الخاص | provider= None
+    dataJson {"company":"\u0647\u064A\u0626\u0629 \u0627\u0644\u0634\u0627\u0631\u0642\u0629 \u0644\u0644\u062A\u0639\u0644\u064A\u0645 \u0627\u0644\u062E\u0627\u0635","source":"SearXNG"}
+  ListingOrganizationExtracted | CompanyExtraction | Extracted organization 'Advanced search' from listing. | provider= IndependentCrawler
+    dataJson {"name":"Advanced search","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block","confidence":65}
+  ListingOrganizationExtracted | CompanyExtraction | Extracted organization 'Advanced search' from listing. | provider= IndependentCrawler
+    dataJson {"name":"Advanced search","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block","confidence":65}
+  ListingOrganizationExtracted | CompanyExtraction | Extracted organization 'Advanced search' from listing. | provider= IndependentCrawler
+    dataJson {"name":"Advanced search","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block","confidence":65}
+  ListingOrganizationExtracted | CompanyExtraction | Extracted organization 'Advanced search' from listing. | provider= IndependentCrawler
+    dataJson {"name":"Advanced search","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block","confidence":65}
+  ListingOrganizationExtracted | CompanyExtraction | Extracted organization 'Advanced search' from listing. | provider= IndependentCrawler
+    dataJson {"name":"Advanced search","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block","confidence":65}
+  ListingOrganizationExtracted | CompanyExtraction | Extracted organization 'Advanced search' from listing. | provider= IndependentCrawler
+    dataJson {"name":"Advanced search","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block","confidence":65}
+  ListingOrganizationExtracted | CompanyExtraction | Extracted organization 'Advanced search' from listing. | provider= IndependentCrawler
+    dataJson {"name":"Advanced search","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block","confidence":65}
+  ListingOrganizationExtracted | CompanyExtraction | Extracted organization 'Advanced search' from listing. | provider= IndependentCrawler
+    dataJson {"name":"Advanced search","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block","confidence":65}
+  ListingOrganizationExtracted | CompanyExtraction | Extracted organization 'Advanced search' from listing. | provider= IndependentCrawler
+    dataJson {"name":"Advanced search","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block","confidence":65}
+--- DateTimeOffset / SQLite / SearXNG ---
+  DateTimeOffset: 0
+  SQLite: 0
+  SearXNG: 10
+   sample: CompanyExtracted Company candidate: ١٠ من أفضل المدارس البريطانية في عجمان
+   dataJson: {"company":"\u0661\u0660 \u0645\u0646 \u0623\u0641\u0636\u0644 \u0627\u0644\u0645\u062F\u0627\u0631\u0633 \u0627\u0644\u0628\u0631\u064A\u0637\u0627\u0646\u064A\u0629 \u0641\u064A \u0639\u062C\u0645\u0627\u0646","source":"SearXNG"}
+  searx: 10
+   sample: CompanyExtracted Company candidate: ١٠ من أفضل المدارس البريطانية في عجمان
+   dataJson: {"company":"\u0661\u0660 \u0645\u0646 \u0623\u0641\u0636\u0644 \u0627\u0644\u0645\u062F\u0627\u0631\u0633 \u0627\u0644\u0628\u0631\u064A\u0637\u0627\u0646\u064A\u0629 \u0641\u064A \u0639\u062C\u0645\u0627\u0646","source":"SearXNG"}
+  Maximum search: 0
+--- distinct messages for Error/Warning ---
+  13x FetchFailed: HTTP request failed.
+  1x Completed: Research run finished with status CompletedWithFailures
+  1x FetchFailed: Host returned HTTP 404.
+================================================================================
+this-run2 040a6670 event count 441
+eventTypes: {'CompanyExtracted': 4, 'UrlDiscovered': 58, 'DirectorySiblingQueued': 18, 'InvestigationFollowUpQueued': 19, 'EvidenceMerged': 4, 'ListingOrganizationExtracted': 189, 'OrganizationProfilesDiscovered': 20, 'PageCrawled': 20, 'FetchStarted': 34, 'RedirectFollowed': 8, 'ContactExtracted': 4, 'FetchFailed': 14, 'DiscoveryCoverageDecision': 1, 'SourceEligibilityEvaluated': 47, 'Started': 1}
+stages: {'Qualification': 2, 'CompanyExtraction': 211, 'Discovery': 124, 'Queue': 19, 'ProspectMerge': 4, 'Parse': 20, 'Fetch': 56, 'ContactExtraction': 4, 'RunLifecycle': 1}
+severities: {'Info': 427, 'Error': 14}
+--- first sample of each eventType ---
+  CompanyExtracted | stage=Qualification sev=Info provider=None
+    Discovered (not campaign-qualified): IMPORTANT INFORMATION AND WHO WE ARE
+    dataJson={"company":"IMPORTANT INFORMATION AND WHO WE ARE","score":38,"reason":"Industry mismatch","missingCriteria":["officialWebsite","publicBusinessEmail","targetCountry","targetIndustry","keywords"]}
+  UrlDiscovered | stage=Discovery sev=Info provider=IndependentCrawler
+    Expanded 25 prioritized links from https://opencorporates.com/pricing/
+    dataJson={"reasonCode":"priority.expansion_accepted","internalCount":25,"externalCount":0,"directorySiblingCount":8}
+  DirectorySiblingQueued | stage=Discovery sev=Info provider=IndependentCrawler
+    Queued 8 related directory host link(s) from https://opencorporates.com/pricing/.
+    dataJson={"reasonCode":"investigation.directory_sibling_host","count":8}
+  InvestigationFollowUpQueued | stage=Queue sev=Info provider=IndependentCrawler
+    Queued 30 investigation follow-up URL(s) from https://opencorporates.com/pricing/.
+    dataJson={"reasonCode":"investigation.followups_queued","count":30,"officialDomains":0,"profiles":56,"summary":"role=Directory; page=Contact; listings=25; followUps=47; candidates=9; orgs=35"}
+  EvidenceMerged | stage=ProspectMerge sev=Info provider=IndependentCrawler
+    Merged evidence into 9 organization candidate(s).
+    dataJson={"count":9}
+  ListingOrganizationExtracted | stage=CompanyExtraction sev=Info provider=IndependentCrawler
+    Extracted organization 'Up to 200 API calls/day' from listing.
+    dataJson={"name":"Up to 200 API calls/day","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block","confidence":55}
+  OrganizationProfilesDiscovered | stage=CompanyExtraction sev=Info provider=IndependentCrawler
+    Found 56 organization profile signal(s).
+    dataJson={"profiles":56,"listings":25}
+  PageCrawled | stage=Parse sev=Info provider=IndependentCrawler
+    Crawled https://opencorporates.com/pricing/
+    dataJson={"title":"Pricing \u2013 OpenCorporates","contentLengthBytes":149229,"redirectCount":0,"factCount":3}
+  FetchStarted | stage=Fetch sev=Info provider=IndependentCrawler
+    Fetching https://opencorporates.com/pricing/
+  RedirectFollowed | stage=Fetch sev=Info provider=IndependentCrawler
+    Followed 1 redirect(s) to https://opencorporates.com/plug-in-our-data/
+    dataJson={"redirectCount":1,"finalUrl":"https://opencorporates.com/plug-in-our-data/"}
+  ContactExtracted | stage=ContactExtraction sev=Info provider=IndependentCrawler
+    Extracted 1 public contact(s) from https://opencorporates.com/user-privacy-policy/
+    dataJson={"contacts":["email"]}
+  FetchFailed | stage=Fetch sev=Error provider=IndependentCrawler
+    Host returned HTTP 404.
+    dataJson={"reasonCode":"fetch.client_error","kind":"Unavailable","retryAppropriate":false,"hostAvoided":true}
+  DiscoveryCoverageDecision | stage=Discovery sev=Info provider=IndependentCrawler
+    Automatic discovery collected 15 candidate URLs (2 domains; fresh=15, prior=0; relevant=0, secondary=1) from 5/6 providers across 3 stage(s), recovery stages: 2 (duplicates removed: 14, rejected unsafe: 0, filtered: 4, z
+    dataJson={"stopReason":"NoRelevantDiscoverySources","relevantIndustrySources":0,"secondaryRegistries":1,"candidateCount":15,"uniqueDomains":2}
+  SourceEligibilityEvaluated | stage=Discovery sev=Info provider=IndependentCrawler
+    Independent Schools Council: Ineligible — Source country coverage does not include the target country.
+    dataJson={"sourceName":"Independent Schools Council","sourceUrl":"https://www.isc.co.uk/schools/","sourceKind":"Association","state":"Ineligible","reasonCode":"source.country_mismatch","explanation":"Source country coverage does not include the target country.","countryMatched":false,"ind
+  Started | stage=RunLifecycle sev=Info provider=None
+    Research run started for ExperienceOps – UAE
+    dataJson={"projectId":"188b202c-faf2-40ea-bcde-5293f2f161f6","requested":50}
+--- search-like events ---
+count 24
+parsed query texts 9
+  0x Extracted organization 'Advanced search' from listing.
+  0x Expanded 25 prioritized links from https://opencorporates.com/advanced-search/
+  0x Queued 7 related directory host link(s) from https://opencorporates.com/advanced-search/.
+  0x Queued 30 investigation follow-up URL(s) from https://opencorporates.com/advanced-search/.
+  0x Crawled https://opencorporates.com/advanced-search/
+  0x Fetching https://opencorporates.com/advanced-search/
+  0x OpenCorporates Search Hub: EligibleSecondary — Generic registry may reveal target organizations but is not a relevant industry directory. Matched via 'Archery Club↔fitness club'.
+  0x Madares Parent Search: Ineligible — Source country coverage does not include the target country.
+  0x Research run started for ExperienceOps – UAE
+--- first 20 searchish ---
+  ListingOrganizationExtracted | CompanyExtraction | Extracted organization 'Advanced search' from listing. | provider= IndependentCrawler
+    dataJson {"name":"Advanced search","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block","confidence":65}
+  ListingOrganizationExtracted | CompanyExtraction | Extracted organization 'Advanced search' from listing. | provider= IndependentCrawler
+    dataJson {"name":"Advanced search","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block","confidence":65}
+  ListingOrganizationExtracted | CompanyExtraction | Extracted organization 'Advanced search' from listing. | provider= IndependentCrawler
+    dataJson {"name":"Advanced search","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block","confidence":65}
+  ListingOrganizationExtracted | CompanyExtraction | Extracted organization 'Advanced search' from listing. | provider= IndependentCrawler
+    dataJson {"name":"Advanced search","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block","confidence":65}
+  ListingOrganizationExtracted | CompanyExtraction | Extracted organization 'Advanced search' from listing. | provider= IndependentCrawler
+    dataJson {"name":"Advanced search","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block","confidence":65}
+  ListingOrganizationExtracted | CompanyExtraction | Extracted organization 'Advanced search' from listing. | provider= IndependentCrawler
+    dataJson {"name":"Advanced search","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block","confidence":65}
+  ListingOrganizationExtracted | CompanyExtraction | Extracted organization 'Advanced search' from listing. | provider= IndependentCrawler
+    dataJson {"name":"Advanced search","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block","confidence":65}
+  ListingOrganizationExtracted | CompanyExtraction | Extracted organization 'Advanced search' from listing. | provider= IndependentCrawler
+    dataJson {"name":"Advanced search","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block","confidence":65}
+  ListingOrganizationExtracted | CompanyExtraction | Extracted organization 'Advanced search' from listing. | provider= IndependentCrawler
+    dataJson {"name":"Advanced search","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block","confidence":65}
+  ListingOrganizationExtracted | CompanyExtraction | Extracted organization 'Advanced search' from listing. | provider= IndependentCrawler
+    dataJson {"name":"Advanced search","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block","confidence":65}
+  ListingOrganizationExtracted | CompanyExtraction | Extracted organization 'Advanced search' from listing. | provider= IndependentCrawler
+    dataJson {"name":"Advanced search","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block","confidence":65}
+  ListingOrganizationExtracted | CompanyExtraction | Extracted organization 'Advanced search' from listing. | provider= IndependentCrawler
+    dataJson {"name":"Advanced search","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block","confidence":65}
+  ListingOrganizationExtracted | CompanyExtraction | Extracted organization 'Advanced search' from listing. | provider= IndependentCrawler
+    dataJson {"name":"Advanced search","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block","confidence":65}
+  UrlDiscovered | Discovery | Expanded 25 prioritized links from https://opencorporates.com/advanced-search/ | provider= IndependentCrawler
+    dataJson {"reasonCode":"priority.expansion_accepted","internalCount":25,"externalCount":0,"directorySiblingCount":7}
+  DirectorySiblingQueued | Discovery | Queued 7 related directory host link(s) from https://opencorporates.com/advanced-search/. | provider= IndependentCrawler
+    dataJson {"reasonCode":"investigation.directory_sibling_host","count":7}
+  InvestigationFollowUpQueued | Queue | Queued 30 investigation follow-up URL(s) from https://opencorporates.com/advanced-search/. | provider= IndependentCrawler
+    dataJson {"reasonCode":"investigation.followups_queued","count":30,"officialDomains":0,"profiles":57,"summary":"role=Directory; page=Contact; listings=14; followUps=47; candidates=0; orgs=14"}
+  ListingOrganizationExtracted | CompanyExtraction | Extracted organization 'Advanced search' from listing. | provider= IndependentCrawler
+    dataJson {"name":"Advanced search","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block","confidence":65}
+  PageCrawled | Parse | Crawled https://opencorporates.com/advanced-search/ | provider= IndependentCrawler
+    dataJson {"title":"Advanced search \u2013 OpenCorporates","contentLengthBytes":195215,"redirectCount":0,"factCount":3}
+  FetchStarted | Fetch | Fetching https://opencorporates.com/advanced-search/ | provider= IndependentCrawler
+  ListingOrganizationExtracted | CompanyExtraction | Extracted organization 'Advanced search' from listing. | provider= IndependentCrawler
+    dataJson {"name":"Advanced search","officialWebsite":null,"hasEmail":false,"hasPhone":false,"method":"listing.semantic_block","confidence":65}
+--- DateTimeOffset / SQLite / SearXNG ---
+  DateTimeOffset: 0
+  SQLite: 0
+  SearXNG: 0
+  searx: 0
+  Maximum search: 0
+--- distinct messages for Error/Warning ---
+  13x FetchFailed: HTTP request failed.
+  1x FetchFailed: Host returned HTTP 404.
+================================================================================
+this-run crawled-pages count 34
+hosts [('opencorporates.com', 20), ('0007.ae', 14)]
+statuses [(200, 20), ('HTTP request failed.', 13), (404, 1)]
+sources [(None, 34)]
+purposes [(None, 34)]
+interesting urls:
+  200 None https://opencorporates.com/pricing/ title= Pricing – OpenCorporates
+  200 None https://opencorporates.com/feed/ title= Redirecting...
+  200 None https://opencorporates.com/user-privacy-policy/ title= User privacy policy – OpenCorporates
+  200 None https://opencorporates.com/use-cases/government title= Government – OpenCorporates
+  200 None https://opencorporates.com/use-cases/academia title= Academia – OpenCorporates
+  200 None https://opencorporates.com/terms-of-use-2/ title= Terms of use – OpenCorporates
+  200 None https://opencorporates.com/public-records-privacy-policy/ title= Public records privacy policy – OpenCorporates
+  200 None https://opencorporates.com/advanced-search/ title= Advanced search – OpenCorporates
+  404 HTTP 404 https://opencorporates.com/comments/feed/ title= None
+  None HTTP request failed. https://0007.ae/best-beaches-in-abu-dhabi title= None
+  None HTTP request failed. https://0007.ae/best-beach-in-abu-dhabi title= None
+  None HTTP request failed. https://0007.ae/best-arabic-restaurant-in-abu-dhabi title= None
+  None HTTP request failed. https://0007.ae/author/david-lee/page/8 title= None
+  None HTTP request failed. https://0007.ae/author/david-lee/page/3 title= None
+  None HTTP request failed. https://0007.ae/author/david-lee/page/2 title= None
+  None HTTP request failed. https://0007.ae/author/david-lee title= None
+  None HTTP request failed. https://0007.ae/barber-in-abu-dhabi title= None
+  None HTTP request failed. https://0007.ae/banks-in-abu-dhabi title= None
+  None HTTP request failed. https://0007.ae/asian-restaurants-in-abu-dhabi title= None
+  None HTTP request failed. https://0007.ae/american-schools-in-abu-dhabi title= None
+  None HTTP request failed. https://0007.ae/afternoon-tea-places-abu-dhabi title= None
+  None HTTP request failed. https://0007.ae/6-golden-rules-for-buying-a-smart-tv title= None
+  200 None https://0007.ae title= 0007.ae for sale | Spaceship.com
+================================================================================
+this-run2 crawled-pages count 34
+hosts [('opencorporates.com', 20), ('0007.ae', 14)]
+statuses [(200, 20), ('HTTP request failed.', 13), (404, 1)]
+sources [(None, 34)]
+purposes [(None, 34)]
+interesting urls:
+  200 None https://opencorporates.com/pricing/ title= Pricing – OpenCorporates
+  200 None https://opencorporates.com/feed/ title= Redirecting...
+  200 None https://opencorporates.com/user-privacy-policy/ title= User privacy policy – OpenCorporates
+  200 None https://opencorporates.com/use-cases/government title= Government – OpenCorporates
+  200 None https://opencorporates.com/use-cases/academia title= Academia – OpenCorporates
+  200 None https://opencorporates.com/terms-of-use-2/ title= Terms of use – OpenCorporates
+  200 None https://opencorporates.com/public-records-privacy-policy/ title= Public records privacy policy – OpenCorporates
+  200 None https://opencorporates.com/advanced-search/ title= Advanced search – OpenCorporates
+  404 HTTP 404 https://opencorporates.com/comments/feed/ title= None
+  None HTTP request failed. https://0007.ae/best-beaches-in-abu-dhabi title= None
+  None HTTP request failed. https://0007.ae/best-beach-in-abu-dhabi title= None
+  None HTTP request failed. https://0007.ae/best-arabic-restaurant-in-abu-dhabi title= None
+  None HTTP request failed. https://0007.ae/author/david-lee/page/8 title= None
+  None HTTP request failed. https://0007.ae/author/david-lee/page/3 title= None
+  None HTTP request failed. https://0007.ae/author/david-lee/page/2 title= None
+  None HTTP request failed. https://0007.ae/author/david-lee title= None
+  None HTTP request failed. https://0007.ae/barber-in-abu-dhabi title= None
+  None HTTP request failed. https://0007.ae/banks-in-abu-dhabi title= None
+  None HTTP request failed. https://0007.ae/asian-restaurants-in-abu-dhabi title= None
+  None HTTP request failed. https://0007.ae/american-schools-in-abu-dhabi title= None
+  None HTTP request failed. https://0007.ae/afternoon-tea-places-abu-dhabi title= None
+  None HTTP request failed. https://0007.ae/6-golden-rules-for-buying-a-smart-tv title= None
+  200 None https://0007.ae title= 0007.ae for sale | Spaceship.com
+================================================================================
+this-run discovered-urls count 71
+hosts [('opencorporates.com', 57), ('0007.ae', 14)]
+statuses [('Pending', 37), ('Crawled', 20), ('Failed', 14)]
+sources [('LinkExpansion', 56), ('WebArchive', 14), ('DirectoryCatalog', 1)]
+purposes [('DirectoryListing', 57), ('CompanyProfile', 7), ('Unknown', 4), ('Listicle', 3)]
+interesting urls:
+  Pending None https://opencorporates.com/terms-of-use/ title= None
+  Crawled None https://opencorporates.com/pricing/ title= None
+  Crawled None https://opencorporates.com/feed/ title= None
+  Failed None https://opencorporates.com/comments/feed/ title= None
+  Crawled None https://opencorporates.com/terms-of-use-2/ title= None
+  Crawled None https://opencorporates.com/public-records-privacy-policy/ title= None
+  Crawled None https://opencorporates.com/user-privacy-policy/ title= None
+  Crawled None https://opencorporates.com/advanced-search/ title= None
+  Crawled None https://opencorporates.com/use-cases/academia title= None
+  Crawled None https://opencorporates.com/use-cases/government title= None
+  Failed None https://0007.ae/6-golden-rules-for-buying-a-smart-tv title= None
+  Failed None https://0007.ae/best-arabic-restaurant-in-abu-dhabi title= None
+  Failed None https://0007.ae/asian-restaurants-in-abu-dhabi title= None
+  Failed None https://0007.ae/afternoon-tea-places-abu-dhabi title= None
+  Failed None https://0007.ae/american-schools-in-abu-dhabi title= None
+  Failed None https://0007.ae/best-beaches-in-abu-dhabi title= None
+  Failed None https://0007.ae/best-beach-in-abu-dhabi title= None
+  Failed None https://0007.ae/author/david-lee/page/8 title= None
+  Failed None https://0007.ae/author/david-lee/page/3 title= None
+  Failed None https://0007.ae/author/david-lee/page/2 title= None
+  Failed None https://0007.ae/barber-in-abu-dhabi title= None
+  Failed None https://0007.ae/banks-in-abu-dhabi title= None
+  Failed None https://0007.ae/author/david-lee title= None
+  Crawled None https://0007.ae title= None
+================================================================================
+this-run2 discovered-urls count 71
+hosts [('opencorporates.com', 57), ('0007.ae', 14)]
+statuses [('Pending', 37), ('Crawled', 20), ('Failed', 14)]
+sources [('LinkExpansion', 56), ('WebArchive', 14), ('DirectoryCatalog', 1)]
+purposes [('DirectoryListing', 57), ('CompanyProfile', 7), ('Unknown', 4), ('Listicle', 3)]
+interesting urls:
+  Pending None https://opencorporates.com/terms-of-use/ title= None
+  Crawled None https://opencorporates.com/pricing/ title= None
+  Crawled None https://opencorporates.com/feed/ title= None
+  Failed None https://opencorporates.com/comments/feed/ title= None
+  Crawled None https://opencorporates.com/terms-of-use-2/ title= None
+  Crawled None https://opencorporates.com/public-records-privacy-policy/ title= None
+  Crawled None https://opencorporates.com/user-privacy-policy/ title= None
+  Crawled None https://opencorporates.com/advanced-search/ title= None
+  Crawled None https://opencorporates.com/use-cases/academia title= None
+  Crawled None https://opencorporates.com/use-cases/government title= None
+  Failed None https://0007.ae/6-golden-rules-for-buying-a-smart-tv title= None
+  Failed None https://0007.ae/best-arabic-restaurant-in-abu-dhabi title= None
+  Failed None https://0007.ae/asian-restaurants-in-abu-dhabi title= None
+  Failed None https://0007.ae/afternoon-tea-places-abu-dhabi title= None
+  Failed None https://0007.ae/american-schools-in-abu-dhabi title= None
+  Failed None https://0007.ae/best-beaches-in-abu-dhabi title= None
+  Failed None https://0007.ae/best-beach-in-abu-dhabi title= None
+  Failed None https://0007.ae/author/david-lee/page/8 title= None
+  Failed None https://0007.ae/author/david-lee/page/3 title= None
+  Failed None https://0007.ae/author/david-lee/page/2 title= None
+  Failed None https://0007.ae/barber-in-abu-dhabi title= None
+  Failed None https://0007.ae/banks-in-abu-dhabi title= None
+  Failed None https://0007.ae/author/david-lee title= None
+  Crawled None https://0007.ae title= None
+================================================================================
+this-run prospects count 12
+all company names:
+  b9276d24 needsReview 79 SearXNG | ١٠ من أفضل المدارس البريطانية في عجمان | https://gjproperties.ae/ar/١٠-من-أفضل-المدارس-البريطانية-في-عجمان/
+  b9276d24 readyForOutreach 83 SearXNG + Web search (المدرسة الألمانية الدولية بالشارقة - Deutsche Schule Sharjah) | Deutsche Internationale Schule Sharjah | https://www.dssharjah.org/ar/الرئيسية/
+  b9276d24 discovered 59 SearXNG + Web search (مدارس نجد الأهلية) | مدارس نجد الأهلية | https://nns.edu.sa/
+  b9276d24 discovered 59 SearXNG + Web search (مدرسة منارة الشارقة الخاصة: الرئيسية) | مدرسة منارة الشارقة الخاصة | https://www.manaratalsharjah.com/
+  b9276d24 discovered 59 SearXNG + Web search (أعلى المدارس في أبوظبي | أفضل مدرسة مصنفة في ... - Aldar Academy) + SearXNG + Web search (مدرسة اللؤلؤة الابتدائية في أبوظبي - Pearl British Academy) | مدرسة اللؤلؤة الابتدائية في أبوظبي | https://www.aldaracademies.com/ar/
+  b9276d24 rejected 30 SearXNG + Web search (مدارس تربية خاصة و دمج في دبي) | مدارس تربية خاصة و دمج في دبي | https://www.abadc.com.sa/directory/sections/مدارس-تربية-خاصة-و-دمج-في-دبي/
+  b9276d24 discovered 0 SearXNG | المدارس السعودية ( عالمي | https://sps.madares-sa.com/
+  b9276d24 needsReview 79 SearXNG + Web search (نبذة عن أكاديمية العين البريطانية - Al Ain British Academy) | نبذة عن أكاديمية العين البريطانية | https://www.alainbritishacademy.ae/ar/about/
+  b9276d24 discovered 59 SearXNG + Web search (مدرسة الامارات الخاصة الفجيرة) | مدرسة الامارات الخاصة الفجيرة | https://epsfuj.com/
+  b9276d24 needsReview 79 SearXNG | هيئة الشارقة للتعليم الخاص | https://spea.shj.ae/
+  b9276d24 discovered 38 DirectoryListingInvestigation | IMPORTANT INFORMATION AND WHO WE ARE | https://opencorporates.com/user-privacy-policy/
+   JUNK MATCH
+  b9276d24 discovered 50 DirectoryListingInvestigation | Make offer Your offer must be higher than the seller’s minimum price. | https://0007.ae/
+   JUNK MATCH
+================================================================================
+this-run2 prospects count 12
+all company names:
+  b9276d24 needsReview 79 SearXNG | ١٠ من أفضل المدارس البريطانية في عجمان | https://gjproperties.ae/ar/١٠-من-أفضل-المدارس-البريطانية-في-عجمان/
+  b9276d24 readyForOutreach 83 SearXNG + Web search (المدرسة الألمانية الدولية بالشارقة - Deutsche Schule Sharjah) | Deutsche Internationale Schule Sharjah | https://www.dssharjah.org/ar/الرئيسية/
+  b9276d24 discovered 59 SearXNG + Web search (مدارس نجد الأهلية) | مدارس نجد الأهلية | https://nns.edu.sa/
+  b9276d24 discovered 59 SearXNG + Web search (مدرسة منارة الشارقة الخاصة: الرئيسية) | مدرسة منارة الشارقة الخاصة | https://www.manaratalsharjah.com/
+  b9276d24 discovered 59 SearXNG + Web search (أعلى المدارس في أبوظبي | أفضل مدرسة مصنفة في ... - Aldar Academy) + SearXNG + Web search (مدرسة اللؤلؤة الابتدائية في أبوظبي - Pearl British Academy) | مدرسة اللؤلؤة الابتدائية في أبوظبي | https://www.aldaracademies.com/ar/
+  b9276d24 rejected 30 SearXNG + Web search (مدارس تربية خاصة و دمج في دبي) | مدارس تربية خاصة و دمج في دبي | https://www.abadc.com.sa/directory/sections/مدارس-تربية-خاصة-و-دمج-في-دبي/
+  b9276d24 discovered 0 SearXNG | المدارس السعودية ( عالمي | https://sps.madares-sa.com/
+  b9276d24 needsReview 79 SearXNG + Web search (نبذة عن أكاديمية العين البريطانية - Al Ain British Academy) | نبذة عن أكاديمية العين البريطانية | https://www.alainbritishacademy.ae/ar/about/
+  b9276d24 discovered 59 SearXNG + Web search (مدرسة الامارات الخاصة الفجيرة) | مدرسة الامارات الخاصة الفجيرة | https://epsfuj.com/
+  b9276d24 needsReview 79 SearXNG | هيئة الشارقة للتعليم الخاص | https://spea.shj.ae/
+  040a6670 discovered 38 DirectoryListingInvestigation | IMPORTANT INFORMATION AND WHO WE ARE | https://opencorporates.com/user-privacy-policy/
+   JUNK MATCH
+  040a6670 discovered 50 DirectoryListingInvestigation | Make offer Your offer must be higher than the seller’s minimum price. | https://0007.ae/
+   JUNK MATCH
+================================================================================
+prospect-details count 12
+keys ['additionalEmails', 'additionalPhones', 'city', 'companyDescription', 'companyName', 'companySize', 'contactHistory', 'contactName', 'contactRole', 'country', 'createdAtUtc', 'duplicateKind', 'email', 'emailConfidenceScore', 'id', 'industry', 'isQualified', 'linkedInUrl', 'outreachCampaignId', 'phone', 'projectId', 'projectName', 'qualificationScore', 'qualificationSummary', 'recommendedTemplateConfidence', 'recommendedTemplateId', 'recommendedTemplateName', 'recommendedTemplateReason', 'researchNotes', 'researchRunId', 'sourceName', 'sourceType', 'sourceUrl', 'sourceUrls', 'status', 'updatedAtUtc', 'website', 'whatsApp', 'whatsAppConfidenceScore']
+detail names sample ['١٠ من أفضل المدارس البريطانية في عجمان', 'Deutsche Internationale Schule Sharjah', 'مدارس نجد الأهلية', 'مدرسة منارة الشارقة الخاصة', 'مدرسة اللؤلؤة الابتدائية في أبوظبي', 'مدارس تربية خاصة و دمج في دبي', 'المدارس السعودية ( عالمي', 'نبذة عن أكاديمية العين البريطانية', 'مدرسة الامارات الخاصة الفجيرة', 'هيئة الشارقة للتعليم الخاص', 'IMPORTANT INFORMATION AND WHO WE ARE', 'Make offer Your offer must be higher than the seller’s minimum price.']
+junk-ish detail: {'companyDescription': None, 'linkedInUrl': None, 'additionalEmails': [], 'additionalPhones': [], 'researchNotes': "Directory listing 'IMPORTANT INFORMATION AND WHO WE ARE' retained for continued investigation; official website not yet verified. | Directory listing 'THE DATA WE COLLECT ABOUT YOU' retained for continued investigation; official website not yet verified. | Directory listing 'HOW YOUR PERSONAL DATA IS COLLECTED' retained for continued investigation; official website not yet verified. | Directory listing 'HOW WE USE YOUR PERSONAL DATA' retained for continued investigation; official website not yet verified. | Directory listing 'INTERNATIONAL TRANSFERS' retained for continued investigation; official website not yet verified. | Directory listing 'Internal & external use' retained for continued investigation; official website not yet verified. | Directory listing 'Up to 500 API calls/mth' retained for continued investigation; official website not yet verified. | Directory listing 'Up to 200 API calls/day' retained for continued investigation; official website not yet verified. | Directory listing 'Up to 2,500 API calls/mth' retained for continued investigation; official website not yet verified. | Directory listing 'Up to 500 API calls/day' retained for continued investigation; official website not yet verified. | Directory listing 'Up to 5,000 API calls/mth' retained for continued investigation; official website not yet verified. | Directory listing 'Up to 1,000 API calls/day' retained for continued investigation; official website not yet verified. | Directory listing 'Enterprise support plan' retained for continued investigation; official website not yet verified. | Directory listing 'Choose your jurisdictions' retained for continued investigation; official website not yet verified. countryGate=country.evidence_missing; country=unknown; evidence=none; Mandatory target country could not be verified from address, path, host, or page location evidence. (country.evidence_missing). Marked NeedsReview rather than qualified.", 'qualificationSummary': 'Not qualified. Score 38. Missing: officialWebsite, publicBusinessEmail, targetCountry, targetIndustry, keywords.', 'contactHistory': [], 'id': '9793af8f-a46d-4bb4-bec5-851a0d3fac09', 'projectId': '188b202c-faf2-40ea-bcde-5293f2f161f6', 'projectName': 'ExperienceOps – UAE', 'researchRunId': 'b9276d24-5627-4fc9-adbd-41430ca1e3e0', 'companyName': 'IMPORTANT INFORMATION AND WHO WE ARE'}
+junk-ish detail: {'companyDescription': None, 'linkedInUrl': None, 'additionalEmails': [], 'additionalPhones': [], 'researchNotes': "Directory listing 'Free transaction support' retained for continued investigation; official website not yet verified. | Directory listing 'Spaceship reliability' retained for continued investigation; official website not yet verified. | Directory listing 'Make offer Your offer must be higher than the seller’s minimum price.' retained for continued investigation; official website not yet verified. | Directory listing 'You will be redirected to spaceship.com' retained for continued investigation; official website not yet verified. | Directory listing 'Buyer protection program' retained for continued investigation; official website not yet verified. | Directory listing 'Fast and easy transfer' retained for continued investigation; official website not yet verified. | Directory listing 'Flexible payment methods' retained for continued investigation; official website not yet verified. countryGate=country.matched_evidence; country=United Arab Emirates; evidence=source_url_host:0007.ae; Organization location evidence matched target country 'United Arab Emirates'. Evidence: source_url_host:0007.ae.", 'qualificationSummary': 'Not qualified. Score 50. Missing: officialWebsite, publicBusinessEmail, targetIndustry, keywords.', 'contactHistory': [], 'id': '5b221527-6c92-4b83-8d78-3d3635f5e8a8', 'projectId': '188b202c-faf2-40ea-bcde-5293f2f161f6', 'projectName': 'ExperienceOps – UAE', 'researchRunId': 'b9276d24-5627-4fc9-adbd-41430ca1e3e0', 'companyName': 'Make offer Your offer must be higher than the seller’s minimum price.'}

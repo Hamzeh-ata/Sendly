@@ -48,6 +48,28 @@ public class SendlyDbContext : DbContext, ISendlyDbContext
 
     public DbSet<ResearchRun> ResearchRuns => Set<ResearchRun>();
 
+    public DbSet<MapCoverageRegion> MapCoverageRegions => Set<MapCoverageRegion>();
+
+    public DbSet<ResearchQuery> ResearchQueries => Set<ResearchQuery>();
+
+    public DbSet<ResearchQueryVersion> ResearchQueryVersions => Set<ResearchQueryVersion>();
+
+    public DbSet<ResearchSeedUrl> ResearchSeedUrls => Set<ResearchSeedUrl>();
+
+    public DbSet<DiscoveredUrl> DiscoveredUrls => Set<DiscoveredUrl>();
+
+    public DbSet<CrawledPage> CrawledPages => Set<CrawledPage>();
+
+    public DbSet<ResearchEvidence> ResearchEvidenceItems => Set<ResearchEvidence>();
+
+    public DbSet<InvestigationContact> InvestigationContacts => Set<InvestigationContact>();
+
+    public DbSet<QualificationCriterionResult> QualificationCriterionResults => Set<QualificationCriterionResult>();
+
+    public DbSet<ResearchRunEvent> ResearchRunEvents => Set<ResearchRunEvent>();
+
+    public DbSet<DiscoverySource> DiscoverySources => Set<DiscoverySource>();
+
     public DbSet<OutreachContactHistory> OutreachContactHistories => Set<OutreachContactHistory>();
 
     public DbSet<OutreachSequence> OutreachSequences => Set<OutreachSequence>();

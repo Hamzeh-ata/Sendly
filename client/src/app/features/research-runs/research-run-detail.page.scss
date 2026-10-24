@@ -1,34 +1,14 @@
-.research-run-detail-page {
-  max-width: 1100px;
-  margin: 0 auto;
-}
-
 .breadcrumb {
   margin-bottom: 1rem;
 
   a {
-    color: var(--accent-blue);
+    color: #7dd3fc;
     text-decoration: none;
     font-size: 0.875rem;
 
     &:hover {
       text-decoration: underline;
     }
-  }
-}
-
-.page-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 1rem;
-  margin-bottom: 1.25rem;
-
-  h2 {
-    margin: 0 0 0.5rem;
-    font-family: var(--font-display);
-    font-size: 1.5rem;
-    color: var(--text-primary);
   }
 }
 
@@ -43,25 +23,19 @@
   }
 }
 
-.header-actions {
-  display: flex;
-  gap: 0.65rem;
-  flex-wrap: wrap;
-}
-
 .progress-bar-wrap {
   height: 8px;
-  background: var(--bg-secondary);
-  border-radius: 999px;
+  background: var(--rc-surface-2);
+  border: 1px solid var(--rc-border);
+  border-radius: var(--radius-sm);
   overflow: hidden;
   margin-bottom: 0.5rem;
 }
 
 .progress-bar {
   height: 100%;
-  background: linear-gradient(90deg, var(--accent-blue), var(--accent-teal));
-  border-radius: 999px;
-  transition: width 0.3s ease;
+  background: var(--rc-cyan);
+  border-radius: var(--radius-sm);
 }
 
 .progress-label {
@@ -90,16 +64,14 @@
   color: var(--text-secondary);
 }
 
-.limits-card {
-  margin-bottom: 1.25rem;
-}
-
+.limits-card,
 .live-results-card {
-  margin-bottom: 1.25rem;
+  margin-bottom: 0;
 }
 
 .live-results-header {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 0.75rem;
@@ -110,12 +82,41 @@
   }
 }
 
+.live-results-title {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.live-results-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.dialog-hint {
+  margin: 0 0 0.75rem;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.toggle-row {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin-bottom: 0.75rem;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
 .live-results-count {
   min-width: 1.75rem;
   height: 1.75rem;
   padding: 0 0.5rem;
-  border-radius: 999px;
-  background: var(--bg-secondary);
+  border-radius: var(--radius-sm);
+  background: var(--rc-surface-2);
+  border: 1px solid var(--rc-border);
   color: var(--text-secondary);
   display: inline-flex;
   align-items: center;
@@ -142,7 +143,7 @@
   td {
     text-align: start;
     padding: 0.65rem 0.5rem;
-    border-bottom: 1px solid var(--border);
+    border-bottom: 1px solid var(--rc-border);
     vertical-align: top;
     font-size: 0.8125rem;
   }
@@ -162,13 +163,8 @@
   gap: 0.15rem;
 }
 
-.muted {
-  color: var(--text-muted);
-  font-size: 0.75rem;
-}
-
 .source-link {
-  color: var(--accent-blue);
+  color: #7dd3fc;
   text-decoration: none;
 
   &:hover {
@@ -181,60 +177,12 @@
   font-size: 0.75rem;
 }
 
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 1rem;
-  margin-bottom: 1.25rem;
+.stat-card.success .stat-value {
+  color: var(--rc-green);
 }
 
-.stat-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  padding: 1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-
-  &.success .stat-value {
-    color: var(--accent-teal);
-  }
-
-  &.danger .stat-value {
-    color: #f87171;
-  }
-
-  &.highlight .stat-value {
-    color: var(--accent-blue);
-  }
-}
-
-.stat-label {
-  font-size: 0.75rem;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
-
-.stat-value {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: var(--text-primary);
-  font-family: var(--font-display);
-}
-
-.card {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 1.15rem;
-  box-shadow: var(--shadow-sm);
-
-  h3 {
-    margin: 0 0 0.85rem;
-    font-size: 0.95rem;
-  }
+.stat-card.danger .stat-value {
+  color: var(--rc-red);
 }
 
 .meta-grid {
@@ -257,18 +205,12 @@
 
 .error-text {
   margin: 1rem 0 0;
-  color: #f87171;
+  color: var(--rc-red);
   font-size: 0.875rem;
 }
 
 .warning-text {
   margin: 0.75rem 0 0;
-  color: #fbbf24;
+  color: var(--rc-amber);
   font-size: 0.875rem;
-}
-
-@media (max-width: 640px) {
-  .page-header {
-    flex-direction: column;
-  }
 }

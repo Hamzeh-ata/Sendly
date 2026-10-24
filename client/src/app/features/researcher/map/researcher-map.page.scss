@@ -1,0 +1,266 @@
+.map-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.map-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 0.75rem;
+}
+
+.map-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-width: 10rem;
+}
+
+.map-field-count {
+  min-width: 7rem;
+}
+
+.project-select {
+  min-width: 14rem;
+}
+
+.map-status-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.map-status-main,
+.map-status-progress,
+.map-unsupported {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.map-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: end;
+}
+
+.map-check {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding-bottom: 0.35rem;
+}
+
+.map-filter-count {
+  margin-inline-start: auto;
+  padding-bottom: 0.35rem;
+}
+
+.map-workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 20rem;
+  gap: 1rem;
+  min-height: 28rem;
+}
+
+.map-canvas {
+  height: 28rem;
+  min-height: 28rem;
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: #0a1220;
+}
+
+:host ::ng-deep .map-canvas.leaflet-container {
+  height: 28rem;
+  width: 100%;
+}
+
+:host ::ng-deep .leaflet-pane,
+:host ::ng-deep .leaflet-tile,
+:host ::ng-deep .leaflet-marker-icon,
+:host ::ng-deep .leaflet-marker-shadow,
+:host ::ng-deep .leaflet-tile-container,
+:host ::ng-deep .leaflet-pane > svg,
+:host ::ng-deep .leaflet-pane > canvas,
+:host ::ng-deep .leaflet-zoom-box,
+:host ::ng-deep .leaflet-image-layer,
+:host ::ng-deep .leaflet-layer {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+:host ::ng-deep .leaflet-container {
+  overflow: hidden;
+}
+
+:host ::ng-deep .leaflet-tile {
+  filter: none;
+  max-width: none !important;
+  max-height: none !important;
+}
+
+:host ::ng-deep .leaflet-marker-icon {
+  max-width: none !important;
+  max-height: none !important;
+}
+
+.map-side-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  max-height: 28rem;
+  overflow: auto;
+}
+
+.map-panel-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  align-items: start;
+}
+
+.map-panel-header h3 {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.map-detail-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.65rem;
+}
+
+.map-detail-label {
+  display: block;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  margin-bottom: 0.15rem;
+}
+
+.map-source-link {
+  color: var(--accent-teal);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.map-missing h4,
+.map-provenance h4,
+.map-contacts h4,
+.map-panel-empty h3 {
+  margin: 0 0 0.35rem;
+}
+
+.map-contacts {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  padding-top: 0.35rem;
+  border-top: 1px solid var(--border);
+}
+
+.map-contact-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.map-contact-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+
+  li {
+    padding: 0.35rem 0.45rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    word-break: break-word;
+    font-size: 0.85rem;
+  }
+}
+
+.map-provenance {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.map-provenance-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.map-missing ul {
+  margin: 0;
+  padding-inline-start: 1.1rem;
+}
+
+.map-table-wrap {
+  overflow: auto;
+}
+
+.map-results-header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: end;
+  justify-content: space-between;
+  margin-bottom: 0.85rem;
+
+  h3 {
+    margin: 0 0 0.25rem;
+  }
+
+  p {
+    margin: 0;
+  }
+}
+
+.map-results-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.map-result-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  align-items: center;
+}
+
+.map-result-link {
+  border: 0;
+  background: transparent;
+  color: var(--accent-teal);
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  text-align: start;
+}
+
+@media (max-width: 960px) {
+  .map-workspace {
+    grid-template-columns: 1fr;
+  }
+
+  .map-side-panel {
+    max-height: none;
+  }
+}

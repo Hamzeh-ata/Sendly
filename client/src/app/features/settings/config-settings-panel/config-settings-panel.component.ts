@@ -23,9 +23,12 @@ export class ConfigSettingsPanelComponent {
   readonly testingSearXng = input(false);
   readonly searXngConnectionStatus = input<ProviderConnectionStatus>('NotConfigured');
   readonly searXngConnectionMessage = input<string | null>(null);
+  readonly testingOllama = input(false);
+  readonly ollamaConnectionMessage = input<string | null>(null);
   readonly saveRequested = output<AppSettings>();
   readonly testBraveRequested = output<void>();
   readonly testSearXngRequested = output<void>();
+  readonly testOllamaRequested = output<void>();
 
   readonly openAiApiKey = signal('');
   readonly openAiModel = signal('');
@@ -89,6 +92,13 @@ export class ConfigSettingsPanelComponent {
     const status = this.searXngConnectionStatus() || this.searXngStatus();
     return `appSettings.searxngStatus.${status}`;
   });
+
+  readonly ollamaEnabled = signal(true);
+  readonly ollamaBaseUrl = signal('http://localhost:11434');
+  readonly ollamaModel = signal('qwen3:4b');
+  readonly ollamaTimeout = signal(60);
+  readonly ollamaMaxRetries = signal(1);
+  readonly ollamaStatus = signal<ProviderConnectionStatus>('NotChecked');
 
   readonly whatsAppToken = signal('');
   readonly whatsAppTokenConfigured = signal(false);
@@ -317,6 +327,30 @@ export class ConfigSettingsPanelComponent {
     this.testSearXngRequested.emit();
   }
 
+  onOllamaEnabledChange(checked: boolean): void {
+    this.ollamaEnabled.set(checked);
+  }
+
+  onOllamaBaseUrlChange(value: string): void {
+    this.ollamaBaseUrl.set(value);
+  }
+
+  onOllamaModelChange(value: string): void {
+    this.ollamaModel.set(value);
+  }
+
+  onOllamaTimeoutChange(value: string): void {
+    this.ollamaTimeout.set(this.parseIntOr(value, 60));
+  }
+
+  onOllamaMaxRetriesChange(value: string): void {
+    this.ollamaMaxRetries.set(this.parseIntOr(value, 1));
+  }
+
+  testOllamaConnection(): void {
+    this.testOllamaRequested.emit();
+  }
+
   onWhatsAppTokenChange(value: string): void {
     this.whatsAppToken.set(value);
   }
@@ -452,8 +486,16 @@ export class ConfigSettingsPanelComponent {
         requestDelayMilliseconds: this.braveRequestDelay(),
         connectionStatus: this.braveStatus()
       },
+      ollama: {
+        enabled: this.ollamaEnabled(),
+        baseUrl: this.ollamaBaseUrl().trim() || 'http://localhost:11434',
+        model: this.ollamaModel().trim() || 'qwen3:4b',
+        timeoutSeconds: this.ollamaTimeout(),
+        maxRetries: this.ollamaMaxRetries(),
+        connectionStatus: this.ollamaStatus()
+      },
       searXng: {
-        enabled: this.searXngEnabled(),
+        enabled: false,
         baseUrl: this.searXngBaseUrl().trim(),
         defaultLanguage: this.searXngDefaultLanguage().trim() || 'en',
         requestTimeoutSeconds: this.searXngTimeout(),
@@ -547,8 +589,16 @@ export class ConfigSettingsPanelComponent {
     this.braveRequestDelay.set(brave?.requestDelayMilliseconds ?? 250);
     this.braveStatus.set(brave?.connectionStatus ?? 'NotConfigured');
 
+    const ollama = settings.ollama;
+    this.ollamaEnabled.set(ollama?.enabled ?? true);
+    this.ollamaBaseUrl.set(ollama?.baseUrl ?? 'http://localhost:11434');
+    this.ollamaModel.set(ollama?.model ?? 'qwen3:4b');
+    this.ollamaTimeout.set(ollama?.timeoutSeconds ?? 60);
+    this.ollamaMaxRetries.set(ollama?.maxRetries ?? 1);
+    this.ollamaStatus.set(ollama?.connectionStatus ?? 'NotChecked');
+
     const searXng = settings.searXng;
-    this.searXngEnabled.set(searXng?.enabled ?? true);
+    this.searXngEnabled.set(false);
     this.searXngBaseUrl.set(searXng?.baseUrl ?? '');
     this.searXngDefaultLanguage.set(searXng?.defaultLanguage ?? 'en');
     this.searXngTimeout.set(searXng?.requestTimeoutSeconds ?? 30);

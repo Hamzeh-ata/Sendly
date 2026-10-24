@@ -59,7 +59,7 @@ export class ResearchRunsPage implements OnInit {
   }
 
   openDetail(id: string): void {
-    this.router.navigate(['/research-runs', id]);
+    this.router.navigate(['/researcher/live', id]);
   }
 
   openDelete(id: string): void {

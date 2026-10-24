@@ -34,7 +34,7 @@ export interface ProspectFilterChoice {
 }
 
 export interface ProspectActiveFilterChip {
-  group: 'status' | 'contactMethod' | 'qualification' | 'duplicate';
+  group: 'status' | 'contactMethod' | 'qualification' | 'duplicate' | 'researchRun';
   value: string;
   labelKey: string;
 }
@@ -44,5 +44,11 @@ export interface ContactHistoryRow {
   channelLabel: string;
   contactValue: string;
   contactedLabel: string;
+}
+
+export interface FetchedContactRow {
+  id: string;
+  value: string;
+  kindLabel: string;
 }
 

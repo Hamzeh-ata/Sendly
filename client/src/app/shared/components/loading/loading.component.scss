@@ -6,13 +6,17 @@
   gap: 1rem;
   padding: 3rem;
   color: var(--text-muted);
+  background: var(--rc-surface);
+  border: 1px solid var(--rc-border);
+  border-radius: var(--radius-md);
+  box-shadow: none;
 }
 
 .spinner {
   width: 2rem;
   height: 2rem;
-  border: 2px solid var(--border);
-  border-top-color: var(--accent-blue);
+  border: 2px solid var(--rc-border);
+  border-top-color: var(--rc-cyan);
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }

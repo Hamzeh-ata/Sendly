@@ -66,12 +66,13 @@ export class SettingsPage implements OnInit {
   readonly testingSearXng = signal(false);
   readonly searXngConnectionStatus = signal<ProviderConnectionStatus>('NotConfigured');
   readonly searXngConnectionMessage = signal<string | null>(null);
+  readonly testingOllama = signal(false);
+  readonly ollamaConnectionMessage = signal<string | null>(null);
 
   readonly loading = signal(true);
   readonly saving = signal(false);
   readonly testing = signal(false);
   readonly connecting = signal(false);
-  readonly showPassword = signal(false);
   readonly showProviderPicker = signal(false);
   readonly showEditor = signal(false);
   readonly showDeleteConfirm = signal(false);
@@ -79,7 +80,6 @@ export class SettingsPage implements OnInit {
   readonly editingId = signal<string | null>(null);
   readonly deleteId = signal<string | null>(null);
   readonly testingId = signal<string | null>(null);
-  readonly hasPassword = signal(false);
   readonly isInsecure = signal(false);
   readonly isDefault = signal(false);
   readonly microsoftOAuthConfigured = signal(false);
@@ -102,12 +102,6 @@ export class SettingsPage implements OnInit {
 
   readonly editorTitleKey = computed(() =>
     this.editingId() ? 'settings.editSmtpTitle' : 'settings.createSmtpTitle'
-  );
-
-  readonly passwordPlaceholder = computed(() =>
-    this.hasPassword()
-      ? this.translate.instant('settings.passwordKeepExisting')
-      : this.translate.instant('settings.passwordPlaceholder')
   );
 
   readonly showAccountsHeader = computed(() => this.activeTab() === 'accounts');
@@ -205,6 +199,31 @@ export class SettingsPage implements OnInit {
     });
   }
 
+  onTestOllamaConnection(): void {
+    this.testingOllama.set(true);
+    this.appSettingsApi.testOllama().subscribe({
+      next: (result) => {
+        this.testingOllama.set(false);
+        const message = result.modelAvailable
+          ? this.translate.instant('appSettings.ollamaTestSuccess')
+          : result.errorSummary || this.translate.instant('appSettings.ollamaModelMissing');
+        this.ollamaConnectionMessage.set(message);
+        if (result.modelAvailable) {
+          this.notification.success(message);
+        } else {
+          this.notification.error(message);
+        }
+      },
+      error: (err: HttpErrorResponse) => {
+        this.testingOllama.set(false);
+        const body = err.error as { errorSummary?: string } | null;
+        const message = body?.errorSummary || this.extractError(err);
+        this.ollamaConnectionMessage.set(message);
+        this.notification.error(message);
+      }
+    });
+  }
+
   openAdd(): void {
     this.showProviderPicker.set(true);
   }
@@ -236,14 +255,12 @@ export class SettingsPage implements OnInit {
     this.port.set(account.port ?? 587);
     this.securityMode.set(account.securityMode ?? 'startTls');
     this.username.set(account.username ?? '');
-    this.password.set('');
+    this.password.set(account.password ?? '');
     this.senderEmail.set(account.senderEmail ?? '');
     this.senderDisplayName.set(account.senderDisplayName ?? '');
     this.replyToEmail.set(account.replyToEmail ?? '');
-    this.hasPassword.set(account.hasPassword);
     this.isInsecure.set(account.isInsecure);
     this.isDefault.set(account.isDefault);
-    this.showPassword.set(false);
     this.showEditor.set(true);
   }
 
@@ -290,10 +307,6 @@ export class SettingsPage implements OnInit {
 
   onDefaultChange(checked: boolean): void {
     this.isDefault.set(checked);
-  }
-
-  togglePassword(): void {
-    this.showPassword.update((visible) => !visible);
   }
 
   save(): void {
@@ -521,10 +534,8 @@ export class SettingsPage implements OnInit {
     this.senderEmail.set('');
     this.senderDisplayName.set('');
     this.replyToEmail.set('');
-    this.hasPassword.set(false);
     this.isInsecure.set(false);
     this.isDefault.set(false);
-    this.showPassword.set(false);
   }
 
   private parsePort(value: string): number {

@@ -1,0 +1,24 @@
+<div class="template-selector">
+  <div class="header-row">
+    <label class="field-label">{{ 'compose.templateLabel' | translate }}</label>
+    <a class="edit-link" routerLink="/templates">{{ 'compose.manageTemplates' | translate }}</a>
+  </div>
+
+  @if (loading()) {
+    <p class="disabled-hint">{{ 'compose.templateLoading' | translate }}</p>
+  } @else if (!hasTemplates()) {
+    <p class="disabled-hint">{{ 'compose.noTemplates' | translate }}</p>
+  } @else {
+    <select
+      class="input"
+      [value]="selectedId() ?? ''"
+      (change)="onSelect($any($event.target).value)"
+    >
+      <option value="">{{ 'compose.noTemplate' | translate }}</option>
+      @for (template of optionList(); track template.id) {
+        <option [value]="template.id">{{ template.label }}</option>
+      }
+    </select>
+    <p class="include-hint">{{ 'compose.templateSelectHint' | translate }}</p>
+  }
+</div>

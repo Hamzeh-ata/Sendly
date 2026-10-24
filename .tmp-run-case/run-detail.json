@@ -1,0 +1,707 @@
+﻿{
+    "prospects":  [
+                      {
+                          "id":  "2ce03fa4-ad22-4fd5-883c-d57d60e5e14c",
+                          "companyName":  "الوظائف الإدارية",
+                          "website":  "https://career.kc.edu.sa",
+                          "city":  null,
+                          "country":  "Saudi Arabia",
+                          "email":  null,
+                          "whatsApp":  null,
+                          "sourceUrl":  "https://career.kc.edu.sa/apply/admin-staff",
+                          "qualificationScore":  30,
+                          "status":  "rejected",
+                          "isQualified":  false,
+                          "createdAtUtc":  "2026-10-18T18:42:37.3125234+00:00"
+                      },
+                      {
+                          "id":  "f1fa136b-b8f7-498a-8fc7-a5c0d943f087",
+                          "companyName":  "الأرقام التي نفخر بها",
+                          "website":  "https://maarif.sa",
+                          "city":  null,
+                          "country":  "Saudi Arabia",
+                          "email":  "info@maarif.sa",
+                          "whatsApp":  "00966920010600",
+                          "sourceUrl":  "https://maarif.sa/ar/contact-us",
+                          "qualificationScore":  30,
+                          "status":  "rejected",
+                          "isQualified":  false,
+                          "createdAtUtc":  "2026-10-18T15:04:19.8564271+00:00"
+                      },
+                      {
+                          "id":  "4d865219-e3fc-421c-aa96-91d24a6f90da",
+                          "companyName":  "The International School of KSAFH",
+                          "website":  "https://bist-ksa.org",
+                          "city":  "Tabuk",
+                          "country":  "Saudi Arabia",
+                          "email":  null,
+                          "whatsApp":  null,
+                          "sourceUrl":  "https://bist-ksa.org/",
+                          "qualificationScore":  30,
+                          "status":  "rejected",
+                          "isQualified":  false,
+                          "createdAtUtc":  "2026-10-18T14:56:59.1409088+00:00"
+                      },
+                      {
+                          "id":  "76838ce8-fcdc-4fb4-b50a-7281e52fbefa",
+                          "companyName":  "Almadinah International School",
+                          "website":  "https://www.mis.edu.sa",
+                          "city":  "Medina",
+                          "country":  "Saudi Arabia",
+                          "email":  null,
+                          "whatsApp":  "0531203037",
+                          "sourceUrl":  "https://www.mis.edu.sa/en/",
+                          "qualificationScore":  30,
+                          "status":  "rejected",
+                          "isQualified":  false,
+                          "createdAtUtc":  "2026-10-18T14:56:51.6965061+00:00"
+                      },
+                      {
+                          "id":  "340944af-a46b-45cb-a103-61821676d790",
+                          "companyName":  "Blessing International School",
+                          "website":  "https://blessingintschool.com",
+                          "city":  null,
+                          "country":  "Saudi Arabia",
+                          "email":  null,
+                          "whatsApp":  "966583912907",
+                          "sourceUrl":  "https://blessingintschool.com/",
+                          "qualificationScore":  30,
+                          "status":  "rejected",
+                          "isQualified":  false,
+                          "createdAtUtc":  "2026-10-18T14:56:49.2264556+00:00"
+                      },
+                      {
+                          "id":  "78151274-9d31-445e-8143-0f6ee75d379f",
+                          "companyName":  "Abdulrahman Fakieh School for Girls",
+                          "website":  "https://www.afsg.edu.sa",
+                          "city":  "Saudi Arabia",
+                          "country":  "Saudi Arabia",
+                          "email":  null,
+                          "whatsApp":  "+966 12 5333 666",
+                          "sourceUrl":  "https://www.afsg.edu.sa/about-us",
+                          "qualificationScore":  30,
+                          "status":  "rejected",
+                          "isQualified":  false,
+                          "createdAtUtc":  "2026-10-18T14:56:39.0893038+00:00"
+                      },
+                      {
+                          "id":  "4d56fa10-7b0d-43c1-a4fb-b828c3b2ffd2",
+                          "companyName":  "Global English School",
+                          "website":  "https://ges.edu.sa",
+                          "city":  "Makkah",
+                          "country":  "Saudi Arabia",
+                          "email":  "info@ges.edu.sa",
+                          "whatsApp":  "1818123456789",
+                          "sourceUrl":  "https://ges.edu.sa/",
+                          "qualificationScore":  30,
+                          "status":  "rejected",
+                          "isQualified":  false,
+                          "createdAtUtc":  "2026-10-18T14:56:33.3328307+00:00"
+                      },
+                      {
+                          "id":  "2a502f8f-96de-415f-a297-c2de85377699",
+                          "companyName":  "Rowad Al-Khaleej International School - Al-Khobar Branch",
+                          "website":  "https://www.rowad-alkhaleej.edu.sa",
+                          "city":  "Khobar",
+                          "country":  "Saudi Arabia",
+                          "email":  null,
+                          "whatsApp":  "138215900",
+                          "sourceUrl":  "https://www.rowad-alkhaleej.edu.sa/en/rowad-al-khaleej-international-school-al-khobar-branch-king-faisal-street-al-bahr-district/",
+                          "qualificationScore":  30,
+                          "status":  "rejected",
+                          "isQualified":  false,
+                          "createdAtUtc":  "2026-10-18T14:56:28.1150657+00:00"
+                      },
+                      {
+                          "id":  "75653abe-859e-408d-86e6-ffa5e521b894",
+                          "companyName":  "Al-Khozama International School, Dammam",
+                          "website":  "https://www.edarabia.com",
+                          "city":  "Dammam",
+                          "country":  "Saudi Arabia",
+                          "email":  null,
+                          "whatsApp":  "3384 - 4764",
+                          "sourceUrl":  "https://www.edarabia.com/schools/dammam/",
+                          "qualificationScore":  30,
+                          "status":  "rejected",
+                          "isQualified":  false,
+                          "createdAtUtc":  "2026-10-18T14:56:23.490739+00:00"
+                      },
+                      {
+                          "id":  "1d24fe3b-4c9d-403f-b0b8-071a151e4108",
+                          "companyName":  "Samha International School",
+                          "website":  "https://samhaschools.com",
+                          "city":  "Dammam",
+                          "country":  "Saudi Arabia",
+                          "email":  "info@samhaschools.com",
+                          "whatsApp":  "+966 544448141",
+                          "sourceUrl":  "https://samhaschools.com/",
+                          "qualificationScore":  30,
+                          "status":  "rejected",
+                          "isQualified":  false,
+                          "createdAtUtc":  "2026-10-18T14:56:15.8125425+00:00"
+                      },
+                      {
+                          "id":  "5d1a8368-8913-40c9-ac67-a86511787bf8",
+                          "companyName":  "مدارس علوم جازان العالمية",
+                          "website":  "https://js.edu.sa",
+                          "city":  "Jazan",
+                          "country":  "Saudi Arabia",
+                          "email":  null,
+                          "whatsApp":  null,
+                          "sourceUrl":  "https://js.edu.sa/",
+                          "qualificationScore":  59,
+                          "status":  "rejected",
+                          "isQualified":  false,
+                          "createdAtUtc":  "2026-10-17T19:59:03.6475324+00:00"
+                      },
+                      {
+                          "id":  "70f30d9e-353f-41ac-91b3-0783a50dd076",
+                          "companyName":  "Jazan Educational Company (American Diploma)",
+                          "website":  "https://jazanschools.edu.sa",
+                          "city":  null,
+                          "country":  "Saudi Arabia",
+                          "email":  null,
+                          "whatsApp":  "966504303993",
+                          "sourceUrl":  "https://jazanschools.edu.sa/",
+                          "qualificationScore":  59,
+                          "status":  "rejected",
+                          "isQualified":  false,
+                          "createdAtUtc":  "2026-10-17T19:59:01.3160434+00:00"
+                      },
+                      {
+                          "id":  "838fcf66-47d2-4a46-9616-db378897d81f",
+                          "companyName":  "مرحبًا بكم في شركة دار الاحفاد",
+                          "website":  "https://www.dar-alahfad.edu.sa",
+                          "city":  null,
+                          "country":  "Saudi Arabia",
+                          "email":  "info@dar-alahfad.edu.sa",
+                          "whatsApp":  "920031325",
+                          "sourceUrl":  "https://www.dar-alahfad.edu.sa/home/home",
+                          "qualificationScore":  59,
+                          "status":  "rejected",
+                          "isQualified":  false,
+                          "createdAtUtc":  "2026-10-17T19:58:55.1795407+00:00"
+                      },
+                      {
+                          "id":  "9661aebf-2a9d-4492-b1bf-86ad9284790a",
+                          "companyName":  "أفضل مدارس خميس مشيط 2026",
+                          "website":  "https://kc.edu.sa",
+                          "city":  "خميس مشيط",
+                          "country":  "Saudi Arabia",
+                          "email":  "hello@kc.edu.sa",
+                          "whatsApp":  "920010007",
+                          "sourceUrl":  "https://kc.edu.sa/blog/أفضل-مدارس-خميس-مشيط-2026-دليل-شامل-للمقار",
+                          "qualificationScore":  59,
+                          "status":  "rejected",
+                          "isQualified":  false,
+                          "createdAtUtc":  "2026-10-17T19:58:43.0279669+00:00"
+                      },
+                      {
+                          "id":  "ef818d02-e0e0-4faa-af9f-752401fcafde",
+                          "companyName":  "مدارس الذكر النموذجية أفضل مدارس أهلية في خميس مشيط",
+                          "website":  "https://ibnroshd.edu.sa",
+                          "city":  "خميس مشيط",
+                          "country":  "Saudi Arabia",
+                          "email":  "info@ibnroshd.edu.sa",
+                          "whatsApp":  "920006685",
+                          "sourceUrl":  "https://ibnroshd.edu.sa/blog/mdars-althkr-alnmothgy-afdl-mdars-ahly-fy-khmys-mshyt",
+                          "qualificationScore":  59,
+                          "status":  "rejected",
+                          "isQualified":  false,
+                          "createdAtUtc":  "2026-10-17T19:58:40.5986895+00:00"
+                      },
+                      {
+                          "id":  "71ee4fa7-4855-40c7-adf3-ea2a42a4e9b7",
+                          "companyName":  "Tatweer Education Holding Company",
+                          "website":  "https://tatweer.sa",
+                          "city":  null,
+                          "country":  "Saudi Arabia",
+                          "email":  null,
+                          "whatsApp":  null,
+                          "sourceUrl":  "https://www.tatweer.sa/en",
+                          "qualificationScore":  59,
+                          "status":  "rejected",
+                          "isQualified":  false,
+                          "createdAtUtc":  "2026-10-17T19:58:33.325898+00:00"
+                      },
+                      {
+                          "id":  "076247ba-3386-4123-b2ba-153b2b7cc940",
+                          "companyName":  "الصفحة الرئيسية",
+                          "website":  "https://tetco.sa",
+                          "city":  null,
+                          "country":  "Saudi Arabia",
+                          "email":  null,
+                          "whatsApp":  "920005618",
+                          "sourceUrl":  "https://tetco.sa/",
+                          "qualificationScore":  59,
+                          "status":  "rejected",
+                          "isQualified":  false,
+                          "createdAtUtc":  "2026-10-17T19:58:31.4534261+00:00"
+                      }
+                  ],
+    "id":  "ab19e03a-cb64-40ed-8fb6-17397ce01623",
+    "projectId":  "23fd30be-b89e-414e-b880-eef0a5a4eb7d",
+    "projectName":  "School Watch - Saudi Arabia",
+    "researchQueryId":  "3da18c8f-9c05-463c-bb5c-0c9778125c81",
+    "researchQueryVersionId":  "7ac59419-1b79-4ea3-8840-e1ee45be0999",
+    "researchQueryName":  null,
+    "urlsDiscovered":  400,
+    "pagesCrawled":  80,
+    "crawlErrors":  7,
+    "status":  "completed",
+    "requestedProspectCount":  50,
+    "includeEmail":  true,
+    "includeWhatsApp":  false,
+    "minQualificationScore":  60,
+    "progressPercent":  100,
+    "companiesFound":  45,
+    "contactsFound":  0,
+    "validEmails":  0,
+    "validWhatsApp":  0,
+    "duplicatesFound":  44,
+    "rejectedCount":  44,
+    "qualifiedCount":  0,
+    "searchQueriesExecuted":  0,
+    "searchResultsReceived":  0,
+    "candidatesDiscovered":  45,
+    "candidatesAfterDeduplication":  0,
+    "candidatesValidated":  44,
+    "prospectsSaved":  0,
+    "prospectsSkippedAsDuplicates":  0,
+    "researchLimitsReached":  true,
+    "researchLimitsReachedReason":  "Maximum page fetch budget reached with 313 useful URL(s) still pending.",
+    "rejectionReasons":  {
+                             "Weak company identity":  44
+                         },
+    "searchProviderDiagnostics":  {
+                                      "provider":  "IndependentCrawler",
+                                      "queriesExecuted":  0,
+                                      "requestsSuccessful":  0,
+                                      "requestsFailed":  0,
+                                      "resultsReceived":  0,
+                                      "http401":  0,
+                                      "http429":  0,
+                                      "http5xx":  0,
+                                      "timeouts":  0,
+                                      "automaticDiscoverySummary":  "Automatic discovery collected 42 candidate URLs (35 domains; fresh=2, prior=40) from 6/6 providers across 3 stage(s), recovery stages: 2 (duplicates removed: 0, rejected unsafe: 1, filtered: 2, zero-return providers: 4).",
+                                      "automaticDiscoveryDuplicatesRemoved":  0,
+                                      "automaticDiscoveryRejectedUnsafe":  1,
+                                      "discoveryPlanSummary":  "Plan: 14 industries (+8 synonyms), 1 countries, 5 providers, budget 200 URLs / 100 domains / 3 stages.",
+                                      "uniqueDomainsDiscovered":  35,
+                                      "recoveryAttempts":  2,
+                                      "discoveryStopReason":  "BudgetExhausted",
+                                      "recoveryStrategies":  [
+                                                                 "PreferFreshDiscoveryProviders",
+                                                                 "PreferFreshDiscoveryProviders"
+                                                             ],
+                                      "sourcesReused":  4,
+                                      "sourcesAdded":  2,
+                                      "sourcesSkipped":  8,
+                                      "sourcesUnavailable":  0,
+                                      "urlsAccessible":  80,
+                                      "urlsParsed":  80,
+                                      "urlsUnavailable":  7,
+                                      "urlsRobotsBlocked":  0,
+                                      "companiesIdentified":  45,
+                                      "publicContactsExtracted":  36,
+                                      "liveVerifiedCompanies":  37,
+                                      "prospectsQualified":  0,
+                                      "urlsRejectedFiltered":  2,
+                                      "urlsAdmitted":  129,
+                                      "urlsReusedFromCache":  0,
+                                      "urlsSkippedKnownProspect":  0,
+                                      "usefulPendingUrls":  313,
+                                      "usefulUrlsLeftPendingAtStop":  313,
+                                      "newlyDiscoveredProspects":  0,
+                                      "previouslyKnownProspects":  0,
+                                      "previouslyContactedProspects":  0,
+                                      "newlyOutreachEligibleProspects":  0,
+                                      "identityVerifiedBusinesses":  0,
+                                      "emailReadyProspects":  0,
+                                      "contactableProspects":  0,
+                                      "pagesFetched":  80,
+                                      "pagesQueued":  313,
+                                      "pagesSkipped":  33,
+                                      "fetchBudgetConsumed":  80,
+                                      "fetchBudgetLimit":  80,
+                                      "requestedFetchBudget":  80,
+                                      "configuredBatchSize":  20,
+                                      "batchesStarted":  4,
+                                      "batchesCompleted":  4,
+                                      "fetchesAttempted":  87,
+                                      "fetchesSucceeded":  80,
+                                      "fetchesFailed":  7,
+                                      "fetchesSkipped":  0,
+                                      "budgetReserved":  0,
+                                      "budgetRemaining":  0,
+                                      "eligiblePendingUrls":  309,
+                                      "deferredUrls":  0,
+                                      "moreEligibleWorkRemained":  true,
+                                      "lastBudgetStopReason":  "fetch.run_budget_exhausted",
+                                      "searchLimitsExhausted":  false,
+                                      "searchLimitsExhaustedReason":  null,
+                                      "limitsExhausted":  true,
+                                      "limitsExhaustedReason":  "Maximum page fetch budget reached with 313 useful URL(s) still pending.",
+                                      "stageDurationsMs":  {
+                                                               "source.IndependentCrawler":  123862,
+                                                               "discoveryBatch":  123865,
+                                                               "qualification":  98930,
+                                                               "source.WebSearch":  0
+                                                           },
+                                      "urlRejectionReasons":  {
+                                                                  "url.ssrf_or_unsafe":  1,
+                                                                  "url.low_value_host":  2
+                                                              },
+                                      "fetchFailureReasons":  {
+                                                                  "fetch.forbidden":  4,
+                                                                  "fetch.unsupported_content":  2,
+                                                                  "fetch.client_error":  1
+                                                              },
+                                      "discoveryStages":  [
+                                                              {
+                                                                  "stageNumber":  1,
+                                                                  "stageName":  "Primary registry and prior research",
+                                                                  "providersAttempted":  [
+                                                                                             "SeedUrls",
+                                                                                             "PriorResearchUrls",
+                                                                                             "DirectoryCatalog",
+                                                                                             "IndustryAssociationCatalog"
+                                                                                         ],
+                                                                  "candidatesAdded":  54,
+                                                                  "recoveryTriggered":  true,
+                                                                  "notes":  "PreferFreshDiscoveryProviders: Prior research dominates discovery; fresh provider contribution is too low."
+                                                              },
+                                                              {
+                                                                  "stageNumber":  2,
+                                                                  "stageName":  "Synonym expansion and secondary providers",
+                                                                  "providersAttempted":  [
+                                                                                             "CommonCrawlIndex"
+                                                                                         ],
+                                                                  "candidatesAdded":  0,
+                                                                  "recoveryTriggered":  true,
+                                                                  "notes":  "PreferFreshDiscoveryProviders: Prior research dominates discovery; fresh provider contribution is too low."
+                                                              },
+                                                              {
+                                                                  "stageNumber":  3,
+                                                                  "stageName":  "Archive and recovery providers",
+                                                                  "providersAttempted":  [
+                                                                                             "CommonCrawlIndex"
+                                                                                         ],
+                                                                  "candidatesAdded":  0,
+                                                                  "recoveryTriggered":  false,
+                                                                  "notes":  null
+                                                              }
+                                                          ],
+                                      "discoveryProviders":  [
+                                                                 {
+                                                                     "providerName":  "SeedUrls",
+                                                                     "attempted":  true,
+                                                                     "succeeded":  true,
+                                                                     "producedUsefulCandidates":  false,
+                                                                     "candidatesReturned":  0,
+                                                                     "stageNumber":  1,
+                                                                     "error":  null,
+                                                                     "zeroYieldReason":  "Catalog/provider had no eligible entries for the requested country/industry scope."
+                                                                 },
+                                                                 {
+                                                                     "providerName":  "PriorResearchUrls",
+                                                                     "attempted":  true,
+                                                                     "succeeded":  true,
+                                                                     "producedUsefulCandidates":  true,
+                                                                     "candidatesReturned":  52,
+                                                                     "stageNumber":  1,
+                                                                     "error":  null,
+                                                                     "zeroYieldReason":  null
+                                                                 },
+                                                                 {
+                                                                     "providerName":  "DirectoryCatalog",
+                                                                     "attempted":  true,
+                                                                     "succeeded":  true,
+                                                                     "producedUsefulCandidates":  true,
+                                                                     "candidatesReturned":  2,
+                                                                     "stageNumber":  1,
+                                                                     "error":  null,
+                                                                     "zeroYieldReason":  null
+                                                                 },
+                                                                 {
+                                                                     "providerName":  "IndustryAssociationCatalog",
+                                                                     "attempted":  true,
+                                                                     "succeeded":  true,
+                                                                     "producedUsefulCandidates":  false,
+                                                                     "candidatesReturned":  0,
+                                                                     "stageNumber":  1,
+                                                                     "error":  null,
+                                                                     "zeroYieldReason":  "Catalog/provider had no eligible entries for the requested country/industry scope."
+                                                                 },
+                                                                 {
+                                                                     "providerName":  "CommonCrawlIndex",
+                                                                     "attempted":  true,
+                                                                     "succeeded":  true,
+                                                                     "producedUsefulCandidates":  false,
+                                                                     "candidatesReturned":  0,
+                                                                     "stageNumber":  2,
+                                                                     "error":  null,
+                                                                     "zeroYieldReason":  "Catalog/provider had no eligible entries for the requested country/industry scope."
+                                                                 },
+                                                                 {
+                                                                     "providerName":  "CommonCrawlIndex",
+                                                                     "attempted":  true,
+                                                                     "succeeded":  true,
+                                                                     "producedUsefulCandidates":  false,
+                                                                     "candidatesReturned":  0,
+                                                                     "stageNumber":  3,
+                                                                     "error":  null,
+                                                                     "zeroYieldReason":  "Catalog/provider had no eligible entries for the requested country/industry scope."
+                                                                 }
+                                                             ],
+                                      "topPendingUrls":  [
+                                                             {
+                                                                 "url":  "https://kc.edu.sa/en/contactUs",
+                                                                 "priority":  106,
+                                                                 "pagePurpose":  "Contact",
+                                                                 "host":  "kc.edu.sa",
+                                                                 "sourceType":  "Sitemap",
+                                                                 "reason":  "priority=82 source=24 relevance=12 purpose=36 gain=34 cost=-24 page=Contact; preserved persisted score"
+                                                             },
+                                                             {
+                                                                 "url":  "https://sites.moe.gov.sa/ahsaa/contact-us",
+                                                                 "priority":  106,
+                                                                 "pagePurpose":  "Contact",
+                                                                 "host":  "sites.moe.gov.sa",
+                                                                 "sourceType":  "Sitemap",
+                                                                 "reason":  "priority=82 source=24 relevance=12 purpose=36 gain=34 cost=-24 page=Contact; preserved persisted score"
+                                                             },
+                                                             {
+                                                                 "url":  "https://tetco.sa/ar/contact",
+                                                                 "priority":  96,
+                                                                 "pagePurpose":  "Contact",
+                                                                 "host":  "tetco.sa",
+                                                                 "sourceType":  "LinkExpansion",
+                                                                 "reason":  "priority=47 source=14 relevance=12 purpose=36 gain=34 cost=-49 page=Contact; preserved persisted score"
+                                                             },
+                                                             {
+                                                                 "url":  "https://charterforcompassion.org/how-to-engage/contact.html",
+                                                                 "priority":  94,
+                                                                 "pagePurpose":  "Contact",
+                                                                 "host":  "charterforcompassion.org",
+                                                                 "sourceType":  "Sitemap",
+                                                                 "reason":  "priority=86 source=24 relevance=0 purpose=36 gain=34 cost=-8 page=Contact; preserved persisted score"
+                                                             },
+                                                             {
+                                                                 "url":  "https://samhaschools.com/about-shamha/",
+                                                                 "priority":  86,
+                                                                 "pagePurpose":  "About",
+                                                                 "host":  "samhaschools.com",
+                                                                 "sourceType":  "LinkExpansion",
+                                                                 "reason":  "priority=46 source=14 relevance=0 purpose=22 gain=34 cost=-24 page=About; preserved persisted score"
+                                                             },
+                                                             {
+                                                                 "url":  "https://ifs-dammam.com/Contact.aspx",
+                                                                 "priority":  84,
+                                                                 "pagePurpose":  "Contact",
+                                                                 "host":  "ifs-dammam.com",
+                                                                 "sourceType":  "LinkExpansion",
+                                                                 "reason":  "priority=76 source=14 relevance=0 purpose=36 gain=34 cost=-8 page=Contact; preserved persisted score"
+                                                             },
+                                                             {
+                                                                 "url":  "https://www.saudiinternationalschool-dhahran.com.sa/staff-contacts",
+                                                                 "priority":  84,
+                                                                 "pagePurpose":  "Contact",
+                                                                 "host":  "saudiinternationalschool-dhahran.com.sa",
+                                                                 "sourceType":  "LinkExpansion",
+                                                                 "reason":  "priority=68 source=14 relevance=12 purpose=36 gain=34 cost=-28 page=Contact; preserved persisted score"
+                                                             },
+                                                             {
+                                                                 "url":  "https://ges.edu.sa/about/",
+                                                                 "priority":  82,
+                                                                 "pagePurpose":  "About",
+                                                                 "host":  "ges.edu.sa",
+                                                                 "sourceType":  "LinkExpansion",
+                                                                 "reason":  "priority=58 source=14 relevance=12 purpose=22 gain=34 cost=-24 page=About; preserved persisted score"
+                                                             },
+                                                             {
+                                                                 "url":  "https://maarif.sa/ar/about-maarif",
+                                                                 "priority":  82,
+                                                                 "pagePurpose":  "About",
+                                                                 "host":  "maarif.sa",
+                                                                 "sourceType":  "LinkExpansion",
+                                                                 "reason":  "priority=58 source=14 relevance=12 purpose=22 gain=34 cost=-24 page=About; preserved persisted score"
+                                                             },
+                                                             {
+                                                                 "url":  "https://ibnroshd.edu.sa/our-schools",
+                                                                 "priority":  79,
+                                                                 "pagePurpose":  "CompanyProfile",
+                                                                 "host":  "ibnroshd.edu.sa",
+                                                                 "sourceType":  "Sitemap",
+                                                                 "reason":  "priority=39 source=24 relevance=12 purpose=12 gain=15 cost=-24 page=CompanyProfile; preserved persisted score"
+                                                             }
+                                                         ],
+                                      "deferredHighScoreUrls":  [
+                                                                    {
+                                                                        "url":  "https://sites.moe.gov.sa/aseer/contact-us",
+                                                                        "priority":  106,
+                                                                        "pagePurpose":  "Contact",
+                                                                        "host":  "sites.moe.gov.sa",
+                                                                        "sourceType":  "Sitemap",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=106 batchSize=20"
+                                                                    },
+                                                                    {
+                                                                        "url":  "https://sites.moe.gov.sa/baha/contact-us",
+                                                                        "priority":  106,
+                                                                        "pagePurpose":  "Contact",
+                                                                        "host":  "sites.moe.gov.sa",
+                                                                        "sourceType":  "Sitemap",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=106 batchSize=20"
+                                                                    },
+                                                                    {
+                                                                        "url":  "https://sites.moe.gov.sa/buk/contact-us",
+                                                                        "priority":  106,
+                                                                        "pagePurpose":  "Contact",
+                                                                        "host":  "sites.moe.gov.sa",
+                                                                        "sourceType":  "Sitemap",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=106 batchSize=20"
+                                                                    },
+                                                                    {
+                                                                        "url":  "https://sites.moe.gov.sa/cm/at/contact-us",
+                                                                        "priority":  106,
+                                                                        "pagePurpose":  "Contact",
+                                                                        "host":  "sites.moe.gov.sa",
+                                                                        "sourceType":  "Sitemap",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=106 batchSize=20"
+                                                                    },
+                                                                    {
+                                                                        "url":  "https://sites.moe.gov.sa/cm/dz/contact-us",
+                                                                        "priority":  106,
+                                                                        "pagePurpose":  "Contact",
+                                                                        "host":  "sites.moe.gov.sa",
+                                                                        "sourceType":  "Sitemap",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=106 batchSize=20"
+                                                                    },
+                                                                    {
+                                                                        "url":  "https://sites.moe.gov.sa/cm/ie/contact-us",
+                                                                        "priority":  106,
+                                                                        "pagePurpose":  "Contact",
+                                                                        "host":  "sites.moe.gov.sa",
+                                                                        "sourceType":  "Sitemap",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=106 batchSize=20"
+                                                                    },
+                                                                    {
+                                                                        "url":  "https://sites.moe.gov.sa/cm/it/contact-us",
+                                                                        "priority":  106,
+                                                                        "pagePurpose":  "Contact",
+                                                                        "host":  "sites.moe.gov.sa",
+                                                                        "sourceType":  "Sitemap",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=106 batchSize=20"
+                                                                    },
+                                                                    {
+                                                                        "url":  "https://sites.moe.gov.sa/cm/ma/contact-us",
+                                                                        "priority":  106,
+                                                                        "pagePurpose":  "Contact",
+                                                                        "host":  "sites.moe.gov.sa",
+                                                                        "sourceType":  "Sitemap",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=106 batchSize=20"
+                                                                    },
+                                                                    {
+                                                                        "url":  "https://sites.moe.gov.sa/cm/my/contact-us",
+                                                                        "priority":  106,
+                                                                        "pagePurpose":  "Contact",
+                                                                        "host":  "sites.moe.gov.sa",
+                                                                        "sourceType":  "Sitemap",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=106 batchSize=20"
+                                                                    },
+                                                                    {
+                                                                        "url":  "https://sites.moe.gov.sa/cm/sd/contact-us",
+                                                                        "priority":  106,
+                                                                        "pagePurpose":  "Contact",
+                                                                        "host":  "sites.moe.gov.sa",
+                                                                        "sourceType":  "Sitemap",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=106 batchSize=20"
+                                                                    },
+                                                                    {
+                                                                        "url":  "https://sites.moe.gov.sa/cm/sg/contact-us",
+                                                                        "priority":  106,
+                                                                        "pagePurpose":  "Contact",
+                                                                        "host":  "sites.moe.gov.sa",
+                                                                        "sourceType":  "Sitemap",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=106 batchSize=20"
+                                                                    },
+                                                                    {
+                                                                        "url":  "https://sites.moe.gov.sa/cm/sp/contact-us",
+                                                                        "priority":  106,
+                                                                        "pagePurpose":  "Contact",
+                                                                        "host":  "sites.moe.gov.sa",
+                                                                        "sourceType":  "Sitemap",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=106 batchSize=20"
+                                                                    },
+                                                                    {
+                                                                        "url":  "https://sites.moe.gov.sa/cm/tn/contact-us",
+                                                                        "priority":  106,
+                                                                        "pagePurpose":  "Contact",
+                                                                        "host":  "sites.moe.gov.sa",
+                                                                        "sourceType":  "Sitemap",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=106 batchSize=20"
+                                                                    },
+                                                                    {
+                                                                        "url":  "https://sites.moe.gov.sa/dahranaljanoub/contact-us",
+                                                                        "priority":  106,
+                                                                        "pagePurpose":  "Contact",
+                                                                        "host":  "sites.moe.gov.sa",
+                                                                        "sourceType":  "Sitemap",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=106 batchSize=20"
+                                                                    },
+                                                                    {
+                                                                        "url":  "https://sites.moe.gov.sa/dawadmi/contact-us",
+                                                                        "priority":  106,
+                                                                        "pagePurpose":  "Contact",
+                                                                        "host":  "sites.moe.gov.sa",
+                                                                        "sourceType":  "Sitemap",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=106 batchSize=20"
+                                                                    },
+                                                                    {
+                                                                        "url":  "https://sites.moe.gov.sa/ghatt/contact-us",
+                                                                        "priority":  106,
+                                                                        "pagePurpose":  "Contact",
+                                                                        "host":  "sites.moe.gov.sa",
+                                                                        "sourceType":  "Sitemap",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=106 batchSize=20"
+                                                                    },
+                                                                    {
+                                                                        "url":  "https://sites.moe.gov.sa/hafralbaten/contact-us",
+                                                                        "priority":  106,
+                                                                        "pagePurpose":  "Contact",
+                                                                        "host":  "sites.moe.gov.sa",
+                                                                        "sourceType":  "Sitemap",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=106 batchSize=20"
+                                                                    },
+                                                                    {
+                                                                        "url":  "https://sites.moe.gov.sa/jazan/contact-us",
+                                                                        "priority":  106,
+                                                                        "pagePurpose":  "Contact",
+                                                                        "host":  "sites.moe.gov.sa",
+                                                                        "sourceType":  "Sitemap",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=106 batchSize=20"
+                                                                    },
+                                                                    {
+                                                                        "url":  "https://kc.edu.sa/about",
+                                                                        "priority":  92,
+                                                                        "pagePurpose":  "About",
+                                                                        "host":  "kc.edu.sa",
+                                                                        "sourceType":  "Sitemap",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=92 batchSize=20"
+                                                                    },
+                                                                    {
+                                                                        "url":  "https://kc.edu.sa/en/about",
+                                                                        "priority":  92,
+                                                                        "pagePurpose":  "About",
+                                                                        "host":  "kc.edu.sa",
+                                                                        "sourceType":  "Sitemap",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=92 batchSize=20"
+                                                                    }
+                                                                ]
+                                  },
+    "error":  null,
+    "warning":  "50 requested, 0 qualified. The research budget or duration limit was exhausted before sufficient coverage was achieved.",
+    "createdAtUtc":  "2026-10-18T19:07:27.6454178+00:00",
+    "startedAtUtc":  "2026-10-18T19:07:27.651498+00:00",
+    "completedAtUtc":  "2026-10-18T19:11:10.4606229+00:00"
+}

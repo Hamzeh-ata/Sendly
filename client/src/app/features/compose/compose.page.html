@@ -11,19 +11,16 @@
     </div>
   </div>
 
-  @if (templateName()) {
-    <section class="card template-banner">
-      <div>
-        <span class="banner-label">{{ 'compose.templateLabel' | translate }}</span>
-        <strong>{{ templateName() }}</strong>
-      </div>
-      <button type="button" class="btn btn-ghost" (click)="clearTemplate()">
-        {{ 'compose.clearTemplate' | translate }}
-      </button>
-    </section>
-  }
-
   <div class="compose-grid">
+    <section class="card">
+      <app-template-selector
+        [templates]="templates()"
+        [selectedId]="templateId()"
+        [loading]="templatesLoading()"
+        (selectionChange)="onTemplateChange($event)"
+      />
+    </section>
+
     <section class="card">
       <app-compose-recipients
         [rawRecipients]="rawRecipients()"

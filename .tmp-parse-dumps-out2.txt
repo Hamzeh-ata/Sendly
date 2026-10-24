@@ -1,0 +1,255 @@
+this-run listing org names 27 events 189
+junk-like extracted orgs: 13 of 27
+  18x About Why Purpose, history and principles
+  18x Case studies Blog Events and insights
+  18x Resources Our data Legal-Entity Data Principles
+  18x Academia
+  18x Government
+  15x Purpose
+  15x Advanced search
+  2x Up to 200 API calls/day
+  2x Up to 500 API calls/mth
+  1x IMPORTANT INFORMATION AND WHO WE ARE
+  1x You will be redirected to spaceship.com
+  1x Make offer Your offer must be higher than the seller’s minimum price.
+  1x Spaceship reliability
+top 40 listing names:
+  18x About Why Purpose, history and principles
+  18x Case studies Blog Events and insights
+  18x Bulk-delivery guide
+  18x Resources Our data Legal-Entity Data Principles
+  18x Academia
+  18x Government
+  15x Purpose
+  15x Knowledge base
+  15x Data coverage
+  15x Advanced search
+  2x Up to 200 API calls/day
+  2x Up to 500 API calls/mth
+  2x Internal & external use
+  2x API access
+  1x index.xml
+  1x HOW WE USE YOUR PERSONAL DATA
+  1x HOW YOUR PERSONAL DATA IS COLLECTED
+  1x THE DATA WE COLLECT ABOUT YOU
+  1x IMPORTANT INFORMATION AND WHO WE ARE
+  1x Flexible payment methods
+  1x Fast and easy transfer
+  1x Buyer protection program
+  1x You will be redirected to spaceship.com
+  1x Make offer Your offer must be higher than the seller’s minimum price.
+  1x Spaceship reliability
+  1x Secure payments
+  1x Free transaction support
+this-run2 listing org names 27 events 189
+junk-like extracted orgs: 13 of 27
+  18x About Why Purpose, history and principles
+  18x Case studies Blog Events and insights
+  18x Resources Our data Legal-Entity Data Principles
+  18x Academia
+  18x Government
+  15x Purpose
+  15x Advanced search
+  2x Up to 200 API calls/day
+  2x Up to 500 API calls/mth
+  1x IMPORTANT INFORMATION AND WHO WE ARE
+  1x You will be redirected to spaceship.com
+  1x Make offer Your offer must be higher than the seller’s minimum price.
+  1x Spaceship reliability
+top 40 listing names:
+  18x About Why Purpose, history and principles
+  18x Case studies Blog Events and insights
+  18x Bulk-delivery guide
+  18x Resources Our data Legal-Entity Data Principles
+  18x Academia
+  18x Government
+  15x Purpose
+  15x Knowledge base
+  15x Data coverage
+  15x Advanced search
+  2x Up to 200 API calls/day
+  2x Up to 500 API calls/mth
+  2x Internal & external use
+  2x API access
+  1x index.xml
+  1x HOW WE USE YOUR PERSONAL DATA
+  1x HOW YOUR PERSONAL DATA IS COLLECTED
+  1x THE DATA WE COLLECT ABOUT YOU
+  1x IMPORTANT INFORMATION AND WHO WE ARE
+  1x Flexible payment methods
+  1x Fast and easy transfer
+  1x Buyer protection program
+  1x You will be redirected to spaceship.com
+  1x Make offer Your offer must be higher than the seller’s minimum price.
+  1x Spaceship reliability
+  1x Secure payments
+  1x Free transaction support
+================================================================================
+this-run SourceEligibilityEvaluated
+  Ineligible | Independent Schools Council | Association | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | Club Industry Fitness | Directory | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | US Yellow Pages Fitness | Directory | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | IHRSA Fitness Association | Association | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | Private School Review | Directory | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | Expat School Guide | Directory | source.industry_mismatch | Source industries do not overlap the target industry or its supported synonyms. Country match alone is not sufficient.
+  Ineligible | International Schools Directory | Directory | source.industry_mismatch | Source industries do not overlap the target industry or its supported synonyms. Country match alone is not sufficient.
+  Ineligible | NAIS Independent Schools | Association | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | UK Yell Business Directory | Directory | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | Federation of Small Businesses | Association | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | Independent Schools Council | Association | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | New Zealand Yellow Pages | Directory | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | Australia Yellow Pages | Directory | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | UK Companies House | Registry | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | New Zealand Companies Office | Registry | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | www.hobartcity.com.au | Association | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | www.bscai.org | Association | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | www.bscai.org | Association | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | www.bscai.org | Association | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | www.bscai.org | Association | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | www.bscai.org | Association | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | www.bscai.org | Association | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | www.bscai.org | Association | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | go.issa.com | Association | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | www.issa.com | Association | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | www.issa.com | Association | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | www.issa.com | Association | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | www.issa.com | Association | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | www.issa.com | Association | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | www.issa.com | Association | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | www.issa.com | Association | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | www.issa.com | Association | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | www.issa.com | Association | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | UAE Business Directory | Directory | source.industry_mismatch | Source industries do not overlap the target industry or its supported synonyms. Country match alone is not sufficient.
+  Ineligible | Saudi Business Center | Directory | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | Saudi Chambers Directory | Association | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | UAE Yellow Pages | Directory | source.industry_mismatch | Source industries do not overlap the target industry or its supported synonyms. Country match alone is not sufficient.
+  Ineligible | Egypt Yellow Pages | Directory | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | Saudi Contractors Authority | Association | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | UK Facilities Management Association | Association | source.country_mismatch | Source country coverage does not include the target country.
+  EligibleSecondary | OpenCorporates Search Hub | Registry | source.eligible_secondary_registry | Generic registry may reveal target organizations but is not a relevant industry directory. Matched via 'Archery Club↔fitness club'.
+  Ineligible | Monshaat Saudi SME | Directory | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | Jordan Yellow Pages | Directory | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | Madares Parent Search | Directory | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | ISSA Cleaning Association | Association | source.industry_mismatch | Source industries do not overlap the target industry or its supported synonyms. Country match alone is not sufficient.
+  Ineligible | BSCAI Cleaning Association | Association | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | Madares Saudi Schools | Directory | source.country_mismatch | Source country coverage does not include the target country.
+states {'Ineligible': 46, 'EligibleSecondary': 1}
+interesting:
+{"sourceName": "UAE Business Directory", "sourceUrl": "https://www.dubaibusinessdirectory.com", "sourceKind": "Directory", "state": "Ineligible", "reasonCode": "source.industry_mismatch", "explanation": "Source industries do not overlap the target industry or its supported synonyms. Country match alone is not sufficient.", "countryMatched": true, "industryMatched": false, "matchedIndustryEvidence": null, "countsAsRelevantIndustrySource": false, "canRevealTargetOrganizations": false, "expectedDis
+{"sourceName": "UAE Yellow Pages", "sourceUrl": "https://www.yellowpages.ae", "sourceKind": "Directory", "state": "Ineligible", "reasonCode": "source.industry_mismatch", "explanation": "Source industries do not overlap the target industry or its supported synonyms. Country match alone is not sufficient.", "countryMatched": true, "industryMatched": false, "matchedIndustryEvidence": null, "countsAsRelevantIndustrySource": false, "canRevealTargetOrganizations": false, "expectedDiscoveryValue": 0}
+{"sourceName": "OpenCorporates Search Hub", "sourceUrl": "https://opencorporates.com", "sourceKind": "Registry", "state": "EligibleSecondary", "reasonCode": "source.eligible_secondary_registry", "explanation": "Generic registry may reveal target organizations but is not a relevant industry directory. Matched via 'Archery Club↔fitness club'.", "countryMatched": true, "industryMatched": true, "matchedIndustryEvidence": "Archery Club↔fitness club", "countsAsRelevantIndustrySource": false, "canRevea
+================================================================================
+this-run2 SourceEligibilityEvaluated
+  Ineligible | Independent Schools Council | Association | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | Club Industry Fitness | Directory | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | US Yellow Pages Fitness | Directory | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | IHRSA Fitness Association | Association | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | Private School Review | Directory | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | Expat School Guide | Directory | source.industry_mismatch | Source industries do not overlap the target industry or its supported synonyms. Country match alone is not sufficient.
+  Ineligible | International Schools Directory | Directory | source.industry_mismatch | Source industries do not overlap the target industry or its supported synonyms. Country match alone is not sufficient.
+  Ineligible | NAIS Independent Schools | Association | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | UK Yell Business Directory | Directory | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | Federation of Small Businesses | Association | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | Independent Schools Council | Association | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | New Zealand Yellow Pages | Directory | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | Australia Yellow Pages | Directory | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | UK Companies House | Registry | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | New Zealand Companies Office | Registry | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | www.hobartcity.com.au | Association | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | www.bscai.org | Association | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | www.bscai.org | Association | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | www.bscai.org | Association | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | www.bscai.org | Association | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | www.bscai.org | Association | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | www.bscai.org | Association | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | www.bscai.org | Association | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | go.issa.com | Association | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | www.issa.com | Association | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | www.issa.com | Association | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | www.issa.com | Association | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | www.issa.com | Association | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | www.issa.com | Association | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | www.issa.com | Association | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | www.issa.com | Association | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | www.issa.com | Association | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | www.issa.com | Association | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | UAE Business Directory | Directory | source.industry_mismatch | Source industries do not overlap the target industry or its supported synonyms. Country match alone is not sufficient.
+  Ineligible | Saudi Business Center | Directory | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | Saudi Chambers Directory | Association | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | UAE Yellow Pages | Directory | source.industry_mismatch | Source industries do not overlap the target industry or its supported synonyms. Country match alone is not sufficient.
+  Ineligible | Egypt Yellow Pages | Directory | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | Saudi Contractors Authority | Association | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | UK Facilities Management Association | Association | source.country_mismatch | Source country coverage does not include the target country.
+  EligibleSecondary | OpenCorporates Search Hub | Registry | source.eligible_secondary_registry | Generic registry may reveal target organizations but is not a relevant industry directory. Matched via 'Archery Club↔fitness club'.
+  Ineligible | Monshaat Saudi SME | Directory | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | Jordan Yellow Pages | Directory | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | Madares Parent Search | Directory | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | ISSA Cleaning Association | Association | source.industry_mismatch | Source industries do not overlap the target industry or its supported synonyms. Country match alone is not sufficient.
+  Ineligible | BSCAI Cleaning Association | Association | source.country_mismatch | Source country coverage does not include the target country.
+  Ineligible | Madares Saudi Schools | Directory | source.country_mismatch | Source country coverage does not include the target country.
+states {'Ineligible': 46, 'EligibleSecondary': 1}
+interesting:
+{"sourceName": "UAE Business Directory", "sourceUrl": "https://www.dubaibusinessdirectory.com", "sourceKind": "Directory", "state": "Ineligible", "reasonCode": "source.industry_mismatch", "explanation": "Source industries do not overlap the target industry or its supported synonyms. Country match alone is not sufficient.", "countryMatched": true, "industryMatched": false, "matchedIndustryEvidence": null, "countsAsRelevantIndustrySource": false, "canRevealTargetOrganizations": false, "expectedDis
+{"sourceName": "UAE Yellow Pages", "sourceUrl": "https://www.yellowpages.ae", "sourceKind": "Directory", "state": "Ineligible", "reasonCode": "source.industry_mismatch", "explanation": "Source industries do not overlap the target industry or its supported synonyms. Country match alone is not sufficient.", "countryMatched": true, "industryMatched": false, "matchedIndustryEvidence": null, "countsAsRelevantIndustrySource": false, "canRevealTargetOrganizations": false, "expectedDiscoveryValue": 0}
+{"sourceName": "OpenCorporates Search Hub", "sourceUrl": "https://opencorporates.com", "sourceKind": "Registry", "state": "EligibleSecondary", "reasonCode": "source.eligible_secondary_registry", "explanation": "Generic registry may reveal target organizations but is not a relevant industry directory. Matched via 'Archery Club↔fitness club'.", "countryMatched": true, "industryMatched": true, "matchedIndustryEvidence": "Archery Club↔fitness club", "countsAsRelevantIndustrySource": false, "canRevea
+================================================================================
+this-run CompanyExtracted
+Company candidate: ١٠ من أفضل المدارس البريطانية في عجمان {"company":"\u0661\u0660 \u0645\u0646 \u0623\u0641\u0636\u0644 \u0627\u0644\u0645\u062F\u0627\u0631\u0633 \u0627\u0644\u0628\u0631\u064A\u0637\u0627\u0646\u064A\u0629 \u0641\u064A \u0639\u062C\u0645\u0627\u0646","source":"SearXNG"}
+Company candidate: Deutsche Internationale Schule Sharjah {"company":"Deutsche Internationale Schule Sharjah","source":"SearXNG \u002B Web search (\u0627\u0644\u0645\u062F\u0631\u0633\u0629 \u0627\u0644\u0623\u0644\u0645\u0627\u0646\u064A\u0629 \u0627\u0644\u062F\u0648\u0644\u064A\u0629 \u0628\u0627\u0644\u0634\u0627\u0631\u0642\u0629 - Deutsche Schule Sharjah)"}
+Discovered (not campaign-qualified): مدارس نجد الأهلية {"company":"\u0645\u062F\u0627\u0631\u0633 \u0646\u062C\u062F \u0627\u0644\u0623\u0647\u0644\u064A\u0629","score":59,"reason":"Outside target country","missingCriteria":["publicBusinessEmail","targetCountry"]}
+Company candidate: مدارس نجد الأهلية {"company":"\u0645\u062F\u0627\u0631\u0633 \u0646\u062C\u062F \u0627\u0644\u0623\u0647\u0644\u064A\u0629","source":"SearXNG \u002B Web search (\u0645\u062F\u0627\u0631\u0633 \u0646\u062C\u062F \u0627\u0644\u0623\u0647\u0644\u064A\u0629)"}
+Discovered (not campaign-qualified): مدرسة منارة الشارقة الخاصة {"company":"\u0645\u062F\u0631\u0633\u0629 \u0645\u0646\u0627\u0631\u0629 \u0627\u0644\u0634\u0627\u0631\u0642\u0629 \u0627\u0644\u062E\u0627\u0635\u0629","score":59,"reason":"Contact attribution failed","missingCriteria":["contactAttribution"]}
+Company candidate: مدرسة منارة الشارقة الخاصة {"company":"\u0645\u062F\u0631\u0633\u0629 \u0645\u0646\u0627\u0631\u0629 \u0627\u0644\u0634\u0627\u0631\u0642\u0629 \u0627\u0644\u062E\u0627\u0635\u0629","source":"SearXNG \u002B Web search (\u0645\u062F\u0631\u0633\u0629 \u0645\u0646\u0627\u0631\u0629 \u0627\u0644\u0634\u0627\u0631\u0642\u0629 \u0627\u0644\u062E\u0627\u0635\u0629: \u0627\u0644\u0631\u0626\u064A\u0633\u064A\u0629)"}
+Discovered (not campaign-qualified): مدرسة اللؤلؤة الابتدائية في أبوظبي {"company":"\u0645\u062F\u0631\u0633\u0629 \u0627\u0644\u0644\u0624\u0644\u0624\u0629 \u0627\u0644\u0627\u0628\u062A\u062F\u0627\u0626\u064A\u0629 \u0641\u064A \u0623\u0628\u0648\u0638\u0628\u064A","score":59,"reason":"Contact attribution failed","missingCriteria":["contactAttribution"]}
+Company candidate: مدرسة اللؤلؤة الابتدائية في أبوظبي {"company":"\u0645\u062F\u0631\u0633\u0629 \u0627\u0644\u0644\u0624\u0644\u0624\u0629 \u0627\u0644\u0627\u0628\u062A\u062F\u0627\u0626\u064A\u0629 \u0641\u064A \u0623\u0628\u0648\u0638\u0628\u064A","source":"SearXNG \u002B Web search (\u0623\u0639\u0644\u0649 \u0627\u0644\u0645\u062F\u0627\u0631\u0633 \u0641\u064A \u0623\u0628\u0648\u0638\u0628\u064A | \u0623\u0641\u0636\u0644 \u0645\u062F\u0631\u0633\u0629 \u0645\u0635\u0646\u0641\u0629 \u0641\u064A ... - Aldar Academy) \u002B SearXNG \u002B Web search (\u0645\u062F\u0631\u0633\u0629 \u0627\u0644\u0644\u0624\u0644\u0624\u0629 \u0627\u0644\u0627\u0628\u062A\u062F\u0627\u0626\u064A\u0629 \u0641\u064A \u0623\u0628\u0648\u0638\u0628\u064A - Pearl British Academy)"}
+Company candidate: مدارس تربية خاصة و دمج في دبي {"company":"\u0645\u062F\u0627\u0631\u0633 \u062A\u0631\u0628\u064A\u0629 \u062E\u0627\u0635\u0629 \u0648 \u062F\u0645\u062C \u0641\u064A \u062F\u0628\u064A","source":"SearXNG \u002B Web search (\u0645\u062F\u0627\u0631\u0633 \u062A\u0631\u0628\u064A\u0629 \u062E\u0627\u0635\u0629 \u0648 \u062F\u0645\u062C \u0641\u064A \u062F\u0628\u064A)"}
+Discovered (not campaign-qualified): المدارس السعودية ( عالمي {"company":"\u0627\u0644\u0645\u062F\u0627\u0631\u0633 \u0627\u0644\u0633\u0639\u0648\u062F\u064A\u0629 ( \u0639\u0627\u0644\u0645\u064A","score":0,"reason":"Outside target country","missingCriteria":["publicBusinessEmail","targetCountry"]}
+Company candidate: المدارس السعودية ( عالمي {"company":"\u0627\u0644\u0645\u062F\u0627\u0631\u0633 \u0627\u0644\u0633\u0639\u0648\u062F\u064A\u0629 ( \u0639\u0627\u0644\u0645\u064A","source":"SearXNG"}
+Company candidate: نبذة عن أكاديمية العين البريطانية {"company":"\u0646\u0628\u0630\u0629 \u0639\u0646 \u0623\u0643\u0627\u062F\u064A\u0645\u064A\u0629 \u0627\u0644\u0639\u064A\u0646 \u0627\u0644\u0628\u0631\u064A\u0637\u0627\u0646\u064A\u0629","source":"SearXNG \u002B Web search (\u0646\u0628\u0630\u0629 \u0639\u0646 \u0623\u0643\u0627\u062F\u064A\u0645\u064A\u0629 \u0627\u0644\u0639\u064A\u0646 \u0627\u0644\u0628\u0631\u064A\u0637\u0627\u0646\u064A\u0629 - Al Ain British Academy)"}
+Discovered (not campaign-qualified): مدرسة الامارات الخاصة الفجيرة {"company":"\u0645\u062F\u0631\u0633\u0629 \u0627\u0644\u0627\u0645\u0627\u0631\u0627\u062A \u0627\u0644\u062E\u0627\u0635\u0629 \u0627\u0644\u0641\u062C\u064A\u0631\u0629","score":59,"reason":"Contact attribution failed","missingCriteria":["targetCountry","contactAttribution"]}
+Company candidate: مدرسة الامارات الخاصة الفجيرة {"company":"\u0645\u062F\u0631\u0633\u0629 \u0627\u0644\u0627\u0645\u0627\u0631\u0627\u062A \u0627\u0644\u062E\u0627\u0635\u0629 \u0627\u0644\u0641\u062C\u064A\u0631\u0629","source":"SearXNG \u002B Web search (\u0645\u062F\u0631\u0633\u0629 \u0627\u0644\u0627\u0645\u0627\u0631\u0627\u062A \u0627\u0644\u062E\u0627\u0635\u0629 \u0627\u0644\u0641\u062C\u064A\u0631\u0629)"}
+Company candidate: هيئة الشارقة للتعليم الخاص {"company":"\u0647\u064A\u0626\u0629 \u0627\u0644\u0634\u0627\u0631\u0642\u0629 \u0644\u0644\u062A\u0639\u0644\u064A\u0645 \u0627\u0644\u062E\u0627\u0635","source":"SearXNG"}
+Discovered (not campaign-qualified): IMPORTANT INFORMATION AND WHO WE ARE {"company":"IMPORTANT INFORMATION AND WHO WE ARE","score":38,"reason":"Industry mismatch","missingCriteria":["officialWebsite","publicBusinessEmail","targetCountry","targetIndustry","keywords"]}
+Company candidate: IMPORTANT INFORMATION AND WHO WE ARE {"company":"IMPORTANT INFORMATION AND WHO WE ARE","source":"DirectoryListingInvestigation"}
+Discovered (not campaign-qualified): Make offer Your offer must be higher than the seller’s minimum price. {"company":"Make offer Your offer must be higher than the seller\u2019s minimum price.","score":50,"reason":"Industry mismatch","missingCriteria":["officialWebsite","publicBusinessEmail","targetIndustry","keywords"]}
+Company candidate: Make offer Your offer must be higher than the seller’s minimum price. {"company":"Make offer Your offer must be higher than the seller\u2019s minimum price.","source":"DirectoryListingInvestigation"}
+================================================================================
+this-run2 CompanyExtracted
+Discovered (not campaign-qualified): IMPORTANT INFORMATION AND WHO WE ARE {"company":"IMPORTANT INFORMATION AND WHO WE ARE","score":38,"reason":"Industry mismatch","missingCriteria":["officialWebsite","publicBusinessEmail","targetCountry","targetIndustry","keywords"]}
+Company candidate: IMPORTANT INFORMATION AND WHO WE ARE {"company":"IMPORTANT INFORMATION AND WHO WE ARE","source":"DirectoryListingInvestigation"}
+Discovered (not campaign-qualified): Make offer Your offer must be higher than the seller’s minimum price. {"company":"Make offer Your offer must be higher than the seller\u2019s minimum price.","score":50,"reason":"Industry mismatch","missingCriteria":["officialWebsite","publicBusinessEmail","targetIndustry","keywords"]}
+Company candidate: Make offer Your offer must be higher than the seller’s minimum price. {"company":"Make offer Your offer must be higher than the seller\u2019s minimum price.","source":"DirectoryListingInvestigation"}
+================================================================================
+Completed Research run finished with status CompletedWithFailures
+{"status":"CompletedWithFailures","qualified":4,"requested":50,"pagesCrawled":20,"crawlErrors":14}
+DiscoveryCoverageDecision Automatic discovery collected 15 candidate URLs (2 domains; fresh=15, prior=0; relevant=0, secondary=1) from 5/6 providers across 3 stage(s), recovery stages: 2 (duplicates removed: 0, rejected unsafe: 0, filtered: 2, zero-return providers: 3).
+{"stopReason":"NoRelevantDiscoverySources","relevantIndustrySources":0,"secondaryRegistries":1,"candidateCount":15,"uniqueDomains":2}
+Started Research run started for ExperienceOps – UAE
+{"projectId":"188b202c-faf2-40ea-bcde-5293f2f161f6","requested":50}
+================================================================================
+DiscoveryCoverageDecision Automatic discovery collected 15 candidate URLs (2 domains; fresh=15, prior=0; relevant=0, secondary=1) from 5/6 providers across 3 stage(s), recovery stages: 2 (duplicates removed: 14, rejected unsafe: 0, filtered: 4, zero-return providers: 3).
+{"stopReason":"NoRelevantDiscoverySources","relevantIndustrySources":0,"secondaryRegistries":1,"candidateCount":15,"uniqueDomains":2}
+Started Research run started for ExperienceOps – UAE
+{"projectId":"188b202c-faf2-40ea-bcde-5293f2f161f6","requested":50}
+================================================================================
+discovery-sources count 46
+attempted 12
+OpenCorporates Search Hub https://opencorporates.com attempts 13 success 13 cands 13 last 2026-10-20T07:47:04.1523231+00:00
+Madares Parent Search https://parents.madares.sa/school-search attempts 18 success 18 cands 18 last 2026-10-19T10:34:17.493317+00:00
+Madares Saudi Schools https://madares.sa attempts 18 success 18 cands 18 last 2026-10-19T10:34:17.5123516+00:00
+ISSA Cleaning Association https://www.issa.com attempts 6 success 6 cands 6 last 2026-10-19T15:13:32.1624777+00:00
+BSCAI Cleaning Association https://www.bscai.org attempts 4 success 4 cands 4 last 2026-10-19T15:13:32.1633673+00:00
+UAE Yellow Pages https://www.yellowpages.ae attempts 3 success 3 cands 3 last 2026-10-19T14:19:35.3122906+00:00
+Expat School Guide https://www.expatschoolguide.com attempts 2 success 2 cands 2 last 2026-10-19T14:19:35.3133781+00:00
+International Schools Directory https://www.theinternationalschools.com attempts 2 success 2 cands 2 last 2026-10-19T14:19:35.3145421+00:00
+UAE Business Directory https://www.dubaibusinessdirectory.com attempts 2 success 2 cands 2 last 2026-10-17T12:06:32.7777538+00:00
+UK Companies House https://find-and-update.company-information.service.gov.uk attempts 2 success 2 cands 2 last 2026-10-17T15:17:38.9508398+00:00
+UK Facilities Management Association https://www.bia.co.uk attempts 2 success 2 cands 2 last 2026-10-17T15:17:38.9545771+00:00
+NAIS Independent Schools https://www.nais.org/school-directory attempts 1 success 1 cands 1 last 2026-10-19T11:45:46.720662+00:00
+UAE-tagged sources 6
+  OpenCorporates Search Hub https://opencorporates.com ["Cleaning","Commercial Cleaning","Construction","Hospitality","Healthcare","Manufacturing","Logistics","Business","Services","Fitness","Gym","Retail","Property","Technology"]
+  ISSA Cleaning Association https://www.issa.com ["Cleaning","Commercial Cleaning","Janitorial","Facility","Sanitation"]
+  UAE Yellow Pages https://www.yellowpages.ae ["Cleaning","Commercial Cleaning","Facility","Construction","Education","Hospitality","Hotel","Business","Services"]
+  Expat School Guide https://www.expatschoolguide.com ["Education","School","Schools","International School","Private School"]
+  International Schools Directory https://www.theinternationalschools.com ["Education","School","Schools","International School","Private School","Independent School"]
+  UAE Business Directory https://www.dubaibusinessdirectory.com ["Cleaning","Business","Services","Construction","Facility"]

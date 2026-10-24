@@ -47,4 +47,8 @@ public class OutreachProject
     public ICollection<Prospect> Prospects { get; set; } = new List<Prospect>();
 
     public ICollection<ResearchRun> ResearchRuns { get; set; } = new List<ResearchRun>();
+
+    public ICollection<ResearchQuery> ResearchQueries { get; set; } = new List<ResearchQuery>();
+
+    public ICollection<ResearchSeedUrl> SeedUrls { get; set; } = new List<ResearchSeedUrl>();
 }

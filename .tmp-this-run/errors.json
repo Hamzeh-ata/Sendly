@@ -1,0 +1,41 @@
+[
+  {
+    "category": "http4xx",
+    "sampleMessage": "Host returned HTTP 403 Forbidden.",
+    "count": 1,
+    "firstOccurredAtUtc": "2026-10-23T11:55:53.4178905+00:00",
+    "lastOccurredAtUtc": "2026-10-23T11:55:53.4178905+00:00",
+    "researchRunId": "c1740e20-ac40-456b-966f-29abd21ffd79",
+    "domain": "ontology.birzeit.edu",
+    "url": "https://ontology.birzeit.edu/term/أش",
+    "stage": "Fetch",
+    "suggestedRemediation": "Resource is unavailable or forbidden. Verify the URL is public.",
+    "retryPossible": false
+  },
+  {
+    "category": "responseSizeLimit",
+    "sampleMessage": "Response exceeded size limit.",
+    "count": 1,
+    "firstOccurredAtUtc": "2026-10-23T11:55:29.7450186+00:00",
+    "lastOccurredAtUtc": "2026-10-23T11:55:29.7450186+00:00",
+    "researchRunId": "c1740e20-ac40-456b-966f-29abd21ffd79",
+    "domain": "translate.google.ae",
+    "url": "https://translate.google.ae/details",
+    "stage": "Fetch",
+    "suggestedRemediation": "Response exceeded capture limits; try a smaller page or deepen link selection.",
+    "retryPossible": false
+  },
+  {
+    "category": "networkFailure",
+    "sampleMessage": "HTTP request failed.",
+    "count": 1,
+    "firstOccurredAtUtc": "2026-10-23T11:54:07.3313814+00:00",
+    "lastOccurredAtUtc": "2026-10-23T11:54:07.3313814+00:00",
+    "researchRunId": "c1740e20-ac40-456b-966f-29abd21ffd79",
+    "domain": "yellowpages.ae",
+    "url": "https://www.yellowpages.ae",
+    "stage": "Fetch",
+    "suggestedRemediation": "Check DNS/connectivity for the domain; confirm the host still resolves publicly.",
+    "retryPossible": true
+  }
+]

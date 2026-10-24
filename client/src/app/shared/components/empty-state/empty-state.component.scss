@@ -1,7 +1,11 @@
 .empty-state {
   text-align: center;
-  padding: 3rem 1.5rem;
+  padding: 2.5rem 1.5rem;
   color: var(--text-muted);
+  background: var(--rc-surface);
+  border: 1px solid var(--rc-border);
+  border-radius: var(--radius-md);
+  box-shadow: none;
 
   h3 {
     margin: 0 0 0.5rem;

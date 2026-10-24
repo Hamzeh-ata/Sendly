@@ -11,7 +11,15 @@
       <a routerLink="/projects" routerLinkActive="active" (click)="closeSidebar()">
         {{ 'nav.projects' | translate }}
       </a>
-      <a routerLink="/research-runs" routerLinkActive="active" (click)="closeSidebar()">
+      <a
+        routerLink="/researcher"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        (click)="closeSidebar()"
+      >
+        {{ 'nav.researcher' | translate }}
+      </a>
+      <a routerLink="/researcher/runs" routerLinkActive="active" (click)="closeSidebar()">
         {{ 'nav.researchRuns' | translate }}
       </a>
       <a routerLink="/prospects" routerLinkActive="active" (click)="closeSidebar()">

@@ -1,0 +1,633 @@
+﻿{
+    "prospects":  [
+                      {
+                          "id":  "f1e69b1e-ad58-4d49-a3e7-dbf310cad558",
+                          "companyName":  "Mofradat",
+                          "website":  "https://mofradat.com",
+                          "city":  null,
+                          "country":  null,
+                          "email":  null,
+                          "whatsApp":  null,
+                          "sourceUrl":  "https://www.mofradat.com/أش",
+                          "qualificationScore":  44,
+                          "status":  "discovered",
+                          "isQualified":  false,
+                          "createdAtUtc":  "2026-10-23T11:55:21.4687888+00:00"
+                      },
+                      {
+                          "id":  "d7fd4674-9698-4fea-833a-7a72266778e7",
+                          "companyName":  "لسانا",
+                          "website":  "https://lesana.co",
+                          "city":  null,
+                          "country":  null,
+                          "email":  "saud@lesana.co",
+                          "whatsApp":  "+966545215395",
+                          "sourceUrl":  "https://www.lesana.co/meaning",
+                          "qualificationScore":  54,
+                          "status":  "discovered",
+                          "isQualified":  false,
+                          "createdAtUtc":  "2026-10-23T11:54:58.2927331+00:00"
+                      },
+                      {
+                          "id":  "e47ed78c-788f-4cc3-bc4a-8cf0dd54581d",
+                          "companyName":  "مواقيت الصلاة في مدن الأردن",
+                          "website":  "https://timesprayer.com",
+                          "city":  null,
+                          "country":  null,
+                          "email":  null,
+                          "whatsApp":  null,
+                          "sourceUrl":  "https://timesprayer.com/prayer-times-cities-jordan.html",
+                          "qualificationScore":  44,
+                          "status":  "discovered",
+                          "isQualified":  false,
+                          "createdAtUtc":  "2026-10-23T11:54:54.8674201+00:00"
+                      },
+                      {
+                          "id":  "de4bf4f5-2ace-4ad5-b68e-1c9b62c93fa6",
+                          "companyName":  "About Capify",
+                          "website":  "https://capify.ai",
+                          "city":  null,
+                          "country":  null,
+                          "email":  null,
+                          "whatsApp":  null,
+                          "sourceUrl":  "https://capify.ai/about",
+                          "qualificationScore":  44,
+                          "status":  "discovered",
+                          "isQualified":  false,
+                          "createdAtUtc":  "2026-10-23T11:54:52.1372876+00:00"
+                      },
+                      {
+                          "id":  "c35b4cbf-0774-4b39-a5b8-70d9c0d4b233",
+                          "companyName":  "Platinum Academy",
+                          "website":  "https://platinumacademyeg.com/",
+                          "city":  null,
+                          "country":  "United Arab Emirates",
+                          "email":  null,
+                          "whatsApp":  null,
+                          "sourceUrl":  "https://platinumacademyeg.com/",
+                          "qualificationScore":  0,
+                          "status":  "discovered",
+                          "isQualified":  false,
+                          "createdAtUtc":  "2026-10-23T11:53:07.6678299+00:00"
+                      },
+                      {
+                          "id":  "05390c9f-54cc-4493-9b2d-eb9a6b25ac0d",
+                          "companyName":  "متجر جو أكاديمي",
+                          "website":  "https://store.joacademy.com",
+                          "city":  null,
+                          "country":  "Jordan",
+                          "email":  "E.store@joacademy.com",
+                          "whatsApp":  "0782878776",
+                          "sourceUrl":  "https://store.joacademy.com/about-us",
+                          "qualificationScore":  59,
+                          "status":  "discovered",
+                          "isQualified":  false,
+                          "createdAtUtc":  "2026-10-23T11:33:29.6078637+00:00"
+                      }
+                  ],
+    "id":  "c1740e20-ac40-456b-966f-29abd21ffd79",
+    "projectId":  "57c93a44-2db2-43c9-80e3-b8c7ef89a2f2",
+    "projectName":  "School Watch - UAE",
+    "researchQueryId":  "8d11f9a7-72d9-4607-aaa3-40f7f9bdfa43",
+    "researchQueryVersionId":  "7f6fffa5-dadf-4c6e-9255-fdf2aabf6735",
+    "researchQueryName":  null,
+    "urlsDiscovered":  568,
+    "pagesCrawled":  23,
+    "crawlErrors":  3,
+    "status":  "cancelled",
+    "requestedProspectCount":  200,
+    "includeEmail":  true,
+    "includeWhatsApp":  false,
+    "minQualificationScore":  60,
+    "progressPercent":  21,
+    "companiesFound":  40,
+    "contactsFound":  12,
+    "validEmails":  1,
+    "validWhatsApp":  0,
+    "duplicatesFound":  4,
+    "rejectedCount":  4,
+    "qualifiedCount":  0,
+    "searchQueriesExecuted":  150,
+    "searchResultsReceived":  677,
+    "candidatesDiscovered":  41,
+    "candidatesAfterDeduplication":  12,
+    "candidatesValidated":  10,
+    "prospectsSaved":  5,
+    "prospectsSkippedAsDuplicates":  1,
+    "researchLimitsReached":  false,
+    "researchLimitsReachedReason":  "Maximum search requests reached",
+    "rejectionReasons":  {
+                             "RejectedBeforeFetch":  440,
+                             "Irrelevant":  25,
+                             "ExcludedCategory":  1,
+                             "WrongGeography":  1,
+                             "Industry mismatch":  3,
+                             "Outside target country":  1
+                         },
+    "searchProviderDiagnostics":  {
+                                      "provider":  "IndependentCrawler",
+                                      "queriesExecuted":  150,
+                                      "requestsSuccessful":  149,
+                                      "requestsFailed":  1,
+                                      "resultsReceived":  677,
+                                      "http401":  0,
+                                      "http429":  0,
+                                      "http5xx":  0,
+                                      "timeouts":  0,
+                                      "automaticDiscoverySummary":  "Automatic discovery collected 60 candidate URLs (43 domains; fresh=20, prior=40; relevant=20, secondary=0) from 9/9 providers across 3 stage(s), recovery stages: 2 (duplicates removed: 0, rejected unsafe: 0, filtered: 22, zero-return providers: 6).",
+                                      "automaticDiscoveryDuplicatesRemoved":  0,
+                                      "automaticDiscoveryRejectedUnsafe":  0,
+                                      "discoveryPlanSummary":  "Plan: 14 industries (+12 synonyms), 2 countries, 8 providers, budget 200 URLs / 100 domains / 3 stages.",
+                                      "uniqueDomainsDiscovered":  43,
+                                      "recoveryAttempts":  2,
+                                      "discoveryStopReason":  "None",
+                                      "recoveryStrategies":  [
+                                                                 "TightenUrlFiltering",
+                                                                 "TightenUrlFiltering"
+                                                             ],
+                                      "sourcesReused":  6,
+                                      "sourcesAdded":  3,
+                                      "sourcesSkipped":  10,
+                                      "sourcesUnavailable":  0,
+                                      "urlsAccessible":  23,
+                                      "urlsParsed":  23,
+                                      "urlsUnavailable":  3,
+                                      "urlsRobotsBlocked":  0,
+                                      "companiesIdentified":  40,
+                                      "publicContactsExtracted":  6,
+                                      "liveVerifiedCompanies":  14,
+                                      "prospectsQualified":  5,
+                                      "urlsRejectedFiltered":  152,
+                                      "urlsAdmitted":  146,
+                                      "urlsReusedFromCache":  0,
+                                      "urlsSkippedKnownProspect":  0,
+                                      "usefulPendingUrls":  529,
+                                      "usefulUrlsLeftPendingAtStop":  0,
+                                      "newlyDiscoveredProspects":  5,
+                                      "previouslyKnownProspects":  1,
+                                      "previouslyContactedProspects":  0,
+                                      "newlyOutreachEligibleProspects":  0,
+                                      "identityVerifiedBusinesses":  9,
+                                      "emailReadyProspects":  0,
+                                      "contactableProspects":  4,
+                                      "pagesFetched":  23,
+                                      "pagesQueued":  542,
+                                      "pagesSkipped":  2,
+                                      "fetchBudgetConsumed":  23,
+                                      "fetchBudgetLimit":  80,
+                                      "requestedFetchBudget":  80,
+                                      "configuredBatchSize":  20,
+                                      "batchesStarted":  3,
+                                      "batchesCompleted":  3,
+                                      "fetchesAttempted":  26,
+                                      "fetchesSucceeded":  23,
+                                      "fetchesFailed":  3,
+                                      "fetchesSkipped":  0,
+                                      "budgetReserved":  3,
+                                      "budgetRemaining":  57,
+                                      "eligiblePendingUrls":  485,
+                                      "deferredUrls":  0,
+                                      "moreEligibleWorkRemained":  true,
+                                      "lastBudgetStopReason":  null,
+                                      "searchLimitsExhausted":  true,
+                                      "searchLimitsExhaustedReason":  "Maximum search requests reached",
+                                      "limitsExhausted":  false,
+                                      "limitsExhaustedReason":  null,
+                                      "stageDurationsMs":  {
+                                                               "source.WebSearch":  161436,
+                                                               "discoveryBatch":  272691,
+                                                               "qualification":  57543,
+                                                               "parseExtract":  58,
+                                                               "investigation":  4,
+                                                               "queueSchedule":  140,
+                                                               "source.IndependentCrawler":  111253
+                                                           },
+                                      "urlRejectionReasons":  {
+                                                                  "gate.WrongIndustry":  316,
+                                                                  "url.foreign_host":  1,
+                                                                  "url.embed_host":  110,
+                                                                  "gate.UnsupportedOrInvalidResult":  52,
+                                                                  "url.social_platform":  1,
+                                                                  "gate.Irrelevant":  97,
+                                                                  "url.forum":  10,
+                                                                  "url.api_endpoint":  8,
+                                                                  "url.foreign_path":  22,
+                                                                  "url.auth_host":  10,
+                                                                  "url.low_value_legal":  2,
+                                                                  "url.low_value_host":  5,
+                                                                  "url.media_asset":  70,
+                                                                  "entity.encyclopedia_or_topic":  1,
+                                                                  "gate.WrongGeography":  1,
+                                                                  "url.app_store":  2,
+                                                                  "url.script_asset":  40,
+                                                                  "url.whitespace":  1
+                                                              },
+                                      "fetchFailureReasons":  {
+                                                                  "fetch.unavailable":  2,
+                                                                  "fetch.forbidden":  1
+                                                              },
+                                      "discoveryStages":  [
+                                                              {
+                                                                  "stageNumber":  1,
+                                                                  "stageName":  "Primary registry and prior research",
+                                                                  "providersAttempted":  [
+                                                                                             "SeedUrls",
+                                                                                             "PriorResearchUrls",
+                                                                                             "DirectoryCatalog",
+                                                                                             "IndustryAssociationCatalog",
+                                                                                             "WebSearchDiscovery"
+                                                                                         ],
+                                                                  "candidatesAdded":  99,
+                                                                  "recoveryTriggered":  true,
+                                                                  "notes":  "TightenUrlFiltering: High asset/API URL pollution in discovery queue."
+                                                              },
+                                                              {
+                                                                  "stageNumber":  2,
+                                                                  "stageName":  "Synonym expansion and secondary providers",
+                                                                  "providersAttempted":  [
+                                                                                             "CommonCrawlIndex"
+                                                                                         ],
+                                                                  "candidatesAdded":  0,
+                                                                  "recoveryTriggered":  true,
+                                                                  "notes":  "TightenUrlFiltering: High asset/API URL pollution in discovery queue."
+                                                              },
+                                                              {
+                                                                  "stageNumber":  3,
+                                                                  "stageName":  "Archive and recovery providers",
+                                                                  "providersAttempted":  [
+                                                                                             "LocalBusinessIndex",
+                                                                                             "OpenStreetMapNominatim",
+                                                                                             "CommonCrawlIndex"
+                                                                                         ],
+                                                                  "candidatesAdded":  0,
+                                                                  "recoveryTriggered":  false,
+                                                                  "notes":  null
+                                                              }
+                                                          ],
+                                      "discoveryProviders":  [
+                                                                 {
+                                                                     "providerName":  "SeedUrls",
+                                                                     "attempted":  true,
+                                                                     "succeeded":  true,
+                                                                     "producedUsefulCandidates":  false,
+                                                                     "candidatesReturned":  0,
+                                                                     "stageNumber":  1,
+                                                                     "error":  null,
+                                                                     "zeroYieldReason":  "Catalog/provider had no eligible entries for the requested country/industry scope."
+                                                                 },
+                                                                 {
+                                                                     "providerName":  "PriorResearchUrls",
+                                                                     "attempted":  true,
+                                                                     "succeeded":  true,
+                                                                     "producedUsefulCandidates":  true,
+                                                                     "candidatesReturned":  79,
+                                                                     "stageNumber":  1,
+                                                                     "error":  null,
+                                                                     "zeroYieldReason":  null
+                                                                 },
+                                                                 {
+                                                                     "providerName":  "DirectoryCatalog",
+                                                                     "attempted":  true,
+                                                                     "succeeded":  true,
+                                                                     "producedUsefulCandidates":  true,
+                                                                     "candidatesReturned":  3,
+                                                                     "stageNumber":  1,
+                                                                     "error":  null,
+                                                                     "zeroYieldReason":  null
+                                                                 },
+                                                                 {
+                                                                     "providerName":  "IndustryAssociationCatalog",
+                                                                     "attempted":  true,
+                                                                     "succeeded":  true,
+                                                                     "producedUsefulCandidates":  false,
+                                                                     "candidatesReturned":  0,
+                                                                     "stageNumber":  1,
+                                                                     "error":  null,
+                                                                     "zeroYieldReason":  "Catalog/provider had no eligible entries for the requested country/industry scope."
+                                                                 },
+                                                                 {
+                                                                     "providerName":  "WebSearchDiscovery",
+                                                                     "attempted":  true,
+                                                                     "succeeded":  true,
+                                                                     "producedUsefulCandidates":  true,
+                                                                     "candidatesReturned":  17,
+                                                                     "stageNumber":  1,
+                                                                     "error":  null,
+                                                                     "zeroYieldReason":  null
+                                                                 },
+                                                                 {
+                                                                     "providerName":  "CommonCrawlIndex",
+                                                                     "attempted":  true,
+                                                                     "succeeded":  true,
+                                                                     "producedUsefulCandidates":  false,
+                                                                     "candidatesReturned":  0,
+                                                                     "stageNumber":  2,
+                                                                     "error":  null,
+                                                                     "zeroYieldReason":  "Catalog/provider had no eligible entries for the requested country/industry scope."
+                                                                 },
+                                                                 {
+                                                                     "providerName":  "LocalBusinessIndex",
+                                                                     "attempted":  true,
+                                                                     "succeeded":  true,
+                                                                     "producedUsefulCandidates":  false,
+                                                                     "candidatesReturned":  0,
+                                                                     "stageNumber":  3,
+                                                                     "error":  null,
+                                                                     "zeroYieldReason":  "Catalog/provider had no eligible entries for the requested country/industry scope."
+                                                                 },
+                                                                 {
+                                                                     "providerName":  "OpenStreetMapNominatim",
+                                                                     "attempted":  true,
+                                                                     "succeeded":  true,
+                                                                     "producedUsefulCandidates":  false,
+                                                                     "candidatesReturned":  0,
+                                                                     "stageNumber":  3,
+                                                                     "error":  null,
+                                                                     "zeroYieldReason":  "Catalog/provider had no eligible entries for the requested country/industry scope."
+                                                                 },
+                                                                 {
+                                                                     "providerName":  "CommonCrawlIndex",
+                                                                     "attempted":  true,
+                                                                     "succeeded":  true,
+                                                                     "producedUsefulCandidates":  false,
+                                                                     "candidatesReturned":  0,
+                                                                     "stageNumber":  3,
+                                                                     "error":  null,
+                                                                     "zeroYieldReason":  "Catalog/provider had no eligible entries for the requested country/industry scope."
+                                                                 }
+                                                             ],
+                                      "topPendingUrls":  [
+                                                             {
+                                                                 "url":  "https://store.joacademy.com/contact-us",
+                                                                 "priority":  150,
+                                                                 "pagePurpose":  "Contact",
+                                                                 "host":  "store.joacademy.com",
+                                                                 "sourceType":  "LinkExpansion",
+                                                                 "reason":  "priority=115 source=14 relevance=0 purpose=36 gain=68 cost=-3 page=Contact; preserved persisted score"
+                                                             },
+                                                             {
+                                                                 "url":  "https://www.mofradat.com/contact.html",
+                                                                 "priority":  150,
+                                                                 "pagePurpose":  "Contact",
+                                                                 "host":  "mofradat.com",
+                                                                 "sourceType":  "LinkExpansion",
+                                                                 "reason":  "priority=115 source=14 relevance=0 purpose=36 gain=68 cost=-3 page=Contact; preserved persisted score"
+                                                             },
+                                                             {
+                                                                 "url":  "https://www.lesana.co/contact",
+                                                                 "priority":  118,
+                                                                 "pagePurpose":  "Contact",
+                                                                 "host":  "lesana.co",
+                                                                 "sourceType":  "Sitemap",
+                                                                 "reason":  "priority=115 source=24 relevance=0 purpose=36 gain=58 cost=-3 page=Contact; preserved persisted score"
+                                                             },
+                                                             {
+                                                                 "url":  "https://timesprayer.com/c-aboutads.html",
+                                                                 "priority":  90,
+                                                                 "pagePurpose":  "About",
+                                                                 "host":  "timesprayer.com",
+                                                                 "sourceType":  "LinkExpansion",
+                                                                 "reason":  "priority=67 source=14 relevance=0 purpose=22 gain=34 cost=-3 page=About; preserved persisted score"
+                                                             },
+                                                             {
+                                                                 "url":  "https://expatschoolguide.com/schools/3e-international-school-beijing/",
+                                                                 "priority":  83,
+                                                                 "pagePurpose":  "DirectoryListing",
+                                                                 "host":  "expatschoolguide.com",
+                                                                 "sourceType":  "Sitemap",
+                                                                 "reason":  "priority=80 source=24 relevance=0 purpose=16 gain=43 cost=-3 page=DirectoryListing; preserved persisted score"
+                                                             },
+                                                             {
+                                                                 "url":  "https://xn----ymcbakc3fyevabd0b2a.com/country-109.html",
+                                                                 "priority":  58,
+                                                                 "pagePurpose":  "CompanyProfile",
+                                                                 "host":  "xn----ymcbakc3fyevabd0b2a.com",
+                                                                 "sourceType":  "WebSearch",
+                                                                 "reason":  "priority=38 source=11 relevance=0 purpose=12 gain=15 cost=-0 page=CompanyProfile; preserved persisted score"
+                                                             },
+                                                             {
+                                                                 "url":  "https://jotawjihinews.com/من-نحن-about-us",
+                                                                 "priority":  56,
+                                                                 "pagePurpose":  "About",
+                                                                 "host":  "jotawjihinews.com",
+                                                                 "sourceType":  "PriorResearch",
+                                                                 "reason":  "priority=56 source=12 relevance=0 purpose=22 gain=22 cost=-0 page=About"
+                                                             },
+                                                             {
+                                                                 "url":  "https://www.ens.sch.ae/campus/rak",
+                                                                 "priority":  55,
+                                                                 "pagePurpose":  "Location",
+                                                                 "host":  "ens.sch.ae",
+                                                                 "sourceType":  "PriorResearch",
+                                                                 "reason":  "priority=55 source=12 relevance=12 purpose=16 gain=15 cost=-0 page=Location"
+                                                             },
+                                                             {
+                                                                 "url":  "https://www.larvera.com/ar/directory/platinum-academy-and-nursery",
+                                                                 "priority":  54,
+                                                                 "pagePurpose":  "Unknown",
+                                                                 "host":  "larvera.com",
+                                                                 "sourceType":  "WebSearch",
+                                                                 "reason":  "priority=54 source=11 relevance=0 purpose=0 gain=43 cost=-0 page=Unknown"
+                                                             },
+                                                             {
+                                                                 "url":  "https://capify.ai/ai-music-video-generator",
+                                                                 "priority":  51,
+                                                                 "pagePurpose":  "CompanyProfile",
+                                                                 "host":  "capify.ai",
+                                                                 "sourceType":  "Sitemap",
+                                                                 "reason":  "priority=48 source=24 relevance=0 purpose=12 gain=15 cost=-3 page=CompanyProfile; preserved persisted score"
+                                                             }
+                                                         ],
+                                      "deferredHighScoreUrls":  [
+                                                                    {
+                                                                        "url":  "https://store.joacademy.com/en/contact-us",
+                                                                        "priority":  118,
+                                                                        "pagePurpose":  "Contact",
+                                                                        "host":  "store.joacademy.com",
+                                                                        "sourceType":  "Sitemap",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=118 batchSize=20"
+                                                                    },
+                                                                    {
+                                                                        "url":  "https://store.joacademy.com/en/about-us",
+                                                                        "priority":  114,
+                                                                        "pagePurpose":  "About",
+                                                                        "host":  "store.joacademy.com",
+                                                                        "sourceType":  "LinkExpansion",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=114 batchSize=20"
+                                                                    },
+                                                                    {
+                                                                        "url":  "https://expatschoolguide.com/schools/aba-an-ib-world-school-muscat/",
+                                                                        "priority":  83,
+                                                                        "pagePurpose":  "DirectoryListing",
+                                                                        "host":  "expatschoolguide.com",
+                                                                        "sourceType":  "Sitemap",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=83 batchSize=20"
+                                                                    },
+                                                                    {
+                                                                        "url":  "https://expatschoolguide.com/schools/abbey-college-cambridge/",
+                                                                        "priority":  83,
+                                                                        "pagePurpose":  "DirectoryListing",
+                                                                        "host":  "expatschoolguide.com",
+                                                                        "sourceType":  "Sitemap",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=83 batchSize=20"
+                                                                    },
+                                                                    {
+                                                                        "url":  "https://expatschoolguide.com/schools/abc-international-school-hcmc-ho-chi-minh-city/",
+                                                                        "priority":  83,
+                                                                        "pagePurpose":  "DirectoryListing",
+                                                                        "host":  "expatschoolguide.com",
+                                                                        "sourceType":  "Sitemap",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=83 batchSize=20"
+                                                                    },
+                                                                    {
+                                                                        "url":  "https://expatschoolguide.com/schools/abdul-rahman-kanoo-international-school-manama/",
+                                                                        "priority":  83,
+                                                                        "pagePurpose":  "DirectoryListing",
+                                                                        "host":  "expatschoolguide.com",
+                                                                        "sourceType":  "Sitemap",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=83 batchSize=20"
+                                                                    },
+                                                                    {
+                                                                        "url":  "https://expatschoolguide.com/schools/abu-dhabi-grammar-school-canada/",
+                                                                        "priority":  83,
+                                                                        "pagePurpose":  "DirectoryListing",
+                                                                        "host":  "expatschoolguide.com",
+                                                                        "sourceType":  "Sitemap",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=83 batchSize=20"
+                                                                    },
+                                                                    {
+                                                                        "url":  "https://expatschoolguide.com/schools/abu-dhabi-international-school/",
+                                                                        "priority":  83,
+                                                                        "pagePurpose":  "DirectoryListing",
+                                                                        "host":  "expatschoolguide.com",
+                                                                        "sourceType":  "Sitemap",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=83 batchSize=20"
+                                                                    },
+                                                                    {
+                                                                        "url":  "https://expatschoolguide.com/schools/academia-international-school-basel/",
+                                                                        "priority":  83,
+                                                                        "pagePurpose":  "DirectoryListing",
+                                                                        "host":  "expatschoolguide.com",
+                                                                        "sourceType":  "Sitemap",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=83 batchSize=20"
+                                                                    },
+                                                                    {
+                                                                        "url":  "https://expatschoolguide.com/schools/acg-parnell-college-auckland/",
+                                                                        "priority":  83,
+                                                                        "pagePurpose":  "DirectoryListing",
+                                                                        "host":  "expatschoolguide.com",
+                                                                        "sourceType":  "Sitemap",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=83 batchSize=20"
+                                                                    },
+                                                                    {
+                                                                        "url":  "https://expatschoolguide.com/schools/acg-school-jakarta/",
+                                                                        "priority":  83,
+                                                                        "pagePurpose":  "DirectoryListing",
+                                                                        "host":  "expatschoolguide.com",
+                                                                        "sourceType":  "Sitemap",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=83 batchSize=20"
+                                                                    },
+                                                                    {
+                                                                        "url":  "https://expatschoolguide.com/schools/acg-strathallan-auckland/",
+                                                                        "priority":  83,
+                                                                        "pagePurpose":  "DirectoryListing",
+                                                                        "host":  "expatschoolguide.com",
+                                                                        "sourceType":  "Sitemap",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=83 batchSize=20"
+                                                                    },
+                                                                    {
+                                                                        "url":  "https://expatschoolguide.com/schools/acs-international-school-cobham-london/",
+                                                                        "priority":  83,
+                                                                        "pagePurpose":  "DirectoryListing",
+                                                                        "host":  "expatschoolguide.com",
+                                                                        "sourceType":  "Sitemap",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=83 batchSize=20"
+                                                                    },
+                                                                    {
+                                                                        "url":  "https://expatschoolguide.com/schools/acs-international-school-hillingdon-london/",
+                                                                        "priority":  83,
+                                                                        "pagePurpose":  "DirectoryListing",
+                                                                        "host":  "expatschoolguide.com",
+                                                                        "sourceType":  "Sitemap",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=83 batchSize=20"
+                                                                    },
+                                                                    {
+                                                                        "url":  "https://expatschoolguide.com/schools/adelaide-international-school/",
+                                                                        "priority":  83,
+                                                                        "pagePurpose":  "DirectoryListing",
+                                                                        "host":  "expatschoolguide.com",
+                                                                        "sourceType":  "Sitemap",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=83 batchSize=20"
+                                                                    },
+                                                                    {
+                                                                        "url":  "https://expatschoolguide.com/schools/aga-khan-academy-mombasa/",
+                                                                        "priority":  83,
+                                                                        "pagePurpose":  "DirectoryListing",
+                                                                        "host":  "expatschoolguide.com",
+                                                                        "sourceType":  "Sitemap",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=83 batchSize=20"
+                                                                    },
+                                                                    {
+                                                                        "url":  "https://expatschoolguide.com/schools/aga-khan-academy-nairobi/",
+                                                                        "priority":  83,
+                                                                        "pagePurpose":  "DirectoryListing",
+                                                                        "host":  "expatschoolguide.com",
+                                                                        "sourceType":  "Sitemap",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=83 batchSize=20"
+                                                                    },
+                                                                    {
+                                                                        "url":  "https://expatschoolguide.com/schools/agora-international-school-barcelona/",
+                                                                        "priority":  83,
+                                                                        "pagePurpose":  "DirectoryListing",
+                                                                        "host":  "expatschoolguide.com",
+                                                                        "sourceType":  "Sitemap",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=83 batchSize=20"
+                                                                    },
+                                                                    {
+                                                                        "url":  "https://expatschoolguide.com/schools/agora-portals-international-school-palma-de-mallorca/",
+                                                                        "priority":  83,
+                                                                        "pagePurpose":  "DirectoryListing",
+                                                                        "host":  "expatschoolguide.com",
+                                                                        "sourceType":  "Sitemap",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=83 batchSize=20"
+                                                                    },
+                                                                    {
+                                                                        "url":  "https://expatschoolguide.com/schools/ags-barcelona/",
+                                                                        "priority":  83,
+                                                                        "pagePurpose":  "DirectoryListing",
+                                                                        "host":  "expatschoolguide.com",
+                                                                        "sourceType":  "Sitemap",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=83 batchSize=20"
+                                                                    }
+                                                                ],
+                                      "currentInvestigationActivity":  "searching_for_sources",
+                                      "underCoveredIndustries":  [
+                                                                     "Private High School",
+                                                                     "Private Secondary School",
+                                                                     "Private Boarding School",
+                                                                     "Private School",
+                                                                     "Private Primary School",
+                                                                     "International School",
+                                                                     "Independent Senior School",
+                                                                     "Independent All-Through School",
+                                                                     "Private Elementary School",
+                                                                     "مدرسة",
+                                                                     "مدرسة خاصة",
+                                                                     "مدرسة عالمية"
+                                                                 ],
+                                      "nextBestInvestigationStrategy":  "Investigate remaining high-value queued pages, directories, and official websites.",
+                                      "ollamaChecked":  true,
+                                      "ollamaReachable":  true,
+                                      "ollamaModelAvailable":  true,
+                                      "ollamaModel":  "qwen3:4b",
+                                      "ollamaQueriesGenerated":  12,
+                                      "searchProviderHealth":  "Healthy",
+                                      "searchProviderHealthSummary":  null,
+                                      "lastHeartbeatAtUtc":  "2026-10-23T11:55:21.473936+00:00"
+                                  },
+    "error":  null,
+    "warning":  "Research run was cancelled.",
+    "createdAtUtc":  "2026-10-23T11:50:20.6800736+00:00",
+    "startedAtUtc":  "2026-10-23T11:50:20.6863479+00:00",
+    "completedAtUtc":  "2026-10-23T11:56:30.9860523+00:00"
+}

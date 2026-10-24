@@ -1,0 +1,78 @@
+<div class="researcher-page">
+  <div class="page-header">
+    <div>
+      <h2>{{ 'researcher.sources.title' | translate }}</h2>
+      <p class="subtitle">{{ 'researcher.sources.subtitle' | translate }}</p>
+    </div>
+  </div>
+
+  @if (loading()) {
+    <div class="rc-skeleton">
+      <div class="bone"></div>
+      <div class="bone"></div>
+    </div>
+  } @else if (!hasRows()) {
+    <app-empty-state
+      titleKey="researcher.sources.emptyTitle"
+      descriptionKey="researcher.sources.emptyDescription"
+    />
+  } @else {
+    <div class="rc-grid two">
+      <section class="rc-panel">
+        <table class="rc-table">
+          <thead>
+            <tr>
+              <th>{{ 'researcher.sources.name' | translate }}</th>
+              <th>{{ 'researcher.sources.status' | translate }}</th>
+              <th>{{ 'researcher.sources.candidates' | translate }}</th>
+              <th>{{ 'researcher.sources.failureRate' | translate }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (source of rows(); track source.id) {
+              <tr
+                class="clickable"
+                [class.selected]="source.id === selectedId()"
+                (click)="selectSource(source.id)"
+              >
+                <td>
+                  <div>{{ source.name }}</div>
+                  <div class="rc-muted rc-mono">{{ source.sourceType }}</div>
+                </td>
+                <td>
+                  <span class="source-status" [class]="source.statusClass">{{ source.status }}</span>
+                </td>
+                <td class="rc-mono">{{ source.candidatesDiscovered }}</td>
+                <td class="rc-mono">{{ source.failureRateLabel }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </section>
+
+      <section class="rc-panel">
+        <h3>{{ 'researcher.sources.detailTitle' | translate }}</h3>
+        @if (!selectedDetail()) {
+          <p class="rc-muted">{{ 'researcher.sources.selectHint' | translate }}</p>
+        } @else {
+          <p class="detail-name">{{ selectedDetail()!.name }}</p>
+          <div class="rc-grid metrics">
+            @for (tile of detailTiles(); track tile.labelKey) {
+              <app-metric-tile [labelKey]="tile.labelKey" [value]="tile.value" [tone]="tile.tone" />
+            }
+          </div>
+          <table class="rc-table">
+            <tbody>
+              @for (field of detailMeta(); track field.labelKey) {
+                <tr>
+                  <th>{{ field.labelKey | translate }}</th>
+                  <td>{{ field.value }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        }
+      </section>
+    </div>
+  }
+</div>

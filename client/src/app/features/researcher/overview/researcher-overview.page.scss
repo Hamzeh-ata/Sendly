@@ -1,0 +1,25 @@
+.error-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.error-list li {
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--rc-border);
+}
+
+.error-list p {
+  margin: 0.35rem 0;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+.error-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+}

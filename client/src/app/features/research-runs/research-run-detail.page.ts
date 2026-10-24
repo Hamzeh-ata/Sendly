@@ -4,9 +4,22 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Subscription, filter, switchMap, takeWhile, timer } from 'rxjs';
 import { toObservable } from '@angular/core/rxjs-interop';
-import { ResearchRunDetail } from '../../core/models/prospecting.model';
+import {
+  DiscoveryProviderRow,
+  DiscoveryStageRow,
+  OutreachChannelType,
+  PrepareOutreachRequest,
+  ResearchRunDetail,
+  ResearchRunProspectItem
+} from '../../core/models/prospecting.model';
+import {
+  CrawledPageItem,
+  DiscoveredUrlItem,
+  ResearchRunEventItem
+} from '../../core/models/research-query.model';
 import { ResearchRunApiService } from '../../core/services/research-run-api.service';
 import { ResearchHubService } from '../../core/services/research-hub.service';
+import { ProjectApiService } from '../../core/services/project-api.service';
 import { NotificationService } from '../../core/services/notification.service';
 import { formatDate } from '../../core/utils/format.utils';
 import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
@@ -30,6 +43,7 @@ export class ResearchRunDetailPage implements OnInit, OnDestroy {
   private readonly router = inject(Router);
   private readonly researchRunApi = inject(ResearchRunApiService);
   private readonly researchHub = inject(ResearchHubService);
+  private readonly projectApi = inject(ProjectApiService);
   private readonly notification = inject(NotificationService);
   private readonly translate = inject(TranslateService);
   private pollSub: Subscription | null = null;
@@ -40,6 +54,11 @@ export class ResearchRunDetailPage implements OnInit, OnDestroy {
   readonly actionLoading = signal(false);
   readonly showCancelConfirm = signal(false);
   readonly showDeleteConfirm = signal(false);
+  readonly campaignOpen = signal(false);
+  readonly campaignSaving = signal(false);
+  readonly campaignChannel = signal<OutreachChannelType>('email');
+  readonly useAiRecommendedTemplate = signal(true);
+  readonly selectedProspectIds = signal<string[]>([]);
   readonly run = signal<ResearchRunDetail | null>(null);
   readonly runId = signal('');
   readonly liveConnected = computed(() => this.researchHub.connected());
@@ -80,6 +99,92 @@ export class ResearchRunDetailPage implements OnInit, OnDestroy {
       .sort((a, b) => b.count - a.count);
   });
   readonly providerDiagnostics = computed(() => this.run()?.searchProviderDiagnostics ?? null);
+  readonly discoverySummary = computed(
+    () => this.providerDiagnostics()?.automaticDiscoverySummary ?? null
+  );
+  readonly discoveryPlanSummary = computed(
+    () => this.providerDiagnostics()?.discoveryPlanSummary ?? null
+  );
+  readonly discoveryStopReason = computed(
+    () => this.providerDiagnostics()?.discoveryStopReason ?? null
+  );
+  readonly discoveryUniqueDomains = computed(
+    () => this.providerDiagnostics()?.uniqueDomainsDiscovered ?? 0
+  );
+  readonly discoveryRecoveryAttempts = computed(
+    () => this.providerDiagnostics()?.recoveryAttempts ?? 0
+  );
+  readonly discoveryRecoveryStrategies = computed(
+    () => (this.providerDiagnostics()?.recoveryStrategies ?? []).join(', ') || '—'
+  );
+  readonly discoverySourcesReused = computed(() => this.providerDiagnostics()?.sourcesReused ?? 0);
+  readonly discoverySourcesAdded = computed(() => this.providerDiagnostics()?.sourcesAdded ?? 0);
+  readonly discoverySourcesSkipped = computed(() => this.providerDiagnostics()?.sourcesSkipped ?? 0);
+  readonly discoverySourcesUnavailable = computed(
+    () => this.providerDiagnostics()?.sourcesUnavailable ?? 0
+  );
+  readonly discoveryUrlsAccessible = computed(() => this.providerDiagnostics()?.urlsAccessible ?? 0);
+  readonly discoveryUrlsParsed = computed(() => this.providerDiagnostics()?.urlsParsed ?? 0);
+  readonly discoveryUrlsUnavailable = computed(() => this.providerDiagnostics()?.urlsUnavailable ?? 0);
+  readonly discoveryCompaniesIdentified = computed(
+    () => this.providerDiagnostics()?.companiesIdentified ?? 0
+  );
+  readonly discoveryPublicContacts = computed(
+    () => this.providerDiagnostics()?.publicContactsExtracted ?? 0
+  );
+  readonly discoveryLiveVerified = computed(
+    () => this.providerDiagnostics()?.liveVerifiedCompanies ?? 0
+  );
+  readonly discoveryProspectsQualified = computed(
+    () => this.providerDiagnostics()?.prospectsQualified ?? 0
+  );
+  readonly discoveryProviderRows = computed((): DiscoveryProviderRow[] => {
+    const providers = this.providerDiagnostics()?.discoveryProviders ?? [];
+    const rows: DiscoveryProviderRow[] = [];
+    for (const item of providers) {
+      let statusLabel = '—';
+      if (!item.attempted) {
+        statusLabel = this.translate.instant('researcher.live.providerNotAttempted');
+      } else if (item.producedUsefulCandidates) {
+        statusLabel = this.translate.instant('researchRuns.providersSucceeded');
+      } else if (item.attempted && item.error) {
+        statusLabel = item.error;
+      } else if (item.zeroYieldReason) {
+        statusLabel = item.zeroYieldReason;
+      } else if (item.attempted) {
+        statusLabel = this.translate.instant('researcher.live.providerZeroYield');
+      }
+      rows.push({
+        providerName: item.providerName,
+        statusLabel,
+        candidatesReturned: item.candidatesReturned || 0,
+        zeroYieldReason: item.zeroYieldReason || '—',
+        producedUseful: !!item.producedUsefulCandidates
+      });
+    }
+    return rows;
+  });
+  readonly discoveryStageRows = computed((): DiscoveryStageRow[] => {
+    const stages = this.providerDiagnostics()?.discoveryStages ?? [];
+    const rows: DiscoveryStageRow[] = [];
+    for (const stage of stages) {
+      rows.push({
+        stageLabel: `${stage.stageNumber}. ${stage.stageName}`,
+        providersLabel: (stage.providersAttempted ?? []).join(', ') || '—',
+        candidatesAdded: stage.candidatesAdded || 0,
+        recoveryLabel: stage.recoveryTriggered
+          ? this.translate.instant('researchRuns.recoveryTriggered')
+          : this.translate.instant('researchRuns.recoveryNotNeeded')
+      });
+    }
+    return rows;
+  });
+  readonly discoveryDuplicatesRemoved = computed(
+    () => this.providerDiagnostics()?.automaticDiscoveryDuplicatesRemoved ?? 0
+  );
+  readonly discoveryRejectedUnsafe = computed(
+    () => this.providerDiagnostics()?.automaticDiscoveryRejectedUnsafe ?? 0
+  );
   readonly continueSearching = computed(() => {
     const run = this.run();
     if (!run || !this.isActive()) {
@@ -89,6 +194,33 @@ export class ResearchRunDetailPage implements OnInit, OnDestroy {
   });
   readonly liveProspects = computed(() => this.run()?.prospects ?? []);
   readonly hasLiveProspects = computed(() => this.liveProspects().length > 0);
+  readonly readyCampaignProspects = computed(() =>
+    this.liveProspects().filter((prospect) => this.isCampaignReady(prospect))
+  );
+  readonly readyCampaignCount = computed(() => this.readyCampaignProspects().length);
+  readonly selectedCampaignCount = computed(() => this.selectedProspectIds().length);
+  readonly canCreateCampaign = computed(
+    () => this.readyCampaignCount() > 0 || this.selectedCampaignCount() > 0
+  );
+  readonly selectedMap = computed(() => {
+    const map: Record<string, boolean> = {};
+    for (const id of this.selectedProspectIds()) {
+      map[id] = true;
+    }
+    return map;
+  });
+  readonly discoveredUrls = signal<DiscoveredUrlItem[]>([]);
+  readonly crawledPages = signal<CrawledPageItem[]>([]);
+  readonly runEvents = signal<ResearchRunEventItem[]>([]);
+  readonly crawlErrors = computed(() =>
+    this.discoveredUrls().filter((item) => !!item.lastError || item.status === 'Failed')
+  );
+  readonly hasDiagnostics = computed(
+    () =>
+      this.discoveredUrls().length > 0 ||
+      this.crawledPages().length > 0 ||
+      this.runEvents().length > 0
+  );
 
   constructor() {
     effect(() => {
@@ -164,6 +296,92 @@ export class ResearchRunDetailPage implements OnInit, OnDestroy {
     this.router.navigate(['/prospects', prospectId]);
   }
 
+  toggleProspectSelection(prospectId: string, checked: boolean): void {
+    const current = this.selectedProspectIds();
+    if (checked) {
+      if (current.includes(prospectId)) {
+        return;
+      }
+      this.selectedProspectIds.set([...current, prospectId]);
+      return;
+    }
+    this.selectedProspectIds.set(current.filter((id) => id !== prospectId));
+  }
+
+  selectAllReadyProspects(): void {
+    this.selectedProspectIds.set(this.readyCampaignProspects().map((prospect) => prospect.id));
+  }
+
+  openCampaignForReady(): void {
+    const ids = this.readyCampaignProspects().map((prospect) => prospect.id);
+    if (ids.length === 0) {
+      this.notification.error(this.translate.instant('researchRuns.createCampaignNone'));
+      return;
+    }
+    this.selectedProspectIds.set(ids);
+    this.campaignChannel.set(this.run()?.includeWhatsApp && !this.run()?.includeEmail ? 'whatsApp' : 'email');
+    this.useAiRecommendedTemplate.set(true);
+    this.campaignOpen.set(true);
+  }
+
+  openCampaignForSelected(): void {
+    if (this.selectedProspectIds().length === 0) {
+      this.notification.error(this.translate.instant('prospects.selectRequired'));
+      return;
+    }
+    this.campaignChannel.set(this.run()?.includeWhatsApp && !this.run()?.includeEmail ? 'whatsApp' : 'email');
+    this.useAiRecommendedTemplate.set(true);
+    this.campaignOpen.set(true);
+  }
+
+  closeCampaign(): void {
+    this.campaignOpen.set(false);
+  }
+
+  onCampaignChannelChange(value: string): void {
+    this.campaignChannel.set(value as OutreachChannelType);
+  }
+
+  onUseAiTemplateChange(checked: boolean): void {
+    this.useAiRecommendedTemplate.set(checked);
+  }
+
+  confirmCampaign(): void {
+    const run = this.run();
+    const prospectIds = this.selectedProspectIds();
+    if (!run?.projectId || prospectIds.length === 0) {
+      this.notification.error(this.translate.instant('prospects.selectRequired'));
+      return;
+    }
+    const request: PrepareOutreachRequest = {
+      prospectIds,
+      channel: this.campaignChannel(),
+      templateId: null,
+      useAiRecommendedTemplate: this.useAiRecommendedTemplate(),
+      emailAccountId: null,
+      signatureId: null,
+      allowAlreadyContacted: false
+    };
+    this.campaignSaving.set(true);
+    this.projectApi.prepareOutreach(run.projectId, request).subscribe({
+      next: (result) => {
+        this.campaignSaving.set(false);
+        this.campaignOpen.set(false);
+        this.selectedProspectIds.set([]);
+        this.notification.success(this.translate.instant('prospects.campaignSuccess'));
+        if (result.campaignId) {
+          this.router.navigate(['/history', result.campaignId]);
+          return;
+        }
+        this.hydrateOnce(run.id);
+      },
+      error: (err: HttpErrorResponse) => {
+        this.campaignSaving.set(false);
+        this.notifyError(err);
+      }
+    });
+  }
+
   openCancelConfirm(): void {
     this.showCancelConfirm.set(true);
   }
@@ -220,12 +438,20 @@ export class ResearchRunDetailPage implements OnInit, OnDestroy {
     });
   }
 
+  private isCampaignReady(prospect: ResearchRunProspectItem): boolean {
+    if (prospect.status === 'doNotContact' || prospect.status === 'contacted') {
+      return false;
+    }
+    return !!prospect.email || !!prospect.whatsApp;
+  }
+
   private hydrateOnce(id: string): void {
     this.loading.set(true);
     this.researchRunApi.get(id).subscribe({
       next: (detail) => {
         this.run.set(detail);
         this.loading.set(false);
+        this.loadDiagnostics(id);
         if (this.isActiveStatus(detail.status) && !this.researchHub.connected()) {
           this.startPollingFallback(id);
         }
@@ -235,6 +461,21 @@ export class ResearchRunDetailPage implements OnInit, OnDestroy {
         this.notifyError(err);
         this.router.navigate(['/research-runs']);
       }
+    });
+  }
+
+  private loadDiagnostics(id: string): void {
+    this.researchRunApi.listDiscoveredUrls(id).subscribe({
+      next: (items) => this.discoveredUrls.set(items ?? []),
+      error: () => this.discoveredUrls.set([])
+    });
+    this.researchRunApi.listCrawledPages(id).subscribe({
+      next: (items) => this.crawledPages.set(items ?? []),
+      error: () => this.crawledPages.set([])
+    });
+    this.researchRunApi.listEvents(id).subscribe({
+      next: (items) => this.runEvents.set(items ?? []),
+      error: () => this.runEvents.set([])
     });
   }
 

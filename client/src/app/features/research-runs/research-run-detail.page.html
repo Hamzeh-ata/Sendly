@@ -35,6 +35,17 @@
         <button type="button" class="btn btn-ghost" (click)="openProspects()">
           {{ 'researchRuns.viewProspects' | translate }}
         </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          [disabled]="!canCreateCampaign() || campaignSaving()"
+          (click)="openCampaignForReady()"
+        >
+          {{ 'researchRuns.createCampaignReady' | translate }}
+          @if (readyCampaignCount() > 0) {
+            ({{ readyCampaignCount() }})
+          }
+        </button>
         @if (isActive()) {
           <button
             type="button"
@@ -89,6 +100,18 @@
         <span class="stat-value">{{ run()!.searchResultsReceived || 0 }}</span>
       </div>
       <div class="stat-card">
+        <span class="stat-label">{{ 'researchRuns.urlsDiscovered' | translate }}</span>
+        <span class="stat-value">{{ run()!.urlsDiscovered || 0 }}</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">{{ 'researchRuns.pagesCrawled' | translate }}</span>
+        <span class="stat-value">{{ run()!.pagesCrawled || 0 }}</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">{{ 'researchRuns.crawlErrors' | translate }}</span>
+        <span class="stat-value">{{ run()!.crawlErrors || 0 }}</span>
+      </div>
+      <div class="stat-card">
         <span class="stat-label">{{ 'researchRuns.candidatesDiscovered' | translate }}</span>
         <span class="stat-value">{{ run()!.candidatesDiscovered || 0 }}</span>
       </div>
@@ -136,8 +159,28 @@
 
     <section class="card live-results-card">
       <div class="live-results-header">
-        <h3>{{ 'researchRuns.liveResults' | translate }}</h3>
-        <span class="live-results-count">{{ liveProspects().length }}</span>
+        <div class="live-results-title">
+          <h3>{{ 'researchRuns.liveResults' | translate }}</h3>
+          <span class="live-results-count">{{ liveProspects().length }}</span>
+        </div>
+        @if (hasLiveProspects()) {
+          <div class="live-results-actions">
+            <button type="button" class="btn btn-ghost btn-small" (click)="selectAllReadyProspects()">
+              {{ 'researcher.live.selectAllReady' | translate }}
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary btn-small"
+              [disabled]="selectedCampaignCount() === 0 || campaignSaving()"
+              (click)="openCampaignForSelected()"
+            >
+              {{ 'researchRuns.createCampaign' | translate }}
+              @if (selectedCampaignCount() > 0) {
+                ({{ selectedCampaignCount() }})
+              }
+            </button>
+          </div>
+        }
       </div>
       @if (!hasLiveProspects()) {
         <p class="empty-live">
@@ -152,6 +195,7 @@
           <table class="live-results-table">
             <thead>
               <tr>
+                <th>{{ 'researcher.live.selectProspect' | translate }}</th>
                 <th>{{ 'researchRuns.resultCompany' | translate }}</th>
                 <th>{{ 'researchRuns.resultLocation' | translate }}</th>
                 <th>{{ 'researchRuns.resultContact' | translate }}</th>
@@ -164,6 +208,14 @@
             <tbody>
               @for (prospect of liveProspects(); track prospect.id) {
                 <tr>
+                  <td>
+                    <input
+                      type="checkbox"
+                      [checked]="!!selectedMap()[prospect.id]"
+                      (change)="toggleProspectSelection(prospect.id, $any($event.target).checked)"
+                      [attr.aria-label]="'researcher.live.selectProspect' | translate"
+                    />
+                  </td>
                   <td>
                     <div class="company-cell">
                       <strong>{{ prospect.companyName }}</strong>
@@ -279,6 +331,169 @@
       </section>
     }
 
+    @if (discoverySummary() || discoveryPlanSummary()) {
+      <section class="card">
+        <h3>{{ 'researchRuns.discoveryStage' | translate }}</h3>
+        @if (discoveryPlanSummary()) {
+          <p class="body-text">{{ discoveryPlanSummary() }}</p>
+        }
+        @if (discoverySummary()) {
+          <p class="body-text">{{ discoverySummary() }}</p>
+        }
+        @if (discoveryStopReason()) {
+          <p class="meta">
+            <span class="meta-label">{{ 'researchRuns.discoveryStopReason' | translate }}:</span>
+            {{ discoveryStopReason() }}
+          </p>
+        }
+        <div class="meta-grid">
+          <div>
+            <span class="meta-label">{{ 'researchRuns.duplicatesRemoved' | translate }}</span>
+            <span class="meta-value">{{ discoveryDuplicatesRemoved() }}</span>
+          </div>
+          <div>
+            <span class="meta-label">{{ 'researchRuns.urlsRejectedUnsafe' | translate }}</span>
+            <span class="meta-value">{{ discoveryRejectedUnsafe() }}</span>
+          </div>
+          <div>
+            <span class="meta-label">{{ 'researchRuns.uniqueDomains' | translate }}</span>
+            <span class="meta-value">{{ discoveryUniqueDomains() }}</span>
+          </div>
+          <div>
+            <span class="meta-label">{{ 'researchRuns.recoveryAttempts' | translate }}</span>
+            <span class="meta-value">{{ discoveryRecoveryAttempts() }}</span>
+          </div>
+          <div>
+            <span class="meta-label">{{ 'researchRuns.recoveryStrategies' | translate }}</span>
+            <span class="meta-value">{{ discoveryRecoveryStrategies() }}</span>
+          </div>
+          <div>
+            <span class="meta-label">{{ 'researchRuns.sourcesReused' | translate }}</span>
+            <span class="meta-value">{{ discoverySourcesReused() }}</span>
+          </div>
+          <div>
+            <span class="meta-label">{{ 'researchRuns.sourcesAdded' | translate }}</span>
+            <span class="meta-value">{{ discoverySourcesAdded() }}</span>
+          </div>
+          <div>
+            <span class="meta-label">{{ 'researchRuns.sourcesSkipped' | translate }}</span>
+            <span class="meta-value">{{ discoverySourcesSkipped() }}</span>
+          </div>
+          <div>
+            <span class="meta-label">{{ 'researchRuns.sourcesUnavailable' | translate }}</span>
+            <span class="meta-value">{{ discoverySourcesUnavailable() }}</span>
+          </div>
+          <div>
+            <span class="meta-label">{{ 'researchRuns.urlsAccessible' | translate }}</span>
+            <span class="meta-value">{{ discoveryUrlsAccessible() }}</span>
+          </div>
+          <div>
+            <span class="meta-label">{{ 'researchRuns.urlsParsed' | translate }}</span>
+            <span class="meta-value">{{ discoveryUrlsParsed() }}</span>
+          </div>
+          <div>
+            <span class="meta-label">{{ 'researchRuns.urlsUnavailable' | translate }}</span>
+            <span class="meta-value">{{ discoveryUrlsUnavailable() }}</span>
+          </div>
+          <div>
+            <span class="meta-label">{{ 'researchRuns.companiesIdentified' | translate }}</span>
+            <span class="meta-value">{{ discoveryCompaniesIdentified() }}</span>
+          </div>
+          <div>
+            <span class="meta-label">{{ 'researchRuns.liveVerifiedCompanies' | translate }}</span>
+            <span class="meta-value">{{ discoveryLiveVerified() }}</span>
+          </div>
+          <div>
+            <span class="meta-label">{{ 'researchRuns.publicContactsExtracted' | translate }}</span>
+            <span class="meta-value">{{ discoveryPublicContacts() }}</span>
+          </div>
+          <div>
+            <span class="meta-label">{{ 'researchRuns.prospectsQualified' | translate }}</span>
+            <span class="meta-value">{{ discoveryProspectsQualified() }}</span>
+          </div>
+        </div>
+        @if (discoveryStageRows().length > 0) {
+          <h4>{{ 'researchRuns.discoveryStages' | translate }}</h4>
+          <ul class="diagnostics-list">
+            @for (item of discoveryStageRows(); track item.stageLabel) {
+              <li>
+                <span>{{ item.stageLabel }}</span>
+                <span class="meta-value">
+                  {{ item.providersLabel }} · {{ item.candidatesAdded }} · {{ item.recoveryLabel }}
+                </span>
+              </li>
+            }
+          </ul>
+        }
+        @if (discoveryProviderRows().length > 0) {
+          <h4>{{ 'researchRuns.providersAttempted' | translate }}</h4>
+          <ul class="diagnostics-list">
+            @for (item of discoveryProviderRows(); track item.providerName) {
+              <li>
+                <span>{{ item.providerName }}</span>
+                <span class="meta-value">{{ item.statusLabel }} · {{ item.candidatesReturned }}</span>
+              </li>
+            }
+          </ul>
+        }
+      </section>
+    }
+
+    @if (hasDiagnostics()) {
+      <section class="card">
+        <h3>{{ 'researchRuns.crawlDiagnostics' | translate }}</h3>
+        @if (crawlErrors().length > 0) {
+          <h4>{{ 'researchRuns.crawlErrorsTitle' | translate }}</h4>
+          <ul class="diagnostics-list">
+            @for (item of crawlErrors(); track item.id) {
+              <li>
+                <span>{{ item.url }}</span>
+                <span class="meta-value">{{ item.lastError || item.status }}</span>
+              </li>
+            }
+          </ul>
+        }
+        @if (discoveredUrls().length > 0) {
+          <h4>{{ 'researchRuns.discoveredUrlsTitle' | translate }}</h4>
+          <ul class="diagnostics-list">
+            @for (item of discoveredUrls(); track item.id) {
+              <li>
+                <span>{{ item.url }}</span>
+                <span class="meta-value">
+                  {{ item.sourceType }} · {{ item.status }}
+                  @if (item.discoveryReason || item.sourceName) {
+                    · {{ item.discoveryReason || item.sourceName }}
+                  }
+                  @if (item.priorityScore != null) {
+                    · P{{ item.priorityScore }}
+                  }
+                </span>
+                @if (item.parentUrl) {
+                  <span class="meta-value">{{ 'researchRuns.parentUrl' | translate }}: {{ item.parentUrl }}</span>
+                } @else if (item.parentDiscoveredUrlId && item.provenanceComplete === false) {
+                  <span class="meta-value">{{ 'researchRuns.provenanceIncomplete' | translate }}</span>
+                }
+                @if (item.rejectionReasonCode) {
+                  <span class="meta-value">{{ item.rejectionReasonCode }}</span>
+                }
+              </li>
+            }
+          </ul>
+        }
+        @if (crawledPages().length > 0) {
+          <h4>{{ 'researchRuns.crawledPagesTitle' | translate }}</h4>
+          <ul class="diagnostics-list">
+            @for (item of crawledPages(); track item.id) {
+              <li>
+                <span>{{ item.title || item.url }}</span>
+                <span class="meta-value">{{ item.httpStatusCode || '—' }}</span>
+              </li>
+            }
+          </ul>
+        }
+      </section>
+    }
+
     <section class="card">
       <h3>{{ 'researchRuns.timing' | translate }}</h3>
       <div class="meta-grid">
@@ -304,6 +519,48 @@
     </section>
   }
 </div>
+
+@if (campaignOpen()) {
+  <div class="overlay" (click)="closeCampaign()">
+    <div class="dialog" role="dialog" (click)="$event.stopPropagation()">
+      <h2>{{ 'prospects.campaignTitle' | translate }}</h2>
+      <p class="dialog-hint">{{ 'researchRuns.createCampaignHint' | translate }}</p>
+      <p class="dialog-hint">
+        {{
+          'researchRuns.campaignSelectedCount'
+            | translate: { count: selectedCampaignCount() }
+        }}
+      </p>
+      <div class="field">
+        <label>{{ 'prospects.campaignChannel' | translate }}</label>
+        <select
+          class="input"
+          [value]="campaignChannel()"
+          (change)="onCampaignChannelChange($any($event.target).value)"
+        >
+          <option value="email">{{ 'projects.channelEmail' | translate }}</option>
+          <option value="whatsApp">{{ 'projects.channelWhatsApp' | translate }}</option>
+        </select>
+      </div>
+      <label class="toggle-row">
+        <input
+          type="checkbox"
+          [checked]="useAiRecommendedTemplate()"
+          (change)="onUseAiTemplateChange($any($event.target).checked)"
+        />
+        <span>{{ 'prospects.useAiRecommendedTemplate' | translate }}</span>
+      </label>
+      <div class="dialog-actions">
+        <button type="button" class="btn btn-ghost" [disabled]="campaignSaving()" (click)="closeCampaign()">
+          {{ 'common.cancel' | translate }}
+        </button>
+        <button type="button" class="btn btn-primary" [disabled]="campaignSaving()" (click)="confirmCampaign()">
+          {{ 'researchRuns.createCampaign' | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+}
 
 <app-confirm-dialog
   [visible]="showCancelConfirm()"

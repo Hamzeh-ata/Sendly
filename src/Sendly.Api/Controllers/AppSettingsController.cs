@@ -11,16 +11,16 @@ public class AppSettingsController : ControllerBase
 {
     private readonly AppSettingsService _appSettingsService;
     private readonly IBraveSearchClient _braveSearchClient;
-    private readonly ISearXngSearchClient _searXngSearchClient;
+    private readonly ILocalAiHealthService _localAiHealth;
 
     public AppSettingsController(
         AppSettingsService appSettingsService,
         IBraveSearchClient braveSearchClient,
-        ISearXngSearchClient searXngSearchClient)
+        ILocalAiHealthService localAiHealth)
     {
         _appSettingsService = appSettingsService;
         _braveSearchClient = braveSearchClient;
-        _searXngSearchClient = searXngSearchClient;
+        _localAiHealth = localAiHealth;
     }
 
     [HttpGet]
@@ -57,10 +57,21 @@ public class AppSettingsController : ControllerBase
     }
 
     [HttpPost("searxng/test")]
-    public async Task<ActionResult<ProviderConnectionTestResult>> TestSearXng(CancellationToken cancellationToken)
+    public ActionResult<ProviderConnectionTestResult> TestSearXng()
     {
-        var result = await _searXngSearchClient.TestConnectionAsync(cancellationToken);
-        if (!result.Success)
+        return BadRequest(new ProviderConnectionTestResult
+        {
+            Success = false,
+            Status = "Disabled",
+            Message = "SearXNG is disabled. Sendly uses zero-budget public HTML search, directories, Common Crawl and prior research instead."
+        });
+    }
+
+    [HttpPost("ollama/test")]
+    public async Task<ActionResult<LocalAiHealthResult>> TestOllama(CancellationToken cancellationToken)
+    {
+        var result = await _localAiHealth.CheckHealthAsync(cancellationToken);
+        if (!result.IsReachable)
         {
             return BadRequest(result);
         }

@@ -38,6 +38,83 @@ public static class EmailAddressParser
         return EmailRegex.IsMatch(email.Trim());
     }
 
+    public static bool IsPlaceholderOrInternalEmail(string? email)
+    {
+        if (string.IsNullOrWhiteSpace(email) || !email.Contains('@'))
+        {
+            return true;
+        }
+
+        var normalized = email.Trim().ToLowerInvariant();
+        var parts = normalized.Split('@', 2);
+        if (parts.Length != 2)
+        {
+            return true;
+        }
+
+        var local = parts[0];
+        var domain = parts[1].TrimEnd('.');
+        if (IsPlaceholderDomain(domain) || IsPlaceholderLocalPart(local))
+        {
+            return true;
+        }
+
+        return domain.Contains("placeholder", StringComparison.Ordinal)
+               || domain.Contains("yourdomain", StringComparison.Ordinal)
+               || domain.Contains("your-domain", StringComparison.Ordinal);
+    }
+
+    public static bool IsAcceptableBusinessEmail(string? email)
+    {
+        return !string.IsNullOrWhiteSpace(email)
+               && IsValidEmail(email)
+               && !IsPlaceholderOrInternalEmail(email);
+    }
+
+    private static readonly HashSet<string> FileExtensionTlds = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "png", "jpg", "jpeg", "gif", "svg", "webp", "ico", "bmp",
+        "css", "js", "json", "xml", "pdf", "zip", "mp4", "mp3"
+    };
+
+    private static bool IsPlaceholderDomain(string domain)
+    {
+        var lastDot = domain.LastIndexOf('.');
+        if (lastDot >= 0 && FileExtensionTlds.Contains(domain[(lastDot + 1)..]))
+        {
+            return true;
+        }
+
+        if (string.IsNullOrWhiteSpace(domain)
+            || domain.Equals("localhost", StringComparison.Ordinal)
+            || domain.EndsWith(".local", StringComparison.Ordinal)
+            || domain.EndsWith(".localhost", StringComparison.Ordinal)
+            || domain.EndsWith(".invalid", StringComparison.Ordinal)
+            || domain.EndsWith(".test", StringComparison.Ordinal)
+            || domain.Equals("example.com", StringComparison.Ordinal)
+            || domain.Equals("example.org", StringComparison.Ordinal)
+            || domain.Equals("example.net", StringComparison.Ordinal)
+            || domain.Equals("domain.com", StringComparison.Ordinal)
+            || domain.Equals("email.com", StringComparison.Ordinal)
+            || domain.Equals("yourdomain.com", StringComparison.Ordinal)
+            || domain.Equals("yourcompany.com", StringComparison.Ordinal))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    private static bool IsPlaceholderLocalPart(string local)
+    {
+        return local.Equals("example", StringComparison.Ordinal)
+               || local.Equals("placeholder", StringComparison.Ordinal)
+               || local.Equals("yourname", StringComparison.Ordinal)
+               || local.Equals("youremail", StringComparison.Ordinal)
+               || local.Equals("name", StringComparison.Ordinal)
+                   && local.Length <= 4;
+    }
+
     public static string Normalize(string email)
     {
         return email.Trim().ToLowerInvariant();

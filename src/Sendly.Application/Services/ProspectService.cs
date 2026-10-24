@@ -473,6 +473,11 @@ public class ProspectService
             query = query.Where(x => x.ProjectId == filter.ProjectId);
         }
 
+        if (filter.ResearchRunId is not null)
+        {
+            query = query.Where(x => x.ResearchRunId == filter.ResearchRunId);
+        }
+
         if (!string.IsNullOrWhiteSpace(filter.Search))
         {
             var term = filter.Search.Trim();
@@ -863,6 +868,125 @@ public class ProspectService
 
         var parsed = EmailAddressParser.Parse(email);
         return parsed.ValidEmails.Count == 0 ? null : parsed.ValidEmails[0];
+    }
+
+    public async Task<string> ExportCsvAsync(ProspectFilterDto filter, CancellationToken cancellationToken)
+    {
+        var prospects = await ListAsync(filter, cancellationToken);
+        var builder = new System.Text.StringBuilder();
+        builder.AppendLine(
+            "CompanyName,Website,Country,City,Industry,Email,Phone,WhatsApp,Status,QualificationScore,IsQualified,SourceUrl,ProjectName");
+
+        foreach (var prospect in prospects)
+        {
+            builder.Append(EscapeCsv(prospect.CompanyName)).Append(',');
+            builder.Append(EscapeCsv(prospect.Website)).Append(',');
+            builder.Append(EscapeCsv(prospect.Country)).Append(',');
+            builder.Append(EscapeCsv(prospect.City)).Append(',');
+            builder.Append(EscapeCsv(prospect.Industry)).Append(',');
+            builder.Append(EscapeCsv(prospect.Email)).Append(',');
+            builder.Append(EscapeCsv(prospect.Phone)).Append(',');
+            builder.Append(EscapeCsv(prospect.WhatsApp)).Append(',');
+            builder.Append(EscapeCsv(prospect.Status.ToString())).Append(',');
+            builder.Append(prospect.QualificationScore?.ToString() ?? string.Empty).Append(',');
+            builder.Append(prospect.IsQualified ? "true" : "false").Append(',');
+            builder.Append(EscapeCsv(prospect.SourceUrl)).Append(',');
+            builder.Append(EscapeCsv(prospect.ProjectName));
+            builder.AppendLine();
+        }
+
+        return builder.ToString();
+    }
+
+    public async Task<ProspectDetailDto> MergeAsync(
+        MergeProspectsRequestDto request,
+        CancellationToken cancellationToken)
+    {
+        if (request.TargetProspectId == request.SourceProspectId)
+        {
+            throw new InvalidOperationException("Cannot merge a prospect into itself.");
+        }
+
+        var target = await _db.Prospects.FirstOrDefaultAsync(x => x.Id == request.TargetProspectId, cancellationToken);
+        var source = await _db.Prospects.FirstOrDefaultAsync(x => x.Id == request.SourceProspectId, cancellationToken);
+        if (target is null || source is null)
+        {
+            throw new InvalidOperationException("One or both prospects were not found.");
+        }
+
+        if (target.ProjectId != source.ProjectId)
+        {
+            throw new InvalidOperationException("Prospects must belong to the same project to merge.");
+        }
+
+        ProspectMergeHelper.MergeCandidateInto(
+            target,
+            new ProspectMergeInput
+            {
+                CompanyName = source.CompanyName,
+                Website = source.Website,
+                Country = source.Country,
+                City = source.City,
+                Industry = source.Industry,
+                CompanyDescription = source.CompanyDescription,
+                CompanySize = source.CompanySize,
+                ContactName = source.ContactName,
+                ContactRole = source.ContactRole,
+                Email = source.Email,
+                Phone = source.Phone,
+                WhatsApp = source.WhatsApp,
+                LinkedInUrl = source.LinkedInUrl,
+                SourceUrl = source.SourceUrl
+            });
+
+        target.DuplicateKind = ProspectDuplicateKind.SameCompany;
+        target.UpdatedAtUtc = DateTimeOffset.UtcNow;
+
+        var sourceEvidence = await _db.ResearchEvidenceItems
+            .Where(x => x.ProspectId == source.Id)
+            .ToListAsync(cancellationToken);
+        foreach (var item in sourceEvidence)
+        {
+            item.ProspectId = target.Id;
+        }
+
+        var sourceCriteria = await _db.QualificationCriterionResults
+            .Where(x => x.ProspectId == source.Id)
+            .ToListAsync(cancellationToken);
+        _db.QualificationCriterionResults.RemoveRange(sourceCriteria);
+
+        var histories = await _db.OutreachContactHistories
+            .Where(x => x.ProspectId == source.Id)
+            .ToListAsync(cancellationToken);
+        foreach (var history in histories)
+        {
+            history.ProspectId = target.Id;
+        }
+
+        var enrollments = await _db.ProspectSequenceEnrollments
+            .Where(x => x.ProspectId == source.Id)
+            .ToListAsync(cancellationToken);
+        foreach (var enrollment in enrollments)
+        {
+            enrollment.ProspectId = target.Id;
+        }
+
+        _db.Prospects.Remove(source);
+        await _db.SaveChangesAsync(cancellationToken);
+
+        return (await GetAsync(target.Id, cancellationToken))!;
+    }
+
+    private static string EscapeCsv(string? value)
+    {
+        if (string.IsNullOrEmpty(value))
+        {
+            return string.Empty;
+        }
+
+        var needsQuotes = value.Contains(',') || value.Contains('"') || value.Contains('\n');
+        var escaped = value.Replace("\"", "\"\"");
+        return needsQuotes ? $"\"{escaped}\"" : escaped;
     }
 
     private static string? TrimOrNull(string? value)

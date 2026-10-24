@@ -174,6 +174,138 @@
       </section>
 
       <section class="card">
+        <h3>{{ 'projects.queryBuilderSection' | translate }}</h3>
+        <p class="section-hint">{{ 'projects.queryBuilderHint' | translate }}</p>
+        <div class="field">
+          <label>{{ 'projects.queryName' | translate }}</label>
+          <input
+            type="text"
+            class="input"
+            [value]="queryName()"
+            (input)="onQueryNameChange($any($event.target).value)"
+            [placeholder]="'projects.queryNamePlaceholder' | translate"
+          />
+        </div>
+        <div class="field">
+          <label>{{ 'projects.plainLanguageBrief' | translate }}</label>
+          <textarea
+            class="textarea"
+            rows="4"
+            [value]="plainLanguageBrief()"
+            (input)="onPlainLanguageBriefChange($any($event.target).value)"
+            [placeholder]="'projects.plainLanguageBriefPlaceholder' | translate"
+          ></textarea>
+        </div>
+        <div class="field-grid">
+          <div class="field">
+            <label>{{ 'projects.targetIndustry' | translate }}</label>
+            <input
+              type="text"
+              class="input"
+              [value]="targetIndustry()"
+              (input)="onTargetIndustryChange($any($event.target).value)"
+            />
+          </div>
+          <div class="field">
+            <label>{{ 'projects.targetCountry' | translate }}</label>
+            <input
+              type="text"
+              class="input"
+              [value]="targetCountry()"
+              (input)="onTargetCountryChange($any($event.target).value)"
+            />
+          </div>
+        </div>
+        <label class="toggle-row">
+          <input
+            type="checkbox"
+            [checked]="requireOfficialWebsite()"
+            (change)="onRequireOfficialWebsiteChange($any($event.target).checked)"
+          />
+          <span>{{ 'projects.requireOfficialWebsite' | translate }}</span>
+        </label>
+        <label class="toggle-row">
+          <input
+            type="checkbox"
+            [checked]="requirePublicBusinessEmail()"
+            (change)="onRequirePublicBusinessEmailChange($any($event.target).checked)"
+          />
+          <span>{{ 'projects.requirePublicBusinessEmail' | translate }}</span>
+        </label>
+
+        <details class="advanced-panel">
+          <summary>{{ 'projects.advancedCrawlSettings' | translate }}</summary>
+          <p class="field-hint">{{ 'projects.advancedCrawlSettingsHint' | translate }}</p>
+          <div class="field-grid">
+            <div class="field">
+              <label>{{ 'projects.maxPagesPerDomain' | translate }}</label>
+              <input
+                type="number"
+                class="input"
+                min="1"
+                max="50"
+                [value]="maxPagesPerDomain()"
+                (input)="onMaxPagesPerDomainChange($any($event.target).value)"
+              />
+            </div>
+            <div class="field">
+              <label>{{ 'projects.maxCrawlDepth' | translate }}</label>
+              <input
+                type="number"
+                class="input"
+                min="0"
+                max="5"
+                [value]="maxCrawlDepth()"
+                (input)="onMaxCrawlDepthChange($any($event.target).value)"
+              />
+            </div>
+            <div class="field">
+              <label>{{ 'projects.maxUrlsPerRun' | translate }}</label>
+              <input
+                type="number"
+                class="input"
+                min="1"
+                [value]="maxUrlsPerRun()"
+                (input)="onMaxUrlsPerRunChange($any($event.target).value)"
+              />
+            </div>
+          </div>
+          <label class="toggle-row">
+            <input
+              type="checkbox"
+              [checked]="enableDirectoryDiscovery()"
+              (change)="onEnableDirectoryDiscoveryChange($any($event.target).checked)"
+            />
+            <span>{{ 'projects.enableDirectoryDiscovery' | translate }}</span>
+          </label>
+          <label class="toggle-row">
+            <input
+              type="checkbox"
+              [checked]="enableSitemapDiscovery()"
+              (change)="onEnableSitemapDiscoveryChange($any($event.target).checked)"
+            />
+            <span>{{ 'projects.enableSitemapDiscovery' | translate }}</span>
+          </label>
+          <label class="toggle-row">
+            <input
+              type="checkbox"
+              [checked]="enableLinkExpansion()"
+              (change)="onEnableLinkExpansionChange($any($event.target).checked)"
+            />
+            <span>{{ 'projects.enableLinkExpansion' | translate }}</span>
+          </label>
+          <label class="toggle-row">
+            <input
+              type="checkbox"
+              [checked]="enablePriorResearchUrls()"
+              (change)="onEnablePriorResearchUrlsChange($any($event.target).checked)"
+            />
+            <span>{{ 'projects.enablePriorResearchUrls' | translate }}</span>
+          </label>
+        </details>
+      </section>
+
+      <section class="card">
         <h3>{{ 'projects.templatesSection' | translate }}</h3>
         <p class="section-hint">{{ 'projects.templatesHint' | translate }}</p>
         @if (templateChecklist().length === 0) {

@@ -1,0 +1,23 @@
+<div class="researcher-shell">
+  <header class="shell-header">
+    <div>
+      <h1>{{ 'researcher.title' | translate }}</h1>
+      <p>{{ 'researcher.subtitle' | translate }}</p>
+    </div>
+  </header>
+
+  <nav class="researcher-subnav" aria-label="Researcher">
+    @for (item of navItems; track item.path) {
+      <a
+        [routerLink]="item.path"
+        [queryParams]="item.queryParams || null"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: item.exact }"
+      >
+        {{ item.labelKey | translate }}
+      </a>
+    }
+  </nav>
+
+  <router-outlet />
+</div>

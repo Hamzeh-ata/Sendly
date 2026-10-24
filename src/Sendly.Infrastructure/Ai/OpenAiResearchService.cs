@@ -50,7 +50,7 @@ public class OpenAiResearchService : IAiResearchService
                 return await _fallback.QualifyAsync(request, cancellationToken);
             }
 
-            parsed.Industry = NullIfBlank(parsed.Industry) ?? NullIfBlank(request.Industry);
+            parsed.Industry = NullIfBlank(parsed.Industry);
             parsed.CompanySize = NullIfBlank(parsed.CompanySize) ?? NullIfBlank(request.CompanySize);
             parsed.ContactRole = NullIfBlank(parsed.ContactRole) ?? NullIfBlank(request.ContactRole);
             if (string.IsNullOrWhiteSpace(request.Email))

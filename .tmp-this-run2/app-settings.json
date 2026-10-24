@@ -1,0 +1,117 @@
+﻿{
+    "openAi":  {
+                   "apiKey":  null,
+                   "apiKeyConfigured":  true,
+                   "model":  "gpt-4o-mini",
+                   "organizationId":  null,
+                   "projectId":  null,
+                   "baseUrl":  "https://api.openai.com/v1",
+                   "timeoutSeconds":  60
+               },
+    "research":  {
+                     "maxCandidatesPerRun":  200,
+                     "defaultMinQualificationScore":  70,
+                     "defaultRequestedProspectCount":  50,
+                     "providerTimeoutSeconds":  30,
+                     "enableSeedProvider":  true,
+                     "enableWebsiteCrawler":  true,
+                     "enableSearchProvider":  true,
+                     "enableIndependentCrawler":  true,
+                     "enableHtmlSearchFallback":  true,
+                     "maxPagesPerCrawl":  5,
+                     "maxSearchResults":  15,
+                     "maxSearchQueries":  100,
+                     "maxSearchRequests":  150,
+                     "maxResearchDurationMinutes":  30,
+                     "discoveryOversampleFactor":  4,
+                     "minSearchRelevanceScore":  0,
+                     "bingSearchApiKey":  null,
+                     "bingSearchApiKeyConfigured":  false,
+                     "bingSearchEndpoint":  "https://api.bing.microsoft.com/v7.0/search",
+                     "googleSearchApiKey":  null,
+                     "googleSearchApiKeyConfigured":  false,
+                     "googleSearchEngineId":  null,
+                     "hostDenylist":  [
+                                          "facebook.com",
+                                          "linkedin.com",
+                                          "twitter.com",
+                                          "x.com",
+                                          "instagram.com",
+                                          "youtube.com",
+                                          "wikipedia.org",
+                                          "reddit.com"
+                                      ]
+                 },
+    "braveSearch":  {
+                        "enabled":  false,
+                        "apiKey":  null,
+                        "apiKeyConfigured":  true,
+                        "baseUrl":  "https://api.search.brave.com/res/v1/web/search",
+                        "timeoutSeconds":  30,
+                        "maxResultsPerQuery":  10,
+                        "maxRequestsPerResearchRun":  100,
+                        "requestDelayMilliseconds":  250,
+                        "connectionStatus":  "Configured"
+                    },
+    "searXng":  {
+                    "enabled":  true,
+                    "baseUrl":  "http://localhost:8080",
+                    "defaultLanguage":  "en",
+                    "requestTimeoutSeconds":  30,
+                    "defaultResultsPerQuery":  10,
+                    "maximumPagesPerQuery":  2,
+                    "maxRequestsPerResearchRun":  100,
+                    "requestDelayMilliseconds":  250,
+                    "allowPrivateNetworkHosts":  true,
+                    "basicAuthUsername":  null,
+                    "basicAuthPassword":  null,
+                    "basicAuthConfigured":  false,
+                    "connectionStatus":  "Configured"
+                },
+    "whatsApp":  {
+                     "accessToken":  null,
+                     "accessTokenConfigured":  false,
+                     "phoneNumberId":  "",
+                     "apiVersion":  "v21.0",
+                     "baseUrl":  "https://graph.facebook.com",
+                     "defaultTemplateLanguage":  "en",
+                     "preferTemplateMessages":  true,
+                     "timeoutSeconds":  30
+                 },
+    "microsoftGraph":  {
+                           "clientId":  "",
+                           "clientSecret":  null,
+                           "clientSecretConfigured":  false,
+                           "tenantId":  "common",
+                           "redirectUri":  "http://localhost:5088/api/email-accounts/microsoft/callback",
+                           "frontendSuccessUri":  "http://localhost:4202/settings?microsoft=connected",
+                           "frontendErrorUri":  "http://localhost:4202/settings?microsoft=error"
+                       },
+    "emailSending":  {
+                         "defaultDelayMilliseconds":  1000,
+                         "defaultBatchSize":  50,
+                         "defaultMaxRetryCount":  2,
+                         "connectionTimeoutSeconds":  30
+                     },
+    "attachments":  {
+                        "maxFileSizeBytes":  5242880,
+                        "maxTotalSizeBytes":  20971520,
+                        "allowedContentTypes":  [
+                                                    "application/pdf",
+                                                    "application/msword",
+                                                    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                                                    "application/vnd.ms-excel",
+                                                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                                                    "image/png",
+                                                    "image/jpeg",
+                                                    "image/gif",
+                                                    "text/plain",
+                                                    "text/csv",
+                                                    "application/zip"
+                                                ],
+                        "storageRoot":  "App_Data/attachments"
+                    },
+    "backgroundQueues":  {
+                             "provider":  "InMemory"
+                         }
+}

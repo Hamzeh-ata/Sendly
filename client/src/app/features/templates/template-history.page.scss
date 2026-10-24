@@ -1,37 +1,11 @@
-.template-history-page {
-  max-width: 1100px;
-  margin: 0 auto;
-}
-
 .breadcrumb {
   margin-bottom: 1rem;
 
   a {
-    color: var(--accent-blue);
+    color: #7dd3fc;
     text-decoration: none;
     font-size: 0.875rem;
   }
-}
-
-.page-header {
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-  align-items: flex-start;
-  margin-bottom: 1.25rem;
-  flex-wrap: wrap;
-
-  h2 {
-    margin: 0;
-    font-family: var(--font-display);
-    font-size: 1.5rem;
-  }
-}
-
-.page-desc {
-  margin: 0.35rem 0 0;
-  color: var(--text-muted);
-  font-size: 0.9rem;
 }
 
 .search-input {
@@ -39,80 +13,37 @@
 }
 
 .stats-grid {
-  display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 0.75rem;
-  margin-bottom: 1.25rem;
+  margin-bottom: 0;
 }
 
-.stat-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  padding: 0.9rem 1rem;
-
-  &.success .stat-value {
-    color: var(--accent-teal);
-  }
-
-  &.danger .stat-value {
-    color: #f87171;
-  }
+.stat-card.success .stat-value {
+  color: var(--rc-green);
 }
 
-.stat-label {
-  display: block;
-  font-size: 0.75rem;
-  color: var(--text-muted);
-  margin-bottom: 0.3rem;
-}
-
-.stat-value {
-  font-size: 1.25rem;
-  font-weight: 600;
-}
-
-.table-wrap {
-  overflow: auto;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-}
-
-.data-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.9rem;
-
-  th,
-  td {
-    text-align: start;
-    padding: 0.75rem 1rem;
-    border-bottom: 1px solid var(--border);
-  }
-
-  th {
-    color: var(--text-muted);
-    font-size: 0.78rem;
-  }
+.stat-card.danger .stat-value {
+  color: var(--rc-red);
 }
 
 .status-chip {
   display: inline-flex;
   padding: 0.15rem 0.5rem;
-  border-radius: 999px;
+  border-radius: var(--radius-sm);
   font-size: 0.72rem;
-  background: rgba(148, 163, 184, 0.15);
+  background: rgba(148, 163, 184, 0.12);
   color: var(--text-secondary);
+  border: 1px solid var(--rc-border);
 
   &.sent {
-    background: color-mix(in srgb, var(--accent-teal) 18%, transparent);
-    color: var(--accent-teal);
+    background: rgba(52, 211, 153, 0.12);
+    color: var(--rc-green);
+    border-color: rgba(52, 211, 153, 0.28);
   }
 
   &.failed {
-    background: rgba(248, 113, 113, 0.15);
-    color: #f87171;
+    background: rgba(248, 113, 113, 0.12);
+    color: var(--rc-red);
+    border-color: rgba(248, 113, 113, 0.28);
   }
 }
 

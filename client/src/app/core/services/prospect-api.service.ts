@@ -8,6 +8,10 @@ import {
   ProspectSummary,
   RecommendTemplateResponse
 } from '../models/prospecting.model';
+import {
+  QualificationCriterionItem,
+  ResearchEvidenceItem
+} from '../models/research-query.model';
 import { ApiBaseService } from './api-base.service';
 
 @Injectable({ providedIn: 'root' })
@@ -18,6 +22,7 @@ export class ProspectApiService {
   list(filter: ProspectListFilter = {}): Observable<ProspectSummary[]> {
     let params = new HttpParams();
     params = this.appendParam(params, 'projectId', filter.projectId);
+    params = this.appendParam(params, 'researchRunId', filter.researchRunId);
     params = this.appendParam(params, 'search', filter.search);
     params = this.appendParam(params, 'country', filter.country);
     params = this.appendParam(params, 'industry', filter.industry);
@@ -53,6 +58,40 @@ export class ProspectApiService {
       `${this.api.baseUrl}/prospects/${id}/recommend-template`,
       {}
     );
+  }
+
+  listEvidence(id: string): Observable<ResearchEvidenceItem[]> {
+    return this.http.get<ResearchEvidenceItem[]>(`${this.api.baseUrl}/prospects/${id}/evidence`);
+  }
+
+  listQualificationCriteria(id: string): Observable<QualificationCriterionItem[]> {
+    return this.http.get<QualificationCriterionItem[]>(
+      `${this.api.baseUrl}/prospects/${id}/qualification-criteria`
+    );
+  }
+
+  exportCsv(filter: ProspectListFilter = {}): Observable<Blob> {
+    let params = new HttpParams();
+    params = this.appendParam(params, 'projectId', filter.projectId);
+    params = this.appendParam(params, 'researchRunId', filter.researchRunId);
+    params = this.appendParam(params, 'search', filter.search);
+    params = this.appendParam(params, 'country', filter.country);
+    params = this.appendParam(params, 'industry', filter.industry);
+    params = this.appendArray(params, 'contactMethod', filter.contactMethods);
+    params = this.appendArray(params, 'status', filter.statuses);
+    params = this.appendArray(params, 'qualification', filter.qualifications);
+    params = this.appendArray(params, 'duplicate', filter.duplicates);
+    return this.http.get(`${this.api.baseUrl}/prospects/export`, {
+      params,
+      responseType: 'blob'
+    });
+  }
+
+  merge(targetProspectId: string, sourceProspectId: string): Observable<ProspectDetail> {
+    return this.http.post<ProspectDetail>(`${this.api.baseUrl}/prospects/merge`, {
+      targetProspectId,
+      sourceProspectId
+    });
   }
 
   private appendParam(params: HttpParams, key: string, value?: string): HttpParams {

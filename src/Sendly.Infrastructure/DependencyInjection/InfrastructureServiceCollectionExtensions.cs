@@ -1,5 +1,6 @@
 using Sendly.Application.Abstractions;
 using Sendly.Application.Options;
+using Sendly.Application.Services;
 using Sendly.Infrastructure.Ai;
 using Sendly.Infrastructure.Email;
 using Sendly.Infrastructure.Jobs;
@@ -47,7 +48,17 @@ public static class InfrastructureServiceCollectionExtensions
             }
 
             client.Timeout = TimeSpan.FromSeconds(timeoutSeconds);
-            client.DefaultRequestHeaders.UserAgent.ParseAdd("SendlyResearchBot/1.0");
+            var userAgent = section["CrawlerUserAgent"];
+            if (string.IsNullOrWhiteSpace(userAgent))
+            {
+                userAgent = "SendlyResearchBot/1.0 (+https://localhost; research@sendly.local)";
+            }
+
+            client.DefaultRequestHeaders.UserAgent.ParseAdd(userAgent);
+        }).ConfigurePrimaryHttpMessageHandler(() => new System.Net.Http.SocketsHttpHandler
+        {
+            AllowAutoRedirect = false,
+            AutomaticDecompression = System.Net.DecompressionMethods.All
         });
         services.AddHttpClient("WhatsAppBusiness", (_, client) =>
         {
@@ -71,30 +82,28 @@ public static class InfrastructureServiceCollectionExtensions
             client.Timeout = TimeSpan.FromSeconds(timeoutSeconds);
             client.DefaultRequestHeaders.UserAgent.ParseAdd("SendlyResearchBot/1.0");
         });
-        services.AddHttpClient("SearXng", (_, client) =>
-        {
-            var section = configuration.GetSection(SearXngOptions.SectionName);
-            var timeoutSeconds = 30;
-            if (int.TryParse(section["RequestTimeoutSeconds"], out var parsedTimeout))
-            {
-                timeoutSeconds = Math.Clamp(parsedTimeout, 5, 120);
-            }
-
-            client.Timeout = TimeSpan.FromSeconds(timeoutSeconds);
-            client.DefaultRequestHeaders.UserAgent.ParseAdd("SendlyResearchBot/1.0");
-        }).ConfigurePrimaryHttpMessageHandler(() => new System.Net.Http.SocketsHttpHandler
-        {
-            AllowAutoRedirect = false,
-            AutomaticDecompression = System.Net.DecompressionMethods.All
-        });
         services.AddHttpClient("HtmlSearch", (_, client) =>
         {
             client.Timeout = TimeSpan.FromSeconds(30);
             client.DefaultRequestHeaders.UserAgent.ParseAdd("SendlyResearchBot/1.0");
         });
+        services.AddHttpClient("OpenStreetMap", (_, client) =>
+        {
+            client.Timeout = TimeSpan.FromSeconds(20);
+            client.DefaultRequestHeaders.UserAgent.ParseAdd(
+                "SendlyResearchBot/1.0 (local research; contact: research@sendly.local)");
+            client.DefaultRequestHeaders.Accept.ParseAdd("application/json");
+        });
+        services.AddHttpClient("OpenStreetMapOverpass", (_, client) =>
+        {
+            client.Timeout = TimeSpan.FromSeconds(18);
+            client.DefaultRequestHeaders.UserAgent.ParseAdd(
+                "SendlyResearchBot/1.0 (local research; contact: research@sendly.local)");
+            client.DefaultRequestHeaders.Accept.ParseAdd("application/json");
+        });
+        services.AddSingleton<IChallengedSourceRegistry, ChallengedSourceRegistry>();
         services.AddSingleton<IBraveSearchSecretStore, BraveSearchSecretStore>();
         services.AddScoped<IBraveSearchClient, BraveSearchClient>();
-        services.AddScoped<ISearXngSearchClient, SearXngSearchClient>();
         services.AddScoped<MicrosoftOAuthService>();
         services.AddScoped<IMicrosoftOAuthService>(sp => sp.GetRequiredService<MicrosoftOAuthService>());
         services.AddScoped<IMicrosoftTokenService>(sp => sp.GetRequiredService<MicrosoftOAuthService>());
@@ -102,13 +111,39 @@ public static class InfrastructureServiceCollectionExtensions
         services.AddScoped<IProviderEmailSender, MicrosoftGraphEmailSender>();
         services.AddScoped<ISmtpConnectionTester, MailKitSmtpConnectionTester>();
         services.AddScoped<IAttachmentStore, FileAttachmentStore>();
-        services.AddScoped<IAiResearchService, OpenAiResearchService>();
+        services.AddHttpClient("Ollama");
+        services.AddScoped<OllamaAiResearchService>();
+        services.AddScoped<OpenAiMapContactAssistant>();
+        services.AddScoped<IOpenAiMapContactAssistant>(sp => sp.GetRequiredService<OpenAiMapContactAssistant>());
+        services.AddScoped<IAiResearchService>(sp => sp.GetRequiredService<OllamaAiResearchService>());
+        services.AddScoped<ILocalAiHealthService>(sp => sp.GetRequiredService<OllamaAiResearchService>());
+        services.AddScoped<ILocalAiQueryPlanner>(sp => sp.GetRequiredService<OllamaAiResearchService>());
+        services.AddScoped<ILocalAiSearchClassifier>(sp => sp.GetRequiredService<OllamaAiResearchService>());
+        services.AddScoped<ILocalAiResearchIntelligence>(sp => sp.GetRequiredService<OllamaAiResearchService>());
+        services.AddScoped<IMapResearchIntelligence, OllamaMapResearchIntelligence>();
+        services.AddScoped<OverpassOpenStreetMapSource>();
+        services.AddScoped<NominatimMapGeographicSource>();
+        services.AddScoped<IMapGeographicSource, CompositeMapGeographicSource>();
         services.AddScoped<WebsitePageCrawler>();
+        services.AddScoped<ISitemapParser, SitemapParser>();
+        services.AddSingleton<IRobotsTxtService, RobotsTxtService>();
+
+        services.AddScoped<ISafeHttpFetcher, SafeHttpFetcher>();
+        services.AddScoped<LocalBusinessIndexService>();
+        services.AddScoped<IUrlDiscoverySource, SeedUrlDiscoverySource>();
+        services.AddScoped<IUrlDiscoverySource, PriorResearchUrlDiscoverySource>();
+        services.AddScoped<IUrlDiscoverySource, LocalBusinessIndexDiscoverySource>();
+        services.AddScoped<IUrlDiscoverySource, DirectoryCatalogDiscoverySource>();
+        services.AddScoped<IUrlDiscoverySource, IndustryAssociationDiscoverySource>();
+        services.AddScoped<IUrlDiscoverySource, OpenStreetMapDiscoverySource>();
+        services.AddScoped<IUrlDiscoverySource, CommonCrawlIndexDiscoverySource>();
+        services.AddScoped<IUrlDiscoverySource, WebSearchUrlDiscoverySource>();
+        services.AddScoped<IAutomaticDiscoveryCoordinator, AutomaticDiscoveryCoordinator>();
+        services.AddScoped<IProspectSource, IndependentCrawlProspectSource>();
         services.AddScoped<IProspectSource, SeedProspectSource>();
         services.AddScoped<IProspectSource, WebsiteCrawlProspectSource>();
         services.AddScoped<IProspectSource, SearchProspectSource>();
         services.AddScoped<IWebSearchProvider, BraveWebSearchProvider>();
-        services.AddScoped<IWebSearchProvider, SearXngWebSearchProvider>();
         services.AddScoped<IWebSearchProvider, BingWebSearchProvider>();
         services.AddScoped<IWebSearchProvider, GoogleCustomSearchProvider>();
         services.AddScoped<IWebSearchProvider, HtmlWebSearchProvider>();

@@ -1,11 +1,12 @@
 using Sendly.Application.Abstractions;
 using Sendly.Application.Options;
+using Sendly.Domain.Enums;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace Sendly.Infrastructure.Research;
 
-public class SearXngWebSearchProvider : IWebSearchProvider
+public class SearXngWebSearchProvider : IDiagnosticWebSearchProvider
 {
     private readonly ISearXngSearchClient _client;
     private readonly SearXngOptions _searXngOptions;
@@ -36,16 +37,52 @@ public class SearXngWebSearchProvider : IWebSearchProvider
         WebSearchRequest request,
         CancellationToken cancellationToken)
     {
+        var outcome = await SearchDetailedAsync(request, cancellationToken);
+        if (outcome.State is SearchProviderHealthState.Unavailable or SearchProviderHealthState.InvalidResponse)
+        {
+            throw new InvalidOperationException(outcome.ErrorSummary ?? "SearXNG search failed.");
+        }
+
+        return outcome.Hits;
+    }
+
+    public async Task<WebSearchOutcome> HealthCheckAsync(CancellationToken cancellationToken)
+    {
+        if (!IsEnabled)
+        {
+            return WebSearchOutcome.Unavailable(Name, "SearXNG is not enabled.");
+        }
+
+        var test = await _client.TestConnectionAsync(cancellationToken);
+        var state = Enum.TryParse<SearchProviderHealthState>(test.HealthState, true, out var parsed)
+            ? parsed
+            : test.Success
+                ? SearchProviderHealthState.Healthy
+                : SearchProviderHealthState.Unavailable;
+        return new WebSearchOutcome
+        {
+            Provider = Name,
+            State = state,
+            ErrorSummary = test.Success ? null : test.Message,
+            ProviderResultCount = test.ResultCount,
+            UnresponsiveEngines = test.UnresponsiveEngines
+        };
+    }
+
+    public async Task<WebSearchOutcome> SearchDetailedAsync(
+        WebSearchRequest request,
+        CancellationToken cancellationToken)
+    {
         if (!IsEnabled || string.IsNullOrWhiteSpace(request.Query))
         {
-            return [];
+            return WebSearchOutcome.Unavailable(Name, "SearXNG is not enabled or the query is empty.");
         }
 
         var maxRequests = Math.Clamp(_searXngOptions.MaxRequestsPerResearchRun, 1, 500);
         if (_requestsThisRun >= maxRequests)
         {
             _logger.LogWarning("SearXNG request cap reached for current process scope ({Max})", maxRequests);
-            throw new InvalidOperationException("SearXNG request cap reached for this research run.");
+            return WebSearchOutcome.Unavailable(Name, "SearXNG request cap reached for this research run.");
         }
 
         var count = Math.Clamp(
@@ -57,7 +94,7 @@ public class SearXngWebSearchProvider : IWebSearchProvider
         var maxPages = Math.Clamp(_searXngOptions.MaximumPagesPerQuery, 1, 20);
         if (pageNumber > maxPages)
         {
-            return [];
+            return WebSearchOutcome.FromHits(Name, []);
         }
 
         _requestsThisRun++;
@@ -92,7 +129,22 @@ public class SearXngWebSearchProvider : IWebSearchProvider
             });
         }
 
-        _logger.LogInformation("SearXNG returned {Count} urls", hits.Count);
-        return hits;
+        _logger.LogInformation(
+            "SearXNG returned {Count} urls state {State}",
+            hits.Count,
+            response.State);
+        return new WebSearchOutcome
+        {
+            Provider = Name,
+            State = response.State,
+            Hits = hits,
+            ProviderResultCount = response.ProviderResultCount,
+            AcceptedCount = hits.Count,
+            ErrorSummary = response.ErrorSummary,
+            UnresponsiveEngines = response.UnresponsiveEngines
+                .Select(x => string.IsNullOrWhiteSpace(x.Reason) ? x.Engine : $"{x.Engine}: {x.Reason}")
+                .ToList(),
+            IsTransient = response.State == SearchProviderHealthState.Unavailable
+        };
     }
 }

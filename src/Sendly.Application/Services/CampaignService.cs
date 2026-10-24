@@ -578,7 +578,11 @@ public class CampaignService
             cancellationToken);
         EnsureHasSendableRecipients(sendableEmails, templateSnapshot.TemplateId, request.AllowAlreadyContacted);
 
-        var personalizationMap = BuildPersonalizationMap(request);
+        var personalizationMap = await BuildPersonalizationMapAsync(
+            request,
+            sendableEmails,
+            templateSnapshot.TemplateId,
+            cancellationToken);
         var campaign = CreateCampaignEntity(
             request,
             sendableEmails,
@@ -686,6 +690,195 @@ public class CampaignService
         }
 
         return map;
+    }
+
+    private async Task<Dictionary<string, CreateCampaignRecipientDto>> BuildPersonalizationMapAsync(
+        CreateCampaignRequestDto request,
+        List<string> sendableEmails,
+        Guid? templateId,
+        CancellationToken cancellationToken)
+    {
+        var map = BuildPersonalizationMap(request);
+        await EnrichPersonalizationFromProspectsAsync(map, sendableEmails, templateId, cancellationToken);
+        return map;
+    }
+
+    private async Task EnrichPersonalizationFromProspectsAsync(
+        Dictionary<string, CreateCampaignRecipientDto> map,
+        List<string> sendableEmails,
+        Guid? templateId,
+        CancellationToken cancellationToken)
+    {
+        var missing = CollectMissingPersonalizationEmails(map, sendableEmails);
+        if (missing.Count == 0)
+        {
+            return;
+        }
+
+        var candidates = await LoadProspectCandidatesAsync(missing, cancellationToken);
+        if (candidates.Count == 0)
+        {
+            return;
+        }
+
+        var preferredProjectIds = await LoadTemplateProjectIdsAsync(templateId, cancellationToken);
+        foreach (var email in missing)
+        {
+            var prospect = ChooseProspectForEmail(candidates, email, preferredProjectIds, templateId);
+            if (prospect is null)
+            {
+                continue;
+            }
+
+            map[email] = BuildProspectRecipient(prospect);
+        }
+    }
+
+    private static List<string> CollectMissingPersonalizationEmails(
+        Dictionary<string, CreateCampaignRecipientDto> map,
+        List<string> sendableEmails)
+    {
+        var missing = new List<string>();
+        var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        foreach (var email in sendableEmails)
+        {
+            var key = EmailAddressParser.Normalize(email);
+            if (!seen.Add(key))
+            {
+                continue;
+            }
+
+            if (map.TryGetValue(key, out var existing) && !NeedsProspectPersonalization(existing))
+            {
+                continue;
+            }
+
+            missing.Add(key);
+        }
+
+        return missing;
+    }
+
+    private static bool NeedsProspectPersonalization(CreateCampaignRecipientDto recipient)
+    {
+        return string.IsNullOrWhiteSpace(recipient.CompanyName)
+            && string.IsNullOrWhiteSpace(recipient.DisplayName)
+            && recipient.Personalization.Count == 0;
+    }
+
+    private async Task<List<Prospect>> LoadProspectCandidatesAsync(
+        List<string> normalizedEmails,
+        CancellationToken cancellationToken)
+    {
+        return await _db.Prospects
+            .AsNoTracking()
+            .Where(x => x.NormalizedEmail != null && normalizedEmails.Contains(x.NormalizedEmail))
+            .ToListAsync(cancellationToken);
+    }
+
+    private async Task<HashSet<Guid>> LoadTemplateProjectIdsAsync(
+        Guid? templateId,
+        CancellationToken cancellationToken)
+    {
+        if (templateId is null)
+        {
+            return new HashSet<Guid>();
+        }
+
+        var projectIds = await _db.ProjectTemplates
+            .AsNoTracking()
+            .Where(x => x.TemplateId == templateId.Value)
+            .Select(x => x.ProjectId)
+            .Distinct()
+            .ToListAsync(cancellationToken);
+        return new HashSet<Guid>(projectIds);
+    }
+
+    private static Prospect? ChooseProspectForEmail(
+        List<Prospect> candidates,
+        string normalizedEmail,
+        HashSet<Guid> preferredProjectIds,
+        Guid? templateId)
+    {
+        Prospect? best = null;
+        var bestScore = -1;
+        foreach (var candidate in candidates)
+        {
+            if (!string.Equals(candidate.NormalizedEmail, normalizedEmail, StringComparison.OrdinalIgnoreCase))
+            {
+                continue;
+            }
+
+            var score = ScoreProspect(candidate, preferredProjectIds, templateId);
+            if (best is null || score > bestScore || (score == bestScore && candidate.UpdatedAtUtc > best.UpdatedAtUtc))
+            {
+                best = candidate;
+                bestScore = score;
+            }
+        }
+
+        return best;
+    }
+
+    private static int ScoreProspect(Prospect prospect, HashSet<Guid> preferredProjectIds, Guid? templateId)
+    {
+        var score = 0;
+        if (preferredProjectIds.Contains(prospect.ProjectId))
+        {
+            score += 4;
+        }
+
+        if (templateId.HasValue && prospect.RecommendedTemplateId == templateId.Value)
+        {
+            score += 2;
+        }
+
+        if (!string.IsNullOrWhiteSpace(prospect.CompanyName))
+        {
+            score += 1;
+        }
+
+        return score;
+    }
+
+    private static CreateCampaignRecipientDto BuildProspectRecipient(Prospect prospect)
+    {
+        return new CreateCampaignRecipientDto
+        {
+            Email = prospect.Email ?? prospect.NormalizedEmail ?? string.Empty,
+            ProspectId = prospect.Id,
+            DisplayName = TrimOrNull(prospect.ContactName),
+            CompanyName = TrimOrNull(prospect.CompanyName),
+            Personalization = BuildProspectPersonalization(prospect)
+        };
+    }
+
+    private static Dictionary<string, string> BuildProspectPersonalization(Prospect prospect)
+    {
+        var values = PersonalizationSerializer.Deserialize(prospect.PersonalizationJson);
+        AddPersonalizationValue(values, "CompanyName", prospect.CompanyName);
+        AddPersonalizationValue(values, "ContactName", prospect.ContactName);
+        AddPersonalizationValue(values, "Industry", prospect.Industry);
+        AddPersonalizationValue(values, "City", prospect.City);
+        AddPersonalizationValue(values, "Country", prospect.Country);
+        AddPersonalizationValue(values, "ContactRole", prospect.ContactRole);
+        AddPersonalizationValue(values, "Email", prospect.Email);
+        return values;
+    }
+
+    private static void AddPersonalizationValue(Dictionary<string, string> values, string key, string? value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            return;
+        }
+
+        if (values.TryGetValue(key, out var existing) && !string.IsNullOrWhiteSpace(existing))
+        {
+            return;
+        }
+
+        values[key] = value.Trim();
     }
 
     private static string? TrimOrNull(string? value)

@@ -1,0 +1,12 @@
+.run-label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  min-width: min(100%, 28rem);
+}
+
+.has-error td:first-child a {
+  color: #f87171;
+}

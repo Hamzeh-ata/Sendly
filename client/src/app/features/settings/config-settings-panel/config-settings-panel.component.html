@@ -347,136 +347,71 @@
     </div>
 
     <h4>{{ 'appSettings.searxngTitle' | translate }}</h4>
-    <p class="section-hint">{{ 'appSettings.searxngHint' | translate }}</p>
+    <p class="section-hint">{{ 'appSettings.searxngDisabledHint' | translate }}</p>
+
+    <h4>{{ 'appSettings.ollamaTitle' | translate }}</h4>
+    <p class="section-hint">{{ 'appSettings.ollamaHint' | translate }}</p>
     <div class="toggle-grid">
       <label class="check-row">
         <input
           type="checkbox"
-          [checked]="searXngEnabled()"
-          (change)="onSearXngEnabledChange($any($event.target).checked)"
+          [checked]="ollamaEnabled()"
+          (change)="onOllamaEnabledChange($any($event.target).checked)"
         />
-        <span>{{ 'appSettings.searxngEnabled' | translate }}</span>
-      </label>
-      <label class="check-row">
-        <input
-          type="checkbox"
-          [checked]="searXngAllowPrivateHosts()"
-          (change)="onSearXngAllowPrivateHostsChange($any($event.target).checked)"
-        />
-        <span>{{ 'appSettings.searxngAllowPrivateNetworkHosts' | translate }}</span>
+        <span>{{ 'appSettings.ollamaEnabled' | translate }}</span>
       </label>
     </div>
     <div class="field-grid">
       <div class="field">
-        <label>{{ 'appSettings.searxngBaseUrl' | translate }}</label>
+        <label>{{ 'appSettings.ollamaBaseUrl' | translate }}</label>
         <input
           type="text"
           class="input"
-          [value]="searXngBaseUrl()"
-          (input)="onSearXngBaseUrlChange($any($event.target).value)"
-          [placeholder]="'appSettings.searxngBaseUrlPlaceholder' | translate"
+          [value]="ollamaBaseUrl()"
+          (input)="onOllamaBaseUrlChange($any($event.target).value)"
+          [placeholder]="'appSettings.ollamaBaseUrlPlaceholder' | translate"
         />
       </div>
       <div class="field">
-        <label>{{ 'appSettings.searxngDefaultLanguage' | translate }}</label>
+        <label>{{ 'appSettings.ollamaModel' | translate }}</label>
         <input
           type="text"
           class="input"
-          [value]="searXngDefaultLanguage()"
-          (input)="onSearXngDefaultLanguageChange($any($event.target).value)"
+          [value]="ollamaModel()"
+          (input)="onOllamaModelChange($any($event.target).value)"
+          [placeholder]="'appSettings.ollamaModelPlaceholder' | translate"
         />
       </div>
       <div class="field">
-        <label>{{ 'appSettings.searxngTimeoutSeconds' | translate }}</label>
+        <label>{{ 'appSettings.ollamaTimeoutSeconds' | translate }}</label>
         <input
           type="number"
           class="input"
-          [value]="searXngTimeout()"
-          (input)="onSearXngTimeoutChange($any($event.target).value)"
+          [value]="ollamaTimeout()"
+          (input)="onOllamaTimeoutChange($any($event.target).value)"
         />
       </div>
       <div class="field">
-        <label>{{ 'appSettings.searxngDefaultResultsPerQuery' | translate }}</label>
+        <label>{{ 'appSettings.ollamaMaxRetries' | translate }}</label>
         <input
           type="number"
           class="input"
-          [value]="searXngDefaultResults()"
-          (input)="onSearXngDefaultResultsChange($any($event.target).value)"
-        />
-      </div>
-      <div class="field">
-        <label>{{ 'appSettings.searxngMaximumPagesPerQuery' | translate }}</label>
-        <input
-          type="number"
-          class="input"
-          [value]="searXngMaxPages()"
-          (input)="onSearXngMaxPagesChange($any($event.target).value)"
-        />
-      </div>
-      <div class="field">
-        <label>{{ 'appSettings.searxngMaxRequestsPerRun' | translate }}</label>
-        <input
-          type="number"
-          class="input"
-          [value]="searXngMaxRequests()"
-          (input)="onSearXngMaxRequestsChange($any($event.target).value)"
-        />
-      </div>
-      <div class="field">
-        <label>{{ 'appSettings.searxngRequestDelayMs' | translate }}</label>
-        <input
-          type="number"
-          class="input"
-          [value]="searXngRequestDelay()"
-          (input)="onSearXngRequestDelayChange($any($event.target).value)"
-        />
-      </div>
-      <div class="field">
-        <label>{{ 'appSettings.searxngBasicAuthUsername' | translate }}</label>
-        <input
-          type="text"
-          class="input"
-          [value]="searXngBasicAuthUsername()"
-          (input)="onSearXngBasicAuthUsernameChange($any($event.target).value)"
-          [placeholder]="
-            (searXngBasicAuthConfigured()
-              ? 'appSettings.secretKeepExisting'
-              : 'appSettings.apiKeyPlaceholder'
-            ) | translate
-          "
-        />
-      </div>
-      <div class="field">
-        <label>{{ 'appSettings.searxngBasicAuthPassword' | translate }}</label>
-        <input
-          type="password"
-          class="input"
-          [value]="searXngBasicAuthPassword()"
-          (input)="onSearXngBasicAuthPasswordChange($any($event.target).value)"
-          [placeholder]="
-            (searXngBasicAuthConfigured()
-              ? 'appSettings.secretKeepExisting'
-              : 'appSettings.apiKeyPlaceholder'
-            ) | translate
-          "
+          [value]="ollamaMaxRetries()"
+          (input)="onOllamaMaxRetriesChange($any($event.target).value)"
         />
       </div>
     </div>
     <div class="brave-status-row">
-      <span class="section-hint">
-        {{ 'appSettings.searxngConnectionStatus' | translate }}:
-        {{ searXngStatusLabelKey() | translate }}
-      </span>
-      @if (searXngConnectionMessage()) {
-        <span class="section-hint">{{ searXngConnectionMessage() }}</span>
+      @if (ollamaConnectionMessage()) {
+        <span class="section-hint">{{ ollamaConnectionMessage() }}</span>
       }
       <button
         type="button"
         class="btn btn-ghost"
-        [disabled]="testingSearXng() || saving()"
-        (click)="testSearXngConnection()"
+        [disabled]="testingOllama() || saving()"
+        (click)="testOllamaConnection()"
       >
-        {{ 'appSettings.searxngTestConnection' | translate }}
+        {{ 'appSettings.ollamaTestConnection' | translate }}
       </button>
     </div>
 

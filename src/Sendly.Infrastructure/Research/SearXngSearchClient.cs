@@ -5,6 +5,7 @@ using System.Text.Json;
 using Sendly.Application.Abstractions;
 using Sendly.Application.Options;
 using Sendly.Application.Services;
+using Sendly.Domain.Enums;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
@@ -42,11 +43,26 @@ public class SearXngSearchClient : ISearXngSearchClient
         var url = BuildSearchUrl(query.Query.Trim(), pageNumber, language);
         var maxAttempts = Math.Clamp(_options.MaxRetryCount, 0, 5) + 1;
 
+        SearXngSearchResponse? lastUnavailable = null;
         for (var attempt = 1; attempt <= maxAttempts; attempt++)
         {
             try
             {
-                return await SendSearchAsync(url, count, cancellationToken);
+                var response = await SendSearchAsync(url, count, cancellationToken);
+                if (response.State == SearchProviderHealthState.Unavailable
+                    && attempt < maxAttempts
+                    && IsTransientUnresponsive(response))
+                {
+                    lastUnavailable = response;
+                    _logger.LogWarning(
+                        "SearXNG engines unresponsive; retry {Attempt}/{MaxAttempts}",
+                        attempt,
+                        maxAttempts);
+                    await Task.Delay(ResolveRetryDelayMs(null), cancellationToken);
+                    continue;
+                }
+
+                return response;
             }
             catch (SearXngTransientException ex) when (attempt < maxAttempts)
             {
@@ -57,6 +73,11 @@ public class SearXngSearchClient : ISearXngSearchClient
                     maxAttempts);
                 await Task.Delay(ResolveRetryDelayMs(ex.RetryAfter), cancellationToken);
             }
+        }
+
+        if (lastUnavailable is not null)
+        {
+            return lastUnavailable;
         }
 
         throw new InvalidOperationException("SearXNG request failed after retries.");
@@ -87,14 +108,7 @@ public class SearXngSearchClient : ISearXngSearchClient
                 },
                 cancellationToken);
 
-            return new ProviderConnectionTestResult
-            {
-                Success = true,
-                Status = "ConnectionSuccessful",
-                Message = response.Results.Count == 0
-                    ? "Connected successfully. No results for the test query."
-                    : "Connected successfully."
-            };
+            return MapConnectionResult(response);
         }
         catch (InvalidOperationException ex)
         {
@@ -175,14 +189,15 @@ public class SearXngSearchClient : ISearXngSearchClient
                 continue;
             }
 
+            var contentType = response.Content.Headers.ContentType?.MediaType;
             var body = await response.Content.ReadAsStringAsync(timeoutCts.Token);
-            return HandleResponse(status, body, count);
+            return HandleResponse(status, body, count, contentType);
         }
 
         throw new InvalidOperationException("SearXNG redirect limit exceeded.");
     }
 
-    private SearXngSearchResponse HandleResponse(int status, string body, int count)
+    private SearXngSearchResponse HandleResponse(int status, string body, int count, string? contentType)
     {
         if (status is 401 or 403)
         {
@@ -205,6 +220,15 @@ public class SearXngSearchClient : ISearXngSearchClient
         {
             _logger.LogWarning("SearXNG failed with status {Status}", status);
             throw new InvalidOperationException("SearXNG service failure.");
+        }
+
+        if (LooksLikeHtml(contentType, body))
+        {
+            return new SearXngSearchResponse
+            {
+                State = SearchProviderHealthState.InvalidResponse,
+                ErrorSummary = "SearXNG returned HTML instead of JSON search results."
+            };
         }
 
         return ParseResponse(body, count);
@@ -239,7 +263,22 @@ public class SearXngSearchClient : ISearXngSearchClient
     {
         if (string.IsNullOrWhiteSpace(body))
         {
-            throw new InvalidOperationException("SearXNG returned an empty response.");
+            return new SearXngSearchResponse
+            {
+                State = SearchProviderHealthState.InvalidResponse,
+                ErrorSummary = "SearXNG returned an empty response."
+            };
+        }
+
+        if (LooksLikeHtml(null, body) || LooksLikeChallenge(body))
+        {
+            return new SearXngSearchResponse
+            {
+                State = SearchProviderHealthState.InvalidResponse,
+                ErrorSummary = LooksLikeChallenge(body)
+                    ? "SearXNG returned a challenge or block page."
+                    : "SearXNG returned HTML instead of JSON search results."
+            };
         }
 
         JsonDocument document;
@@ -249,7 +288,11 @@ public class SearXngSearchClient : ISearXngSearchClient
         }
         catch (JsonException)
         {
-            throw new InvalidOperationException("SearXNG returned invalid JSON.");
+            return new SearXngSearchResponse
+            {
+                State = SearchProviderHealthState.InvalidResponse,
+                ErrorSummary = "SearXNG returned invalid JSON."
+            };
         }
 
         using (document)
@@ -257,12 +300,18 @@ public class SearXngSearchClient : ISearXngSearchClient
             var root = document.RootElement;
             if (!root.TryGetProperty("results", out var results) || results.ValueKind != JsonValueKind.Array)
             {
-                throw new InvalidOperationException("SearXNG response is missing a usable results array.");
+                return new SearXngSearchResponse
+                {
+                    State = SearchProviderHealthState.InvalidResponse,
+                    ErrorSummary = "SearXNG response is missing a usable results array.",
+                    UnresponsiveEngines = ReadUnresponsiveEngines(root)
+                };
             }
 
             var response = new SearXngSearchResponse
             {
-                Provider = "SearXNG"
+                Provider = "SearXNG",
+                UnresponsiveEngines = ReadUnresponsiveEngines(root)
             };
 
             foreach (var item in results.EnumerateArray())
@@ -294,9 +343,156 @@ public class SearXngSearchClient : ISearXngSearchClient
                 });
             }
 
+            response.ProviderResultCount = response.Results.Count;
             response.TotalResults = response.Results.Count;
+            ClassifyParsedResponse(response);
             return response;
         }
+    }
+
+    private static void ClassifyParsedResponse(SearXngSearchResponse response)
+    {
+        if (response.Results.Count > 0)
+        {
+            response.State = response.UnresponsiveEngines.Count > 0
+                ? SearchProviderHealthState.Degraded
+                : SearchProviderHealthState.Healthy;
+            return;
+        }
+
+        if (response.UnresponsiveEngines.Count > 0)
+        {
+            response.State = SearchProviderHealthState.Unavailable;
+            response.ErrorSummary = SummarizeUnresponsive(response.UnresponsiveEngines);
+            return;
+        }
+
+        response.State = SearchProviderHealthState.NoResults;
+    }
+
+    private static List<SearXngUnresponsiveEngine> ReadUnresponsiveEngines(JsonElement root)
+    {
+        var result = new List<SearXngUnresponsiveEngine>();
+        if (!root.TryGetProperty("unresponsive_engines", out var engines)
+            || engines.ValueKind != JsonValueKind.Array)
+        {
+            return result;
+        }
+
+        foreach (var item in engines.EnumerateArray())
+        {
+            if (item.ValueKind != JsonValueKind.Array)
+            {
+                continue;
+            }
+
+            var parts = item.EnumerateArray().ToList();
+            var engine = parts.Count > 0 ? parts[0].GetString() : null;
+            if (string.IsNullOrWhiteSpace(engine))
+            {
+                continue;
+            }
+
+            result.Add(new SearXngUnresponsiveEngine
+            {
+                Engine = engine,
+                Reason = parts.Count > 1 ? parts[1].GetString() ?? string.Empty : string.Empty
+            });
+        }
+
+        return result;
+    }
+
+    private static ProviderConnectionTestResult MapConnectionResult(SearXngSearchResponse response)
+    {
+        if (response.State is SearchProviderHealthState.Healthy or SearchProviderHealthState.Degraded)
+        {
+            return new ProviderConnectionTestResult
+            {
+                Success = true,
+                Status = "ConnectionSuccessful",
+                Message = response.State == SearchProviderHealthState.Degraded
+                    ? "Connected with degraded search engines."
+                    : "Connected successfully.",
+                HealthState = response.State.ToString(),
+                ResultCount = response.Results.Count,
+                UnresponsiveEngines = response.UnresponsiveEngines.Select(x => $"{x.Engine}: {x.Reason}").ToList()
+            };
+        }
+
+        if (response.State == SearchProviderHealthState.NoResults)
+        {
+            return new ProviderConnectionTestResult
+            {
+                Success = true,
+                Status = "ConnectionSuccessful",
+                Message = "Connected successfully. No results for the test query.",
+                HealthState = response.State.ToString(),
+                ResultCount = 0
+            };
+        }
+
+        return new ProviderConnectionTestResult
+        {
+            Success = false,
+            Status = response.State == SearchProviderHealthState.InvalidResponse
+                ? "InvalidResponse"
+                : "Unavailable",
+            Message = response.ErrorSummary ?? "SearXNG search engines are unavailable.",
+            HealthState = response.State.ToString(),
+            ResultCount = response.Results.Count,
+            UnresponsiveEngines = response.UnresponsiveEngines.Select(x => $"{x.Engine}: {x.Reason}").ToList()
+        };
+    }
+
+    private static string SummarizeUnresponsive(List<SearXngUnresponsiveEngine> engines)
+    {
+        var parts = engines
+            .Select(x => string.IsNullOrWhiteSpace(x.Reason) ? x.Engine : $"{x.Engine} ({x.Reason})")
+            .Take(6);
+        return "SearXNG engines unresponsive: " + string.Join("; ", parts);
+    }
+
+    private static bool LooksLikeHtml(string? contentType, string body)
+    {
+        if (!string.IsNullOrWhiteSpace(contentType)
+            && contentType.Contains("html", StringComparison.OrdinalIgnoreCase))
+        {
+            return true;
+        }
+
+        var trimmed = body.TrimStart();
+        return trimmed.StartsWith("<!DOCTYPE", StringComparison.OrdinalIgnoreCase)
+               || trimmed.StartsWith("<html", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static bool LooksLikeChallenge(string body)
+    {
+        return body.Contains("cf-challenge", StringComparison.OrdinalIgnoreCase)
+               || body.Contains("captcha", StringComparison.OrdinalIgnoreCase)
+               || body.Contains("Enable JavaScript", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static bool IsTransientUnresponsive(SearXngSearchResponse response)
+    {
+        if (response.UnresponsiveEngines.Count == 0)
+        {
+            return false;
+        }
+
+        foreach (var engine in response.UnresponsiveEngines)
+        {
+            var reason = engine.Reason ?? string.Empty;
+            if (reason.Contains("timeout", StringComparison.OrdinalIgnoreCase)
+                || reason.Contains("too many requests", StringComparison.OrdinalIgnoreCase)
+                || reason.Contains("suspended", StringComparison.OrdinalIgnoreCase)
+                || reason.Contains("429", StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private void ApplyOptionalBasicAuth(HttpRequestMessage request)

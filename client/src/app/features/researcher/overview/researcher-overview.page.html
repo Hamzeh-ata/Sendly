@@ -1,0 +1,159 @@
+<div class="researcher-page">
+  <div class="page-header">
+    <div>
+      <h2>{{ 'researcher.overview.title' | translate }}</h2>
+      <p class="subtitle">{{ 'researcher.overview.subtitle' | translate }}</p>
+    </div>
+  </div>
+
+  @if (loading()) {
+    <div class="rc-skeleton">
+      <div class="bone"></div>
+      <div class="bone"></div>
+      <div class="bone"></div>
+    </div>
+  } @else if (!hasData()) {
+    <app-empty-state
+      titleKey="researcher.overview.emptyTitle"
+      descriptionKey="researcher.overview.emptyDescription"
+    />
+  } @else {
+    <section class="rc-panel">
+      <h3>{{ 'researcher.overview.statusTitle' | translate }}</h3>
+      <div class="rc-grid metrics">
+        @for (tile of statusTiles(); track tile.labelKey) {
+          <app-metric-tile [labelKey]="tile.labelKey" [value]="tile.value" [tone]="tile.tone" />
+        }
+      </div>
+    </section>
+
+    <section class="rc-panel">
+      <h3>{{ 'researcher.overview.funnelTitle' | translate }}</h3>
+      <p class="subtitle">{{ 'researcher.overview.funnelHint' | translate }}</p>
+      <div class="rc-grid metrics">
+        @for (tile of funnelTiles(); track tile.labelKey) {
+          <app-metric-tile [labelKey]="tile.labelKey" [value]="tile.value" [tone]="tile.tone" />
+        }
+      </div>
+    </section>
+
+    <div class="rc-grid two">
+      <section class="rc-panel">
+        <h3>{{ 'researcher.overview.activeRunsTitle' | translate }}</h3>
+        @if (activeRuns().length === 0) {
+          <p class="rc-muted">{{ 'researcher.overview.noActiveRuns' | translate }}</p>
+        } @else {
+          <table class="rc-table">
+            <thead>
+              <tr>
+                <th>{{ 'researcher.overview.run' | translate }}</th>
+                <th>{{ 'researcher.overview.status' | translate }}</th>
+                <th>{{ 'researcher.overview.urls' | translate }}</th>
+                <th>{{ 'researcher.overview.pages' | translate }}</th>
+                <th>{{ 'researcher.overview.qualified' | translate }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (run of activeRuns(); track run.id) {
+                <tr>
+                  <td>
+                    <a [routerLink]="['/researcher/live', run.id]">{{ run.title }}</a>
+                    <div class="rc-muted">{{ run.projectName }} · {{ run.startedLabel }}</div>
+                  </td>
+                  <td><app-status-badge prefix="researchStatus" [status]="run.status" /></td>
+                  <td class="rc-mono">{{ run.urlsDiscovered }}</td>
+                  <td class="rc-mono">{{ run.pagesCrawled }}</td>
+                  <td class="rc-mono">{{ run.qualifiedCount }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        }
+      </section>
+
+      <section class="rc-panel">
+        <h3>{{ 'researcher.overview.recentErrorsTitle' | translate }}</h3>
+        @if (recentErrors().length === 0) {
+          <p class="rc-muted">{{ 'researcher.overview.noRecentErrors' | translate }}</p>
+        } @else {
+          <ul class="error-list">
+            @for (item of recentErrors(); track item.category + item.lastLabel) {
+              <li>
+                <div class="error-head">
+                  <strong>{{ item.category }}</strong>
+                  <span class="rc-mono">×{{ item.count }}</span>
+                </div>
+                <p>{{ item.sampleMessage }}</p>
+                @if (item.hasRunLink) {
+                  <a [routerLink]="['/researcher/live', item.researchRunId]">
+                    {{ 'researcher.overview.openRun' | translate }}
+                  </a>
+                }
+              </li>
+            }
+          </ul>
+        }
+      </section>
+    </div>
+
+    <div class="rc-grid two">
+      <section class="rc-panel">
+        <h3>{{ 'researcher.overview.topSourcesTitle' | translate }}</h3>
+        @if (topSources().length === 0) {
+          <p class="rc-muted">{{ 'researcher.overview.noSources' | translate }}</p>
+        } @else {
+          <table class="rc-table">
+            <thead>
+              <tr>
+                <th>{{ 'researcher.sources.name' | translate }}</th>
+                <th>{{ 'researcher.sources.candidates' | translate }}</th>
+                <th>{{ 'researcher.sources.qualified' | translate }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (source of topSources(); track source.id) {
+                <tr>
+                  <td>
+                    <a [routerLink]="['/researcher/sources']" [queryParams]="{ id: source.id }">
+                      {{ source.name }}
+                    </a>
+                  </td>
+                  <td class="rc-mono">{{ source.candidatesDiscovered }}</td>
+                  <td class="rc-mono">{{ source.qualifiedProspectsYielded }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        }
+      </section>
+
+      <section class="rc-panel">
+        <h3>{{ 'researcher.overview.unhealthySourcesTitle' | translate }}</h3>
+        @if (unhealthySources().length === 0) {
+          <p class="rc-muted">{{ 'researcher.overview.noUnhealthySources' | translate }}</p>
+        } @else {
+          <table class="rc-table">
+            <thead>
+              <tr>
+                <th>{{ 'researcher.sources.name' | translate }}</th>
+                <th>{{ 'researcher.sources.status' | translate }}</th>
+                <th>{{ 'researcher.sources.failureRate' | translate }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (source of unhealthySources(); track source.id) {
+                <tr>
+                  <td>{{ source.name }}</td>
+                  <td>
+                    <span class="source-status" [class]="source.statusClass">{{ source.status }}</span>
+                  </td>
+                  <td class="rc-mono">{{ source.failureRateLabel }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        }
+      </section>
+    </div>
+  }
+</div>

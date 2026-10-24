@@ -180,31 +180,7 @@ public class WebsitePageCrawler
             }
         }
 
-        if (result.Count == 0)
-        {
-            result.Add(new ProspectCandidate
-            {
-                CompanyName = string.IsNullOrWhiteSpace(companyName)
-                    ? InferCompanyFromHost(seedUri)
-                    : companyName.Trim(),
-                Website = seedUri.GetLeftPart(UriPartial.Authority),
-                Country = country,
-                Industry = industry,
-                SourceUrl = seedUri.ToString(),
-                SourceType = Domain.Enums.ProspectSourceType.Website,
-                SourceName = sourceName ?? "Company website",
-                ResearchNotes = "Website confirmed. Contact details were not found on crawled pages."
-            });
-        }
-
         return ProspectCandidateDeduplicator.DeduplicateAndMerge(result);
-    }
-
-    private static string InferCompanyFromHost(Uri uri)
-    {
-        var host = uri.Host.Replace("www.", string.Empty, StringComparison.OrdinalIgnoreCase);
-        var parts = host.Split('.', StringSplitOptions.RemoveEmptyEntries);
-        return parts.Length == 0 ? uri.Host : parts[0];
     }
 
     private static List<Uri> OrderLinks(List<Uri> links)

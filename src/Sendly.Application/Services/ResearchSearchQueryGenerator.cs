@@ -80,7 +80,7 @@ public static class ResearchSearchQueryGenerator
         "contact"
     ];
 
-    private static readonly string[] ArabicSchoolBusinessTypes =
+    public static readonly string[] ArabicEducationBusinessTypes =
     [
         "مدرسة",
         "مدرسة خاصة",
@@ -321,11 +321,12 @@ public static class ResearchSearchQueryGenerator
 
     public static IReadOnlyList<string> Generate(ProspectSourceContext context, int maxQueries)
     {
-        var limit = Math.Clamp(maxQueries, 1, 200);
-        var queries = new List<string>();
-        var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-        AppendCoreQueries(context, queries, seen, limit);
-        return queries;
+        return GeneratePlan(context, maxQueries).Select(x => x.Query).ToList();
+    }
+
+    public static IReadOnlyList<PlannedSearchQuery> GeneratePlan(ProspectSourceContext context, int maxQueries)
+    {
+        return SearchCampaignPlanner.Build(context, maxQueries);
     }
 
     public static IReadOnlyList<string> GenerateAdditional(
@@ -380,11 +381,7 @@ public static class ResearchSearchQueryGenerator
         var locations = ResolveLocations(context);
         var businessTypes = ResolveBusinessTypes(context);
         var roles = ResolveDecisionMakerTerms(context);
-        var excluded = context.ExcludedKeywords
-            .Where(x => !string.IsNullOrWhiteSpace(x))
-            .Select(FormatExcludedTerm)
-            .Take(4)
-            .ToList();
+        var excluded = new List<string>();
 
         var coreTypes = businessTypes.Take(6).ToList();
         if (coreTypes.Count == 0)
@@ -422,7 +419,7 @@ public static class ResearchSearchQueryGenerator
                 }
             }
 
-            if (ShouldGenerateArabic(country))
+            if (ShouldGenerateArabic(country) && IsApprovedEducationProject(context))
             {
                 AppendArabicCoreQueries(queries, seen, limit, country, coreLocations.Take(8).ToList());
                 if (queries.Count >= limit)
@@ -443,9 +440,24 @@ public static class ResearchSearchQueryGenerator
                 }
             }
 
-            if (LooksLikeExperienceBookingProject(context))
+            if (LooksLikeExperienceBookingProject(context) || LooksLikePlayWatchVenueProject(context))
             {
                 AppendExperienceBookingQueries(
+                    queries,
+                    seen,
+                    limit,
+                    coreTypes,
+                    coreLocations,
+                    excluded);
+                if (queries.Count >= limit)
+                {
+                    return;
+                }
+            }
+
+            if (LooksLikePlayWatchVenueProject(context))
+            {
+                AppendPlayWatchVenueQueries(
                     queries,
                     seen,
                     limit,
@@ -558,11 +570,7 @@ public static class ResearchSearchQueryGenerator
         var locations = ResolveLocations(context);
         var businessTypes = ResolveBusinessTypes(context);
         var roles = ResolveDecisionMakerTerms(context);
-        var excluded = context.ExcludedKeywords
-            .Where(x => !string.IsNullOrWhiteSpace(x))
-            .Select(FormatExcludedTerm)
-            .Take(4)
-            .ToList();
+        var excluded = new List<string>();
 
         if (businessTypes.Count == 0)
         {
@@ -673,7 +681,7 @@ public static class ResearchSearchQueryGenerator
         List<string> englishLocations)
     {
         var arabicCities = ResolveArabicCities(country, englishLocations);
-        foreach (var businessType in ArabicSchoolBusinessTypes)
+        foreach (var businessType in ArabicEducationBusinessTypes)
         {
             foreach (var city in arabicCities)
             {
@@ -695,7 +703,7 @@ public static class ResearchSearchQueryGenerator
         {
             foreach (var city in arabicCities.Take(8))
             {
-                AddQuery(queries, seen, $"{ArabicSchoolBusinessTypes[0]} {role} {city}", limit);
+                AddQuery(queries, seen, $"{ArabicEducationBusinessTypes[0]} {role} {city}", limit);
                 if (queries.Count >= limit)
                 {
                     return;
@@ -719,10 +727,13 @@ public static class ResearchSearchQueryGenerator
                 continue;
             }
 
-            AppendArabicCoreQueries(queries, seen, limit, country, locations);
-            if (queries.Count >= limit)
+            if (IsApprovedEducationProject(context))
             {
-                return;
+                AppendArabicCoreQueries(queries, seen, limit, country, locations);
+                if (queries.Count >= limit)
+                {
+                    return;
+                }
             }
 
             foreach (var businessType in ResolveBusinessTypes(context).Take(6))
@@ -755,7 +766,7 @@ public static class ResearchSearchQueryGenerator
 
         var countries = ResolveCountries(context);
         var country = countries.FirstOrDefault() ?? string.Empty;
-        var seedType = businessTypes.Count > 0 ? businessTypes[0] : "school";
+        var seedType = businessTypes.Count > 0 ? businessTypes[0] : "business";
         var locationSlice = locations.Take(4).ToList();
         if (locationSlice.Count == 0)
         {
@@ -784,7 +795,7 @@ public static class ResearchSearchQueryGenerator
                 continue;
             }
 
-            foreach (var arabicType in ArabicSchoolBusinessTypes.Take(2))
+            foreach (var arabicType in ArabicEducationBusinessTypes.Take(2))
             {
                 AddQuery(queries, seen, $"{prefix} {arabicType}".Trim(), limit);
                 if (queries.Count >= limit)
@@ -819,7 +830,7 @@ public static class ResearchSearchQueryGenerator
             return;
         }
 
-        var isEducation = LooksLikeEducationProject(context) || IsEducationProject(businessTypes);
+        var isEducation = IsApprovedEducationProject(context);
         var directorySuffixes = isEducation
             ? new[]
             {
@@ -871,7 +882,7 @@ public static class ResearchSearchQueryGenerator
 
             if (isEducation && ShouldGenerateArabic(country))
             {
-                foreach (var arabicType in ArabicSchoolBusinessTypes.Take(4))
+                foreach (var arabicType in ArabicEducationBusinessTypes.Take(4))
                 {
                     AddQuery(queries, seen, $"دليل {arabicType} السعودية", limit);
                     if (queries.Count >= limit)
@@ -944,7 +955,7 @@ public static class ResearchSearchQueryGenerator
         }
     }
 
-    private static List<string> ResolveArabicCities(string country, List<string> englishLocations)
+    public static List<string> ResolveArabicCities(string country, List<string> englishLocations)
     {
         var cities = new List<string>();
         var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
@@ -1095,6 +1106,30 @@ public static class ResearchSearchQueryGenerator
         return value;
     }
 
+    public static List<string> ResolveApprovedBusinessTypes(ProspectSourceContext context)
+        => ResolveBusinessTypes(context);
+
+    public static bool IsApprovedEducationProject(ProspectSourceContext context)
+    {
+        foreach (var industry in context.Industries)
+        {
+            if (ContainsEducationMarker(industry))
+            {
+                return true;
+            }
+        }
+
+        foreach (var keyword in context.Keywords)
+        {
+            if (ContainsEducationMarker(keyword))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     private static List<string> ResolveBusinessTypes(ProspectSourceContext context)
     {
         var primary = new List<string>();
@@ -1130,7 +1165,7 @@ public static class ResearchSearchQueryGenerator
         }
 
         var types = new List<string>();
-        if (IsEducationProject(primary) || IsEducationProject(secondary) || LooksLikeEducationProject(context))
+        if (IsApprovedEducationProject(context) || IsEducationProject(primary))
         {
             foreach (var defaultType in DefaultSchoolBusinessTypes)
             {
@@ -1172,7 +1207,8 @@ public static class ResearchSearchQueryGenerator
         }
         else if (IsFitnessProject(types)
                  && !IsEducationProject(types)
-                 && !LooksLikeExperienceBookingProject(context))
+                 && !LooksLikeExperienceBookingProject(context)
+                 && !LooksLikePlayWatchVenueProject(context))
         {
             foreach (var defaultType in DefaultBusinessTypes)
             {
@@ -1253,7 +1289,7 @@ public static class ResearchSearchQueryGenerator
     {
         foreach (var type in types)
         {
-            if (IsClimbingOrExperienceGym(type))
+            if (IsClimbingOrExperienceGym(type) || IsPlayWatchVenueType(type))
             {
                 continue;
             }
@@ -1280,6 +1316,94 @@ public static class ResearchSearchQueryGenerator
                || value.Contains("go-kart", StringComparison.OrdinalIgnoreCase)
                || value.Contains("go kart", StringComparison.OrdinalIgnoreCase)
                || value.Contains("karting", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static void AppendPlayWatchVenueQueries(
+        List<string> queries,
+        HashSet<string> seen,
+        int limit,
+        IReadOnlyList<string> businessTypes,
+        IReadOnlyList<string> locations,
+        IReadOnlyList<string> excluded)
+    {
+        var intents = new[]
+        {
+            "reservations",
+            "sessions",
+            "walk-in",
+            "group bookings",
+            "birthday parties"
+        };
+
+        foreach (var businessType in businessTypes.Take(7))
+        {
+            foreach (var location in locations.Take(10))
+            {
+                foreach (var intent in intents)
+                {
+                    var parts = new List<string> { businessType, intent, location };
+                    parts.AddRange(excluded);
+                    AddQuery(queries, seen, string.Join(' ', parts.Where(x => !string.IsNullOrWhiteSpace(x))), limit);
+                    if (queries.Count >= limit)
+                    {
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
+    private static bool LooksLikePlayWatchVenueProject(ProspectSourceContext context)
+    {
+        if (!string.IsNullOrWhiteSpace(context.ProjectName)
+            && context.ProjectName.Contains("PlayWatch", StringComparison.OrdinalIgnoreCase))
+        {
+            return true;
+        }
+
+        var markers = new[]
+        {
+            "billiards",
+            "snooker",
+            "pool hall",
+            "paintball",
+            "laser tag",
+            "trampoline park",
+            "indoor activity center",
+            "indoor activity centre"
+        };
+
+        foreach (var marker in markers)
+        {
+            foreach (var keyword in context.Keywords)
+            {
+                if (ContainsIgnoreCase(keyword, marker))
+                {
+                    return true;
+                }
+            }
+
+            foreach (var industry in context.Industries)
+            {
+                if (ContainsIgnoreCase(industry, marker))
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private static bool IsPlayWatchVenueType(string value)
+    {
+        return value.Contains("billiard", StringComparison.OrdinalIgnoreCase)
+               || value.Contains("snooker", StringComparison.OrdinalIgnoreCase)
+               || value.Contains("pool hall", StringComparison.OrdinalIgnoreCase)
+               || value.Contains("paintball", StringComparison.OrdinalIgnoreCase)
+               || value.Contains("laser tag", StringComparison.OrdinalIgnoreCase)
+               || value.Contains("trampoline", StringComparison.OrdinalIgnoreCase)
+               || value.Contains("indoor activity", StringComparison.OrdinalIgnoreCase);
     }
 
     private static bool LooksLikeExperienceBookingProject(ProspectSourceContext context)
@@ -1353,40 +1477,7 @@ public static class ResearchSearchQueryGenerator
     }
 
     private static bool LooksLikeEducationProject(ProspectSourceContext context)
-    {
-        if (ContainsEducationMarker(context.ProjectName)
-            || ContainsEducationMarker(context.Description)
-            || ContainsEducationMarker(context.ResearchInstructions))
-        {
-            return true;
-        }
-
-        foreach (var industry in context.Industries)
-        {
-            if (ContainsEducationMarker(industry))
-            {
-                return true;
-            }
-        }
-
-        foreach (var keyword in context.Keywords)
-        {
-            if (ContainsEducationMarker(keyword))
-            {
-                return true;
-            }
-        }
-
-        foreach (var role in context.TargetRoles)
-        {
-            if (ContainsEducationMarker(role))
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
+        => IsApprovedEducationProject(context);
 
     private static readonly string[] NonEducationSchoolPhrases =
     [

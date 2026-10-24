@@ -1,0 +1,148 @@
+﻿project School Watch - USA c61ef480-d3b7-4f77-8d5e-25335228c0e5
+query None 9988834f-7fc3-4a96-8935-40374881f663
+countries None
+industries None
+  candidatesAfterDeduplication=0
+  candidatesDiscovered=93
+  candidatesValidated=24
+  companiesFound=93
+  completedAtUtc=None
+  contactsFound=0
+  crawlErrors=9
+  createdAtUtc=2026-10-19T10:38:02.6881369+00:00
+  duplicatesFound=20
+  error=None
+  id=87bda16d-ca99-489a-959b-a9ecb511c6c5
+  includeEmail=True
+  includeWhatsApp=False
+  minQualificationScore=60
+  pagesCrawled=64
+  progressPercent=22
+  projectId=c61ef480-d3b7-4f77-8d5e-25335228c0e5
+  projectName=School Watch - USA
+  prospectsSaved=5
+  prospectsSkippedAsDuplicates=0
+  qualifiedCount=0
+  rejectedCount=22
+  requestedProspectCount=50
+  researchLimitsReached=False
+  researchLimitsReachedReason=None
+  researchQueryId=9988834f-7fc3-4a96-8935-40374881f663
+  researchQueryName=None
+  researchQueryVersionId=09c54e42-8ea6-432f-bdd9-d63abaee7138
+  searchQueriesExecuted=0
+  searchResultsReceived=0
+  startedAtUtc=2026-10-19T10:38:02.7054324+00:00
+  status=running
+  urlsDiscovered=573
+  validEmails=0
+  validWhatsApp=0
+  warning=None
+
+diag summary: Automatic discovery collected 83 candidate URLs (83 domains; fresh=3, prior=80) from 4/4 providers across 1 stage(s), recovery stages: 0 (duplicates removed: 2, rejected unsafe: 0, filtered: 2, zero-return providers: 2).
+plan: Plan: 14 industries (+8 synonyms), 1 countries, 5 providers, budget 200 URLs / 100 domains / 3 stages.
+uniqueDomains 83
+
+EVENT TYPES
+106 UrlDiscovered
+95 ListingOrganizationExtracted
+46 FetchStarted
+45 PageCrawled
+36 ContactExtracted
+36 OfficialWebsiteQueued
+34 InvestigationFollowUpQueued
+23 Warning
+19 CompanyExtracted
+16 Rejected
+14 OrganizationProfilesDiscovered
+9 RedirectFollowed
+8 DirectorySiblingQueued
+6 EvidenceMerged
+3 DirectoryCategoryDiscovered
+2 DuplicateSkipped
+1 FetchFailed
+1 Qualified
+
+MADARES
+madares urls 0 Counter()
+
+TOP DOMAINS CRAWLED/PENDING
+pending [('dcschools.com', 44), ('bscai.org', 36), ('business.fau.edu', 35), ('districtcannabis.us', 32), ('fticonsulting.com', 30), ('issa.com', 29), ('opencorporates.com', 29), ('chiul.org', 29), ('cleaningforareason.org', 24), ('fau.edu', 22), ('firststudentinc.com', 20), ('collegepossible.org', 20), ('douglasma.org', 18), ('hygieianetwork.org', 13), ('issacharities.org', 12), ('empowercharter.org', 12), ('dallasmoms.com', 12), ('kids-kab.com', 6), ('a.cms.omniupdate.com', 3), ('fticonsult.referrals.selectminds.com', 3)]
+crawled [('business.fau.edu', 3), ('fau.edu', 3), ('issacharities.org', 3), ('hygieianetwork.org', 3), ('cleaningforareason.org', 3), ('firststudentinc.com', 3), ('dcschools.com', 3), ('dallasmoms.com', 3), ('collegepossible.org', 3), ('chiul.org', 3), ('districtcannabis.us', 3), ('issa.com', 3), ('bscai.org', 3), ('kids-kab.com', 2), ('inspirear.com', 2), ('opencorporates.com', 2), ('go.execed2.fau.edu', 1), ('fau.libcal.com', 1), ('empowercharter.org', 1), ('opencorporates.recruitee.com', 1)]
+
+HOST COUNTRY-ISH
+sa-ish 0 edu.sa 0 total 500
+
+BAD EMAIL / NAME EVENTS
+CompanyExtracted Company candidate: by local moms for local moms {"company":"by local moms for local moms","source":"investigation.first_party_team"}
+Rejected Rejected: DISTRICT {"company":"DISTRICT","score":59,"reason":"Industry mismatch","missingCriteria":["targetIndustry","exclusionCriteria","keywords"],"mandatoryFailures":["targetIn
+CompanyExtracted Company candidate: DISTRICT {"company":"DISTRICT","source":"Sitemap"}
+Rejected Rejected: Florida Atlantic University {"company":"Florida Atlantic University","score":59,"reason":"Excluded by criteria","missingCriteria":["exclusionCriteria"],"mandatoryFailures":["exclusionCrite
+CompanyExtracted Company candidate: Florida Atlantic University {"company":"Florida Atlantic University","source":"priority.internal_expansion"}
+ContactExtracted Extracted 1 public contact(s) from https://issacharities.org/ways-to-give {"contacts":["email"]}
+ContactExtracted Extracted 6 public contact(s) from https://hygieianetwork.org {"contacts":["email","email","email","email","phone","phone"]}
+ContactExtracted Extracted 2 public contact(s) from https://cleaningforareason.org {"contacts":["phone","phone"]}
+ContactExtracted Extracted 3 public contact(s) from https://www.issa.com/advocacy/international-cleaning-week/ {"contacts":["phone","phone","phone"]}
+ContactExtracted Extracted 1 public contact(s) from https://www.bscai.org/About/Board-of-Directors {"contacts":["email"]}
+ContactExtracted Extracted 2 public contact(s) from https://dcschools.com/schools/the-school-for-ethics-and-global-le {"contacts":["phone","phone"]}
+ContactExtracted Extracted 4 public contact(s) from https://business.fau.edu/our-college/leadership-team/advisory-boa {"contacts":["phone","phone","phone","phone"]}
+ContactExtracted Extracted 1 public contact(s) from https://firststudentinc.com/about-us/ {"contacts":["phone"]}
+ContactExtracted Extracted 2 public contact(s) from https://districtcannabis.us/products/weed-the-people-tee-xl/ {"contacts":["email","email"]}
+ContactExtracted Extracted 17 public contact(s) from https://www.fau.edu/about/contact/ {"contacts":["email","email","email","email","email","email","email","email","email","email","email","email","email","email","email","email","email"]}
+Rejected Rejected: Inspire {"company":"Inspire","score":59,"reason":"Industry mismatch","missingCriteria":["publicBusinessEmail","targetIndustry","keywords"],"mandatoryFailures":["targetI
+CompanyExtracted Company candidate: Inspire {"company":"Inspire","source":"investigation.official_website_from_listing"}
+Rejected Rejected: About ISSA The ISSA Family Association History Careers Contact {"company":"About ISSA The ISSA Family Association History Careers Contact","score":14,"reason":"Weak company identity","missingCriteria":["officialWebsite","pu
+CompanyExtracted Company candidate: About ISSA The ISSA Family Association History Careers Contact {"company":"About ISSA The ISSA Family Association History Careers Contact","source":"DirectoryListingInvestigation"}
+Rejected Rejected: DISTRICT {"company":"DISTRICT","score":59,"reason":"Industry mismatch","missingCriteria":["targetIndustry","exclusionCriteria","keywords"],"mandatoryFailures":["targetIn
+CompanyExtracted Company candidate: DISTRICT {"company":"DISTRICT","source":"Sitemap"}
+Rejected Rejected: Book a Visit → {"company":"Book a Visit \u2192","score":59,"reason":"Industry mismatch","missingCriteria":["publicBusinessEmail","targetIndustry","keywords"],"mandatoryFailure
+CompanyExtracted Company candidate: Book a Visit → {"company":"Book a Visit \u2192","source":"investigation.official_contact_guess"}
+Rejected Rejected: Florida Atlantic University {"company":"Florida Atlantic University","score":59,"reason":"Excluded by criteria","missingCriteria":["exclusionCriteria"],"mandatoryFailures":["exclusionCrite
+CompanyExtracted Company candidate: Florida Atlantic University {"company":"Florida Atlantic University","source":"investigation.contact_page"}
+Rejected Rejected: ISSA Scholars {"company":"ISSA Scholars","score":59,"reason":"Industry mismatch","missingCriteria":["publicBusinessEmail","targetIndustry","keywords"],"mandatoryFailures":["t
+CompanyExtracted Company candidate: ISSA Scholars {"company":"ISSA Scholars","source":"investigation.contact_page \u002B DirectoryListingInvestigation"}
+ContactExtracted Extracted 2 public contact(s) from https://inspirear.com {"contacts":["phone","phone"]}
+ContactExtracted Extracted 3 public contact(s) from https://www.issa.com/advocacy/action-center/?vvsrc=%2fSurveys%2f5 {"contacts":["phone","phone","phone"]}
+ContactExtracted Extracted 1 public contact(s) from https://www.bscai.org/About/BSCAI-Partners {"contacts":["email"]}
+ContactExtracted Extracted 6 public contact(s) from https://hygieianetwork.org/about/ {"contacts":["email","email","email","email","phone","phone"]}
+ContactExtracted Extracted 2 public contact(s) from https://cleaningforareason.org/about/ {"contacts":["phone","phone"]}
+ContactExtracted Extracted 2 public contact(s) from https://dcschools.com/about {"contacts":["email","email"]}
+ContactExtracted Extracted 9 public contact(s) from https://chiul.org/about/ {"contacts":["email","email","email","email","email","email","email","email","phone"]}
+ContactExtracted Extracted 5 public contact(s) from http://www.kids-kab.com/about/ {"contacts":["email","email","phone","phone","phone"]}
+ContactExtracted Extracted 45 public contact(s) from https://business.fau.edu/our-college/leadership-team/ {"contacts":["email","email","email","email","email","email","email","email","email","email","email","email","email","email","email","email","email","email","em
+ContactExtracted Extracted 1 public contact(s) from https://dallasmoms.com/about-dallas-moms/executive-team/ {"contacts":["email"]}
+ContactExtracted Extracted 2 public contact(s) from https://districtcannabis.us/products/weed-the-people-tee-s/ {"contacts":["email","email"]}
+ContactExtracted Extracted 6 public contact(s) from https://www.fau.edu/controllers-office/student-services/contact/i {"contacts":["email","email","email","phone","phone","phone"]}
+ContactExtracted Extracted 4 public contact(s) from https://issacharities.org/contact-us/ {"contacts":["email","phone","phone","phone"]}
+ContactExtracted Extracted 15 public contact(s) from https://firststudentinc.com/contact/ {"contacts":["email","phone","phone","phone","phone","phone","phone","phone","phone","phone","phone","phone","phone","phone","phone"]}
+Rejected Rejected: About ISSA The ISSA Family Association History Careers Contact {"company":"About ISSA The ISSA Family Association History Careers Contact","score":14,"reason":"Weak company identity","missingCriteria":["officialWebsite","pu
+CompanyExtracted Company candidate: About ISSA The ISSA Family Association History Careers Contact {"company":"About ISSA The ISSA Family Association History Careers Contact","source":"DirectoryListingInvestigation"}
+Rejected Rejected: Team {"company":"Team","score":21,"reason":"Weak company identity","missingCriteria":["officialWebsite","publicBusinessEmail","companyIdentity","targetCountry","targ
+CompanyExtracted Company candidate: Team {"company":"Team","source":"DirectoryListingInvestigation"}
+Rejected Rejected: DISTRICT {"company":"DISTRICT","score":59,"reason":"Industry mismatch","missingCriteria":["targetIndustry","exclusionCriteria","keywords"],"mandatoryFailures":["targetIn
+CompanyExtracted Company candidate: DISTRICT {"company":"DISTRICT","source":"Sitemap"}
+Rejected Rejected: Florida Atlantic University {"company":"Florida Atlantic University","score":59,"reason":"Excluded by criteria","missingCriteria":["exclusionCriteria"],"mandatoryFailures":["exclusionCrite
+CompanyExtracted Company candidate: Florida Atlantic University {"company":"Florida Atlantic University","source":"priority.external_expansion"}
+Rejected Rejected: ISSA Scholars {"company":"ISSA Scholars","score":59,"reason":"Industry mismatch","missingCriteria":["publicBusinessEmail","targetIndustry","keywords"],"mandatoryFailures":["t
+CompanyExtracted Company candidate: ISSA Scholars {"company":"ISSA Scholars","source":"investigation.official_contact_guess \u002B DirectoryListingInvestigation"}
+Rejected Rejected: Inspire {"company":"Inspire","score":59,"reason":"Industry mismatch","missingCriteria":["publicBusinessEmail","targetIndustry","keywords"],"mandatoryFailures":["targetI
+CompanyExtracted Company candidate: Inspire {"company":"Inspire","source":"investigation.official_contact_guess \u002B DirectoryListingInvestigation"}
+Qualified Qualified: Empower Language Academy {"company":"Empower Language Academy","score":83,"status":"ReadyForOutreach"}
+CompanyExtracted Company candidate: Empower Language Academy {"company":"Empower Language Academy","source":"investigation.first_party_contact"}
+CompanyExtracted Company candidate: by local moms for local moms {"company":"by local moms for local moms","source":"investigation.first_party_contact"}
+Rejected Rejected: Book a Visit → {"company":"Book a Visit \u2192","score":46,"reason":"Outside target country","missingCriteria":["publicBusinessEmail","targetCountry","targetIndustry","keyword
+CompanyExtracted Company candidate: Book a Visit → {"company":"Book a Visit \u2192","source":"DirectoryListingInvestigation"}
+Rejected Rejected: Kids {"company":"Kids","score":59,"reason":"Industry mismatch","missingCriteria":["targetIndustry","exclusionCriteria","keywords"],"mandatoryFailures":["targetIndust
+CompanyExtracted Company candidate: Kids {"company":"Kids","source":"investigation.contact_page"}
+ContactExtracted Extracted 3 public contact(s) from https://www.issa.com/advocacy/ {"contacts":["phone","phone","phone"]}
+ContactExtracted Extracted 1 public contact(s) from https://www.bscai.org/About/About-BSCAI {"contacts":["email"]}
+ContactExtracted Extracted 2 public contact(s) from https://districtcannabis.us/products/weed-the-people-tee-large/ {"contacts":["email","email"]}
+ContactExtracted Extracted 17 public contact(s) from http://www.fau.edu/about/contact.php {"contacts":["email","email","email","email","email","email","email","email","email","email","email","email","email","email","email","email","email"]}
+ContactExtracted Extracted 2 public contact(s) from https://opencorporates.recruitee.com/contact {"contacts":["email","email"]}
+ContactExtracted Extracted 4 public contact(s) from https://issacharities.org/ways-to-give/contact {"contacts":["email","phone","phone","phone"]}
+ContactExtracted Extracted 2 public contact(s) from https://inspirear.com/contact {"contacts":["phone","phone"]}
+ContactExtracted Extracted 8 public contact(s) from https://hygieianetwork.org/contact {"contacts":["email","email","email","email","phone","phone","phone","phone"]}
+ContactExtracted Extracted 4 public contact(s) from https://cleaningforareason.org/contact {"contacts":["phone","phone","phone","phone"]}
+ContactExtracted Extracted 15 public contact(s) from https://firststudentinc.com/contact/?partner-with-us {"contacts":["email","phone","phone","phone","phone","phone","phone","phone","phone","phone","phone","phone","phone","phone","phone"]}
+ContactExtracted Extracted 13 public contact(s) from https://empowercharter.org/contact/ {"contacts":["email","email","email","email","email","email","email","email","email","email","phone","phone","phone"]}
+ContactExtracted Extracted 2 public contact(s) from https://dcschools.com/contact {"contacts":["email","email"]}

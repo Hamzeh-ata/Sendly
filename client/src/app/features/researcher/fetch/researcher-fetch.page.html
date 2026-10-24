@@ -1,0 +1,74 @@
+<div class="researcher-page">
+  <div class="page-header">
+    <div>
+      <h2>{{ 'researcher.fetch.title' | translate }}</h2>
+      <p class="subtitle">{{ 'researcher.fetch.subtitle' | translate }}</p>
+    </div>
+  </div>
+
+  <section class="rc-panel">
+    <div class="rc-filters">
+      <label class="run-label">
+        <span>{{ 'researcher.fetch.selectRun' | translate }}</span>
+        <select
+          class="input"
+          [value]="selectedRunId()"
+          (change)="onRunChange($any($event.target).value)"
+          [disabled]="runsLoading()"
+        >
+          <option value="">{{ 'researcher.fetch.noRunSelected' | translate }}</option>
+          @for (run of runs(); track run.id) {
+            <option [value]="run.id">
+              {{ run.researchQueryName || run.projectName || run.id }}
+            </option>
+          }
+        </select>
+      </label>
+    </div>
+  </section>
+
+  @if (loading()) {
+    <div class="rc-skeleton">
+      <div class="bone"></div>
+      <div class="bone"></div>
+    </div>
+  } @else if (!selectedRunId()) {
+    <app-empty-state
+      titleKey="researcher.fetch.emptyTitle"
+      descriptionKey="researcher.fetch.emptyDescription"
+    />
+  } @else if (pageRows().length === 0) {
+    <app-empty-state
+      titleKey="researcher.fetch.noPagesTitle"
+      descriptionKey="researcher.fetch.noPagesDescription"
+    />
+  } @else {
+    <section class="rc-panel">
+      <table class="rc-table">
+        <thead>
+          <tr>
+            <th>{{ 'researcher.fetch.page' | translate }}</th>
+            <th>{{ 'researcher.fetch.status' | translate }}</th>
+            <th>{{ 'researcher.fetch.duration' | translate }}</th>
+            <th>{{ 'researcher.fetch.crawledAt' | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (page of pageRows(); track page.id) {
+            <tr [class.has-error]="page.hasError">
+              <td>
+                <a [routerLink]="['/researcher/fetch', selectedRunId(), page.id]">
+                  {{ page.title }}
+                </a>
+                <div class="rc-muted rc-mono">{{ page.url }}</div>
+              </td>
+              <td class="rc-mono">{{ page.statusLabel }}</td>
+              <td class="rc-mono">{{ page.durationLabel }}</td>
+              <td>{{ page.crawledLabel }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </section>
+  }
+</div>

@@ -7,5 +7,7 @@ public enum ResearchRunStatus
     Completed = 2,
     CompletedWithFailures = 3,
     Failed = 4,
-    Cancelled = 5
+    Cancelled = 5,
+    Partial = 6,
+    BudgetExhausted = 7
 }

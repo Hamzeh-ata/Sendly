@@ -1,0 +1,615 @@
+﻿[
+    {
+        "companyDescription":  "Oct 2, 2024 ... أكاديمية عجمان · مدرسة المدينة عجمان · الأكاديمية الأولى للتعليم عجمان: · مدرسة وودلم بارك: · مدرسة الإبداع العلمي الدولية: · مدرسة الأكاديمية ...",
+        "linkedInUrl":  null,
+        "additionalEmails":  [
+
+                             ],
+        "additionalPhones":  [
+
+                             ],
+        "researchNotes":  "Discovered from search result. Contact details may still be researched. countryGate=country.matched_evidence; country=United Arab Emirates; evidence=official_website_host:gjproperties.ae; source_url_host:gjproperties.ae; Organization location evidence matched target country \u0027United Arab Emirates\u0027. Evidence: official_website_host:gjproperties.ae; source_url_host:gjproperties.ae.",
+        "qualificationSummary":  "The prospect is a school and falls under the excluded industries category. Qualified with score 79. Matched: officialWebsite, entityType, companyIdentity, targetCountry, targetIndustry, exclusionCriteria, keywords. Business qualified; contact method still missing (email or WhatsApp).",
+        "contactHistory":  [
+
+                           ],
+        "id":  "7685cac6-0f74-49d3-9c6e-171e419713a9",
+        "projectId":  "188b202c-faf2-40ea-bcde-5293f2f161f6",
+        "projectName":  "ExperienceOps – UAE",
+        "researchRunId":  "b9276d24-5627-4fc9-adbd-41430ca1e3e0",
+        "companyName":  "١٠ من أفضل المدارس البريطانية في عجمان",
+        "website":  "https://gjproperties.ae",
+        "country":  "United Arab Emirates",
+        "city":  null,
+        "industry":  "Sailing Center",
+        "companySize":  null,
+        "contactName":  null,
+        "contactRole":  null,
+        "email":  null,
+        "phone":  null,
+        "whatsApp":  null,
+        "sourceUrl":  "https://gjproperties.ae/ar/١٠-من-أفضل-المدارس-البريطانية-في-عجمان/",
+        "sourceUrls":  [
+                           "https://gjproperties.ae/ar/١٠-من-أفضل-المدارس-البريطانية-في-عجمان/"
+                       ],
+        "sourceType":  "search",
+        "sourceName":  "SearXNG",
+        "qualificationScore":  79,
+        "emailConfidenceScore":  null,
+        "whatsAppConfidenceScore":  null,
+        "isQualified":  true,
+        "status":  "needsReview",
+        "duplicateKind":  "none",
+        "recommendedTemplateId":  "dc7ed42d-284f-466c-bac6-7ceaae905e42",
+        "recommendedTemplateName":  "ExperienceOps Introduction",
+        "recommendedTemplateReason":  "The prospect is in the education sector, which aligns with the default English ExperienceOps introduction template for approved industries.",
+        "recommendedTemplateConfidence":  75,
+        "outreachCampaignId":  null,
+        "createdAtUtc":  "2026-10-20T07:53:28.5979106+00:00",
+        "updatedAtUtc":  "2026-10-20T07:53:28.5979116+00:00"
+    },
+    {
+        "companyDescription":  "Deutsche Internationale Schule Sharjah https://www.dssharjah.org Deutsche Internationale Schule Sharjah Mon, 19 Oct 2026 08:41:13 +0000 de hourly 1 https://wordpress.org/?v=6.8.2 https://www.dssharjah.org/wp-content/uploads/2025/05/cropped-DISS-Logo_DISS-1-scaled-1-32x32.png Deutsche Internationale Schule Sharjah https://www.dssharjah.org 32 32",
+        "linkedInUrl":  null,
+        "additionalEmails":  [
+
+                             ],
+        "additionalPhones":  [
+
+                             ],
+        "researchNotes":  "Discovered from search result. Contact details may still be researched. | Structured from crawled page content. Contact details were constrained to extracted source values. | Structured from crawled page content. No email or phone was found on this page. countryGate=country.matched_evidence; country=United Arab Emirates; evidence=text_mention:United Arab Emirates; Organization location evidence matched target country \u0027United Arab Emirates\u0027. Evidence: text_mention:United Arab Emirates.",
+        "qualificationSummary":  "Rejected as this is a school, which is an excluded industry. Qualified with score 83. Matched: officialWebsite, publicBusinessEmail, entityType, companyIdentity, targetCountry, targetIndustry, contactAttribution, exclusionCriteria, keywords.",
+        "contactHistory":  [
+
+                           ],
+        "id":  "1d4a58a1-09f2-430f-a1c1-bf58c81f0941",
+        "projectId":  "188b202c-faf2-40ea-bcde-5293f2f161f6",
+        "projectName":  "ExperienceOps – UAE",
+        "researchRunId":  "b9276d24-5627-4fc9-adbd-41430ca1e3e0",
+        "companyName":  "Deutsche Internationale Schule Sharjah",
+        "website":  "https://www.dssharjah.org",
+        "country":  "United Arab Emirates",
+        "city":  "Sharjah",
+        "industry":  "Sailing Center",
+        "companySize":  null,
+        "contactName":  null,
+        "contactRole":  null,
+        "email":  "office@dssharjah.org",
+        "phone":  "+971 65676014",
+        "whatsApp":  "+971 65676014",
+        "sourceUrl":  "https://www.dssharjah.org/ar/الرئيسية/",
+        "sourceUrls":  [
+                           "https://www.dssharjah.org/ar/الرئيسية/",
+                           "https://www.dssharjah.org/feed/"
+                       ],
+        "sourceType":  "search",
+        "sourceName":  "SearXNG + Web search (المدرسة الألمانية الدولية بالشارقة - Deutsche Schule Sharjah)",
+        "qualificationScore":  83,
+        "emailConfidenceScore":  100,
+        "whatsAppConfidenceScore":  100,
+        "isQualified":  true,
+        "status":  "readyForOutreach",
+        "duplicateKind":  "none",
+        "recommendedTemplateId":  "dc7ed42d-284f-466c-bac6-7ceaae905e42",
+        "recommendedTemplateName":  "ExperienceOps Introduction",
+        "recommendedTemplateReason":  "The prospect is in the education sector, and the template is a default introduction suitable for approved industries, which can be adapted for a sailing center context.",
+        "recommendedTemplateConfidence":  85,
+        "outreachCampaignId":  null,
+        "createdAtUtc":  "2026-10-20T07:53:25.3648185+00:00",
+        "updatedAtUtc":  "2026-10-20T07:53:25.3648187+00:00"
+    },
+    {
+        "companyDescription":  "\u0000\u0000\u0001\u0000\u0001\u0000\u0010\u0010\u0000\u0000\u0001\u0000 \u0000h\u0004\u0000\u0000\u0016\u0000\u0000\u0000(\u0000\u0000\u0000\u0010\u0000\u0000\u0000 \u0000\u0000\u0000\u0001\u0000 \u0000\u0000\u0000\u0000\u0000\u0000\u0004\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000�\u0000\u0000\u0000`\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000�\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000�\u0000\u0000\u0000\u0000\u0000\u0000\u0000�\u0000\u0000\u0000�\u0000\u0000\u0000�\u0000\u0000\u0000�\u0000\u0000\u0000�\u0000\u0000\u0000�\u0000\u0000\u0000�\u0000\u0000\u0000�\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000�\u0000\u0000\u0000�\u0000\u0000\u0000�\u0000\u0000\u0000�\u0000\u0000\u0000�\u0000\u0000\u0000�\u0000\u0000\u0000�\u0000\u0000\u0000�\u0000\u0000\u0000�\u0000\u0000\u0000�\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000�\u0000\u0000\u0000\u0000\u0000\u0000",
+        "linkedInUrl":  null,
+        "additionalEmails":  [
+
+                             ],
+        "additionalPhones":  [
+
+                             ],
+        "researchNotes":  "Discovered from search result. Contact details may still be researched. | Structured from crawled page content. No email or phone was found on this page. countryGate=country.mismatch_evidence; country=Saudi Arabia; evidence=official_website_host:nns.edu.sa; source_url_host:nns.edu.sa; additional_source_host:nns.edu.sa; Organization location evidence indicates \u0027Saudi Arabia\u0027, which is outside the target country scope. (country.mismatch_evidence).",
+        "qualificationSummary":  "Not qualified. Score 59. Missing: publicBusinessEmail, targetCountry.",
+        "contactHistory":  [
+
+                           ],
+        "id":  "ea5695f4-9065-4316-8e1d-e9fa4119bce5",
+        "projectId":  "188b202c-faf2-40ea-bcde-5293f2f161f6",
+        "projectName":  "ExperienceOps – UAE",
+        "researchRunId":  "b9276d24-5627-4fc9-adbd-41430ca1e3e0",
+        "companyName":  "مدارس نجد الأهلية",
+        "website":  "https://nns.edu.sa",
+        "country":  "Saudi Arabia",
+        "city":  null,
+        "industry":  "Sailing Center",
+        "companySize":  null,
+        "contactName":  null,
+        "contactRole":  null,
+        "email":  null,
+        "phone":  null,
+        "whatsApp":  null,
+        "sourceUrl":  "https://nns.edu.sa/",
+        "sourceUrls":  [
+                           "https://nns.edu.sa/",
+                           "https://nns.edu.sa/favicon.ico"
+                       ],
+        "sourceType":  "search",
+        "sourceName":  "SearXNG + Web search (مدارس نجد الأهلية)",
+        "qualificationScore":  59,
+        "emailConfidenceScore":  null,
+        "whatsAppConfidenceScore":  null,
+        "isQualified":  false,
+        "status":  "discovered",
+        "duplicateKind":  "none",
+        "recommendedTemplateId":  null,
+        "recommendedTemplateName":  null,
+        "recommendedTemplateReason":  null,
+        "recommendedTemplateConfidence":  null,
+        "outreachCampaignId":  null,
+        "createdAtUtc":  "2026-10-20T07:53:21.6249567+00:00",
+        "updatedAtUtc":  "2026-10-20T07:53:21.6249571+00:00"
+    },
+    {
+        "companyDescription":  "الرئيسية - مدرسة منارة الشارقة الخاصة ⌖ الشارقة – ضاحية سمنان ☎ 06-5347772 ✉ البريد الإلكتروني مدرسة منارة الشارقة الخاصة التعليم • القيم • المسؤولية Home التوظيف الخدمات المدرسية أخبار المدرسة القبول والتسجيل Online Payment تواصل معنا تعليم يصنع المستقبل نبني جيلاً متعلماً، واثقاً، ومسؤولاً، يمتلك المعرفة والمهارات اللازمة للمساهمة الفاعلة في تقدم دولة لإمارات. القبول والتسجيل اكتشف مدرستنا الحلق",
+        "linkedInUrl":  null,
+        "additionalEmails":  [
+
+                             ],
+        "additionalPhones":  [
+
+                             ],
+        "researchNotes":  "Discovered from search result. Contact details may still be researched. | Structured from crawled page content. Contact details were extracted from the source page only. | Structured from crawled page content. Business discovered without email or phone on this page. countryGate=country.matched_evidence; country=United Arab Emirates; evidence=text_mention:United Arab Emirates; Organization location evidence matched target country \u0027United Arab Emirates\u0027. Evidence: text_mention:United Arab Emirates.",
+        "qualificationSummary":  "Not qualified. Score 59. Missing: contactAttribution.",
+        "contactHistory":  [
+
+                           ],
+        "id":  "a924ce16-2b1b-4728-992b-d8678193b4db",
+        "projectId":  "188b202c-faf2-40ea-bcde-5293f2f161f6",
+        "projectName":  "ExperienceOps – UAE",
+        "researchRunId":  "b9276d24-5627-4fc9-adbd-41430ca1e3e0",
+        "companyName":  "مدرسة منارة الشارقة الخاصة",
+        "website":  "https://www.manaratalsharjah.com",
+        "country":  "United Arab Emirates",
+        "city":  "Sharjah",
+        "industry":  "Sailing Center",
+        "companySize":  null,
+        "contactName":  null,
+        "contactRole":  null,
+        "email":  "manarat.shj@gmail.com",
+        "phone":  "06-5347772",
+        "whatsApp":  "06-5347772",
+        "sourceUrl":  "https://www.manaratalsharjah.com/",
+        "sourceUrls":  [
+                           "https://www.manaratalsharjah.com/",
+                           "https://www.manaratalsharjah.com/wp-json/"
+                       ],
+        "sourceType":  "search",
+        "sourceName":  "SearXNG + Web search (مدرسة منارة الشارقة الخاصة: الرئيسية)",
+        "qualificationScore":  59,
+        "emailConfidenceScore":  100,
+        "whatsAppConfidenceScore":  null,
+        "isQualified":  false,
+        "status":  "discovered",
+        "duplicateKind":  "none",
+        "recommendedTemplateId":  null,
+        "recommendedTemplateName":  null,
+        "recommendedTemplateReason":  null,
+        "recommendedTemplateConfidence":  null,
+        "outreachCampaignId":  null,
+        "createdAtUtc":  "2026-10-20T07:53:19.3641202+00:00",
+        "updatedAtUtc":  "2026-10-20T07:53:19.3641206+00:00"
+    },
+    {
+        "companyDescription":  "أعلى المدارس في أبوظبي | أفضل مدرسة مصنفة في أبوظبي | مدارس ADEK المصنفة في أبوظبي --\u003e اختر أكاديمية أكاديمية العين البريطانية أكاديمية البطين العالمية أكاديمية المعمورة البريطانية أكاديمية المُنى البريطانية أكاديمية الياسمينة البريطانية أكاديمية اللؤلؤة البريطانية أكاديمية ياس الأمريكية الصفحة الرئيسية من نحن أكاديمياتنا المنشورات الإلكترونية المناهج الدراسية الدار للتعليم مكافآت الدار القبول وال",
+        "linkedInUrl":  null,
+        "additionalEmails":  [
+                                 "PRE@pearlbritishacademy.ae"
+                             ],
+        "additionalPhones":  [
+                                 "02) 813 2111",
+                                 "2027-2028",
+                                 "2019-2020",
+                                 "+971 2 641 8887"
+                             ],
+        "researchNotes":  "Discovered from search result. Contact details may still be researched. | Structured from crawled page content. Contact details were extracted from the source page only. | Discovered from search result. Contact details may still be researched. | Structured from crawled page content. Contact details were extracted from the source page only. | Structured from crawled page content. No email or phone was found on this page. countryGate=country.matched_evidence; country=United Arab Emirates; evidence=additional_source_host:www.pearlbritishacademy.ae; Organization location evidence matched target country \u0027United Arab Emirates\u0027. Evidence: additional_source_host:www.pearlbritishacademy.ae.",
+        "qualificationSummary":  "Not qualified. Score 59. Missing: contactAttribution.",
+        "contactHistory":  [
+
+                           ],
+        "id":  "ef2c835b-7281-4fc1-8916-84e812ac94b7",
+        "projectId":  "188b202c-faf2-40ea-bcde-5293f2f161f6",
+        "projectName":  "ExperienceOps – UAE",
+        "researchRunId":  "b9276d24-5627-4fc9-adbd-41430ca1e3e0",
+        "companyName":  "مدرسة اللؤلؤة الابتدائية في أبوظبي",
+        "website":  "https://www.aldaracademies.com",
+        "country":  "United Arab Emirates",
+        "city":  null,
+        "industry":  "Sailing Center",
+        "companySize":  null,
+        "contactName":  null,
+        "contactRole":  null,
+        "email":  "School@gmail.com",
+        "phone":  "2026 - 2027 2027 - 2028",
+        "whatsApp":  "07-08-2025",
+        "sourceUrl":  "https://www.aldaracademies.com/ar/",
+        "sourceUrls":  [
+                           "https://www.aldaracademies.com/ar/",
+                           "https://www.aldaracademies.com/ar/about/",
+                           "https://www.pearlbritishacademy.ae/ar/",
+                           "https://www.pearlbritishacademy.ae/ar/about/"
+                       ],
+        "sourceType":  "search",
+        "sourceName":  "SearXNG + Web search (أعلى المدارس في أبوظبي | أفضل مدرسة مصنفة في ... - Aldar Academy) + SearXNG + Web search (مدرسة اللؤلؤة الابتدائية في أبوظبي - Pearl British Academy)",
+        "qualificationScore":  59,
+        "emailConfidenceScore":  null,
+        "whatsAppConfidenceScore":  null,
+        "isQualified":  false,
+        "status":  "discovered",
+        "duplicateKind":  "none",
+        "recommendedTemplateId":  null,
+        "recommendedTemplateName":  null,
+        "recommendedTemplateReason":  null,
+        "recommendedTemplateConfidence":  null,
+        "outreachCampaignId":  null,
+        "createdAtUtc":  "2026-10-20T07:53:17.0264801+00:00",
+        "updatedAtUtc":  "2026-10-20T07:53:17.0271461+00:00"
+    },
+    {
+        "companyDescription":  "مدارس تربية خاصة و دمج في دبي تخطي إلى المحتوى الأبعاد السبعة لخدمات تحليل السلوك التطبيقي الرئيسية من نحن فريق العمل الخدمات الجلسات العلاجية الجلسات السلوكية المنزلية الجلسات السلوكية في المركز القياس والتقييم الدعم الأكاديمي والاجتماعي جلسات العلاج الوظيفي الاستشارات النفسية تدريب الأسرة عن بعد قصص نجاح العملاء التطوير المهني البرامج المهنية طلب استشارة مهنية الإشراف على الممارسين المراجع والاس",
+        "linkedInUrl":  null,
+        "additionalEmails":  [
+
+                             ],
+        "additionalPhones":  [
+                                 "97144238900",
+                                 "97142883303",
+                                 "97142675424",
+                                 "97142886499",
+                                 "97142646202",
+                                 "97142988567",
+                                 "97143263339"
+                             ],
+        "researchNotes":  "Discovered from search result. Contact details may still be researched. | Structured from crawled page content. Contact details were extracted from the source page only. | Structured from crawled page content. No email or phone was found on this page. countryGate=country.mismatch_evidence; country=Saudi Arabia; evidence=official_website_host:www.abadc.com.sa; source_url_host:www.abadc.com.sa; additional_source_host:www.abadc.com.sa; Organization location evidence indicates \u0027Saudi Arabia\u0027, which is outside the target country scope. (country.mismatch_evidence).",
+        "qualificationSummary":  "Not qualified. Score 34. Missing: officialWebsite, entityType, companyIdentity, targetCountry, contactAttribution. Rejected empty discovery shell: missing official website or verified identity.",
+        "contactHistory":  [
+
+                           ],
+        "id":  "538be75f-de5e-4920-93b8-bca7135f0de5",
+        "projectId":  "188b202c-faf2-40ea-bcde-5293f2f161f6",
+        "projectName":  "ExperienceOps – UAE",
+        "researchRunId":  "b9276d24-5627-4fc9-adbd-41430ca1e3e0",
+        "companyName":  "مدارس تربية خاصة و دمج في دبي",
+        "website":  "https://www.abadc.com.sa",
+        "country":  "Saudi Arabia",
+        "city":  null,
+        "industry":  "Sailing Center",
+        "companySize":  null,
+        "contactName":  null,
+        "contactRole":  null,
+        "email":  "info@mirdifamericanschool.ae",
+        "phone":  "97142880965",
+        "whatsApp":  "97143566900",
+        "sourceUrl":  "https://www.abadc.com.sa/directory/sections/مدارس-تربية-خاصة-و-دمج-في-دبي/",
+        "sourceUrls":  [
+                           "https://www.abadc.com.sa/directory/sections/مدارس-تربية-خاصة-و-دمج-في-دبي/",
+                           "https://www.abadc.com.sa/team/"
+                       ],
+        "sourceType":  "search",
+        "sourceName":  "SearXNG + Web search (مدارس تربية خاصة و دمج في دبي)",
+        "qualificationScore":  30,
+        "emailConfidenceScore":  100,
+        "whatsAppConfidenceScore":  100,
+        "isQualified":  false,
+        "status":  "rejected",
+        "duplicateKind":  "none",
+        "recommendedTemplateId":  null,
+        "recommendedTemplateName":  null,
+        "recommendedTemplateReason":  null,
+        "recommendedTemplateConfidence":  null,
+        "outreachCampaignId":  null,
+        "createdAtUtc":  "2026-10-20T07:53:14.4783616+00:00",
+        "updatedAtUtc":  "2026-10-20T07:53:14.4785769+00:00"
+    },
+    {
+        "companyDescription":  "التسجيل مفتوح عبر منصة مدارس ai · منذ انطلاق مدارسنا عام 1405 هـ، حرصت على تأسيس الطلاب والطالبات تأسيسًا علميًا رصينًا بداية من رياض الأطفال، ثم المراحل التي ...",
+        "linkedInUrl":  null,
+        "additionalEmails":  [
+
+                             ],
+        "additionalPhones":  [
+
+                             ],
+        "researchNotes":  "Discovered from search result. Contact details may still be researched. countryGate=country.stamped_without_evidence; country=United Arab Emirates; evidence=none; Candidate country was present without independent geographic evidence; mandatory country cannot be confirmed. (country.stamped_without_evidence). Marked NeedsReview rather than qualified.",
+        "qualificationSummary":  "Not qualified. Score 59. Missing: publicBusinessEmail, targetCountry. Country evidence incomplete; outreach blocked.",
+        "contactHistory":  [
+
+                           ],
+        "id":  "7f1babd0-cc10-470a-840e-0c150c347a3b",
+        "projectId":  "188b202c-faf2-40ea-bcde-5293f2f161f6",
+        "projectName":  "ExperienceOps – UAE",
+        "researchRunId":  "b9276d24-5627-4fc9-adbd-41430ca1e3e0",
+        "companyName":  "المدارس السعودية ( عالمي",
+        "website":  "https://sps.madares-sa.com",
+        "country":  "United Arab Emirates",
+        "city":  null,
+        "industry":  "Sailing Center",
+        "companySize":  null,
+        "contactName":  null,
+        "contactRole":  null,
+        "email":  null,
+        "phone":  null,
+        "whatsApp":  null,
+        "sourceUrl":  "https://sps.madares-sa.com/",
+        "sourceUrls":  [
+                           "https://sps.madares-sa.com/"
+                       ],
+        "sourceType":  "search",
+        "sourceName":  "SearXNG",
+        "qualificationScore":  0,
+        "emailConfidenceScore":  null,
+        "whatsAppConfidenceScore":  null,
+        "isQualified":  false,
+        "status":  "discovered",
+        "duplicateKind":  "none",
+        "recommendedTemplateId":  null,
+        "recommendedTemplateName":  null,
+        "recommendedTemplateReason":  null,
+        "recommendedTemplateConfidence":  null,
+        "outreachCampaignId":  null,
+        "createdAtUtc":  "2026-10-20T07:53:11.7948254+00:00",
+        "updatedAtUtc":  "2026-10-20T07:53:11.7948256+00:00"
+    },
+    {
+        "companyDescription":  "نبذة عن - Al Ain British Academy --\u003e أكاديميات الدار أكاديمية العين البريطانية أكاديمية البطين العالمية أكاديمية المعمورة البريطانية أكاديمية المُنى البريطانية أكاديمية الياسمينة البريطانية أكاديمية اللؤلؤة البريطانية أكاديمية ياس الأمريكية الرئيسية من نحن لماذا أكاديمية العين؟ تعرف على الفريق المنشورات الإلكترونية لماذا أكاديميات الدار؟ قم بحجز جولة القبول والتسجيل إجراءات التسجيل سجل الآن الرسوم",
+        "linkedInUrl":  null,
+        "additionalEmails":  [
+
+                             ],
+        "additionalPhones":  [
+
+                             ],
+        "researchNotes":  "Discovered from search result. Contact details may still be researched. | Structured from crawled page content. No email or phone was found on this page. countryGate=country.matched_evidence; country=United Arab Emirates; evidence=official_website_host:www.alainbritishacademy.ae; source_url_host:www.alainbritishacademy.ae; additional_source_host:www.alainbritishacademy.ae; Organization location evidence matched target country \u0027United Arab Emirates\u0027. Evidence: official_website_host:www.alainbritishacademy.ae; source_url_host:www.alainbritishacademy.ae; additional_source_host:www.alainbritishacademy.ae.",
+        "qualificationSummary":  "The prospect is a school (Al Ain British Academy) and falls under the excluded industries category. Qualified with score 79. Matched: officialWebsite, entityType, companyIdentity, targetCountry, targetIndustry, exclusionCriteria, keywords. Business qualified; contact method still missing (email or WhatsApp).",
+        "contactHistory":  [
+
+                           ],
+        "id":  "8e6441b6-9da4-4f62-98b2-456c723fa2e8",
+        "projectId":  "188b202c-faf2-40ea-bcde-5293f2f161f6",
+        "projectName":  "ExperienceOps – UAE",
+        "researchRunId":  "b9276d24-5627-4fc9-adbd-41430ca1e3e0",
+        "companyName":  "نبذة عن أكاديمية العين البريطانية",
+        "website":  "https://www.alainbritishacademy.ae",
+        "country":  "United Arab Emirates",
+        "city":  "Al Ain",
+        "industry":  "Sailing Center",
+        "companySize":  null,
+        "contactName":  null,
+        "contactRole":  null,
+        "email":  null,
+        "phone":  null,
+        "whatsApp":  null,
+        "sourceUrl":  "https://www.alainbritishacademy.ae/ar/about/",
+        "sourceUrls":  [
+                           "https://www.alainbritishacademy.ae/ar/about/",
+                           "https://www.alainbritishacademy.ae/about/"
+                       ],
+        "sourceType":  "search",
+        "sourceName":  "SearXNG + Web search (نبذة عن أكاديمية العين البريطانية - Al Ain British Academy)",
+        "qualificationScore":  79,
+        "emailConfidenceScore":  null,
+        "whatsAppConfidenceScore":  null,
+        "isQualified":  true,
+        "status":  "needsReview",
+        "duplicateKind":  "none",
+        "recommendedTemplateId":  "dc7ed42d-284f-466c-bac6-7ceaae905e42",
+        "recommendedTemplateName":  "ExperienceOps Introduction",
+        "recommendedTemplateReason":  "The ExperienceOps Introduction template is suitable for introducing a sailing center, providing a default English introduction that can be adapted for the specific context of the British Academy of Al Ain.",
+        "recommendedTemplateConfidence":  85,
+        "outreachCampaignId":  null,
+        "createdAtUtc":  "2026-10-20T07:53:09.6996383+00:00",
+        "updatedAtUtc":  "2026-10-20T07:53:09.6996388+00:00"
+    },
+    {
+        "companyDescription":  "مدرسة الامارات الخاصة الفجيرة --\u003e خيارات EPS FUJ تطبيق للتواصل مواقع هامة أنشطة مدرستنا التوظيف الرسوم الدراسية حول تسجيل الدخول 🎓 !We Have Graduated --\u003e × التسجيل مفتوح الأن للطلبة للسنة الدراسية 2027/2026 يمكنك تعبئة نموذج التسجيل بالبيانات المطلوبة وسيتم التواصل معكم لحجز موعد لاختبار قبول الطالب ملاحظة : تقديم طلب الالتحاق لا يعني قبول تسجيل الطالب في المدرسة، فلا يعتبر الطالب مقبولاً إلا بعد",
+        "linkedInUrl":  null,
+        "additionalEmails":  [
+                                 "ayman.it@eps.aba.vg"
+                             ],
+        "additionalPhones":  [
+                                 "2013-2020",
+                                 "2011-2020",
+                                 "3333333333",
+                                 "6666666667",
+                                 "8571428571",
+                                 "764705882"
+                             ],
+        "researchNotes":  "Discovered from search result. Contact details may still be researched. | Structured from crawled page content. Contact details were extracted from the source page only. countryGate=country.stamped_without_evidence; country=United Arab Emirates; evidence=none; Candidate country was present without independent geographic evidence; mandatory country cannot be confirmed. (country.stamped_without_evidence). Marked NeedsReview rather than qualified.",
+        "qualificationSummary":  "Not qualified. Score 59. Missing: targetCountry, contactAttribution.",
+        "contactHistory":  [
+
+                           ],
+        "id":  "703c5486-3100-4f47-bd46-3d5c8c366aec",
+        "projectId":  "188b202c-faf2-40ea-bcde-5293f2f161f6",
+        "projectName":  "ExperienceOps – UAE",
+        "researchRunId":  "b9276d24-5627-4fc9-adbd-41430ca1e3e0",
+        "companyName":  "مدرسة الامارات الخاصة الفجيرة",
+        "website":  "https://epsfuj.com",
+        "country":  "United Arab Emirates",
+        "city":  null,
+        "industry":  "Sailing Center",
+        "companySize":  null,
+        "contactName":  null,
+        "contactRole":  null,
+        "email":  "em-school2010@hotmail.com",
+        "phone":  "092223437",
+        "whatsApp":  "2024-2025",
+        "sourceUrl":  "https://epsfuj.com/",
+        "sourceUrls":  [
+                           "https://epsfuj.com/",
+                           "https://epsfuj.com/css/styles.css"
+                       ],
+        "sourceType":  "search",
+        "sourceName":  "SearXNG + Web search (مدرسة الامارات الخاصة الفجيرة)",
+        "qualificationScore":  59,
+        "emailConfidenceScore":  100,
+        "whatsAppConfidenceScore":  null,
+        "isQualified":  false,
+        "status":  "discovered",
+        "duplicateKind":  "none",
+        "recommendedTemplateId":  null,
+        "recommendedTemplateName":  null,
+        "recommendedTemplateReason":  null,
+        "recommendedTemplateConfidence":  null,
+        "outreachCampaignId":  null,
+        "createdAtUtc":  "2026-10-20T07:53:06.5129411+00:00",
+        "updatedAtUtc":  "2026-10-20T07:53:06.5222943+00:00"
+    },
+    {
+        "companyDescription":  "هيئة الشارقة للتعليم الخاص تكرّم المدارس المتميزة في نتائج PISA 2025 · مدارس الشارقة الخاصة تتألق بالمرتبة ال 14 عالميًا في الرياضيات في «PISA 2025» · ​\"ملتقى ...",
+        "linkedInUrl":  null,
+        "additionalEmails":  [
+
+                             ],
+        "additionalPhones":  [
+
+                             ],
+        "researchNotes":  "Discovered from search result. Contact details may still be researched. countryGate=country.matched_evidence; country=United Arab Emirates; evidence=official_website_host:spea.shj.ae; source_url_host:spea.shj.ae; Organization location evidence matched target country \u0027United Arab Emirates\u0027. Evidence: official_website_host:spea.shj.ae; source_url_host:spea.shj.ae.",
+        "qualificationSummary":  "Rejected as this is a K-12 education authority, not an operating business in an approved industry. Qualified with score 79. Matched: officialWebsite, entityType, companyIdentity, targetCountry, targetIndustry, exclusionCriteria, keywords. Business qualified; contact method still missing (email or WhatsApp).",
+        "contactHistory":  [
+
+                           ],
+        "id":  "248f7c06-66bb-4cc6-b60b-61ea0283f168",
+        "projectId":  "188b202c-faf2-40ea-bcde-5293f2f161f6",
+        "projectName":  "ExperienceOps – UAE",
+        "researchRunId":  "b9276d24-5627-4fc9-adbd-41430ca1e3e0",
+        "companyName":  "هيئة الشارقة للتعليم الخاص",
+        "website":  "https://spea.shj.ae",
+        "country":  "United Arab Emirates",
+        "city":  null,
+        "industry":  "Sailing Center",
+        "companySize":  null,
+        "contactName":  null,
+        "contactRole":  null,
+        "email":  null,
+        "phone":  null,
+        "whatsApp":  null,
+        "sourceUrl":  "https://spea.shj.ae/",
+        "sourceUrls":  [
+                           "https://spea.shj.ae/"
+                       ],
+        "sourceType":  "search",
+        "sourceName":  "SearXNG",
+        "qualificationScore":  79,
+        "emailConfidenceScore":  null,
+        "whatsAppConfidenceScore":  null,
+        "isQualified":  true,
+        "status":  "needsReview",
+        "duplicateKind":  "none",
+        "recommendedTemplateId":  "dc7ed42d-284f-466c-bac6-7ceaae905e42",
+        "recommendedTemplateName":  "ExperienceOps Introduction",
+        "recommendedTemplateReason":  "The ExperienceOps Introduction template is a default option suitable for various industries, including education and training, which aligns with the prospect\u0027s focus on education.",
+        "recommendedTemplateConfidence":  85,
+        "outreachCampaignId":  null,
+        "createdAtUtc":  "2026-10-20T07:53:04.2290941+00:00",
+        "updatedAtUtc":  "2026-10-20T07:53:04.2290945+00:00"
+    },
+    {
+        "companyDescription":  null,
+        "linkedInUrl":  null,
+        "additionalEmails":  [
+
+                             ],
+        "additionalPhones":  [
+
+                             ],
+        "researchNotes":  "Directory listing \u0027IMPORTANT INFORMATION AND WHO WE ARE\u0027 retained for continued investigation; official website not yet verified. | Directory listing \u0027THE DATA WE COLLECT ABOUT YOU\u0027 retained for continued investigation; official website not yet verified. | Directory listing \u0027HOW YOUR PERSONAL DATA IS COLLECTED\u0027 retained for continued investigation; official website not yet verified. | Directory listing \u0027HOW WE USE YOUR PERSONAL DATA\u0027 retained for continued investigation; official website not yet verified. | Directory listing \u0027INTERNATIONAL TRANSFERS\u0027 retained for continued investigation; official website not yet verified. | Directory listing \u0027Internal \u0026 external use\u0027 retained for continued investigation; official website not yet verified. | Directory listing \u0027Up to 500 API calls/mth\u0027 retained for continued investigation; official website not yet verified. | Directory listing \u0027Up to 200 API calls/day\u0027 retained for continued investigation; official website not yet verified. | Directory listing \u0027Up to 2,500 API calls/mth\u0027 retained for continued investigation; official website not yet verified. | Directory listing \u0027Up to 500 API calls/day\u0027 retained for continued investigation; official website not yet verified. | Directory listing \u0027Up to 5,000 API calls/mth\u0027 retained for continued investigation; official website not yet verified. | Directory listing \u0027Up to 1,000 API calls/day\u0027 retained for continued investigation; official website not yet verified. | Directory listing \u0027Enterprise support plan\u0027 retained for continued investigation; official website not yet verified. | Directory listing \u0027Choose your jurisdictions\u0027 retained for continued investigation; official website not yet verified. countryGate=country.evidence_missing; country=unknown; evidence=none; Mandatory target country could not be verified from address, path, host, or page location evidence. (country.evidence_missing). Marked NeedsReview rather than qualified.",
+        "qualificationSummary":  "Not qualified. Score 38. Missing: officialWebsite, publicBusinessEmail, targetCountry, targetIndustry, keywords.",
+        "contactHistory":  [
+
+                           ],
+        "id":  "9793af8f-a46d-4bb4-bec5-851a0d3fac09",
+        "projectId":  "188b202c-faf2-40ea-bcde-5293f2f161f6",
+        "projectName":  "ExperienceOps – UAE",
+        "researchRunId":  "b9276d24-5627-4fc9-adbd-41430ca1e3e0",
+        "companyName":  "IMPORTANT INFORMATION AND WHO WE ARE",
+        "website":  null,
+        "country":  null,
+        "city":  null,
+        "industry":  null,
+        "companySize":  null,
+        "contactName":  null,
+        "contactRole":  null,
+        "email":  null,
+        "phone":  null,
+        "whatsApp":  null,
+        "sourceUrl":  "https://opencorporates.com/user-privacy-policy/",
+        "sourceUrls":  [
+                           "https://opencorporates.com/user-privacy-policy/",
+                           "https://opencorporates.com/plug-in-our-data/",
+                           "https://opencorporates.com/pricing/"
+                       ],
+        "sourceType":  "directory",
+        "sourceName":  "DirectoryListingInvestigation",
+        "qualificationScore":  38,
+        "emailConfidenceScore":  null,
+        "whatsAppConfidenceScore":  null,
+        "isQualified":  false,
+        "status":  "discovered",
+        "duplicateKind":  "none",
+        "recommendedTemplateId":  null,
+        "recommendedTemplateName":  null,
+        "recommendedTemplateReason":  null,
+        "recommendedTemplateConfidence":  null,
+        "outreachCampaignId":  null,
+        "createdAtUtc":  "2026-10-20T07:48:17.9824721+00:00",
+        "updatedAtUtc":  "2026-10-20T07:48:17.9824727+00:00"
+    },
+    {
+        "companyDescription":  null,
+        "linkedInUrl":  null,
+        "additionalEmails":  [
+
+                             ],
+        "additionalPhones":  [
+
+                             ],
+        "researchNotes":  "Directory listing \u0027Free transaction support\u0027 retained for continued investigation; official website not yet verified. | Directory listing \u0027Spaceship reliability\u0027 retained for continued investigation; official website not yet verified. | Directory listing \u0027Make offer Your offer must be higher than the seller’s minimum price.\u0027 retained for continued investigation; official website not yet verified. | Directory listing \u0027You will be redirected to spaceship.com\u0027 retained for continued investigation; official website not yet verified. | Directory listing \u0027Buyer protection program\u0027 retained for continued investigation; official website not yet verified. | Directory listing \u0027Fast and easy transfer\u0027 retained for continued investigation; official website not yet verified. | Directory listing \u0027Flexible payment methods\u0027 retained for continued investigation; official website not yet verified. countryGate=country.matched_evidence; country=United Arab Emirates; evidence=source_url_host:0007.ae; Organization location evidence matched target country \u0027United Arab Emirates\u0027. Evidence: source_url_host:0007.ae.",
+        "qualificationSummary":  "Not qualified. Score 50. Missing: officialWebsite, publicBusinessEmail, targetIndustry, keywords.",
+        "contactHistory":  [
+
+                           ],
+        "id":  "5b221527-6c92-4b83-8d78-3d3635f5e8a8",
+        "projectId":  "188b202c-faf2-40ea-bcde-5293f2f161f6",
+        "projectName":  "ExperienceOps – UAE",
+        "researchRunId":  "b9276d24-5627-4fc9-adbd-41430ca1e3e0",
+        "companyName":  "Make offer Your offer must be higher than the seller’s minimum price.",
+        "website":  null,
+        "country":  "United Arab Emirates",
+        "city":  null,
+        "industry":  null,
+        "companySize":  null,
+        "contactName":  null,
+        "contactRole":  null,
+        "email":  null,
+        "phone":  null,
+        "whatsApp":  null,
+        "sourceUrl":  "https://0007.ae/",
+        "sourceUrls":  [
+                           "https://0007.ae/"
+                       ],
+        "sourceType":  "directory",
+        "sourceName":  "DirectoryListingInvestigation",
+        "qualificationScore":  50,
+        "emailConfidenceScore":  null,
+        "whatsAppConfidenceScore":  null,
+        "isQualified":  false,
+        "status":  "discovered",
+        "duplicateKind":  "none",
+        "recommendedTemplateId":  null,
+        "recommendedTemplateName":  null,
+        "recommendedTemplateReason":  null,
+        "recommendedTemplateConfidence":  null,
+        "outreachCampaignId":  null,
+        "createdAtUtc":  "2026-10-20T07:48:12.4932679+00:00",
+        "updatedAtUtc":  "2026-10-20T07:48:12.4932681+00:00"
+    }
+]

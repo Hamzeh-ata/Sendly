@@ -421,7 +421,24 @@ public class EmailAccountService
         });
     }
 
-    private static EmailAccountDto Map(EmailAccount entity)
+    private string? RevealPassword(EmailAccount entity)
+    {
+        if (string.IsNullOrWhiteSpace(entity.PasswordProtected))
+        {
+            return null;
+        }
+
+        try
+        {
+            return _secretProtector.Unprotect(entity.PasswordProtected);
+        }
+        catch (Exception)
+        {
+            return null;
+        }
+    }
+
+    private EmailAccountDto Map(EmailAccount entity)
     {
         return new EmailAccountDto
         {
@@ -437,6 +454,7 @@ public class EmailAccountService
             SecurityMode = entity.SecurityMode,
             Username = entity.Username,
             HasPassword = !string.IsNullOrWhiteSpace(entity.PasswordProtected),
+            Password = RevealPassword(entity),
             SenderEmail = entity.SenderEmail,
             SenderDisplayName = entity.SenderDisplayName,
             ReplyToEmail = entity.ReplyToEmail,

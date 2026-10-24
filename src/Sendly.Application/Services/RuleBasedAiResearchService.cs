@@ -168,9 +168,11 @@ public class RuleBasedAiResearchService : IAiResearchService
         AiSourceStructureRequest request,
         CancellationToken cancellationToken)
     {
-        var companyName = NullIfBlank(request.HintCompanyName)
-            ?? InferCompanyFromUrl(request.SourceUrl)
-            ?? "Unknown company";
+        var companyName = NullIfBlank(request.HintCompanyName);
+        if (string.IsNullOrWhiteSpace(companyName))
+        {
+            return Task.FromResult<IReadOnlyList<ProspectCandidate>>([]);
+        }
 
         var primaryEmail = request.ExtractedEmails.Count > 0 ? request.ExtractedEmails[0] : null;
         var primaryPhone = request.ExtractedPhones.Count > 0 ? request.ExtractedPhones[0] : null;
@@ -210,18 +212,6 @@ public class RuleBasedAiResearchService : IAiResearchService
         return trimmed.Length <= maxLength ? trimmed : trimmed[..maxLength];
     }
 
-    private static string? InferCompanyFromUrl(string? url)
-    {
-        if (string.IsNullOrWhiteSpace(url) || !Uri.TryCreate(url, UriKind.Absolute, out var uri))
-        {
-            return null;
-        }
-
-        var host = uri.Host.Replace("www.", string.Empty, StringComparison.OrdinalIgnoreCase);
-        var parts = host.Split('.', StringSplitOptions.RemoveEmptyEntries);
-        return parts.Length == 0 ? null : parts[0];
-    }
-
     private static string? NullIfBlank(string? value)
     {
         return string.IsNullOrWhiteSpace(value) ? null : value.Trim();
@@ -243,20 +233,33 @@ public class RuleBasedAiResearchService : IAiResearchService
 
     private static bool MatchesCountry(AiClassificationRequest request)
     {
-        if (request.Countries.Count == 0 || string.IsNullOrWhiteSpace(request.Country))
+        if (request.Countries.Count == 0)
         {
-            return request.Countries.Count == 0;
+            return true;
         }
 
-        foreach (var country in request.Countries)
+        var host = Domain.Services.UrlCanonicalizer.ExtractDomain(request.Website)
+                   ?? Domain.Services.UrlCanonicalizer.ExtractDomain(request.SourceUrl);
+        if (!Domain.Services.CountryScopeHelper.HostMatchesCountries(host, request.Countries))
         {
-            if (ContainsIgnoreCase(request.Country, country))
-            {
-                return true;
-            }
+            return false;
         }
 
-        return false;
+        var inferred = Domain.Services.CountryScopeHelper.InferCountryFromHost(host);
+        if (inferred is not null)
+        {
+            return Domain.Services.CountryScopeHelper.CountryMatches(inferred, request.Countries);
+        }
+
+        if (!string.IsNullOrWhiteSpace(request.Country)
+            && Domain.Services.CountryScopeHelper.CountryMatches(request.Country, request.Countries))
+        {
+            return true;
+        }
+
+        return Domain.Services.CountryScopeHelper.TextMentionsCountry(
+            $"{request.CompanyName} {request.CompanyDescription} {request.City} {request.Country}",
+            request.Countries);
     }
 
     private static bool MatchesIndustry(AiClassificationRequest request)

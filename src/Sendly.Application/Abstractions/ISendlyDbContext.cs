@@ -37,6 +37,28 @@ public interface ISendlyDbContext
 
     DbSet<ResearchRun> ResearchRuns { get; }
 
+    DbSet<MapCoverageRegion> MapCoverageRegions { get; }
+
+    DbSet<ResearchQuery> ResearchQueries { get; }
+
+    DbSet<ResearchQueryVersion> ResearchQueryVersions { get; }
+
+    DbSet<ResearchSeedUrl> ResearchSeedUrls { get; }
+
+    DbSet<DiscoveredUrl> DiscoveredUrls { get; }
+
+    DbSet<CrawledPage> CrawledPages { get; }
+
+    DbSet<ResearchEvidence> ResearchEvidenceItems { get; }
+
+    DbSet<InvestigationContact> InvestigationContacts { get; }
+
+    DbSet<QualificationCriterionResult> QualificationCriterionResults { get; }
+
+    DbSet<ResearchRunEvent> ResearchRunEvents { get; }
+
+    DbSet<DiscoverySource> DiscoverySources { get; }
+
     DbSet<OutreachContactHistory> OutreachContactHistories { get; }
 
     DbSet<OutreachSequence> OutreachSequences { get; }

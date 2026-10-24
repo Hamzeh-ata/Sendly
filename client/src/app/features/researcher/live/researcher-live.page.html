@@ -1,0 +1,356 @@
+<div class="researcher-page live-page">
+  @if (loading() && !run()) {
+    <div class="rc-skeleton">
+      <div class="bone"></div>
+      <div class="bone"></div>
+      <div class="bone"></div>
+    </div>
+  } @else if (!run()) {
+    <app-empty-state
+      titleKey="researcher.live.emptyTitle"
+      descriptionKey="researcher.live.emptyDescription"
+    />
+  } @else {
+    <div class="page-header">
+      <div>
+        <h2>{{ titleLabel() }}</h2>
+        <p class="subtitle">
+          {{ 'researcher.live.project' | translate }}: {{ projectLabel() }}
+        </p>
+        <p class="investigation-activity">{{ investigationActivityKey() | translate }}</p>
+        @if (nextBestStrategy()) {
+          <p class="rc-muted">{{ 'researcher.live.nextStrategy' | translate }}: {{ nextBestStrategy() }}</p>
+        }
+        <div class="header-meta">
+          <app-status-badge prefix="researchStatus" [status]="run()!.status" />
+          <app-connection-status [state]="connectionState()" />
+          <span class="rc-mono ollama-chip">
+            {{ 'researcher.live.ollama' | translate }}: {{ ollamaStatusKey() | translate }} · {{ ollamaDetailLabel() }}
+          </span>
+          <span class="rc-muted">
+            {{ 'researcher.live.started' | translate }}: {{ startedLabel() }}
+          </span>
+          <span class="rc-mono">
+            {{ 'researcher.live.processingElapsed' | translate }}: {{ processingElapsedLabel() }}
+          </span>
+          <span class="rc-muted">
+            {{ 'researcher.live.wallClockElapsed' | translate }}: {{ wallClockElapsedLabel() }}
+          </span>
+          <span class="rc-muted">
+            {{ 'researcher.live.lastEvent' | translate }}: {{ lastEventLabel() }}
+          </span>
+        </div>
+      </div>
+      <div class="header-actions">
+        <a class="btn btn-ghost" routerLink="/researcher/runs">
+          {{ 'researcher.live.backToRuns' | translate }}
+        </a>
+        <button type="button" class="btn btn-ghost" (click)="openFetchExplorer()">
+          {{ 'researcher.live.openFetch' | translate }}
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          [disabled]="!canCreateCampaign() || campaignSaving()"
+          (click)="openCampaignForReady()"
+        >
+          {{ 'researcher.live.createCampaignReady' | translate }}
+          @if (readyCampaignCount() > 0) {
+            ({{ readyCampaignCount() }})
+          }
+        </button>
+        @if (isActive()) {
+          <button
+            type="button"
+            class="btn btn-danger"
+            [disabled]="actionLoading()"
+            (click)="openCancelConfirm()"
+          >
+            {{ 'researchRuns.cancel' | translate }}
+          </button>
+        }
+      </div>
+    </div>
+
+    <section class="rc-panel">
+      <div class="rc-grid metrics">
+        @for (tile of metricTiles(); track tile.labelKey) {
+          <app-metric-tile [labelKey]="tile.labelKey" [value]="tile.value" [tone]="tile.tone" />
+        }
+      </div>
+    </section>
+
+    <section class="rc-panel">
+      <h3>{{ 'researcher.live.pipelineTitle' | translate }}</h3>
+      <div class="pipeline-rail">
+        @for (stage of pipelineStages(); track stage.key) {
+          <app-pipeline-stage
+            [labelKey]="stage.labelKey"
+            [count]="stage.count"
+            [active]="stage.active"
+          />
+        }
+      </div>
+    </section>
+
+    <section class="rc-panel">
+      <div class="stream-header">
+        <h3>{{ 'researcher.live.streamTitle' | translate }}</h3>
+        <p class="rc-muted">{{ streamSourceKey() | translate }}</p>
+        <div class="rc-filters">
+          <select
+            class="input"
+            [value]="severityFilter()"
+            (change)="onSeverityChange($any($event.target).value)"
+          >
+            @for (opt of severityOptions; track opt.value) {
+              <option [value]="opt.value">{{ opt.labelKey | translate }}</option>
+            }
+          </select>
+          <select
+            class="input"
+            [value]="stageFilter()"
+            (change)="onStageChange($any($event.target).value)"
+          >
+            @for (opt of stageOptions; track opt.value) {
+              <option [value]="opt.value">{{ opt.labelKey | translate }}</option>
+            }
+          </select>
+          <input
+            class="input"
+            type="search"
+            [value]="searchFilter()"
+            (input)="onSearchChange($any($event.target).value)"
+            [attr.placeholder]="'researcher.filters.searchPlaceholder' | translate"
+          />
+          <button type="button" class="btn btn-ghost" (click)="toggleStreamPause()">
+            @if (streamPaused()) {
+              {{ 'researcher.live.resumeStream' | translate }}
+            } @else {
+              {{ 'researcher.live.pauseStream' | translate }}
+            }
+          </button>
+        </div>
+      </div>
+
+      @if (eventRows().length === 0) {
+        <p class="rc-muted">{{ 'researcher.live.noEvents' | translate }}</p>
+      } @else {
+        <div class="event-stream">
+          @for (row of eventRows(); track row.id) {
+            <app-event-row
+              [row]="row"
+              [expanded]="!!expandedMap()[row.id]"
+              (toggleExpand)="toggleExpand($event)"
+              (copyDetails)="copyEventDetails($event)"
+            />
+          }
+        </div>
+      }
+    </section>
+
+    <div class="rc-grid two">
+      <section class="rc-panel">
+        <div class="prospects-panel-header">
+          <h3>{{ 'researcher.live.prospectsTitle' | translate }}</h3>
+          @if (hasLiveProspects()) {
+            <div class="prospects-panel-actions">
+              <button type="button" class="btn btn-ghost" (click)="selectAllReadyProspects()">
+                {{ 'researcher.live.selectAllReady' | translate }}
+              </button>
+              <button
+                type="button"
+                class="btn btn-primary"
+                [disabled]="selectedCampaignCount() === 0 || campaignSaving()"
+                (click)="openCampaignForSelected()"
+              >
+                {{ 'researcher.live.createCampaign' | translate }}
+                @if (selectedCampaignCount() > 0) {
+                  ({{ selectedCampaignCount() }})
+                }
+              </button>
+            </div>
+          }
+        </div>
+        @if (!hasLiveProspects()) {
+          <p class="rc-muted">{{ 'researchRuns.liveResultsWaiting' | translate }}</p>
+        } @else {
+          <table class="rc-table">
+            <thead>
+              <tr>
+                <th>{{ 'researcher.live.selectProspect' | translate }}</th>
+                <th>{{ 'researchRuns.resultCompany' | translate }}</th>
+                <th>{{ 'researchRuns.resultContact' | translate }}</th>
+                <th>{{ 'researchRuns.resultScore' | translate }}</th>
+                <th>{{ 'researchRuns.resultStatus' | translate }}</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (prospect of liveProspects(); track prospect.id) {
+                <tr>
+                  <td>
+                    <input
+                      type="checkbox"
+                      [checked]="!!selectedMap()[prospect.id]"
+                      (change)="toggleProspectSelection(prospect.id, $any($event.target).checked)"
+                      [attr.aria-label]="'researcher.live.selectProspect' | translate"
+                    />
+                  </td>
+                  <td>{{ prospect.companyName }}</td>
+                  <td class="rc-mono">{{ prospect.email || prospect.whatsApp || '—' }}</td>
+                  <td class="rc-mono">{{ prospect.qualificationScore ?? '—' }}</td>
+                  <td>
+                    <app-status-badge prefix="prospectStatus" [status]="prospect.status" />
+                  </td>
+                  <td>
+                    <button type="button" class="btn btn-ghost" (click)="openProspect(prospect.id)">
+                      {{ 'researchRuns.viewResult' | translate }}
+                    </button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        }
+      </section>
+
+      <section class="rc-panel">
+        <h3>{{ 'researchRuns.discoverySummary' | translate }}</h3>
+        @if (discoverySummary()) {
+          <p>{{ discoverySummary() }}</p>
+        } @else {
+          <p class="rc-muted">{{ 'researcher.coverage.unavailable' | translate }}</p>
+        }
+        <div class="rc-grid metrics compact">
+          <app-metric-tile
+            labelKey="researchRuns.uniqueDomains"
+            [value]="'' + discoveryUniqueDomains()"
+          />
+          <app-metric-tile
+            labelKey="researchRuns.liveVerifiedCompanies"
+            [value]="'' + discoveryLiveVerified()"
+            tone="success"
+          />
+          <app-metric-tile
+            labelKey="researchRuns.publicContactsExtracted"
+            [value]="'' + discoveryPublicContacts()"
+          />
+          <app-metric-tile
+            labelKey="researchRuns.prospectsQualified"
+            [value]="'' + discoveryProspectsQualified()"
+            tone="success"
+          />
+          <app-metric-tile
+            labelKey="researcher.live.fetchBudget"
+            [value]="fetchBudgetLabel()"
+          />
+          <app-metric-tile
+            labelKey="researcher.live.pendingLeft"
+            [value]="pendingLeftLabel()"
+            tone="warning"
+          />
+          <app-metric-tile
+            labelKey="researcher.live.stopReason"
+            [value]="stopReasonLabel()"
+          />
+        </div>
+        @if (discoveryProviderRows().length > 0) {
+          <table class="rc-table">
+            <thead>
+              <tr>
+                <th>{{ 'researchRuns.provider' | translate }}</th>
+                <th>{{ 'researcher.overview.status' | translate }}</th>
+                <th>{{ 'researcher.sources.candidates' | translate }}</th>
+                <th>{{ 'researcher.live.zeroYieldReason' | translate }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (row of discoveryProviderRows(); track row.providerName) {
+                <tr>
+                  <td>{{ row.providerName }}</td>
+                  <td>{{ row.statusLabel }}</td>
+                  <td class="rc-mono">{{ row.candidatesReturned }}</td>
+                  <td>{{ row.producedUseful ? '—' : row.zeroYieldReason }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        }
+        @if (discoveryStageRows().length > 0) {
+          <table class="rc-table">
+            <thead>
+              <tr>
+                <th>{{ 'researchRuns.discoveryStages' | translate }}</th>
+                <th>{{ 'researchRuns.providersAttempted' | translate }}</th>
+                <th>{{ 'researcher.sources.candidates' | translate }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (row of discoveryStageRows(); track row.stageLabel) {
+                <tr>
+                  <td>{{ row.stageLabel }}</td>
+                  <td>{{ row.providersLabel }}</td>
+                  <td class="rc-mono">{{ row.candidatesAdded }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        }
+      </section>
+    </div>
+  }
+</div>
+
+@if (campaignOpen()) {
+  <div class="overlay" (click)="closeCampaign()">
+    <div class="dialog" role="dialog" (click)="$event.stopPropagation()">
+      <h2>{{ 'prospects.campaignTitle' | translate }}</h2>
+      <p class="dialog-hint">{{ 'researcher.live.createCampaignHint' | translate }}</p>
+      <p class="dialog-hint">
+        {{
+          'researcher.live.campaignSelectedCount'
+            | translate: { count: selectedCampaignCount() }
+        }}
+      </p>
+      <div class="field">
+        <label>{{ 'prospects.campaignChannel' | translate }}</label>
+        <select
+          class="input"
+          [value]="campaignChannel()"
+          (change)="onCampaignChannelChange($any($event.target).value)"
+        >
+          <option value="email">{{ 'projects.channelEmail' | translate }}</option>
+          <option value="whatsApp">{{ 'projects.channelWhatsApp' | translate }}</option>
+        </select>
+      </div>
+      <label class="toggle-row">
+        <input
+          type="checkbox"
+          [checked]="useAiRecommendedTemplate()"
+          (change)="onUseAiTemplateChange($any($event.target).checked)"
+        />
+        <span>{{ 'prospects.useAiRecommendedTemplate' | translate }}</span>
+      </label>
+      <div class="dialog-actions">
+        <button type="button" class="btn btn-ghost" [disabled]="campaignSaving()" (click)="closeCampaign()">
+          {{ 'common.cancel' | translate }}
+        </button>
+        <button type="button" class="btn btn-primary" [disabled]="campaignSaving()" (click)="confirmCampaign()">
+          {{ 'researcher.live.createCampaign' | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+}
+
+<app-confirm-dialog
+  [visible]="showCancelConfirm()"
+  [titleKey]="'researchRuns.cancelTitle'"
+  [messageKey]="'researchRuns.cancelMessage'"
+  [confirmKey]="'researchRuns.cancel'"
+  [confirmVariant]="'danger'"
+  [loading]="actionLoading()"
+  (confirmed)="confirmCancel()"
+  (cancelled)="closeCancelConfirm()"
+/>

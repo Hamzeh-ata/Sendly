@@ -7,7 +7,11 @@ import {
   PrepareOutreachRequest,
   ProspectDetail
 } from '../../core/models/prospecting.model';
-import { ContactHistoryRow } from '../../core/models/prospect-row.model';
+import {
+  QualificationCriterionItem,
+  ResearchEvidenceItem
+} from '../../core/models/research-query.model';
+import { ContactHistoryRow, FetchedContactRow } from '../../core/models/prospect-row.model';
 import { ProjectApiService } from '../../core/services/project-api.service';
 import { ProspectApiService } from '../../core/services/prospect-api.service';
 import { NotificationService } from '../../core/services/notification.service';
@@ -33,9 +37,20 @@ export class ProspectDetailPage implements OnInit {
   readonly saving = signal(false);
   readonly prospect = signal<ProspectDetail | null>(null);
   readonly contactHistory = signal<ContactHistoryRow[]>([]);
+  readonly fetchedEmails = signal<FetchedContactRow[]>([]);
+  readonly fetchedPhones = signal<FetchedContactRow[]>([]);
+  readonly evidenceItems = signal<ResearchEvidenceItem[]>([]);
+  readonly qualificationCriteria = signal<QualificationCriterionItem[]>([]);
   readonly campaignOpen = signal(false);
   readonly campaignChannel = signal<OutreachChannelType>('email');
   readonly useAiRecommendedTemplate = signal(true);
+  readonly hasEvidence = computed(() => this.evidenceItems().length > 0);
+  readonly hasCriteria = computed(() => this.qualificationCriteria().length > 0);
+  readonly hasFetchedEmails = computed(() => this.fetchedEmails().length > 0);
+  readonly hasFetchedPhones = computed(() => this.fetchedPhones().length > 0);
+  readonly hasFetchedContacts = computed(
+    () => this.hasFetchedEmails() || this.hasFetchedPhones()
+  );
 
   readonly createdLabel = computed(() => formatDate(this.prospect()?.createdAtUtc ?? null));
   readonly updatedLabel = computed(() => formatDate(this.prospect()?.updatedAtUtc ?? null));
@@ -201,13 +216,31 @@ export class ProspectDetailPage implements OnInit {
       next: (detail) => {
         this.prospect.set(detail);
         this.contactHistory.set(this.mapHistory(detail));
+        this.fetchedEmails.set(this.mapFetchedEmails(detail));
+        this.fetchedPhones.set(this.mapFetchedPhones(detail));
         this.loading.set(false);
+        this.loadEvidence(id);
+        this.loadCriteria(id);
       },
       error: (err: HttpErrorResponse) => {
         this.loading.set(false);
         this.notifyError(err);
         this.router.navigate(['/prospects']);
       }
+    });
+  }
+
+  private loadEvidence(id: string): void {
+    this.prospectApi.listEvidence(id).subscribe({
+      next: (items) => this.evidenceItems.set(items ?? []),
+      error: () => this.evidenceItems.set([])
+    });
+  }
+
+  private loadCriteria(id: string): void {
+    this.prospectApi.listQualificationCriteria(id).subscribe({
+      next: (items) => this.qualificationCriteria.set(items ?? []),
+      error: () => this.qualificationCriteria.set([])
     });
   }
 
@@ -224,6 +257,62 @@ export class ProspectDetailPage implements OnInit {
         contactedLabel: formatDate(item.contactedAtUtc ?? null)
       });
     }
+    return rows;
+  }
+
+  private mapFetchedEmails(detail: ProspectDetail): FetchedContactRow[] {
+    return this.buildFetchedRows(
+      detail.email,
+      detail.additionalEmails ?? [],
+      'email'
+    );
+  }
+
+  private mapFetchedPhones(detail: ProspectDetail): FetchedContactRow[] {
+    return this.buildFetchedRows(
+      detail.phone,
+      detail.additionalPhones ?? [],
+      'phone'
+    );
+  }
+
+  private buildFetchedRows(
+    primary: string | null | undefined,
+    additional: string[],
+    channel: 'email' | 'phone'
+  ): FetchedContactRow[] {
+    const rows: FetchedContactRow[] = [];
+    const seen = new Set<string>();
+    const primaryValue = (primary ?? '').trim();
+    if (primaryValue) {
+      const key = primaryValue.toLowerCase();
+      seen.add(key);
+      rows.push({
+        id: `${channel}-primary`,
+        value: primaryValue,
+        kindLabel: this.translate.instant('prospects.fetchedPrimary')
+      });
+    }
+
+    let index = 0;
+    for (const raw of additional) {
+      const value = (raw ?? '').trim();
+      if (!value) {
+        continue;
+      }
+      const key = value.toLowerCase();
+      if (seen.has(key)) {
+        continue;
+      }
+      seen.add(key);
+      index += 1;
+      rows.push({
+        id: `${channel}-extra-${index}`,
+        value,
+        kindLabel: this.translate.instant('prospects.fetchedAdditional')
+      });
+    }
+
     return rows;
   }
 

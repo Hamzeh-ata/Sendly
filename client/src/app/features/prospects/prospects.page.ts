@@ -48,6 +48,7 @@ export class ProspectsPage implements OnInit {
   readonly selectedIds = signal<string[]>([]);
   readonly search = signal('');
   readonly projectId = signal('');
+  readonly researchRunId = signal('');
   readonly country = signal('');
   readonly industry = signal('');
   readonly statuses = signal<string[]>([]);
@@ -63,6 +64,7 @@ export class ProspectsPage implements OnInit {
   readonly enrollSequences = signal<SequenceOption[]>([]);
   readonly selectedSequenceId = signal('');
   readonly enrollMixedProjects = signal(false);
+  private queryParamsBound = false;
 
   private readonly statusValues = [
     'discovered',
@@ -149,6 +151,14 @@ export class ProspectsPage implements OnInit {
   readonly hasDuplicateSelection = computed(() => this.duplicateCount() > 0);
   readonly activeFilterChips = computed(() => this.buildActiveChips());
   readonly hasActiveFilters = computed(() => this.activeFilterChips().length > 0);
+  readonly hasMapRunFilter = computed(() => !!this.researchRunId().trim());
+  readonly mapRunFilterLabel = computed(() => {
+    const runId = this.researchRunId().trim();
+    if (!runId) {
+      return '';
+    }
+    return runId.slice(0, 8);
+  });
 
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {
@@ -167,10 +177,22 @@ export class ProspectsPage implements OnInit {
   }
 
   ngOnInit(): void {
-    const projectId = this.route.snapshot.queryParamMap.get('projectId') ?? '';
-    this.projectId.set(projectId);
     this.loadProjects();
-    this.loadProspects();
+    this.route.queryParamMap.subscribe((params) => {
+      const projectId = params.get('projectId') ?? '';
+      const researchRunId = params.get('researchRunId') ?? '';
+      const unchanged =
+        this.queryParamsBound &&
+        projectId === this.projectId() &&
+        researchRunId === this.researchRunId();
+      this.queryParamsBound = true;
+      this.projectId.set(projectId);
+      this.researchRunId.set(researchRunId);
+      if (unchanged) {
+        return;
+      }
+      this.loadProspects();
+    });
   }
 
   onSearchChange(value: string): void {
@@ -180,7 +202,14 @@ export class ProspectsPage implements OnInit {
 
   onProjectChange(value: string): void {
     this.projectId.set(value);
-    this.syncProjectQuery(value);
+    this.researchRunId.set('');
+    this.syncListQuery(value, '');
+    this.loadProspects();
+  }
+
+  clearMapRunFilter(): void {
+    this.researchRunId.set('');
+    this.syncListQuery(this.projectId(), '');
     this.loadProspects();
   }
 
@@ -244,7 +273,9 @@ export class ProspectsPage implements OnInit {
     this.contactMethods.set([]);
     this.qualifications.set([]);
     this.duplicates.set([]);
+    this.researchRunId.set('');
     this.openFilterMenu.set(null);
+    this.syncListQuery(this.projectId(), '');
     this.loadProspects();
   }
 
@@ -255,6 +286,9 @@ export class ProspectsPage implements OnInit {
       this.contactMethods.update((items) => items.filter((item) => item !== chip.value));
     } else if (chip.group === 'qualification') {
       this.qualifications.update((items) => items.filter((item) => item !== chip.value));
+    } else if (chip.group === 'researchRun') {
+      this.researchRunId.set('');
+      this.syncListQuery(this.projectId(), '');
     } else {
       this.duplicates.update((items) => items.filter((item) => item !== chip.value));
     }
@@ -496,6 +530,14 @@ export class ProspectsPage implements OnInit {
 
   private buildActiveChips(): ProspectActiveFilterChip[] {
     const chips: ProspectActiveFilterChip[] = [];
+    const researchRunId = this.researchRunId().trim();
+    if (researchRunId) {
+      chips.push({
+        group: 'researchRun',
+        value: researchRunId,
+        labelKey: 'prospects.mapRunFilter'
+      });
+    }
     for (const value of this.statuses()) {
       chips.push({ group: 'status', value, labelKey: `prospectStatus.${value}` });
     }
@@ -521,10 +563,13 @@ export class ProspectsPage implements OnInit {
     return chips;
   }
 
-  private syncProjectQuery(projectId: string): void {
+  private syncListQuery(projectId: string, researchRunId: string): void {
     this.router.navigate([], {
       relativeTo: this.route,
-      queryParams: { projectId: projectId || null },
+      queryParams: {
+        projectId: projectId || null,
+        researchRunId: researchRunId || null
+      },
       queryParamsHandling: 'merge',
       replaceUrl: true
     });
@@ -599,10 +644,31 @@ export class ProspectsPage implements OnInit {
     });
   }
 
-  private loadProspects(): void {
-    this.loading.set(true);
-    const filter: ProspectListFilter = {
+  exportCsv(): void {
+    const filter = this.buildFilter();
+    this.saving.set(true);
+    this.prospectApi.exportCsv(filter).subscribe({
+      next: (blob) => {
+        this.saving.set(false);
+        const url = URL.createObjectURL(blob);
+        const anchor = document.createElement('a');
+        anchor.href = url;
+        anchor.download = 'prospects.csv';
+        anchor.click();
+        URL.revokeObjectURL(url);
+        this.notification.success(this.translate.instant('prospects.exportSuccess'));
+      },
+      error: (err: HttpErrorResponse) => {
+        this.saving.set(false);
+        this.notifyError(err);
+      }
+    });
+  }
+
+  private buildFilter(): ProspectListFilter {
+    return {
       projectId: this.projectId().trim() || undefined,
+      researchRunId: this.researchRunId().trim() || undefined,
       search: this.search().trim() || undefined,
       country: this.country().trim() || undefined,
       industry: this.industry().trim() || undefined,
@@ -611,6 +677,11 @@ export class ProspectsPage implements OnInit {
       qualifications: this.qualifications().length > 0 ? this.qualifications() : undefined,
       duplicates: this.duplicates().length > 0 ? this.duplicates() : undefined
     };
+  }
+
+  private loadProspects(): void {
+    this.loading.set(true);
+    const filter = this.buildFilter();
     this.prospectApi.list(filter).subscribe({
       next: (items) => {
         this.prospects.set(this.mapRows(items ?? []));

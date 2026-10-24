@@ -18,6 +18,11 @@ public class SignalRResearchProgressNotifier : IResearchProgressNotifier
     {
         var group = ResearchHub.GetGroupName(progress.Id.ToString());
         await _hubContext.Clients.Group(group).SendAsync("researchProgress", progress, cancellationToken);
-        await _hubContext.Clients.All.SendAsync("researchProgress", progress, cancellationToken);
+    }
+
+    public async Task NotifyEventAsync(ResearchRunEventDto researchEvent, CancellationToken cancellationToken)
+    {
+        var group = ResearchHub.GetGroupName(researchEvent.ResearchRunId.ToString());
+        await _hubContext.Clients.Group(group).SendAsync("researchEvent", researchEvent, cancellationToken);
     }
 }

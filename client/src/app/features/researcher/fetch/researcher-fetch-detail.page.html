@@ -1,0 +1,46 @@
+<div class="researcher-page">
+  <div class="page-header">
+    <div>
+      <h2>{{ 'researcher.fetch.detailTitle' | translate }}</h2>
+      <p class="subtitle">
+        <a [routerLink]="['/researcher/fetch']" [queryParams]="{ runId: runId() }">
+          {{ 'researcher.fetch.backToList' | translate }}
+        </a>
+      </p>
+    </div>
+  </div>
+
+  @if (loading()) {
+    <div class="rc-skeleton">
+      <div class="bone"></div>
+      <div class="bone"></div>
+    </div>
+  } @else if (!page()) {
+    <app-empty-state
+      titleKey="researcher.fetch.detailEmptyTitle"
+      descriptionKey="researcher.fetch.detailEmptyDescription"
+    />
+  } @else {
+    <section class="rc-panel">
+      <table class="rc-table">
+        <tbody>
+          @for (field of fields(); track field.labelKey) {
+            <tr>
+              <th>{{ field.labelKey | translate }}</th>
+              <td class="rc-mono">{{ field.value }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </section>
+
+    <section class="rc-panel">
+      <h3>{{ 'researcher.fetch.excerptTitle' | translate }}</h3>
+      @if (hasExcerpt()) {
+        <pre class="excerpt-box">{{ excerptText() }}</pre>
+      } @else {
+        <p class="rc-muted">{{ 'researcher.fetch.excerptUnavailable' | translate }}</p>
+      }
+    </section>
+  }
+</div>

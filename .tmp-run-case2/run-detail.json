@@ -1,0 +1,617 @@
+﻿{
+    "prospects":  [
+                      {
+                          "id":  "4bb38bf7-a02c-490f-920e-35ed17c1e636",
+                          "companyName":  "Copyright All Right Reserved 2025, Energy Project Support Company LTD",
+                          "website":  "http://185.108.243.77/E-Registration/en",
+                          "city":  null,
+                          "country":  null,
+                          "email":  null,
+                          "whatsApp":  null,
+                          "sourceUrl":  "https://asiaschool.com.sa/",
+                          "qualificationScore":  46,
+                          "status":  "rejected",
+                          "isQualified":  false,
+                          "createdAtUtc":  "2026-10-19T09:26:17.5021649+00:00"
+                      },
+                      {
+                          "id":  "61898fd4-ef84-47ac-9520-ebdf6ec4317e",
+                          "companyName":  "دليل تسجيل طالب ذو إعاقة في برنامج القسائم التعليمية",
+                          "website":  "https://youtu.be/N_1XzZFU3dg",
+                          "city":  null,
+                          "country":  null,
+                          "email":  null,
+                          "whatsApp":  null,
+                          "sourceUrl":  "https://madares.sa/",
+                          "qualificationScore":  30,
+                          "status":  "rejected",
+                          "isQualified":  false,
+                          "createdAtUtc":  "2026-10-19T09:26:14.4788373+00:00"
+                      },
+                      {
+                          "id":  "f1fa136b-b8f7-498a-8fc7-a5c0d943f087",
+                          "companyName":  "الأرقام التي نفخر بها",
+                          "website":  "https://maarif.sa",
+                          "city":  null,
+                          "country":  "Saudi Arabia",
+                          "email":  "info@maarif.sa",
+                          "whatsApp":  "00966920010600",
+                          "sourceUrl":  "https://maarif.sa/ar/contact-us",
+                          "qualificationScore":  83,
+                          "status":  "readyForOutreach",
+                          "isQualified":  true,
+                          "createdAtUtc":  "2026-10-18T15:04:19.8564271+00:00"
+                      },
+                      {
+                          "id":  "76838ce8-fcdc-4fb4-b50a-7281e52fbefa",
+                          "companyName":  "Almadinah International School",
+                          "website":  "https://www.mis.edu.sa",
+                          "city":  "Medina",
+                          "country":  "Saudi Arabia",
+                          "email":  null,
+                          "whatsApp":  "0531203037",
+                          "sourceUrl":  "https://www.mis.edu.sa/en/",
+                          "qualificationScore":  80,
+                          "status":  "needsReview",
+                          "isQualified":  false,
+                          "createdAtUtc":  "2026-10-18T14:56:51.6965061+00:00"
+                      },
+                      {
+                          "id":  "78151274-9d31-445e-8143-0f6ee75d379f",
+                          "companyName":  "Abdulrahman Fakieh School for Girls",
+                          "website":  "https://www.afsg.edu.sa",
+                          "city":  "Saudi Arabia",
+                          "country":  "Saudi Arabia",
+                          "email":  null,
+                          "whatsApp":  "+966 12 5333 666",
+                          "sourceUrl":  "https://www.afsg.edu.sa/about-us",
+                          "qualificationScore":  59,
+                          "status":  "rejected",
+                          "isQualified":  false,
+                          "createdAtUtc":  "2026-10-18T14:56:39.0893038+00:00"
+                      },
+                      {
+                          "id":  "4d56fa10-7b0d-43c1-a4fb-b828c3b2ffd2",
+                          "companyName":  "Global English School",
+                          "website":  "https://ges.edu.sa",
+                          "city":  "Makkah",
+                          "country":  "Saudi Arabia",
+                          "email":  "info@ges.edu.sa",
+                          "whatsApp":  "1818123456789",
+                          "sourceUrl":  "https://ges.edu.sa/",
+                          "qualificationScore":  80,
+                          "status":  "needsReview",
+                          "isQualified":  false,
+                          "createdAtUtc":  "2026-10-18T14:56:33.3328307+00:00"
+                      },
+                      {
+                          "id":  "1d24fe3b-4c9d-403f-b0b8-071a151e4108",
+                          "companyName":  "Samha International School",
+                          "website":  "https://samhaschools.com",
+                          "city":  "Dammam",
+                          "country":  "Saudi Arabia",
+                          "email":  "info@samhaschools.com",
+                          "whatsApp":  "+966 544448141",
+                          "sourceUrl":  "https://samhaschools.com/",
+                          "qualificationScore":  85,
+                          "status":  "readyForOutreach",
+                          "isQualified":  true,
+                          "createdAtUtc":  "2026-10-18T14:56:15.8125425+00:00"
+                      },
+                      {
+                          "id":  "5d1a8368-8913-40c9-ac67-a86511787bf8",
+                          "companyName":  "مدارس علوم جازان العالمية",
+                          "website":  "https://js.edu.sa",
+                          "city":  "Jazan",
+                          "country":  "Saudi Arabia",
+                          "email":  null,
+                          "whatsApp":  null,
+                          "sourceUrl":  "https://js.edu.sa/",
+                          "qualificationScore":  79,
+                          "status":  "needsReview",
+                          "isQualified":  false,
+                          "createdAtUtc":  "2026-10-17T19:59:03.6475324+00:00"
+                      },
+                      {
+                          "id":  "9661aebf-2a9d-4492-b1bf-86ad9284790a",
+                          "companyName":  "أفضل مدارس خميس مشيط 2026",
+                          "website":  "https://kc.edu.sa",
+                          "city":  "خميس مشيط",
+                          "country":  "Saudi Arabia",
+                          "email":  "hello@kc.edu.sa",
+                          "whatsApp":  "920010007",
+                          "sourceUrl":  "https://kc.edu.sa/blog/أفضل-مدارس-خميس-مشيط-2026-دليل-شامل-للمقار",
+                          "qualificationScore":  83,
+                          "status":  "needsReview",
+                          "isQualified":  false,
+                          "createdAtUtc":  "2026-10-17T19:58:43.0279669+00:00"
+                      },
+                      {
+                          "id":  "ef818d02-e0e0-4faa-af9f-752401fcafde",
+                          "companyName":  "مدارس الذكر النموذجية أفضل مدارس أهلية في خميس مشيط",
+                          "website":  "https://ibnroshd.edu.sa",
+                          "city":  "خميس مشيط",
+                          "country":  "Saudi Arabia",
+                          "email":  "info@ibnroshd.edu.sa",
+                          "whatsApp":  "920006685",
+                          "sourceUrl":  "https://ibnroshd.edu.sa/blog/mdars-althkr-alnmothgy-afdl-mdars-ahly-fy-khmys-mshyt",
+                          "qualificationScore":  79,
+                          "status":  "needsReview",
+                          "isQualified":  false,
+                          "createdAtUtc":  "2026-10-17T19:58:40.5986895+00:00"
+                      }
+                  ],
+    "id":  "a7082007-0bfe-4967-a4e9-4e06a867620a",
+    "projectId":  "23fd30be-b89e-414e-b880-eef0a5a4eb7d",
+    "projectName":  "School Watch - Saudi Arabia",
+    "researchQueryId":  "3da18c8f-9c05-463c-bb5c-0c9778125c81",
+    "researchQueryVersionId":  "7ac59419-1b79-4ea3-8840-e1ee45be0999",
+    "researchQueryName":  null,
+    "urlsDiscovered":  346,
+    "pagesCrawled":  37,
+    "crawlErrors":  8,
+    "status":  "running",
+    "requestedProspectCount":  50,
+    "includeEmail":  true,
+    "includeWhatsApp":  false,
+    "minQualificationScore":  60,
+    "progressPercent":  12,
+    "companiesFound":  36,
+    "contactsFound":  0,
+    "validEmails":  0,
+    "validWhatsApp":  0,
+    "duplicatesFound":  9,
+    "rejectedCount":  3,
+    "qualifiedCount":  0,
+    "searchQueriesExecuted":  0,
+    "searchResultsReceived":  0,
+    "candidatesDiscovered":  36,
+    "candidatesAfterDeduplication":  0,
+    "candidatesValidated":  10,
+    "prospectsSaved":  2,
+    "prospectsSkippedAsDuplicates":  0,
+    "researchLimitsReached":  false,
+    "researchLimitsReachedReason":  "fetch.batch_limit",
+    "rejectionReasons":  {
+                             "Weak company identity":  1,
+                             "Outside target country":  1,
+                             "Excluded by criteria":  1
+                         },
+    "searchProviderDiagnostics":  {
+                                      "provider":  "IndependentCrawler",
+                                      "queriesExecuted":  0,
+                                      "requestsSuccessful":  0,
+                                      "requestsFailed":  0,
+                                      "resultsReceived":  0,
+                                      "http401":  0,
+                                      "http429":  0,
+                                      "http5xx":  0,
+                                      "timeouts":  0,
+                                      "automaticDiscoverySummary":  "Automatic discovery collected 42 candidate URLs (35 domains; fresh=2, prior=40) from 6/6 providers across 3 stage(s), recovery stages: 2 (duplicates removed: 0, rejected unsafe: 1, filtered: 2, zero-return providers: 4).",
+                                      "automaticDiscoveryDuplicatesRemoved":  0,
+                                      "automaticDiscoveryRejectedUnsafe":  1,
+                                      "discoveryPlanSummary":  "Plan: 14 industries (+8 synonyms), 1 countries, 5 providers, budget 200 URLs / 100 domains / 3 stages.",
+                                      "uniqueDomainsDiscovered":  35,
+                                      "recoveryAttempts":  2,
+                                      "discoveryStopReason":  "None",
+                                      "recoveryStrategies":  [
+                                                                 "PreferFreshDiscoveryProviders",
+                                                                 "PreferFreshDiscoveryProviders"
+                                                             ],
+                                      "sourcesReused":  4,
+                                      "sourcesAdded":  2,
+                                      "sourcesSkipped":  8,
+                                      "sourcesUnavailable":  0,
+                                      "urlsAccessible":  37,
+                                      "urlsParsed":  37,
+                                      "urlsUnavailable":  8,
+                                      "urlsRobotsBlocked":  0,
+                                      "companiesIdentified":  36,
+                                      "publicContactsExtracted":  15,
+                                      "liveVerifiedCompanies":  17,
+                                      "prospectsQualified":  2,
+                                      "urlsRejectedFiltered":  184,
+                                      "urlsAdmitted":  183,
+                                      "urlsReusedFromCache":  1,
+                                      "urlsSkippedKnownProspect":  1,
+                                      "usefulPendingUrls":  290,
+                                      "usefulUrlsLeftPendingAtStop":  196,
+                                      "newlyDiscoveredProspects":  0,
+                                      "previouslyKnownProspects":  8,
+                                      "previouslyContactedProspects":  0,
+                                      "newlyOutreachEligibleProspects":  0,
+                                      "identityVerifiedBusinesses":  9,
+                                      "emailReadyProspects":  2,
+                                      "contactableProspects":  2,
+                                      "pagesFetched":  37,
+                                      "pagesQueued":  300,
+                                      "pagesSkipped":  11,
+                                      "fetchBudgetConsumed":  37,
+                                      "fetchBudgetLimit":  80,
+                                      "requestedFetchBudget":  80,
+                                      "configuredBatchSize":  20,
+                                      "batchesStarted":  2,
+                                      "batchesCompleted":  2,
+                                      "fetchesAttempted":  45,
+                                      "fetchesSucceeded":  37,
+                                      "fetchesFailed":  8,
+                                      "fetchesSkipped":  1,
+                                      "budgetReserved":  0,
+                                      "budgetRemaining":  43,
+                                      "eligiblePendingUrls":  232,
+                                      "deferredUrls":  0,
+                                      "moreEligibleWorkRemained":  true,
+                                      "lastBudgetStopReason":  "fetch.batch_limit",
+                                      "searchLimitsExhausted":  false,
+                                      "searchLimitsExhaustedReason":  null,
+                                      "limitsExhausted":  false,
+                                      "limitsExhaustedReason":  null,
+                                      "stageDurationsMs":  {
+                                                               "parseExtract":  84,
+                                                               "investigation":  43,
+                                                               "queueSchedule":  102,
+                                                               "source.IndependentCrawler":  102687,
+                                                               "discoveryBatch":  102697,
+                                                               "qualification":  35573
+                                                           },
+                                      "urlRejectionReasons":  {
+                                                                  "url.ssrf_or_unsafe":  1,
+                                                                  "url.low_value_host":  2,
+                                                                  "url.media_asset":  111,
+                                                                  "url.embed_host":  2,
+                                                                  "url.api_endpoint":  17,
+                                                                  "url.script_asset":  52
+                                                              },
+                                      "fetchFailureReasons":  {
+                                                                  "fetch.forbidden":  5,
+                                                                  "fetch.client_error":  2,
+                                                                  "fetch.unsupported_content":  1
+                                                              },
+                                      "discoveryStages":  [
+                                                              {
+                                                                  "stageNumber":  1,
+                                                                  "stageName":  "Primary registry and prior research",
+                                                                  "providersAttempted":  [
+                                                                                             "SeedUrls",
+                                                                                             "PriorResearchUrls",
+                                                                                             "DirectoryCatalog",
+                                                                                             "IndustryAssociationCatalog"
+                                                                                         ],
+                                                                  "candidatesAdded":  54,
+                                                                  "recoveryTriggered":  true,
+                                                                  "notes":  "PreferFreshDiscoveryProviders: Prior research dominates discovery; fresh provider contribution is too low."
+                                                              },
+                                                              {
+                                                                  "stageNumber":  2,
+                                                                  "stageName":  "Synonym expansion and secondary providers",
+                                                                  "providersAttempted":  [
+                                                                                             "CommonCrawlIndex"
+                                                                                         ],
+                                                                  "candidatesAdded":  0,
+                                                                  "recoveryTriggered":  true,
+                                                                  "notes":  "PreferFreshDiscoveryProviders: Prior research dominates discovery; fresh provider contribution is too low."
+                                                              },
+                                                              {
+                                                                  "stageNumber":  3,
+                                                                  "stageName":  "Archive and recovery providers",
+                                                                  "providersAttempted":  [
+                                                                                             "CommonCrawlIndex"
+                                                                                         ],
+                                                                  "candidatesAdded":  0,
+                                                                  "recoveryTriggered":  false,
+                                                                  "notes":  null
+                                                              }
+                                                          ],
+                                      "discoveryProviders":  [
+                                                                 {
+                                                                     "providerName":  "SeedUrls",
+                                                                     "attempted":  true,
+                                                                     "succeeded":  true,
+                                                                     "producedUsefulCandidates":  false,
+                                                                     "candidatesReturned":  0,
+                                                                     "stageNumber":  1,
+                                                                     "error":  null,
+                                                                     "zeroYieldReason":  "Catalog/provider had no eligible entries for the requested country/industry scope."
+                                                                 },
+                                                                 {
+                                                                     "providerName":  "PriorResearchUrls",
+                                                                     "attempted":  true,
+                                                                     "succeeded":  true,
+                                                                     "producedUsefulCandidates":  true,
+                                                                     "candidatesReturned":  52,
+                                                                     "stageNumber":  1,
+                                                                     "error":  null,
+                                                                     "zeroYieldReason":  null
+                                                                 },
+                                                                 {
+                                                                     "providerName":  "DirectoryCatalog",
+                                                                     "attempted":  true,
+                                                                     "succeeded":  true,
+                                                                     "producedUsefulCandidates":  true,
+                                                                     "candidatesReturned":  2,
+                                                                     "stageNumber":  1,
+                                                                     "error":  null,
+                                                                     "zeroYieldReason":  null
+                                                                 },
+                                                                 {
+                                                                     "providerName":  "IndustryAssociationCatalog",
+                                                                     "attempted":  true,
+                                                                     "succeeded":  true,
+                                                                     "producedUsefulCandidates":  false,
+                                                                     "candidatesReturned":  0,
+                                                                     "stageNumber":  1,
+                                                                     "error":  null,
+                                                                     "zeroYieldReason":  "Catalog/provider had no eligible entries for the requested country/industry scope."
+                                                                 },
+                                                                 {
+                                                                     "providerName":  "CommonCrawlIndex",
+                                                                     "attempted":  true,
+                                                                     "succeeded":  true,
+                                                                     "producedUsefulCandidates":  false,
+                                                                     "candidatesReturned":  0,
+                                                                     "stageNumber":  2,
+                                                                     "error":  null,
+                                                                     "zeroYieldReason":  "Catalog/provider had no eligible entries for the requested country/industry scope."
+                                                                 },
+                                                                 {
+                                                                     "providerName":  "CommonCrawlIndex",
+                                                                     "attempted":  true,
+                                                                     "succeeded":  true,
+                                                                     "producedUsefulCandidates":  false,
+                                                                     "candidatesReturned":  0,
+                                                                     "stageNumber":  3,
+                                                                     "error":  null,
+                                                                     "zeroYieldReason":  "Catalog/provider had no eligible entries for the requested country/industry scope."
+                                                                 }
+                                                             ],
+                                      "topPendingUrls":  [
+                                                             {
+                                                                 "url":  "https://samhaschools.com/contact-us/",
+                                                                 "priority":  142,
+                                                                 "pagePurpose":  "Contact",
+                                                                 "host":  "samhaschools.com",
+                                                                 "sourceType":  "LinkExpansion",
+                                                                 "reason":  "priority=91 source=14 relevance=0 purpose=36 gain=44 cost=-3 page=Contact; preserved persisted score"
+                                                             },
+                                                             {
+                                                                 "url":  "https://astrais.edu.sa/contact/",
+                                                                 "priority":  138,
+                                                                 "pagePurpose":  "Contact",
+                                                                 "host":  "astrais.edu.sa",
+                                                                 "sourceType":  "LinkExpansion",
+                                                                 "reason":  "priority=103 source=14 relevance=12 purpose=36 gain=44 cost=-3 page=Contact; preserved persisted score"
+                                                             },
+                                                             {
+                                                                 "url":  "https://maarif.sa/ar/contact-us",
+                                                                 "priority":  138,
+                                                                 "pagePurpose":  "Contact",
+                                                                 "host":  "maarif.sa",
+                                                                 "sourceType":  "LinkExpansion",
+                                                                 "reason":  "priority=103 source=14 relevance=12 purpose=36 gain=44 cost=-3 page=Contact; preserved persisted score"
+                                                             },
+                                                             {
+                                                                 "url":  "https://tetco.sa/ar/contact",
+                                                                 "priority":  138,
+                                                                 "pagePurpose":  "Contact",
+                                                                 "host":  "tetco.sa",
+                                                                 "sourceType":  "LinkExpansion",
+                                                                 "reason":  "priority=103 source=14 relevance=12 purpose=36 gain=44 cost=-3 page=Contact; preserved persisted score"
+                                                             },
+                                                             {
+                                                                 "url":  "http://enpro.com.sa/index-it.php/contact",
+                                                                 "priority":  134,
+                                                                 "pagePurpose":  "Contact",
+                                                                 "host":  "enpro.com.sa",
+                                                                 "sourceType":  "LinkExpansion",
+                                                                 "reason":  "priority=106 source=14 relevance=12 purpose=36 gain=44 cost=-0 page=Contact; preserved persisted score"
+                                                             },
+                                                             {
+                                                                 "url":  "http://185.108.243.77/E-Registration/en/contact",
+                                                                 "priority":  122,
+                                                                 "pagePurpose":  "Contact",
+                                                                 "host":  "185.108.243.77",
+                                                                 "sourceType":  "LinkExpansion",
+                                                                 "reason":  "priority=94 source=14 relevance=0 purpose=36 gain=44 cost=-0 page=Contact; preserved persisted score"
+                                                             },
+                                                             {
+                                                                 "url":  "https://www.office.com/contact",
+                                                                 "priority":  122,
+                                                                 "pagePurpose":  "Contact",
+                                                                 "host":  "office.com",
+                                                                 "sourceType":  "LinkExpansion",
+                                                                 "reason":  "priority=94 source=14 relevance=0 purpose=36 gain=44 cost=-0 page=Contact; preserved persisted score"
+                                                             },
+                                                             {
+                                                                 "url":  "https://ges.edu.sa/contact/",
+                                                                 "priority":  118,
+                                                                 "pagePurpose":  "Contact",
+                                                                 "host":  "ges.edu.sa",
+                                                                 "sourceType":  "LinkExpansion",
+                                                                 "reason":  "priority=103 source=14 relevance=12 purpose=36 gain=44 cost=-3 page=Contact; preserved persisted score"
+                                                             },
+                                                             {
+                                                                 "url":  "https://kc.edu.sa/blog/ما-هو-نظام-steam-في-التعليم-وهل-مدرسة-طفلك-تط",
+                                                                 "priority":  112,
+                                                                 "pagePurpose":  "Team",
+                                                                 "host":  "kc.edu.sa",
+                                                                 "sourceType":  "Sitemap",
+                                                                 "reason":  "priority=93 source=24 relevance=12 purpose=26 gain=34 cost=-3 page=Team; preserved persisted score"
+                                                             },
+                                                             {
+                                                                 "url":  "https://ibnroshd.edu.sa/contact-us",
+                                                                 "priority":  106,
+                                                                 "pagePurpose":  "Contact",
+                                                                 "host":  "ibnroshd.edu.sa",
+                                                                 "sourceType":  "Sitemap",
+                                                                 "reason":  "priority=103 source=24 relevance=12 purpose=36 gain=34 cost=-3 page=Contact; preserved persisted score"
+                                                             }
+                                                         ],
+                                      "deferredHighScoreUrls":  [
+                                                                    {
+                                                                        "url":  "https://samhaschools.com/leadership-team/",
+                                                                        "priority":  108,
+                                                                        "pagePurpose":  "Team",
+                                                                        "host":  "samhaschools.com",
+                                                                        "sourceType":  "LinkExpansion",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=108 batchSize=20"
+                                                                    },
+                                                                    {
+                                                                        "url":  "https://samhaschools.com/about-shamha/",
+                                                                        "priority":  106,
+                                                                        "pagePurpose":  "About",
+                                                                        "host":  "samhaschools.com",
+                                                                        "sourceType":  "LinkExpansion",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=106 batchSize=20"
+                                                                    },
+                                                                    {
+                                                                        "url":  "https://astrais.edu.sa/our-staff/",
+                                                                        "priority":  100,
+                                                                        "pagePurpose":  "Team",
+                                                                        "host":  "astrais.edu.sa",
+                                                                        "sourceType":  "LinkExpansion",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=100 batchSize=20"
+                                                                    },
+                                                                    {
+                                                                        "url":  "https://onboard.madares.sa/site/request-enquery/contact",
+                                                                        "priority":  95,
+                                                                        "pagePurpose":  "DirectoryListing",
+                                                                        "host":  "onboard.madares.sa",
+                                                                        "sourceType":  "LinkExpansion",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=95 batchSize=20"
+                                                                    },
+                                                                    {
+                                                                        "url":  "https://parents.madares.sa/app/ar-sa/qr-secreen/contact",
+                                                                        "priority":  95,
+                                                                        "pagePurpose":  "DirectoryListing",
+                                                                        "host":  "parents.madares.sa",
+                                                                        "sourceType":  "LinkExpansion",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=95 batchSize=20"
+                                                                    },
+                                                                    {
+                                                                        "url":  "https://business.madares.sa",
+                                                                        "priority":  89,
+                                                                        "pagePurpose":  "DirectoryListing",
+                                                                        "host":  "business.madares.sa",
+                                                                        "sourceType":  "LinkExpansion",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=89 batchSize=20"
+                                                                    },
+                                                                    {
+                                                                        "url":  "https://onboard.madares.sa/site/create-account-prerequisites",
+                                                                        "priority":  89,
+                                                                        "pagePurpose":  "DirectoryListing",
+                                                                        "host":  "onboard.madares.sa",
+                                                                        "sourceType":  "LinkExpansion",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=89 batchSize=20"
+                                                                    },
+                                                                    {
+                                                                        "url":  "https://onboard.madares.sa/site/request-enquery",
+                                                                        "priority":  89,
+                                                                        "pagePurpose":  "DirectoryListing",
+                                                                        "host":  "onboard.madares.sa",
+                                                                        "sourceType":  "LinkExpansion",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=89 batchSize=20"
+                                                                    },
+                                                                    {
+                                                                        "url":  "https://parents.madares.sa/app/ar-sa/qr-secreen",
+                                                                        "priority":  89,
+                                                                        "pagePurpose":  "DirectoryListing",
+                                                                        "host":  "parents.madares.sa",
+                                                                        "sourceType":  "LinkExpansion",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=89 batchSize=20"
+                                                                    },
+                                                                    {
+                                                                        "url":  "http://enpro.com.sa/index-it.php",
+                                                                        "priority":  83,
+                                                                        "pagePurpose":  "CompanyProfile",
+                                                                        "host":  "enpro.com.sa",
+                                                                        "sourceType":  "LinkExpansion",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=83 batchSize=20"
+                                                                    },
+                                                                    {
+                                                                        "url":  "https://astrais.edu.sa/campus-life/",
+                                                                        "priority":  75,
+                                                                        "pagePurpose":  "Location",
+                                                                        "host":  "astrais.edu.sa",
+                                                                        "sourceType":  "LinkExpansion",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=75 batchSize=20"
+                                                                    },
+                                                                    {
+                                                                        "url":  "https://asiaschool.com.sa/index.php?rest_route=/",
+                                                                        "priority":  73,
+                                                                        "pagePurpose":  "CompanyProfile",
+                                                                        "host":  "asiaschool.com.sa",
+                                                                        "sourceType":  "LinkExpansion",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=73 batchSize=20"
+                                                                    },
+                                                                    {
+                                                                        "url":  "https://astrais.edu.sa/school-hours-and-responsibilities/",
+                                                                        "priority":  71,
+                                                                        "pagePurpose":  "CompanyProfile",
+                                                                        "host":  "astrais.edu.sa",
+                                                                        "sourceType":  "LinkExpansion",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=71 batchSize=20"
+                                                                    },
+                                                                    {
+                                                                        "url":  "https://madares.sa/index-en.html",
+                                                                        "priority":  71,
+                                                                        "pagePurpose":  "DirectoryListing",
+                                                                        "host":  "madares.sa",
+                                                                        "sourceType":  "LinkExpansion",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=71 batchSize=20"
+                                                                    },
+                                                                    {
+                                                                        "url":  "https://madares.sa/index.html",
+                                                                        "priority":  71,
+                                                                        "pagePurpose":  "DirectoryListing",
+                                                                        "host":  "madares.sa",
+                                                                        "sourceType":  "LinkExpansion",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=71 batchSize=20"
+                                                                    },
+                                                                    {
+                                                                        "url":  "https://parents.madares.sa/",
+                                                                        "priority":  71,
+                                                                        "pagePurpose":  "DirectoryListing",
+                                                                        "host":  "parents.madares.sa",
+                                                                        "sourceType":  "LinkExpansion",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=71 batchSize=20"
+                                                                    },
+                                                                    {
+                                                                        "url":  "https://parents.madares.sa/app/ar-sa/redirect-register",
+                                                                        "priority":  71,
+                                                                        "pagePurpose":  "DirectoryListing",
+                                                                        "host":  "parents.madares.sa",
+                                                                        "sourceType":  "LinkExpansion",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=71 batchSize=20"
+                                                                    },
+                                                                    {
+                                                                        "url":  "https://parents.madares.sa/communication_Channel",
+                                                                        "priority":  71,
+                                                                        "pagePurpose":  "DirectoryListing",
+                                                                        "host":  "parents.madares.sa",
+                                                                        "sourceType":  "LinkExpansion",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=71 batchSize=20"
+                                                                    },
+                                                                    {
+                                                                        "url":  "https://parents.madares.sa/service_Level_Agreement",
+                                                                        "priority":  71,
+                                                                        "pagePurpose":  "DirectoryListing",
+                                                                        "host":  "parents.madares.sa",
+                                                                        "sourceType":  "LinkExpansion",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=71 batchSize=20"
+                                                                    },
+                                                                    {
+                                                                        "url":  "https://www.office.com",
+                                                                        "priority":  71,
+                                                                        "pagePurpose":  "CompanyProfile",
+                                                                        "host":  "office.com",
+                                                                        "sourceType":  "LinkExpansion",
+                                                                        "reason":  "deferred.batch_rank_or_host_fairness reservedInBatch=1 priority=71 batchSize=20"
+                                                                    }
+                                                                ]
+                                  },
+    "error":  null,
+    "warning":  null,
+    "createdAtUtc":  "2026-10-19T09:25:09.7922858+00:00",
+    "startedAtUtc":  "2026-10-19T09:25:09.971947+00:00",
+    "completedAtUtc":  null
+}

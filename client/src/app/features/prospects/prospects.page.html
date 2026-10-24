@@ -5,6 +5,9 @@
       <p class="page-desc">{{ 'prospects.description' | translate }}</p>
     </div>
     <div class="header-actions">
+      <button type="button" class="btn btn-ghost" [disabled]="saving()" (click)="exportCsv()">
+        {{ 'prospects.exportCsv' | translate }}
+      </button>
       <button
         type="button"
         class="btn btn-ghost"
@@ -30,6 +33,18 @@
     </div>
   </div>
 
+  @if (hasMapRunFilter()) {
+    <section class="map-run-banner">
+      <div>
+        <strong>{{ 'prospects.mapRunFilterTitle' | translate }}</strong>
+        <span class="rc-muted">{{ 'prospects.mapRunFilterHint' | translate: { id: mapRunFilterLabel() } }}</span>
+      </div>
+      <button type="button" class="btn btn-ghost" (click)="clearMapRunFilter()">
+        {{ 'prospects.clearMapRunFilter' | translate }}
+      </button>
+    </section>
+  }
+
   <section class="filter-panel">
     <div class="filter-primary">
       <input
@@ -40,9 +55,9 @@
         [placeholder]="'prospects.searchPlaceholder' | translate"
       />
       <select class="input project-select" [value]="projectId()" (change)="onProjectChange($any($event.target).value)">
-        <option value="">{{ 'prospects.filterAllProjects' | translate }}</option>
+        <option value="" [selected]="!projectId()">{{ 'prospects.filterAllProjects' | translate }}</option>
         @for (project of projects(); track project.id) {
-          <option [value]="project.id">{{ project.name }}</option>
+          <option [value]="project.id" [selected]="project.id === projectId()">{{ project.name }}</option>
         }
       </select>
       <input

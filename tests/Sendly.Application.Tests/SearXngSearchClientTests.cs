@@ -3,6 +3,7 @@ using System.Text;
 using Sendly.Application.Abstractions;
 using Sendly.Application.Options;
 using Sendly.Application.Services;
+using Sendly.Domain.Enums;
 using Sendly.Infrastructure.Research;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
@@ -73,7 +74,7 @@ public class SearXngSearchClientTests
     }
 
     [Fact]
-    public async Task SearchAsync_InvalidJson_Throws()
+    public async Task SearchAsync_InvalidHtml_IsInvalidResponse()
     {
         var handler = CreateHandler((_, _) => new HttpResponseMessage(HttpStatusCode.OK)
         {
@@ -81,19 +82,58 @@ public class SearXngSearchClientTests
         });
         var client = CreateClient(handler);
 
-        await Assert.ThrowsAsync<InvalidOperationException>(() =>
-            client.SearchAsync(new SearXngSearchQuery { Query = "gym" }, CancellationToken.None));
+        var result = await client.SearchAsync(new SearXngSearchQuery { Query = "gym" }, CancellationToken.None);
+        Assert.Equal(SearchProviderHealthState.InvalidResponse, result.State);
+        Assert.Empty(result.Results);
+        Assert.Contains("HTML", result.ErrorSummary, StringComparison.OrdinalIgnoreCase);
     }
 
     [Fact]
-    public async Task SearchAsync_MissingResultsArray_Throws()
+    public async Task SearchAsync_MissingResultsArray_IsInvalidResponse()
     {
         var handler = CreateHandler((_, _) => JsonResponse("""{"query":"x"}"""));
         var client = CreateClient(handler);
 
-        var ex = await Assert.ThrowsAsync<InvalidOperationException>(() =>
-            client.SearchAsync(new SearXngSearchQuery { Query = "gym" }, CancellationToken.None));
-        Assert.Contains("results", ex.Message, StringComparison.OrdinalIgnoreCase);
+        var result = await client.SearchAsync(new SearXngSearchQuery { Query = "gym" }, CancellationToken.None);
+        Assert.Equal(SearchProviderHealthState.InvalidResponse, result.State);
+        Assert.Contains("results", result.ErrorSummary, StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Fact]
+    public async Task SearchAsync_EmptyResults_WithUnresponsiveEngines_IsUnavailable()
+    {
+        var handler = CreateHandler((_, _) => JsonResponse("""
+            {
+              "query": "escape room Dubai",
+              "results": [],
+              "unresponsive_engines": [
+                ["brave", "Suspended: too many requests"],
+                ["duckduckgo", "timeout"],
+                ["google cse", "Suspended: too many requests"],
+                ["wikipedia", "Suspended: too many requests"]
+              ]
+            }
+            """));
+        var client = CreateClient(handler, maxRetry: 0);
+        var result = await client.SearchAsync(new SearXngSearchQuery { Query = "escape room Dubai" }, CancellationToken.None);
+        Assert.Equal(SearchProviderHealthState.Unavailable, result.State);
+        Assert.Empty(result.Results);
+        Assert.Equal(4, result.UnresponsiveEngines.Count);
+        Assert.Contains("brave", result.ErrorSummary, StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Fact]
+    public async Task TestConnection_UnresponsiveEngines_IsNotHealthyZeroResults()
+    {
+        var handler = CreateHandler((_, _) => JsonResponse("""
+            {"results":[],"unresponsive_engines":[["brave","Suspended: too many requests"]]}
+            """));
+        var client = CreateClient(handler, maxRetry: 0);
+        var test = await client.TestConnectionAsync(CancellationToken.None);
+        Assert.False(test.Success);
+        Assert.Equal("Unavailable", test.Status);
+        Assert.Equal("Unavailable", test.HealthState);
+        Assert.NotEmpty(test.UnresponsiveEngines);
     }
 
     [Fact]
@@ -172,7 +212,7 @@ public class SearXngSearchClientTests
         var client = CreateClient(handler);
         var result = await client.TestConnectionAsync(CancellationToken.None);
         Assert.False(result.Success);
-        Assert.Equal("ConnectionFailed", result.Status);
+        Assert.Equal("InvalidResponse", result.Status);
     }
 
     [Fact]
@@ -261,8 +301,8 @@ public class SearXngSearchClientTests
         brave.Setup(x => x.SearchAsync(It.IsAny<WebSearchRequest>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(
             [
-                new WebSearchHit { Url = "https://shared.test/page", Title = "Shared Brave", Provider = "Brave" },
-                new WebSearchHit { Url = "https://brave-only.test", Title = "Brave Only", Provider = "Brave" }
+                new WebSearchHit { Url = "https://shared.test/page", Title = "Shared Brave Gym Toronto", Snippet = "Independent gym in Toronto Canada", Provider = "Brave" },
+                new WebSearchHit { Url = "https://brave-only.test", Title = "Brave Only Gym Toronto", Snippet = "Independent gym in Toronto Canada", Provider = "Brave" }
             ]);
 
         var searx = new Mock<IWebSearchProvider>();
@@ -271,7 +311,7 @@ public class SearXngSearchClientTests
         searx.Setup(x => x.SearchAsync(It.IsAny<WebSearchRequest>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(
             [
-                new WebSearchHit { Url = "https://searx-only.test", Title = "SearX Only", Provider = "SearXNG" }
+                new WebSearchHit { Url = "https://searx-only.test", Title = "SearX Only Gym Toronto", Snippet = "Independent gym in Toronto Canada", Provider = "SearXNG" }
             ]);
 
         var ai = new Mock<IAiResearchService>();
@@ -313,6 +353,7 @@ public class SearXngSearchClientTests
         var context = new ProspectSourceContext
         {
             Keywords = ["gym"],
+            Industries = ["Fitness"],
             Countries = ["Canada"],
             Locations = ["Toronto"],
             RequestedCount = 10,
@@ -349,7 +390,7 @@ public class SearXngSearchClientTests
         searx.Setup(x => x.SearchAsync(It.IsAny<WebSearchRequest>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(
             [
-                new WebSearchHit { Url = "https://searx-only.test", Title = "SearX Only", Provider = "SearXNG" }
+                new WebSearchHit { Url = "https://searx-only.test", Title = "SearX Only Gym Toronto", Snippet = "Independent gym in Toronto Canada", Provider = "SearXNG" }
             ]);
 
         var ai = new Mock<IAiResearchService>();
@@ -391,6 +432,7 @@ public class SearXngSearchClientTests
         var context = new ProspectSourceContext
         {
             Keywords = ["gym"],
+            Industries = ["Fitness"],
             Countries = ["Canada"],
             Locations = ["Toronto"],
             RequestedCount = 10,

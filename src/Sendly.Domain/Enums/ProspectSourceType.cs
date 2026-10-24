@@ -7,5 +7,6 @@ public enum ProspectSourceType
     Directory = 2,
     Search = 3,
     Import = 4,
-    Other = 5
+    Other = 5,
+    OpenStreetMap = 6
 }

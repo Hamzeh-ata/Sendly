@@ -9,6 +9,7 @@ namespace Sendly.Domain.Entities;
 [Index(nameof(ProjectId), nameof(NormalizedWhatsApp), IsUnique = true)]
 [Index(nameof(ProjectId), nameof(NormalizedWebsite))]
 [Index(nameof(ProjectId), nameof(NormalizedPhone))]
+[Index(nameof(ProjectId), nameof(SourceObjectKey))]
 [Index(nameof(NormalizedEmail))]
 [Index(nameof(NormalizedWhatsApp))]
 [Index(nameof(NormalizedWebsite))]
@@ -46,6 +47,33 @@ public class Prospect
 
     [MaxLength(100)]
     public string? NormalizedCity { get; set; }
+
+    [MaxLength(500)]
+    public string? StreetAddress { get; set; }
+
+    public double? Latitude { get; set; }
+
+    public double? Longitude { get; set; }
+
+    [MaxLength(200)]
+    public string? OpeningHours { get; set; }
+
+    [MaxLength(40)]
+    public string? OsmElementType { get; set; }
+
+    [MaxLength(80)]
+    public string? OsmElementId { get; set; }
+
+    [MaxLength(200)]
+    public string? SourceObjectKey { get; set; }
+
+    [MaxLength(2000)]
+    public string? CategoryTagsJson { get; set; }
+
+    public string? RawOsmTagsJson { get; set; }
+
+    [MaxLength(50)]
+    public string? Fax { get; set; }
 
     [MaxLength(200)]
     public string? Industry { get; set; }
@@ -132,4 +160,8 @@ public class Prospect
     public DateTimeOffset CreatedAtUtc { get; set; } = DateTimeOffset.UtcNow;
 
     public DateTimeOffset UpdatedAtUtc { get; set; } = DateTimeOffset.UtcNow;
+
+    public ICollection<ResearchEvidence> EvidenceItems { get; set; } = new List<ResearchEvidence>();
+
+    public ICollection<QualificationCriterionResult> QualificationResults { get; set; } = new List<QualificationCriterionResult>();
 }

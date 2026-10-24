@@ -10,6 +10,8 @@ public class AppSettingsDto
 
     public SearXngSettingsDto SearXng { get; set; } = new();
 
+    public OllamaSettingsDto Ollama { get; set; } = new();
+
     public WhatsAppSettingsDto WhatsApp { get; set; } = new();
 
     public MicrosoftGraphSettingsDto MicrosoftGraph { get; set; } = new();
@@ -52,7 +54,9 @@ public class ResearchSettingsDto
 
     public bool EnableWebsiteCrawler { get; set; }
 
-    public bool EnableSearchProvider { get; set; } = true;
+    public bool EnableSearchProvider { get; set; }
+
+    public bool EnableIndependentCrawler { get; set; } = true;
 
     public bool EnableHtmlSearchFallback { get; set; }
 
@@ -108,7 +112,7 @@ public class BraveSearchSettingsDto
 
 public class SearXngSettingsDto
 {
-    public bool Enabled { get; set; } = true;
+    public bool Enabled { get; set; }
 
     public string BaseUrl { get; set; } = string.Empty;
 
@@ -133,6 +137,21 @@ public class SearXngSettingsDto
     public bool BasicAuthConfigured { get; set; }
 
     public string ConnectionStatus { get; set; } = "NotConfigured";
+}
+
+public class OllamaSettingsDto
+{
+    public bool Enabled { get; set; } = true;
+
+    public string BaseUrl { get; set; } = "http://localhost:11434";
+
+    public string Model { get; set; } = "qwen3:4b";
+
+    public int TimeoutSeconds { get; set; } = 60;
+
+    public int MaxRetries { get; set; } = 1;
+
+    public string ConnectionStatus { get; set; } = "NotChecked";
 }
 
 public class WhatsAppSettingsDto

@@ -9,7 +9,7 @@ public static class ProspectMergeHelper
         Prospect target,
         ProspectMergeInput input)
     {
-        target.CompanyName = PreferLongerDisplayName(target.CompanyName, input.CompanyName);
+        target.CompanyName = PreferBetterDisplayName(target.CompanyName, input.CompanyName);
         target.NormalizedCompanyName = ProspectNormalizer.NormalizeCompanyName(target.CompanyName);
         target.Website = PreferFilled(target.Website, input.Website);
         target.NormalizedWebsite = ProspectNormalizer.NormalizeWebsite(target.Website)
@@ -246,7 +246,7 @@ public static class ProspectMergeHelper
         };
     }
 
-    private static string PreferLongerDisplayName(string existing, string? incoming)
+    private static string PreferBetterDisplayName(string existing, string? incoming)
     {
         if (string.IsNullOrWhiteSpace(incoming))
         {
@@ -259,7 +259,48 @@ public static class ProspectMergeHelper
             return trimmed;
         }
 
+        var existingNoise = LooksLikeNoiseDisplayName(existing);
+        var incomingNoise = LooksLikeNoiseDisplayName(trimmed);
+        if (existingNoise && !incomingNoise)
+        {
+            return trimmed;
+        }
+
+        if (!existingNoise && incomingNoise)
+        {
+            return existing;
+        }
+
         return trimmed.Length > existing.Length ? trimmed : existing;
+    }
+
+    private static bool LooksLikeNoiseDisplayName(string name)
+    {
+        var trimmed = name.Trim();
+        if (trimmed.Length >= 55)
+        {
+            return true;
+        }
+
+        if (System.Text.RegularExpressions.Regex.IsMatch(trimmed, @"\b20\d{2}\b"))
+        {
+            return true;
+        }
+
+        var lower = trimmed.ToLowerInvariant();
+        return lower.Contains("أفضل", StringComparison.Ordinal)
+               || lower.Contains("نفخر", StringComparison.Ordinal)
+               || lower.Contains("الأرقام", StringComparison.Ordinal)
+               || lower.Contains("الوظائف", StringComparison.Ordinal)
+               || lower.StartsWith("welcome to", StringComparison.Ordinal)
+               || lower.StartsWith("best ", StringComparison.Ordinal)
+               || lower.StartsWith("top ", StringComparison.Ordinal)
+               || lower.Contains("how it works", StringComparison.Ordinal)
+               || lower.Contains("tuition", StringComparison.Ordinal)
+               || lower.Contains("login", StringComparison.Ordinal)
+               || lower.Contains("register online", StringComparison.Ordinal)
+               || lower.Contains("visit our", StringComparison.Ordinal)
+               || lower.Contains("why choose", StringComparison.Ordinal);
     }
 
     private static string? PreferFilled(string? existing, string? incoming)

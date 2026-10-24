@@ -144,6 +144,8 @@ public class ProspectFilterDto
 {
     public Guid? ProjectId { get; set; }
 
+    public Guid? ResearchRunId { get; set; }
+
     public string? Search { get; set; }
 
     public string? Country { get; set; }
@@ -219,4 +221,11 @@ public class PrepareOutreachResponseDto
     public List<string> Warnings { get; set; } = [];
 
     public List<Guid> PreparedProspectIds { get; set; } = [];
+}
+
+public class MergeProspectsRequestDto
+{
+    public Guid TargetProspectId { get; set; }
+
+    public Guid SourceProspectId { get; set; }
 }

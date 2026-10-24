@@ -1,3 +1,5 @@
+using Sendly.Domain.Enums;
+
 namespace Sendly.Application.Abstractions;
 
 public class SearXngSearchQuery
@@ -24,6 +26,13 @@ public class SearXngSearchResultItem
     public string SearchProvider { get; set; } = "SearXNG";
 }
 
+public class SearXngUnresponsiveEngine
+{
+    public string Engine { get; set; } = string.Empty;
+
+    public string Reason { get; set; } = string.Empty;
+}
+
 public class SearXngSearchResponse
 {
     public List<SearXngSearchResultItem> Results { get; set; } = [];
@@ -31,6 +40,14 @@ public class SearXngSearchResponse
     public string Provider { get; set; } = "SearXNG";
 
     public int? TotalResults { get; set; }
+
+    public SearchProviderHealthState State { get; set; } = SearchProviderHealthState.Healthy;
+
+    public List<SearXngUnresponsiveEngine> UnresponsiveEngines { get; set; } = [];
+
+    public string? ErrorSummary { get; set; }
+
+    public int ProviderResultCount { get; set; }
 }
 
 public interface ISearXngSearchClient

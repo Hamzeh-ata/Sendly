@@ -1,0 +1,117 @@
+﻿{
+    "activeVersion":  {
+                          "id":  "7ac59419-1b79-4ea3-8840-e1ee45be0999",
+                          "versionNumber":  1,
+                          "plainLanguageBrief":  "Find real private, independent, or international schools operating in Saudi Arabia. One real school = one prospect. Merge duplicates from different sources.\n\nPriority markets (in order): Riyadh, Jeddah, Dammam, Khobar. Also cover: Dhahran, Mecca, Medina, Taif, Tabuk, Abha, Jubail, Yanbu, Qassim, Hofuf.\n\nPrioritize private schools, international schools, and national private schools with fee-paying students. Exclude public government schools, universities, and tutoring centers. Arabic-speaking decision makers may prefer the Arabic template.\n\nTarget school types only: private schools, independent schools, international schools, private primary/elementary, private secondary/high schools, independent preparatory schools, independent senior/all-through schools, international colleges (K-12 / secondary), private/independent boarding schools.\n\nPrioritize schools with evidence of: multiple grade/year groups, significant student population, multiple teachers, parent communication needs, attendance management, fee collection, parent portals, student administration, multiple campuses, boarding, complex school administration.\n\nContact methods: Email and WhatsApp. Prefer official school email, admissions, administration, head of school/principal/headmaster, school business manager, operations manager, official WhatsApp. Do not guess emails. Do not use private personal contacts unless clearly published as official school contacts.\n\nExcluded (LOW qualify / reject): public/state/government schools, school districts/boards, universities, higher-education-only colleges, daycare/nursery-only, tutoring centers, private tutors, online education platforms, training centers, language schools (unless full private schools with enrolled students across grades), exam prep centers, educational consultants, recruitment agencies, school suppliers, uniform/equipment suppliers, transportation companies, education/teacher job listings.\n\nEvery prospect MUST have at least one source URL proving it is an actual school (official website, contact/admissions page, school directories, association registries, inspection/registration sources). Never invent school name, website, email, phone, WhatsApp, contact name, or job title. Leave unverified fields empty.\n\nQualification: High (80%+) for private/independent schools with multiple grades, large population, boarding, parent portal, fee-paying, complex admin. Medium for established private/independent with teachers and grades. Low for public/state, universities, tutors, training, consultancies, suppliers, recruitment, no physical school. Minimum qualification target: 80%.\n\nOutreach goal: introduce School Watch to owners, principals, heads of school, directors, and school management for a short demo covering students, teachers, classes, attendance, timetables, exams, student follow-up, parent communication, fees, payments, outstanding balances, and parent access.",
+                          "targetIndustry":  "Private School",
+                          "businessCategories":  [
+
+                                                 ],
+                          "targetCountry":  "Saudi Arabia",
+                          "regions":  [
+
+                                      ],
+                          "cities":  [
+
+                                     ],
+                          "companyTypes":  [
+
+                                           ],
+                          "companySizes":  [
+
+                                           ],
+                          "requiredCriteria":  [
+
+                                               ],
+                          "exclusionCriteria":  [
+
+                                                ],
+                          "requiredContactInfo":  [
+
+                                                  ],
+                          "requiredEvidence":  [
+
+                                               ],
+                          "discoveryStrategies":  [
+
+                                                  ],
+                          "maxPagesPerDomain":  5,
+                          "maxCrawlDepth":  2,
+                          "requestTimeoutSeconds":  30,
+                          "maxConcurrentRequests":  2,
+                          "requestsPerDomainPerMinute":  10,
+                          "maxUrlsPerRun":  200,
+                          "requireOfficialWebsite":  true,
+                          "requirePublicBusinessEmail":  true,
+                          "enableDirectoryDiscovery":  true,
+                          "enableSitemapDiscovery":  true,
+                          "enableLinkExpansion":  true,
+                          "enablePriorResearchUrls":  true,
+                          "createdAtUtc":  "2026-10-17T19:51:06.0634401+00:00"
+                      },
+    "versions":  [
+                     {
+                         "id":  "7ac59419-1b79-4ea3-8840-e1ee45be0999",
+                         "versionNumber":  1,
+                         "plainLanguageBrief":  "Find real private, independent, or international schools operating in Saudi Arabia. One real school = one prospect. Merge duplicates from different sources.\n\nPriority markets (in order): Riyadh, Jeddah, Dammam, Khobar. Also cover: Dhahran, Mecca, Medina, Taif, Tabuk, Abha, Jubail, Yanbu, Qassim, Hofuf.\n\nPrioritize private schools, international schools, and national private schools with fee-paying students. Exclude public government schools, universities, and tutoring centers. Arabic-speaking decision makers may prefer the Arabic template.\n\nTarget school types only: private schools, independent schools, international schools, private primary/elementary, private secondary/high schools, independent preparatory schools, independent senior/all-through schools, international colleges (K-12 / secondary), private/independent boarding schools.\n\nPrioritize schools with evidence of: multiple grade/year groups, significant student population, multiple teachers, parent communication needs, attendance management, fee collection, parent portals, student administration, multiple campuses, boarding, complex school administration.\n\nContact methods: Email and WhatsApp. Prefer official school email, admissions, administration, head of school/principal/headmaster, school business manager, operations manager, official WhatsApp. Do not guess emails. Do not use private personal contacts unless clearly published as official school contacts.\n\nExcluded (LOW qualify / reject): public/state/government schools, school districts/boards, universities, higher-education-only colleges, daycare/nursery-only, tutoring centers, private tutors, online education platforms, training centers, language schools (unless full private schools with enrolled students across grades), exam prep centers, educational consultants, recruitment agencies, school suppliers, uniform/equipment suppliers, transportation companies, education/teacher job listings.\n\nEvery prospect MUST have at least one source URL proving it is an actual school (official website, contact/admissions page, school directories, association registries, inspection/registration sources). Never invent school name, website, email, phone, WhatsApp, contact name, or job title. Leave unverified fields empty.\n\nQualification: High (80%+) for private/independent schools with multiple grades, large population, boarding, parent portal, fee-paying, complex admin. Medium for established private/independent with teachers and grades. Low for public/state, universities, tutors, training, consultancies, suppliers, recruitment, no physical school. Minimum qualification target: 80%.\n\nOutreach goal: introduce School Watch to owners, principals, heads of school, directors, and school management for a short demo covering students, teachers, classes, attendance, timetables, exams, student follow-up, parent communication, fees, payments, outstanding balances, and parent access.",
+                         "targetIndustry":  "Private School",
+                         "businessCategories":  [
+
+                                                ],
+                         "targetCountry":  "Saudi Arabia",
+                         "regions":  [
+
+                                     ],
+                         "cities":  [
+
+                                    ],
+                         "companyTypes":  [
+
+                                          ],
+                         "companySizes":  [
+
+                                          ],
+                         "requiredCriteria":  [
+
+                                              ],
+                         "exclusionCriteria":  [
+
+                                               ],
+                         "requiredContactInfo":  [
+
+                                                 ],
+                         "requiredEvidence":  [
+
+                                              ],
+                         "discoveryStrategies":  [
+
+                                                 ],
+                         "maxPagesPerDomain":  5,
+                         "maxCrawlDepth":  2,
+                         "requestTimeoutSeconds":  30,
+                         "maxConcurrentRequests":  2,
+                         "requestsPerDomainPerMinute":  10,
+                         "maxUrlsPerRun":  200,
+                         "requireOfficialWebsite":  true,
+                         "requirePublicBusinessEmail":  true,
+                         "enableDirectoryDiscovery":  true,
+                         "enableSitemapDiscovery":  true,
+                         "enableLinkExpansion":  true,
+                         "enablePriorResearchUrls":  true,
+                         "createdAtUtc":  "2026-10-17T19:51:06.0634401+00:00"
+                     }
+                 ],
+    "seedUrls":  [
+
+                 ],
+    "id":  "3da18c8f-9c05-463c-bb5c-0c9778125c81",
+    "projectId":  "23fd30be-b89e-414e-b880-eef0a5a4eb7d",
+    "name":  "Automatic discovery",
+    "description":  "System-generated query for automatic research discovery.",
+    "activeVersionId":  "7ac59419-1b79-4ea3-8840-e1ee45be0999",
+    "versionCount":  1,
+    "activeSeedUrlCount":  0,
+    "isArchived":  false,
+    "createdAtUtc":  "2026-10-17T19:51:06.0631951+00:00",
+    "updatedAtUtc":  "2026-10-17T19:51:06.063207+00:00"
+}

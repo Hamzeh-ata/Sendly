@@ -6,6 +6,22 @@ public class ResearchOptions
 
     public int MaxCandidatesPerRun { get; set; } = 200;
 
+    public int MaxDiscoveryCandidates { get; set; } = 200;
+
+    public int MaxFetchesPerRun { get; set; } = 80;
+
+    public int MaxExternalExpansionsPerPage { get; set; } = 8;
+
+    public int MaxLinksPerPage { get; set; } = 15;
+
+    public int MaxLinksPerDomain { get; set; } = 20;
+
+    public int SearchFetchBudgetReservePercent { get; set; } = 25;
+
+    public int MaxSearchIterations { get; set; } = 10;
+
+    public int MaxPriorResearchSharePercent { get; set; } = 40;
+
     public int DefaultMinQualificationScore { get; set; } = 70;
 
     public int DefaultRequestedProspectCount { get; set; } = 50;
@@ -16,11 +32,37 @@ public class ResearchOptions
 
     public bool EnableWebsiteCrawler { get; set; }
 
-    public bool EnableSearchProvider { get; set; } = true;
+    public bool EnableSearchProvider { get; set; }
+
+    public bool EnableIndependentCrawler { get; set; } = true;
+
+    public bool EnableCommonCrawlDiscovery { get; set; } = true;
+
+    public bool EnableOpenStreetMapDiscovery { get; set; } = true;
 
     public bool EnableHtmlSearchFallback { get; set; }
 
-    public int MaxPagesPerCrawl { get; set; } = 5;
+    public bool EnableDiscoverySourceExpansion { get; set; } = true;
+
+    public string CrawlerUserAgent { get; set; } = "SendlyResearchBot/1.0 (+https://localhost; research@sendly.local)";
+
+    public int MaxResponseBytes { get; set; } = 2_000_000;
+
+    public int MaxRedirects { get; set; } = 5;
+
+    public int MaxPagesPerCrawl { get; set; } = 12;
+
+    public int MaxCandidateDomains { get; set; } = 100;
+
+    public int MaxSourceExpansionDepth { get; set; } = 1;
+
+    public int MaxArchiveRecords { get; set; } = 50;
+
+    public int MaxDiscoveryStages { get; set; } = 3;
+
+    public int MaxConcurrentRequests { get; set; } = 2;
+
+    public int MaxDiscoverySourceRetries { get; set; } = 3;
 
     public int MaxSearchResults { get; set; } = 20;
 
@@ -30,9 +72,21 @@ public class ResearchOptions
 
     public int MaxResearchDurationMinutes { get; set; } = 30;
 
+    public int EvidenceReuseMaxAgeDays { get; set; } = 30;
+
+    public int MaxHostFetchFailuresBeforeAvoid { get; set; } = 2;
+
     public int DiscoveryOversampleFactor { get; set; } = 4;
 
     public int PagesPerSearchOffset { get; set; } = 1;
+
+    public int MaxVerificationFetchesPerRun { get; set; } = 60;
+
+    public int MaxContactFetchesPerRun { get; set; } = 40;
+
+    public int MaxLinkExpansionFetchesPerRun { get; set; } = 10;
+
+    public int MaxOllamaCallsPerRun { get; set; } = 40;
 
     public int MinSearchRelevanceScore { get; set; }
 

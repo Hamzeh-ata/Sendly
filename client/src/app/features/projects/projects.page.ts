@@ -118,7 +118,7 @@ export class ProjectsPage implements OnInit {
         this.saving.set(false);
         this.researchProjectId.set(null);
         this.notification.success(this.translate.instant('projects.researchStarted'));
-        this.router.navigate(['/research-runs', run.id]);
+        this.router.navigate(['/researcher/live', run.id]);
       },
       error: (err: HttpErrorResponse) => {
         this.saving.set(false);

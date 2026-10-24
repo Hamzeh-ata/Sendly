@@ -1,0 +1,17 @@
+﻿{
+    "value":  [
+                  {
+                      "id":  "8d11f9a7-72d9-4607-aaa3-40f7f9bdfa43",
+                      "projectId":  "57c93a44-2db2-43c9-80e3-b8c7ef89a2f2",
+                      "name":  "School Watch - UAE",
+                      "description":  "Find private schools, independent schools, international schools, and other fee-paying schools in the United Arab Emirates that could benefit from School Watch.\n\nSchool Watch is a school management platform that helps schools manage students, teachers, classes, attendance, timetables, exams, parent communication, student follow-up, fees, payments, and parent access from one platform.\n\nThe goal is to identify schools where School Watch could improve day-to-day school administration and strengthen communication between the school and parents.",
+                      "activeVersionId":  "7f6fffa5-dadf-4c6e-9255-fdf2aabf6735",
+                      "versionCount":  1,
+                      "activeSeedUrlCount":  0,
+                      "isArchived":  false,
+                      "createdAtUtc":  "2026-10-17T14:06:21.3066959+00:00",
+                      "updatedAtUtc":  "2026-10-17T14:06:21.306696+00:00"
+                  }
+              ],
+    "Count":  1
+}

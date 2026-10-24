@@ -28,6 +28,8 @@ public class EmailAccountDto
 
     public bool HasPassword { get; set; }
 
+    public string? Password { get; set; }
+
     public string? SenderEmail { get; set; }
 
     public string? SenderDisplayName { get; set; }

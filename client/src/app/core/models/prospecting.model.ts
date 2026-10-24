@@ -6,7 +6,9 @@ export type ResearchRunStatus =
   | 'completed'
   | 'completedWithFailures'
   | 'failed'
-  | 'cancelled';
+  | 'cancelled'
+  | 'partial'
+  | 'budgetExhausted';
 export type ProspectStatus =
   | 'discovered'
   | 'researching'
@@ -95,6 +97,41 @@ export interface OutreachProjectDetail extends OutreachProjectSummary {
   recentResearchRuns: ResearchRunSummary[];
 }
 
+export interface DiscoveryProviderStat {
+  providerName: string;
+  attempted: boolean;
+  succeeded: boolean;
+  producedUsefulCandidates?: boolean;
+  candidatesReturned: number;
+  stageNumber?: number;
+  error?: string | null;
+  zeroYieldReason?: string | null;
+}
+
+export interface DiscoveryStage {
+  stageNumber: number;
+  stageName: string;
+  providersAttempted: string[];
+  candidatesAdded: number;
+  recoveryTriggered: boolean;
+  notes?: string | null;
+}
+
+export interface DiscoveryProviderRow {
+  providerName: string;
+  statusLabel: string;
+  candidatesReturned: number;
+  zeroYieldReason: string;
+  producedUseful: boolean;
+}
+
+export interface DiscoveryStageRow {
+  stageLabel: string;
+  providersLabel: string;
+  candidatesAdded: number;
+  recoveryLabel: string;
+}
+
 export interface ResearchSearchProviderDiagnostics {
   provider: string;
   queriesExecuted: number;
@@ -105,12 +142,68 @@ export interface ResearchSearchProviderDiagnostics {
   http429: number;
   http5xx: number;
   timeouts: number;
+  automaticDiscoverySummary?: string | null;
+  automaticDiscoveryDuplicatesRemoved?: number;
+  automaticDiscoveryRejectedUnsafe?: number;
+  discoveryPlanSummary?: string | null;
+  uniqueDomainsDiscovered?: number;
+  recoveryAttempts?: number;
+  recoveryStrategies?: string[];
+  discoveryStopReason?: string | null;
+  sourcesReused?: number;
+  sourcesAdded?: number;
+  sourcesSkipped?: number;
+  sourcesUnavailable?: number;
+  urlsAccessible?: number;
+  urlsParsed?: number;
+  urlsUnavailable?: number;
+  urlsRobotsBlocked?: number;
+  companiesIdentified?: number;
+  publicContactsExtracted?: number;
+  liveVerifiedCompanies?: number;
+  prospectsQualified?: number;
+  emailReadyProspects?: number;
+  contactableProspects?: number;
+  identityVerifiedBusinesses?: number;
+  newlyDiscoveredProspects?: number;
+  previouslyKnownProspects?: number;
+  previouslyContactedProspects?: number;
+  newlyOutreachEligibleProspects?: number;
+  usefulUrlsLeftPendingAtStop?: number;
+  lastBudgetStopReason?: string | null;
+  pagesFetched?: number;
+  fetchBudgetConsumed?: number;
+  fetchBudgetLimit?: number;
+  urlsRejectedFiltered?: number;
+  urlsAdmitted?: number;
+  urlsReusedFromCache?: number;
+  urlsSkippedKnownProspect?: number;
+  fetchFailureReasons?: Record<string, number>;
+  discoveryStages?: DiscoveryStage[];
+  discoveryProviders?: DiscoveryProviderStat[];
+  currentInvestigationActivity?: string | null;
+  underCoveredIndustries?: string[];
+  nextBestInvestigationStrategy?: string | null;
+  ollamaChecked?: boolean;
+  ollamaReachable?: boolean;
+  ollamaModelAvailable?: boolean;
+  ollamaModel?: string | null;
+  ollamaQueriesGenerated?: number;
+  searchProviderHealth?: string | null;
+  searchProviderHealthSummary?: string | null;
+  lastHeartbeatAtUtc?: string | null;
 }
 
 export interface ResearchRunSummary {
   id: string;
   projectId: string;
   projectName?: string | null;
+  researchQueryId?: string | null;
+  researchQueryVersionId?: string | null;
+  researchQueryName?: string | null;
+  urlsDiscovered: number;
+  pagesCrawled: number;
+  crawlErrors: number;
   status: ResearchRunStatus;
   requestedProspectCount: number;
   includeEmail: boolean;
@@ -162,6 +255,8 @@ export interface ResearchRunDetail extends ResearchRunSummary {
 }
 
 export interface StartResearchRequest {
+  researchQueryId?: string | null;
+  researchQueryVersionId?: string | null;
   requestedProspectCount: number;
   includeEmail: boolean;
   includeWhatsApp: boolean;
@@ -245,6 +340,7 @@ export interface CreateProspectRequest {
 
 export interface ProspectListFilter {
   projectId?: string;
+  researchRunId?: string;
   search?: string;
   country?: string;
   industry?: string;

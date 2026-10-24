@@ -22,6 +22,8 @@ import { SignatureSelectorComponent } from './signature-selector/signature-selec
 import { EmailAccountSelectorComponent } from './email-account-selector/email-account-selector.component';
 import { EmailAccountApiService } from '../../core/services/email-account-api.service';
 import { EmailAccount } from '../../core/models/email-account.model';
+import { TemplateSelectorComponent } from './template-selector/template-selector.component';
+import { EmailTemplateDetail, EmailTemplateSummary } from '../../core/models/template.model';
 
 @Component({
   selector: 'app-compose-page',
@@ -33,7 +35,8 @@ import { EmailAccount } from '../../core/models/email-account.model';
     ComposeAttachmentsComponent,
     ComposeProgressComponent,
     SignatureSelectorComponent,
-    EmailAccountSelectorComponent
+    EmailAccountSelectorComponent,
+    TemplateSelectorComponent
   ],
   templateUrl: './compose.page.html',
   styleUrl: './compose.page.scss'
@@ -77,6 +80,8 @@ export class ComposePage implements OnInit {
   readonly selectedEmailAccountId = signal<string | null>(null);
   readonly templateId = signal<string | null>(null);
   readonly templateName = signal<string | null>(null);
+  readonly templates = signal<EmailTemplateSummary[]>([]);
+  readonly templatesLoading = signal(false);
   readonly allowAlreadyContacted = signal(false);
   readonly checkingTemplateRecipients = signal(false);
   readonly templateRecipientRows = signal<TemplateRecipientCheckRow[]>([]);
@@ -135,7 +140,16 @@ export class ComposePage implements OnInit {
     this.idempotencyKey.set(crypto.randomUUID());
     this.loadSignatures();
     this.loadEmailAccounts();
+    this.loadTemplates();
     this.loadTemplateFromQuery();
+  }
+
+  onTemplateChange(templateId: string | null): void {
+    if (!templateId) {
+      this.clearTemplate();
+      return;
+    }
+    this.loadTemplateById(templateId);
   }
 
   onRecipientsChange(value: string): void {
@@ -229,6 +243,11 @@ export class ComposePage implements OnInit {
   }
 
   clearTemplate(): void {
+    this.clearTemplateSelection();
+    this.router.navigate(['/compose']);
+  }
+
+  private clearTemplateSelection(): void {
     this.templateId.set(null);
     this.templateName.set(null);
     this.allowAlreadyContacted.set(false);
@@ -236,7 +255,6 @@ export class ComposePage implements OnInit {
     this.templateNewCount.set(0);
     this.templateContactedCount.set(0);
     this.showContactedOnly.set(false);
-    this.router.navigate(['/compose']);
   }
 
   openConfirm(): void {
@@ -427,38 +445,66 @@ export class ComposePage implements OnInit {
     });
   }
 
+  private loadTemplates(): void {
+    this.templatesLoading.set(true);
+    this.templateApi.list(undefined, 'active').subscribe({
+      next: (items) => {
+        this.templates.set(items ?? []);
+        this.templatesLoading.set(false);
+      },
+      error: () => {
+        this.templates.set([]);
+        this.templatesLoading.set(false);
+      }
+    });
+  }
+
   private loadTemplateFromQuery(): void {
     const templateId = this.route.snapshot.queryParamMap.get('templateId');
     if (!templateId) {
       return;
     }
+    this.loadTemplateById(templateId);
+  }
+
+  private loadTemplateById(templateId: string): void {
     this.templateId.set(templateId);
     this.templateApi.get(templateId).subscribe({
       next: (template) => {
-        this.templateId.set(template.id);
-        this.templateName.set(template.name);
-        this.subject.set(template.subject);
-        this.htmlBody.set(template.htmlBody);
-        this.selectedSignatureId.set(template.signatureId);
-        if (template.emailAccountId) {
-          this.selectedEmailAccountId.set(template.emailAccountId);
-        }
-        const items: AttachmentItem[] = [];
-        for (const file of template.attachments) {
-          items.push({
-            id: file.id,
-            fileName: file.fileName,
-            contentType: file.contentType,
-            sizeBytes: file.sizeBytes,
-            canDelete: false
-          });
-        }
-        this.attachments.set(items);
+        this.applyTemplate(template);
+        this.checkTemplateRecipients();
       },
       error: (err: HttpErrorResponse) => {
+        this.clearTemplateSelection();
         this.notification.error(this.extractError(err));
       }
     });
+  }
+
+  private applyTemplate(template: EmailTemplateDetail): void {
+    this.templateId.set(template.id);
+    this.templateName.set(template.name);
+    this.subject.set(template.subject);
+    this.htmlBody.set(template.htmlBody);
+    this.selectedSignatureId.set(template.signatureId);
+    if (template.emailAccountId) {
+      this.selectedEmailAccountId.set(template.emailAccountId);
+    }
+    this.attachments.set(this.mapTemplateAttachments(template));
+  }
+
+  private mapTemplateAttachments(template: EmailTemplateDetail): AttachmentItem[] {
+    const items: AttachmentItem[] = [];
+    for (const file of template.attachments) {
+      items.push({
+        id: file.id,
+        fileName: file.fileName,
+        contentType: file.contentType,
+        sizeBytes: file.sizeBytes,
+        canDelete: false
+      });
+    }
+    return items;
   }
 
   private parseNumber(value: string, fallback: number): number {

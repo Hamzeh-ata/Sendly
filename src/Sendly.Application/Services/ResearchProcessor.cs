@@ -16,27 +16,48 @@ public class ResearchProcessor
     private readonly IEnumerable<IProspectSource> _sources;
     private readonly IAiResearchService _ai;
     private readonly ProspectDuplicateService _duplicates;
+    private readonly ProspectQualificationService _qualificationService;
+    private readonly CrawlRetentionService _retentionService;
+    private readonly DiscoverySourceRegistryService _discoverySourceRegistry;
     private readonly ResearchCancellationRegistry _cancellationRegistry;
     private readonly IResearchProgressNotifier _progressNotifier;
+    private readonly IResearchEventRecorder _events;
     private readonly ResearchOptions _options;
     private readonly ILogger<ResearchProcessor> _logger;
+    private readonly ILocalAiHealthService? _localAiHealth;
+    private readonly ILocalAiQueryPlanner? _localAiQueryPlanner;
+    private readonly AdaptiveResearchPlanner? _adaptivePlanner;
 
     public ResearchProcessor(
         ISendlyDbContext db,
         IEnumerable<IProspectSource> sources,
         IAiResearchService ai,
         ProspectDuplicateService duplicates,
+        ProspectQualificationService qualificationService,
+        CrawlRetentionService retentionService,
+        DiscoverySourceRegistryService discoverySourceRegistry,
         ResearchCancellationRegistry cancellationRegistry,
         IResearchProgressNotifier progressNotifier,
+        IResearchEventRecorder events,
         IOptions<ResearchOptions> options,
-        ILogger<ResearchProcessor> logger)
+        ILogger<ResearchProcessor> logger,
+        ILocalAiHealthService? localAiHealth = null,
+        ILocalAiQueryPlanner? localAiQueryPlanner = null,
+        AdaptiveResearchPlanner? adaptivePlanner = null)
     {
+        _localAiHealth = localAiHealth;
+        _localAiQueryPlanner = localAiQueryPlanner;
+        _adaptivePlanner = adaptivePlanner;
         _db = db;
         _sources = sources;
         _ai = ai;
         _duplicates = duplicates;
+        _qualificationService = qualificationService;
+        _retentionService = retentionService;
+        _discoverySourceRegistry = discoverySourceRegistry;
         _cancellationRegistry = cancellationRegistry;
         _progressNotifier = progressNotifier;
+        _events = events;
         _options = options.Value;
         _logger = logger;
     }
@@ -54,7 +75,7 @@ public class ResearchProcessor
             return;
         }
 
-        if (run.Status is ResearchRunStatus.Cancelled or ResearchRunStatus.Completed or ResearchRunStatus.CompletedWithFailures or ResearchRunStatus.Failed)
+        if (ResearchRunOutcomeResolver.IsTerminal(run.Status))
         {
             _cancellationRegistry.Clear(researchRunId);
             return;
@@ -95,6 +116,13 @@ public class ResearchProcessor
         run.ProgressPercent = 5;
         await _db.SaveChangesAsync(cancellationToken);
         await NotifyAsync(run, project.Name, cancellationToken);
+        await RecordLifecycleEventAsync(
+            run.Id,
+            ResearchRunEventType.Started,
+            ResearchRunEventSeverity.Info,
+            $"Research run started for {project.Name}",
+            new { projectId = project.Id, requested = run.RequestedProspectCount },
+            cancellationToken);
         _logger.LogInformation("Research run {ResearchRunId} started", researchRunId);
 
         var providerFailures = new List<string>();
@@ -106,11 +134,15 @@ public class ResearchProcessor
         try
         {
             var context = BuildSourceContext(project, run, discoveryState);
+            await InterpretProjectAsync(project, run, context, cancellationToken);
+            await EnsureOllamaForRunAsync(project, run, context, discoveryState, cancellationToken);
             context.DiscoveryBatchSize = ResolveDiscoveryBatchSize(run.RequestedProspectCount);
+            discoveryState.ConfiguredBatchSize = context.DiscoveryBatchSize;
+            discoveryState.RequestedFetchBudget = _options.MaxFetchesPerRun;
             context.ReportProgressAsync = async (state, token) =>
             {
                 ApplyDiscoveryStats(run, state);
-                run.CompaniesFound = Math.Max(run.CompaniesFound, state.CandidatesDiscovered);
+                run.CompaniesFound = Math.Max(run.CompaniesFound, state.CompaniesIdentified);
                 run.ContactsFound = Math.Max(run.ContactsFound, state.CandidatesAfterDeduplication);
                 run.ProgressPercent = ResolveProgress(run, state);
                 await _db.SaveChangesAsync(token);
@@ -123,30 +155,73 @@ public class ResearchProcessor
                 discoveryState.LimitsExhaustedReason = "No research providers are enabled.";
             }
 
-            while (ShouldContinueResearch(run, discoveryState))
+            while (ResearchRunContinuationPolicy.ShouldContinueResearch(
+                       run,
+                       discoveryState,
+                       _options.MaxResearchDurationMinutes))
             {
                 cancellationToken.ThrowIfCancellationRequested();
+                var pagesFetchedBefore = discoveryState.PagesFetched;
+                var pendingBefore = discoveryState.PagesQueued;
+                var batchStartedAt = DateTimeOffset.UtcNow;
+                discoveryState.LastHeartbeatAtUtc = DateTimeOffset.UtcNow;
+                discoveryState.BatchesStarted++;
                 var batch = await DiscoverNextBatchAsync(context, providerFailures, cancellationToken);
+                discoveryState.BatchesCompleted++;
+                discoveryState.RecordStageDuration(
+                    "discoveryBatch",
+                    (long)(DateTimeOffset.UtcNow - batchStartedAt).TotalMilliseconds);
                 if (batch.Count == 0)
                 {
-                    if (AreAllSourcesCompleted(discoveryState) || discoveryState.LimitsExhausted)
+                    if (AreAllSourcesCompleted(discoveryState)
+                        && !ResearchRunContinuationPolicy.HasEligibleIndependentCrawlWork(discoveryState))
                     {
+                        discoveryState.MoreEligibleWorkRemained = false;
                         break;
                     }
 
-                    discoveryState.LimitsExhausted = true;
-                    discoveryState.LimitsExhaustedReason ??= "No additional candidates could be discovered.";
+                    if (discoveryState.LimitsExhausted
+                        && !ResearchRunContinuationPolicy.IsSearchOnlyLimitReason(
+                            discoveryState.LimitsExhaustedReason)
+                        && !ResearchRunContinuationPolicy.HasEligibleIndependentCrawlWork(discoveryState))
+                    {
+                        discoveryState.MoreEligibleWorkRemained = false;
+                        break;
+                    }
+
+                    if (ResearchRunContinuationPolicy.IsSearchDue(discoveryState))
+                    {
+                        continue;
+                    }
+
+                    if (ResearchRunContinuationPolicy.ShouldContinueAfterEmptyProspectBatch(
+                            discoveryState,
+                            pagesFetchedBefore,
+                            pendingBefore))
+                    {
+                        continue;
+                    }
+
+                    discoveryState.MoreEligibleWorkRemained =
+                        ResearchRunContinuationPolicy.HasEligibleIndependentCrawlWork(discoveryState);
+                    if (!discoveryState.MoreEligibleWorkRemained)
+                    {
+                        discoveryState.LimitsExhausted = true;
+                        discoveryState.LimitsExhaustedReason ??= ResolveEmptyBatchStopReason(discoveryState);
+                    }
+
                     break;
                 }
 
+                discoveryState.UniqueEntitiesAfterDedup = CountDistinctCompanies(batch);
                 ApplyDiscoveryStats(run, discoveryState);
-                run.CompaniesFound = Math.Max(run.CompaniesFound, CountDistinctCompanies(batch) + run.ProspectsSaved);
+                run.CompaniesFound = Math.Max(run.CompaniesFound, discoveryState.CompaniesIdentified);
                 run.ContactsFound = Math.Max(run.ContactsFound, run.CandidatesAfterDeduplication);
                 run.ProgressPercent = ResolveProgress(run, discoveryState);
                 await _db.SaveChangesAsync(cancellationToken);
                 await NotifyAsync(run, project.Name, cancellationToken);
 
-                var index = 0;
+                var qualifyStartedAt = DateTimeOffset.UtcNow;
                 foreach (var candidate in batch)
                 {
                     cancellationToken.ThrowIfCancellationRequested();
@@ -156,19 +231,24 @@ public class ResearchProcessor
                     }
 
                     await ProcessCandidateAsync(project, run, candidate, discoveryState, cancellationToken);
-                    index++;
                     run.ProgressPercent = ResolveProgress(run, discoveryState);
                     ApplyDiscoveryStats(run, discoveryState);
                     await _db.SaveChangesAsync(cancellationToken);
                     await NotifyAsync(run, project.Name, cancellationToken);
                 }
 
+                discoveryState.RecordStageDuration(
+                    "qualification",
+                    (long)(DateTimeOffset.UtcNow - qualifyStartedAt).TotalMilliseconds);
+
                 if (run.QualifiedCount >= run.RequestedProspectCount)
                 {
                     break;
                 }
 
-                if (IsDurationExceeded(discoveryState))
+                if (ResearchRunContinuationPolicy.IsDurationExceeded(
+                        discoveryState,
+                        _options.MaxResearchDurationMinutes))
                 {
                     discoveryState.LimitsExhausted = true;
                     discoveryState.LimitsExhaustedReason ??= "Maximum research duration reached";
@@ -177,11 +257,28 @@ public class ResearchProcessor
             }
 
             ApplyDiscoveryStats(run, discoveryState);
-            FinalizeRunStatus(run, discoveryState, providerFailures);
+            FinalizeRunStatus(run, discoveryState, providerFailures, AreAllSourcesCompleted(discoveryState));
             run.ProgressPercent = 100;
             run.CompletedAtUtc = DateTimeOffset.UtcNow;
             await _db.SaveChangesAsync(cancellationToken);
+            await _retentionService.PurgeFullTextExcerptsAsync(run.Id, cancellationToken);
             await NotifyAsync(run, project.Name, cancellationToken);
+            await RecordLifecycleEventAsync(
+                run.Id,
+                ResearchRunEventType.Completed,
+                run.Status == ResearchRunStatus.CompletedWithFailures
+                    ? ResearchRunEventSeverity.Warning
+                    : ResearchRunEventSeverity.Info,
+                $"Research run finished with status {run.Status}",
+                new
+                {
+                    status = run.Status.ToString(),
+                    qualified = run.QualifiedCount,
+                    requested = run.RequestedProspectCount,
+                    pagesCrawled = run.PagesCrawled,
+                    crawlErrors = run.CrawlErrors
+                },
+                cancellationToken);
             _logger.LogInformation(
                 "Research completed {ResearchRunId} qualified={Qualified}/{Target} queries={Queries} results={Results}",
                 researchRunId,
@@ -198,6 +295,13 @@ public class ResearchProcessor
             run.CompletedAtUtc = DateTimeOffset.UtcNow;
             await _db.SaveChangesAsync(CancellationToken.None);
             await NotifyAsync(run, project.Name, CancellationToken.None);
+            await RecordLifecycleEventAsync(
+                run.Id,
+                ResearchRunEventType.Cancelled,
+                ResearchRunEventSeverity.Warning,
+                "Research run was cancelled.",
+                null,
+                CancellationToken.None);
         }
         catch (Exception ex)
         {
@@ -209,11 +313,91 @@ public class ResearchProcessor
             run.CompletedAtUtc = DateTimeOffset.UtcNow;
             await _db.SaveChangesAsync(CancellationToken.None);
             await NotifyAsync(run, project.Name, CancellationToken.None);
+            await RecordLifecycleEventAsync(
+                run.Id,
+                ResearchRunEventType.Error,
+                ResearchRunEventSeverity.Critical,
+                run.Error,
+                new { exceptionType = ex.GetType().Name },
+                CancellationToken.None);
             _logger.LogError(ex, "Research failed {ResearchRunId}", researchRunId);
         }
         finally
         {
             _cancellationRegistry.Clear(researchRunId);
+        }
+    }
+
+    private List<IProspectSource> OrderSourcesForBatch(ResearchDiscoveryState state)
+    {
+        var sources = _sources.ToList();
+        var search = sources.FirstOrDefault(x => string.Equals(
+            x.Name,
+            ResearchRunContinuationPolicy.WebSearchSourceName,
+            StringComparison.OrdinalIgnoreCase));
+        var crawler = sources.FirstOrDefault(x => string.Equals(
+            x.Name,
+            ResearchRunContinuationPolicy.IndependentCrawlerSourceName,
+            StringComparison.OrdinalIgnoreCase));
+        if (search is null)
+        {
+            return sources;
+        }
+
+        sources.RemoveAll(x =>
+            string.Equals(x.Name, ResearchRunContinuationPolicy.WebSearchSourceName, StringComparison.OrdinalIgnoreCase)
+            || string.Equals(x.Name, ResearchRunContinuationPolicy.IndependentCrawlerSourceName, StringComparison.OrdinalIgnoreCase));
+
+        var searchExhausted = state.SearchLimitsExhausted
+                              || state.CompletedSourceNames.Contains(ResearchRunContinuationPolicy.WebSearchSourceName);
+        if (search.IsEnabled && !searchExhausted)
+        {
+            sources.Insert(0, search);
+            if (crawler is not null)
+            {
+                sources.Insert(1, crawler);
+            }
+
+            return sources;
+        }
+
+        if (crawler is not null)
+        {
+            sources.Insert(0, crawler);
+        }
+
+        if (search.IsEnabled && !state.CompletedSourceNames.Contains(search.Name))
+        {
+            sources.Add(search);
+        }
+
+        return sources;
+    }
+
+    private static bool IsSearchSource(IProspectSource source)
+        => string.Equals(
+            source.Name,
+            ResearchRunContinuationPolicy.WebSearchSourceName,
+            StringComparison.OrdinalIgnoreCase);
+
+    private static void TrackSourceBatch(ResearchDiscoveryState state, string sourceName)
+    {
+        if (string.Equals(
+                sourceName,
+                ResearchRunContinuationPolicy.WebSearchSourceName,
+                StringComparison.OrdinalIgnoreCase))
+        {
+            state.CrawlBatchesSinceSearch = 0;
+            state.SearchBatchesCompleted++;
+            return;
+        }
+
+        if (string.Equals(
+                sourceName,
+                ResearchRunContinuationPolicy.IndependentCrawlerSourceName,
+                StringComparison.OrdinalIgnoreCase))
+        {
+            state.CrawlBatchesSinceSearch++;
         }
     }
 
@@ -223,7 +407,7 @@ public class ResearchProcessor
         CancellationToken cancellationToken)
     {
         var batch = new List<ProspectCandidate>();
-        foreach (var source in _sources)
+        foreach (var source in OrderSourcesForBatch(context.DiscoveryState))
         {
             cancellationToken.ThrowIfCancellationRequested();
             if (!source.IsEnabled)
@@ -231,18 +415,35 @@ public class ResearchProcessor
                 continue;
             }
 
-            if (context.DiscoveryState.CompletedSourceNames.Contains(source.Name)
-                && !string.Equals(source.Name, "WebSearch", StringComparison.OrdinalIgnoreCase))
+            if (context.DiscoveryState.CompletedSourceNames.Contains(source.Name))
             {
                 continue;
             }
 
             try
             {
+                var sourceStartedAt = DateTimeOffset.UtcNow;
                 var discovered = await source.DiscoverAsync(context, cancellationToken);
+                TrackSourceBatch(context.DiscoveryState, source.Name);
+                context.DiscoveryState.RecordStageDuration(
+                    $"source.{source.Name}",
+                    (long)(DateTimeOffset.UtcNow - sourceStartedAt).TotalMilliseconds);
                 batch.AddRange(discovered);
-                if (!string.Equals(source.Name, "WebSearch", StringComparison.OrdinalIgnoreCase)
-                    && discovered.Count == 0)
+                if (IsSearchSource(source) && batch.Count > 0)
+                {
+                    break;
+                }
+
+                if (discovered.Count == 0
+                    && !string.Equals(
+                        source.Name,
+                        ResearchRunContinuationPolicy.WebSearchSourceName,
+                        StringComparison.OrdinalIgnoreCase)
+                    && !string.Equals(
+                        source.Name,
+                        ResearchRunContinuationPolicy.IndependentCrawlerSourceName,
+                        StringComparison.OrdinalIgnoreCase)
+                    && !context.DiscoveryState.CompletedSourceNames.Contains(source.Name))
                 {
                     context.DiscoveryState.CompletedSourceNames.Add(source.Name);
                 }
@@ -260,41 +461,72 @@ public class ResearchProcessor
             }
         }
 
-        return ProspectCandidateDeduplicator.DeduplicateAndMerge(batch);
+        var deduped = ProspectCandidateDeduplicator.DeduplicateAndMerge(batch);
+        context.DiscoveryState.CandidatesAfterDeduplication = Math.Max(
+            context.DiscoveryState.CandidatesAfterDeduplication,
+            deduped.Count);
+        context.DiscoveryState.UniqueEntitiesAfterDedup = Math.Max(
+            context.DiscoveryState.UniqueEntitiesAfterDedup,
+            CountDistinctCompanies(deduped));
+        context.DiscoveryState.UniqueOrganizationCandidates = context.DiscoveryState.UniqueEntitiesAfterDedup;
+        return deduped;
     }
 
-    private static bool ShouldContinueResearch(ResearchRun run, ResearchDiscoveryState state)
+    private static string ResolveEmptyBatchStopReason(ResearchDiscoveryState state)
     {
-        if (run.QualifiedCount >= run.RequestedProspectCount)
+        if (!string.IsNullOrWhiteSpace(state.LastBudgetStopReason))
         {
-            return false;
+            return $"Discovery returned no prospect candidates ({state.LastBudgetStopReason}).";
         }
 
+        if (state.UsefulPendingUrls > 0 || state.PagesQueued > 0)
+        {
+            return "No eligible crawl progress remained under current host/budget constraints.";
+        }
+
+        return "No additional candidates could be discovered.";
+    }
+
+    private bool AreAllSourcesCompleted(ResearchDiscoveryState state)
+    {
         if (state.LimitsExhausted)
         {
-            return false;
+            return true;
         }
 
-        return true;
-    }
+        var enabled = false;
+        foreach (var source in _sources)
+        {
+            if (!source.IsEnabled)
+            {
+                continue;
+            }
 
-    private static bool AreAllSourcesCompleted(ResearchDiscoveryState state)
-    {
-        return state.CompletedSourceNames.Contains("WebSearch")
-               || state.LimitsExhausted;
-    }
+            enabled = true;
+            if (!state.CompletedSourceNames.Contains(source.Name))
+            {
+                return false;
+            }
+        }
 
-    private bool IsDurationExceeded(ResearchDiscoveryState state)
-    {
-        var minutes = Math.Clamp(_options.MaxResearchDurationMinutes, 1, 240);
-        return DateTimeOffset.UtcNow - state.StartedAtUtc > TimeSpan.FromMinutes(minutes);
+        return enabled;
     }
 
     private static void FinalizeRunStatus(
         ResearchRun run,
         ResearchDiscoveryState state,
-        List<string> providerFailures)
+        List<string> providerFailures,
+        bool allSourcesCompleted)
     {
+        if (state.DiscoveryStopReason == DiscoveryStopReason.None)
+        {
+            state.DiscoveryStopReason = DiscoveryOutcomeClassifier.Classify(
+                state,
+                run.QualifiedCount,
+                run.RequestedProspectCount);
+        }
+
+        var outcome = DiscoveryOutcomeClassifier.Describe(state.DiscoveryStopReason);
         if (run.QualifiedCount >= run.RequestedProspectCount)
         {
             run.Status = providerFailures.Count > 0
@@ -308,31 +540,27 @@ public class ResearchProcessor
             return;
         }
 
-        run.ResearchLimitsReached = state.LimitsExhausted || AreAllSourcesCompleted(state);
-        run.ResearchLimitsReachedReason = state.LimitsExhaustedReason
-            ?? (run.CandidatesDiscovered == 0
-                ? "No candidates were returned by configured research providers."
-                : "Research limits reached before target prospects were found.");
+        run.ResearchLimitsReached = state.LimitsExhausted
+                                   || (allSourcesCompleted
+                                       && !ResearchRunContinuationPolicy.HasEligibleIndependentCrawlWork(state));
+        run.ResearchLimitsReachedReason = ResolveLimitsReachedReason(state, outcome);
 
+        var underCovered = state.ResolveUnderCoveredIndustries();
+        var underCoveredText = underCovered.Count == 0
+            ? "No under-covered industries."
+            : $"Under-covered industries: {string.Join(", ", underCovered.Take(8))}.";
         var summary =
-            $"{run.RequestedProspectCount} requested, {run.QualifiedCount} qualified prospects found. {run.ResearchLimitsReachedReason}";
+            $"{run.RequestedProspectCount} requested, {run.QualifiedCount} qualified, {state.CompaniesIdentified} organizations, {state.PublicContactsExtracted} contacts. {outcome} {underCoveredText} Next: {state.ResolveNextBestStrategy()}";
 
-        if (providerFailures.Count > 0)
-        {
-            run.Status = ResearchRunStatus.CompletedWithFailures;
-            run.Warning = $"{summary} Providers: {string.Join("; ", providerFailures)}";
-            return;
-        }
-
-        if (run.CandidatesDiscovered == 0)
-        {
-            run.Status = ResearchRunStatus.Completed;
-            run.Warning = summary;
-            return;
-        }
-
-        run.Status = ResearchRunStatus.CompletedWithFailures;
-        run.Warning = summary;
+        run.Status = ResearchRunOutcomeResolver.Resolve(
+            run.QualifiedCount,
+            run.RequestedProspectCount,
+            state,
+            providerFailures.Count,
+            allSourcesCompleted);
+        run.Warning = providerFailures.Count > 0
+            ? $"{summary} Providers: {string.Join("; ", providerFailures)}"
+            : summary;
     }
 
     private static void ApplyDiscoveryStats(ResearchRun run, ResearchDiscoveryState state)
@@ -345,16 +573,40 @@ public class ResearchProcessor
         run.ProspectsSaved = state.ProspectsSaved;
         run.ProspectsSkippedAsDuplicates = state.ProspectsSkippedAsDuplicates;
         run.ResearchLimitsReached = state.LimitsExhausted;
-        run.ResearchLimitsReachedReason = state.LimitsExhaustedReason;
+        run.ResearchLimitsReachedReason = ResolveLimitsReachedReason(state, state.LimitsExhaustedReason);
         run.RejectionReasonsJson = state.SerializeRejectionReasons();
         run.SearchProviderDiagnosticsJson = state.SerializeProviderDiagnostics();
+    }
+
+    private static string? ResolveLimitsReachedReason(ResearchDiscoveryState state, string? fallback)
+    {
+        if (!string.IsNullOrWhiteSpace(state.LimitsExhaustedReason)
+            && !ResearchRunContinuationPolicy.IsSearchOnlyLimitReason(state.LimitsExhaustedReason))
+        {
+            return state.LimitsExhaustedReason;
+        }
+
+        if (state.SearchLimitsExhausted
+            && !string.IsNullOrWhiteSpace(state.SearchLimitsExhaustedReason)
+            && !ResearchRunContinuationPolicy.HasEligibleIndependentCrawlWork(state))
+        {
+            return state.SearchLimitsExhaustedReason;
+        }
+
+        if (!string.IsNullOrWhiteSpace(state.LastBudgetStopReason))
+        {
+            return state.LastBudgetStopReason;
+        }
+
+        return fallback ?? state.SearchLimitsExhaustedReason;
     }
 
     private int ResolveDiscoveryBatchSize(int requestedCount)
     {
         var oversample = Math.Clamp(_options.DiscoveryOversampleFactor, 1, 10);
         var target = Math.Max(8, Math.Min(15, requestedCount / 3));
-        return Math.Clamp(target * Math.Max(1, oversample / 2), 8, 20);
+        var batchSize = Math.Clamp(target * Math.Max(1, oversample / 2), 8, 20);
+        return batchSize;
     }
 
     private static int ResolveProgress(ResearchRun run, ResearchDiscoveryState? state = null)
@@ -394,7 +646,253 @@ public class ResearchProcessor
         await _progressNotifier.NotifyProgressAsync(detail, cancellationToken);
     }
 
-    private async Task ProcessCandidateAsync(
+    private async Task EnsureOllamaForRunAsync(
+        OutreachProject project,
+        ResearchRun run,
+        ProspectSourceContext context,
+        ResearchDiscoveryState state,
+        CancellationToken cancellationToken)
+    {
+        if (_localAiHealth is null)
+        {
+            return;
+        }
+
+        var health = await _localAiHealth.EnsureRunningAsync(cancellationToken);
+        state.OllamaChecked = true;
+        state.OllamaReachable = health.IsReachable;
+        state.OllamaModelAvailable = health.ModelAvailable;
+        state.OllamaModel = health.Model;
+        var queriesGenerated = 0;
+        if (health.ModelAvailable && _localAiQueryPlanner is not null)
+        {
+            queriesGenerated = await GenerateOllamaQueriesForRunAsync(context, state, cancellationToken);
+        }
+
+        state.OllamaQueriesGenerated = queriesGenerated;
+        var severity = health.ModelAvailable
+            ? ResearchRunEventSeverity.Info
+            : ResearchRunEventSeverity.Warning;
+        var message = health.ModelAvailable
+            ? $"Ollama running for this research run: model {health.Model} at {health.BaseUrl} ({queriesGenerated} AI search queries generated)."
+            : $"Ollama could not be made available for this research run: {health.ErrorSummary ?? "unknown error"} Deterministic research continues.";
+        _logger.LogInformation(
+            "Research run {ResearchRunId} Ollama check: reachable={Reachable} modelAvailable={ModelAvailable} model={Model} aiQueries={Queries}",
+            run.Id,
+            health.IsReachable,
+            health.ModelAvailable,
+            health.Model,
+            queriesGenerated);
+        await RecordLifecycleEventAsync(
+            run.Id,
+            ResearchRunEventType.SearchProviderHealthChecked,
+            severity,
+            message,
+            new
+            {
+                provider = "Ollama",
+                model = health.Model,
+                baseUrl = health.BaseUrl,
+                reachable = health.IsReachable,
+                modelAvailable = health.ModelAvailable,
+                availableModels = health.AvailableModels,
+                aiQueriesGenerated = queriesGenerated,
+                error = health.ErrorSummary
+            },
+            cancellationToken,
+            ResearchPipelineStage.Discovery);
+    }
+
+    private async Task<int> GenerateOllamaQueriesForRunAsync(
+        ProspectSourceContext context,
+        ResearchDiscoveryState state,
+        CancellationToken cancellationToken)
+    {
+        if (_adaptivePlanner is not null)
+        {
+            return await GenerateAdaptivePlanForRunAsync(context, state, cancellationToken);
+        }
+
+        if (_localAiQueryPlanner is null)
+        {
+            return 0;
+        }
+
+        try
+        {
+            var spec = ProjectEligibilityPolicy.RequireSpec(context);
+            var queries = await _localAiQueryPlanner.GenerateSearchQueriesAsync(
+                new AiQueryGenerationRequest
+                {
+                    ProjectName = context.ProjectName,
+                    ProjectDescription = context.Description,
+                    Industries = spec.ApprovedIndustries.Count > 0 ? spec.ApprovedIndustries : context.Industries,
+                    IndustrySynonyms = spec.IndustrySynonyms,
+                    Countries = spec.TargetCountries.Count > 0 ? spec.TargetCountries : context.Countries,
+                    Locations = spec.Cities.Count > 0 ? spec.Cities : context.Locations,
+                    Keywords = context.Keywords,
+                    ExcludedIndustries = spec.ExcludedIndustries,
+                    ExcludedKeywords = spec.ExcludedKeywords,
+                    ExistingQueries = state.GeneratedQueries,
+                    MaxQueries = 12,
+                    HardConstraintsSummary =
+                        $"Countries={string.Join('|', spec.TargetCountries)}; Industries={string.Join('|', spec.ApprovedIndustries)}; Exclusions={string.Join('|', spec.ExcludedIndustries)}",
+                    CoverageSummary = $"qualified so far in this run; industries planned: {string.Join(", ", context.Industries)}",
+                    RejectionSummary = state.RejectionReasons.Count == 0
+                        ? null
+                        : string.Join(", ", state.RejectionReasons.Select(x => $"{x.Key}={x.Value}")),
+                    UnderCoveredIndustries = state.ResolveUnderCoveredIndustries(),
+                    UnderCoveredLocations = context.Locations
+                },
+                cancellationToken);
+            state.OllamaCallsUsed++;
+            var seen = new HashSet<string>(state.GeneratedQueries, StringComparer.OrdinalIgnoreCase);
+            var added = 0;
+            foreach (var query in queries ?? [])
+            {
+                var trimmed = query?.Trim();
+                if (string.IsNullOrWhiteSpace(trimmed) || !seen.Add(trimmed))
+                {
+                    continue;
+                }
+
+                var planned = new PlannedSearchQuery
+                {
+                    Query = trimmed,
+                    Industry = context.Industries.FirstOrDefault() ?? "business",
+                    Country = context.Countries.FirstOrDefault(),
+                    Location = context.Locations.FirstOrDefault(),
+                    Intent = SearchQueryIntents.DiscoverBusiness,
+                    Purpose = "initial_ai_plan",
+                    ExpectedResultType = "operating_business"
+                };
+                var validation = ProjectEligibilityPolicy.ValidateQuery(
+                    planned.Query,
+                    spec,
+                    planned.Industry,
+                    planned.Country);
+                if (!validation.IsValid)
+                {
+                    state.AdaptiveActionsRejected++;
+                    continue;
+                }
+
+                if (!string.IsNullOrWhiteSpace(validation.MatchedIndustry))
+                {
+                    planned.Industry = validation.MatchedIndustry;
+                }
+
+                state.GeneratedQueries.Add(trimmed);
+                state.PlannedSearchQueries.Add(planned);
+                state.AdaptiveActionsAccepted++;
+                added++;
+            }
+
+            return added;
+        }
+        catch (Exception ex) when (ex is not OperationCanceledException)
+        {
+            _logger.LogWarning(ex, "Ollama query generation failed for research run; deterministic queries remain in use");
+            return 0;
+        }
+    }
+
+    private async Task<int> GenerateAdaptivePlanForRunAsync(
+        ProspectSourceContext context,
+        ResearchDiscoveryState state,
+        CancellationToken cancellationToken)
+    {
+        try
+        {
+            var catalog = AdaptiveResearchPlanner.BuildDefaultSourceCatalog(
+                webSearchAvailable: _options.EnableSearchProvider,
+                independentCrawlerAvailable: _options.EnableIndependentCrawler,
+                directoryCatalogAvailable: true,
+                associationCatalogAvailable: true,
+                osmAvailable: true,
+                localIndexAvailable: true,
+                commonCrawlAvailable: true);
+            var planned = await _adaptivePlanner!.PlanAsync(
+                context,
+                state,
+                catalog,
+                maxActions: 8,
+                isFollowUp: false,
+                remainingOllamaCalls: Math.Max(0, _options.MaxOllamaCallsPerRun - state.OllamaCallsUsed),
+                remainingSearchRequests: Math.Max(0, _options.MaxSearchRequests),
+                cancellationToken);
+            var seen = new HashSet<string>(state.GeneratedQueries, StringComparer.OrdinalIgnoreCase);
+            var added = 0;
+            foreach (var item in planned)
+            {
+                var trimmed = item.Query?.Trim();
+                if (string.IsNullOrWhiteSpace(trimmed) || !seen.Add(trimmed))
+                {
+                    continue;
+                }
+
+                state.GeneratedQueries.Add(trimmed);
+                state.PlannedSearchQueries.Add(item);
+                added++;
+            }
+
+            await RecordLifecycleEventAsync(
+                context.ResearchRunId,
+                ResearchRunEventType.AdaptivePlanProposed,
+                ResearchRunEventSeverity.Info,
+                state.LastAdaptiveStrategySummary ?? $"Adaptive research plan proposed {added} actions.",
+                new
+                {
+                    actionsAdded = added,
+                    adaptiveAccepted = state.AdaptiveActionsAccepted,
+                    adaptiveRejected = state.AdaptiveActionsRejected,
+                    abandonedPatterns = state.AbandonedSearchPatterns.Take(10).ToList(),
+                    decisions = state.IntelligenceDecisions.TakeLast(8).Select(x => new
+                    {
+                        x.ActionType,
+                        x.Query,
+                        x.Reason,
+                        x.AddressesRequirements
+                    }).ToList()
+                },
+                cancellationToken,
+                ResearchPipelineStage.Discovery);
+            return added;
+        }
+        catch (Exception ex) when (ex is not OperationCanceledException)
+        {
+            _logger.LogWarning(ex, "Adaptive Ollama research plan failed; deterministic queries remain in use");
+            return 0;
+        }
+    }
+
+    private async Task RecordLifecycleEventAsync(
+        Guid researchRunId,
+        ResearchRunEventType eventType,
+        ResearchRunEventSeverity severity,
+        string? message,
+        object? data,
+        CancellationToken cancellationToken,
+        ResearchPipelineStage stage = ResearchPipelineStage.RunLifecycle,
+        string? domain = null,
+        string? url = null)
+    {
+        await _events.RecordAsync(
+            new ResearchEventRecordRequest
+            {
+                ResearchRunId = researchRunId,
+                EventType = eventType,
+                Severity = severity,
+                Stage = stage,
+                Message = message,
+                Data = data,
+                Domain = domain,
+                Url = url
+            },
+            cancellationToken);
+    }
+
+    protected async Task ProcessCandidateAsync(
         OutreachProject project,
         ResearchRun run,
         ProspectCandidate candidate,
@@ -405,6 +903,27 @@ public class ResearchProcessor
         {
             run.RejectedCount++;
             state.RecordRejection("Missing company name");
+            return;
+        }
+
+        if (ProspectJunkClassifier.IsJunkOrganization(
+                candidate.CompanyName,
+                candidate.SourceUrl ?? candidate.Website,
+                candidate.CompanyDescription))
+        {
+            run.RejectedCount++;
+            state.IrrelevantEntitiesRejected++;
+            state.RecordRejection("Navigation or legal copy");
+            await RecordLifecycleEventAsync(
+                run.Id,
+                ResearchRunEventType.OrganizationCandidateRejected,
+                ResearchRunEventSeverity.Info,
+                $"Rejected non-organization text: {candidate.CompanyName}",
+                new { company = candidate.CompanyName, source = candidate.SourceUrl },
+                cancellationToken,
+                ResearchPipelineStage.CompanyExtraction,
+                candidate.Website,
+                candidate.SourceUrl);
             return;
         }
 
@@ -439,6 +958,28 @@ public class ResearchProcessor
 
         if (match.Kind != ProspectDuplicateKind.None)
         {
+            var existingJunk = match.ExistingProspect is not null
+                && ProspectJunkClassifier.IsJunkOrganization(
+                    match.ExistingProspect.CompanyName,
+                    match.ExistingProspect.SourceUrl ?? match.ExistingProspect.Website,
+                    match.ExistingProspect.CompanyDescription);
+            if (existingJunk)
+            {
+                state.ProspectsSkippedAsDuplicates++;
+                state.PreviouslyKnownProspects++;
+                await RecordLifecycleEventAsync(
+                    run.Id,
+                    ResearchRunEventType.OrganizationDeduplicated,
+                    ResearchRunEventSeverity.Info,
+                    $"Ignored previously stored junk organization: {candidate.CompanyName}",
+                    new { company = candidate.CompanyName, kind = match.Kind.ToString() },
+                    cancellationToken,
+                    ResearchPipelineStage.ProspectMerge,
+                    candidate.Website,
+                    candidate.SourceUrl);
+                return;
+            }
+
             run.DuplicatesFound++;
             _logger.LogInformation("Duplicate detected {Kind} for {Company}", match.Kind, candidate.CompanyName);
         }
@@ -453,6 +994,16 @@ public class ResearchProcessor
         {
             state.ProspectsSkippedAsDuplicates++;
             state.RecordRejection("Duplicate");
+            await RecordLifecycleEventAsync(
+                run.Id,
+                ResearchRunEventType.DuplicateSkipped,
+                ResearchRunEventSeverity.Info,
+                $"Duplicate skipped: {candidate.CompanyName} ({match.Kind})",
+                new { company = candidate.CompanyName, kind = match.Kind.ToString() },
+                cancellationToken,
+                ResearchPipelineStage.ProspectMerge,
+                candidate.Website,
+                candidate.SourceUrl);
             return;
         }
 
@@ -466,8 +1017,29 @@ public class ResearchProcessor
         {
             state.ProspectsSkippedAsDuplicates++;
             state.RecordRejection("Duplicate");
+            await RecordLifecycleEventAsync(
+                run.Id,
+                ResearchRunEventType.DuplicateSkipped,
+                ResearchRunEventSeverity.Info,
+                $"Duplicate skipped: {candidate.CompanyName} ({match.Kind})",
+                new { company = candidate.CompanyName, kind = match.Kind.ToString() },
+                cancellationToken,
+                ResearchPipelineStage.ProspectMerge,
+                candidate.Website,
+                candidate.SourceUrl);
             return;
         }
+
+        await RecordLifecycleEventAsync(
+            run.Id,
+            ResearchRunEventType.CompanyExtracted,
+            ResearchRunEventSeverity.Info,
+            $"Company candidate: {candidate.CompanyName}",
+            new { company = candidate.CompanyName, source = candidate.SourceName },
+            cancellationToken,
+            ResearchPipelineStage.CompanyExtraction,
+            candidate.Website,
+            candidate.SourceUrl);
 
         var classification = new AiClassificationRequest
         {
@@ -495,6 +1067,28 @@ public class ResearchProcessor
             ResearchNotes = TrimOrNull(candidate.ResearchNotes)
         };
 
+        var queryVersion = run.ResearchQueryVersionId is null
+            ? null
+            : await _db.ResearchQueryVersions.AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Id == run.ResearchQueryVersionId.Value, cancellationToken);
+
+        var evidenceItems = await LoadEvidenceForCandidateAsync(run.Id, candidate, cancellationToken);
+        var ruleEvaluation = _qualificationService.Evaluate(new QualificationEvaluationRequest
+        {
+            ProjectId = project.Id,
+            ResearchRunId = run.Id,
+            Candidate = candidate,
+            QueryVersion = queryVersion,
+            RequireEmail = run.IncludeEmail,
+            MinQualificationScore = run.MinQualificationScore,
+            Keywords = classification.Keywords,
+            ExcludedKeywords = classification.ExcludedKeywords,
+            Countries = classification.Countries,
+            Industries = classification.Industries,
+            ExcludedIndustries = classification.ExcludedIndustries,
+            EvidenceItems = evidenceItems
+        });
+
         AiQualificationResult qualification;
         try
         {
@@ -518,6 +1112,35 @@ public class ResearchProcessor
             };
         }
 
+        ApplyRuleEvaluation(qualification, ruleEvaluation);
+        ApplyHardConstraintConflictGuard(project, state, qualification, candidate);
+        AppendCountryEvidenceNotes(candidate, ruleEvaluation);
+        if (!HasMinimumDiscoverableEvidence(candidate, ruleEvaluation))
+        {
+            qualification.IsRelevant = false;
+            qualification.IsQualified = false;
+            qualification.NeedsReview = false;
+            qualification.QualificationScore = Math.Min(qualification.QualificationScore, 30);
+            qualification.Summary = AppendNote(
+                qualification.Summary,
+                "Rejected empty discovery shell: missing official website or verified identity.");
+        }
+
+        if (ruleEvaluation.IsIdentityVerified)
+        {
+            state.IdentityVerifiedBusinesses++;
+        }
+
+        if (ruleEvaluation.IsContactable)
+        {
+            state.ContactableProspects++;
+        }
+
+        if (ruleEvaluation.IsEmailReady)
+        {
+            state.EmailReadyProspects++;
+        }
+
         if (match.NeedsReview)
         {
             qualification.NeedsReview = true;
@@ -525,13 +1148,65 @@ public class ResearchProcessor
 
         if (!qualification.IsRelevant || qualification.QualificationScore < Math.Min(run.MinQualificationScore, 40))
         {
-            run.RejectedCount++;
-            state.RecordRejection(ResolveRejectionReason(qualification, candidate));
-            _logger.LogInformation("Prospect rejected {Company}", candidate.CompanyName);
-            if (project.DuplicateHandling == DuplicateHandlingMode.Allow
-                || match.Kind == ProspectDuplicateKind.None
-                || match.ShouldMerge)
+            var preserveDiscovered = HasMinimumDiscoverableEvidence(candidate, ruleEvaluation);
+            var rejectReason = ResolveRejectionReason(qualification, candidate, ruleEvaluation);
+            if (preserveDiscovered && match.Kind == ProspectDuplicateKind.None)
             {
+                state.NewlyDiscoveredProspects++;
+                await RecordLifecycleEventAsync(
+                    run.Id,
+                    ResearchRunEventType.CompanyExtracted,
+                    ResearchRunEventSeverity.Info,
+                    $"Discovered (not campaign-qualified): {candidate.CompanyName}",
+                    new
+                    {
+                        company = candidate.CompanyName,
+                        score = qualification.QualificationScore,
+                        reason = rejectReason,
+                        missingCriteria = ruleEvaluation.MissingCriteria
+                    },
+                    cancellationToken,
+                    ResearchPipelineStage.Qualification,
+                    candidate.Website,
+                    candidate.SourceUrl);
+            }
+            else
+            {
+                run.RejectedCount++;
+                state.BusinessesRejected++;
+                state.RecordRejection(rejectReason);
+                if (rejectReason.Contains("entity", StringComparison.OrdinalIgnoreCase)
+                    || rejectReason.Contains("identity", StringComparison.OrdinalIgnoreCase))
+                {
+                    state.IrrelevantEntitiesRejected++;
+                }
+
+                _logger.LogInformation("Prospect rejected {Company}", candidate.CompanyName);
+                await RecordLifecycleEventAsync(
+                    run.Id,
+                    ResearchRunEventType.Rejected,
+                    ResearchRunEventSeverity.Info,
+                    $"Rejected: {candidate.CompanyName}",
+                    new
+                    {
+                        company = candidate.CompanyName,
+                        score = qualification.QualificationScore,
+                        reason = rejectReason,
+                        missingCriteria = ruleEvaluation.MissingCriteria,
+                        mandatoryFailures = ruleEvaluation.Criteria
+                            .Where(x => x.IsMandatory && !x.Passed)
+                            .Select(x => x.CriterionKey)
+                            .ToList()
+                    },
+                    cancellationToken,
+                    ResearchPipelineStage.Qualification,
+                    candidate.Website,
+                    candidate.SourceUrl);
+            }
+
+            if (preserveDiscovered || match.ShouldMerge)
+            {
+                RecordAttributedContactYield(run, state, candidate, email, whatsApp, match);
                 await PersistProspectAsync(
                     project,
                     run,
@@ -539,7 +1214,7 @@ public class ResearchProcessor
                     email,
                     whatsApp,
                     qualification,
-                    ProspectStatus.Rejected,
+                    preserveDiscovered ? ProspectStatus.Discovered : ProspectStatus.Rejected,
                     match,
                     null,
                     state,
@@ -558,6 +1233,7 @@ public class ResearchProcessor
             hasRequiredContact);
 
         if (!hasRequiredContact
+            && ruleEvaluation.IsIdentityVerified
             && status is ProspectStatus.Qualified or ProspectStatus.ReadyForOutreach or ProspectStatus.NeedsReview)
         {
             qualification.NeedsReview = true;
@@ -565,6 +1241,18 @@ public class ResearchProcessor
             qualification.Summary = AppendNote(
                 qualification.Summary,
                 "Business qualified; contact method still missing (email or WhatsApp).");
+        }
+        else if (!hasRequiredContact
+                 && !ruleEvaluation.IsIdentityVerified
+                 && status is ProspectStatus.NeedsReview)
+        {
+            qualification.NeedsReview = false;
+            qualification.IsQualified = false;
+            qualification.IsRelevant = false;
+            status = ProspectStatus.Rejected;
+            qualification.Summary = AppendNote(
+                qualification.Summary,
+                "Rejected empty or unverified discovery shell instead of needs-review.");
         }
 
         if (status == ProspectStatus.Qualified || status == ProspectStatus.ReadyForOutreach)
@@ -575,32 +1263,78 @@ public class ResearchProcessor
             }
 
             _logger.LogInformation("Prospect qualified {Company}", candidate.CompanyName);
-        }
-        else if (status == ProspectStatus.NeedsReview
-                 && qualification.IsQualified
-                 && qualification.QualificationScore >= run.MinQualificationScore
-                 && !match.ShouldMerge)
-        {
-            run.QualifiedCount++;
+            await RecordLifecycleEventAsync(
+                run.Id,
+                ResearchRunEventType.Qualified,
+                ResearchRunEventSeverity.Info,
+                $"Qualified: {candidate.CompanyName}",
+                new
+                {
+                    company = candidate.CompanyName,
+                    score = qualification.QualificationScore,
+                    status = status.ToString()
+                },
+                cancellationToken,
+                ResearchPipelineStage.Qualification,
+                candidate.Website,
+                candidate.SourceUrl);
         }
         else if (status == ProspectStatus.Rejected)
         {
             run.RejectedCount++;
-            state.RecordRejection(ResolveRejectionReason(qualification, candidate));
+            var rejectReason = ResolveRejectionReason(qualification, candidate, ruleEvaluation);
+            state.RecordRejection(rejectReason);
+            await RecordLifecycleEventAsync(
+                run.Id,
+                ResearchRunEventType.Rejected,
+                ResearchRunEventSeverity.Info,
+                $"Rejected: {candidate.CompanyName}",
+                new
+                {
+                    company = candidate.CompanyName,
+                    score = qualification.QualificationScore,
+                    reason = rejectReason,
+                    missingCriteria = ruleEvaluation.MissingCriteria
+                },
+                cancellationToken,
+                ResearchPipelineStage.Qualification,
+                candidate.Website,
+                candidate.SourceUrl);
         }
 
-        if (!string.IsNullOrWhiteSpace(email) && !match.ShouldMerge)
+        if (match.Kind == ProspectDuplicateKind.None)
         {
-            run.ValidEmails++;
+            state.NewlyDiscoveredProspects++;
         }
+        else
+        {
+            state.PreviouslyKnownProspects++;
+            if (match.ExistingProspect?.Status == ProspectStatus.Contacted)
+            {
+                state.PreviouslyContactedProspects++;
+            }
+        }
+
+        if (status is ProspectStatus.ReadyForOutreach or ProspectStatus.Qualified
+            && match.Kind == ProspectDuplicateKind.None)
+        {
+            state.NewlyOutreachEligibleProspects++;
+        }
+
+        RecordAttributedContactYield(run, state, candidate, email, whatsApp, match);
 
         if (!string.IsNullOrWhiteSpace(whatsApp) && !match.ShouldMerge)
         {
             run.ValidWhatsApp++;
         }
 
+        if (status == ProspectStatus.Rejected && !match.ShouldMerge)
+        {
+            return;
+        }
+
         var recommendation = await RecommendTemplateSafeAsync(project, classification, qualification, cancellationToken);
-        await PersistProspectAsync(
+        var prospectId = await PersistProspectAsync(
             project,
             run,
             candidate,
@@ -612,6 +1346,349 @@ public class ResearchProcessor
             recommendation,
             state,
             cancellationToken);
+
+        if (prospectId is not null)
+        {
+            await PersistQualificationCriteriaAsync(prospectId.Value, ruleEvaluation, cancellationToken);
+            await AttachEvidenceToProspectAsync(prospectId.Value, evidenceItems, cancellationToken);
+            await PersistAttributedContactEvidenceAsync(
+                project.Id,
+                run.Id,
+                prospectId.Value,
+                candidate,
+                cancellationToken);
+            await _discoverySourceRegistry.RecordQualificationYieldAsync(
+                candidate.SourceUrl ?? candidate.Website,
+                qualification.IsQualified,
+                cancellationToken);
+        }
+    }
+
+    private static void RecordAttributedContactYield(
+        ResearchRun run,
+        ResearchDiscoveryState state,
+        ProspectCandidate candidate,
+        string? email,
+        string? whatsApp,
+        ProspectDuplicateMatch match)
+    {
+        var attributedContactCount = CountAttributedContacts(candidate, email, whatsApp);
+        if (match.ShouldMerge || attributedContactCount <= 0)
+        {
+            return;
+        }
+
+        run.ValidEmails += candidate.AttributedEmails.Count > 0
+            ? candidate.AttributedEmails.Count
+            : string.IsNullOrWhiteSpace(email) ? 0 : 1 + candidate.AdditionalEmails.Count;
+        state.AttributedEmailsAccepted += Math.Max(
+            candidate.AttributedEmails.Count,
+            string.IsNullOrWhiteSpace(email) ? 0 : 1);
+        state.PublicContactsExtracted += attributedContactCount;
+        run.ContactsFound += attributedContactCount;
+    }
+
+    private static int CountAttributedContacts(
+        ProspectCandidate candidate,
+        string? email,
+        string? whatsApp)
+    {
+        var count = candidate.AttributedEmails.Count + candidate.AttributedPhones.Count;
+        if (count > 0)
+        {
+            return count;
+        }
+
+        if (!string.IsNullOrWhiteSpace(email))
+        {
+            count++;
+        }
+
+        count += candidate.AdditionalEmails.Count;
+        if (!string.IsNullOrWhiteSpace(candidate.Phone))
+        {
+            count++;
+        }
+
+        count += candidate.AdditionalPhones.Count;
+        if (!string.IsNullOrWhiteSpace(whatsApp))
+        {
+            count++;
+        }
+
+        return count;
+    }
+
+    private async Task PersistAttributedContactEvidenceAsync(
+        Guid projectId,
+        Guid researchRunId,
+        Guid prospectId,
+        ProspectCandidate candidate,
+        CancellationToken cancellationToken)
+    {
+        foreach (var contact in candidate.AttributedEmails.Concat(candidate.AttributedPhones))
+        {
+            if (string.IsNullOrWhiteSpace(contact.Value))
+            {
+                continue;
+            }
+
+            _db.ResearchEvidenceItems.Add(new ResearchEvidence
+            {
+                ProjectId = projectId,
+                ResearchRunId = researchRunId,
+                ProspectId = prospectId,
+                FactType = contact.Channel,
+                FactValue = contact.Value,
+                ConfidenceKind = string.Equals(contact.VerificationStatus, "same_domain", StringComparison.OrdinalIgnoreCase)
+                    ? EvidenceConfidenceKind.Verified
+                    : EvidenceConfidenceKind.Unverified,
+                SourceUrl = contact.SourceUrl ?? candidate.ContactEvidenceUrl ?? candidate.SourceUrl,
+                Notes = $"{contact.Context}; {contact.AttributionReasonCode}; status={contact.VerificationStatus}",
+                FirstDiscoveredAtUtc = contact.DiscoveredAtUtc,
+                LastVerifiedAtUtc = DateTimeOffset.UtcNow
+            });
+
+            _db.InvestigationContacts.Add(new InvestigationContact
+            {
+                ResearchRunId = researchRunId,
+                ProjectId = projectId,
+                ProspectId = prospectId,
+                OrganizationName = candidate.CompanyName,
+                ExactValue = contact.Value,
+                NormalizedValue = contact.NormalizedValue ?? contact.Value,
+                ContactType = contact.Channel,
+                SourceUrl = contact.SourceUrl ?? candidate.ContactEvidenceUrl ?? candidate.SourceUrl,
+                PageTitle = contact.PageTitle,
+                SurroundingText = contact.SurroundingText ?? contact.Context,
+                AttributionEvidence = contact.AttributionReasonCode,
+                ValidationStatus = contact.VerificationStatus,
+                Confidence = contact.Confidence,
+                ReviewStatus = contact.ReviewStatus,
+                DiscoveredAtUtc = contact.DiscoveredAtUtc
+            });
+        }
+
+        await _db.SaveChangesAsync(cancellationToken);
+    }
+
+    private static void ApplyHardConstraintConflictGuard(
+        OutreachProject project,
+        ResearchDiscoveryState state,
+        AiQualificationResult qualification,
+        ProspectCandidate candidate)
+    {
+        var spec = ProjectEligibilityPolicy.BuildFallbackSpec(new ProspectSourceContext
+        {
+            ProjectName = project.Name,
+            Description = project.Description,
+            ResearchInstructions = project.ResearchInstructions,
+            Industries = project.Industries.Where(x => !x.IsExcluded).Select(x => x.Value).ToList(),
+            ExcludedIndustries = project.Industries.Where(x => x.IsExcluded).Select(x => x.Value).ToList(),
+            ExcludedKeywords = project.Keywords.Where(x => x.IsExcluded).Select(x => x.Value).ToList(),
+            Countries = project.Countries.Select(x => x.Name).ToList(),
+            Keywords = project.Keywords.Where(x => !x.IsExcluded).Select(x => x.Value).ToList(),
+            IncludeEmail = project.EnableEmail
+        });
+
+        if (!ProjectEligibilityPolicy.AiClaimConflictsWithHardConstraints(
+                spec,
+                qualification.Industry ?? candidate.Industry,
+                candidate.Country,
+                qualification.IsRelevant))
+        {
+            return;
+        }
+
+        qualification.IsRelevant = false;
+        qualification.IsQualified = false;
+        qualification.NeedsReview = false;
+        qualification.QualificationScore = Math.Min(qualification.QualificationScore, 20);
+        qualification.Summary = AppendNote(
+            qualification.Summary,
+            "Rejected because AI claims conflicted with project hard constraints.");
+        state.RecordRejection("AiHardConstraintConflict");
+    }
+
+    private static void ApplyRuleEvaluation(
+        AiQualificationResult qualification,
+        QualificationEvaluationResult rules)
+    {
+        var mandatoryFailed = rules.Criteria.Any(x => x.IsMandatory && !x.Passed);
+        if (mandatoryFailed)
+        {
+            qualification.IsRelevant = false;
+            qualification.IsQualified = false;
+            qualification.NeedsReview = false;
+            qualification.QualificationScore = rules.Score;
+            qualification.Summary = rules.Summary;
+            return;
+        }
+
+        var countryNeedsReview = rules.Criteria.Any(x =>
+            x.CriterionKey == "targetCountry"
+            && !x.Passed
+            && !x.IsMandatory);
+        if (countryNeedsReview)
+        {
+            qualification.IsQualified = false;
+            qualification.IsRelevant = true;
+            qualification.NeedsReview = true;
+            qualification.QualificationScore = Math.Min(qualification.QualificationScore, rules.Score);
+            qualification.Summary = AppendNote(rules.Summary, "Country evidence incomplete; outreach blocked.");
+            return;
+        }
+
+        if (!qualification.IsRelevant)
+        {
+            qualification.IsQualified = false;
+            qualification.NeedsReview = false;
+            qualification.QualificationScore = Math.Min(qualification.QualificationScore, rules.Score);
+            qualification.Summary = AppendNote(
+                qualification.Summary,
+                "LLM excluded this prospect; rule scoring cannot override that determination.");
+            qualification.Summary = AppendNote(qualification.Summary, rules.Summary);
+            return;
+        }
+
+        if (rules.IsQualified && qualification.IsQualified)
+        {
+            qualification.IsRelevant = true;
+            qualification.QualificationScore = Math.Max(qualification.QualificationScore, rules.Score);
+            if (!rules.IsIdentityVerified)
+            {
+                qualification.IsQualified = false;
+                qualification.IsRelevant = false;
+                qualification.NeedsReview = false;
+                qualification.Summary = AppendNote(
+                    qualification.Summary,
+                    "Rejected: identity was not verified for an official business domain.");
+                return;
+            }
+        }
+        else if (rules.IsQualified && !qualification.IsQualified)
+        {
+            qualification.IsQualified = false;
+            qualification.IsRelevant = true;
+            qualification.NeedsReview = true;
+            qualification.QualificationScore = Math.Min(qualification.QualificationScore, rules.Score);
+            qualification.Summary = AppendNote(
+                qualification.Summary,
+                "Rule scoring passed but the LLM withheld qualification; marked for review.");
+        }
+        else if (rules.IsIdentityVerified)
+        {
+            qualification.IsQualified = false;
+            qualification.IsRelevant = true;
+            qualification.NeedsReview = true;
+            qualification.QualificationScore = Math.Min(qualification.QualificationScore, rules.Score);
+        }
+        else
+        {
+            qualification.IsQualified = false;
+            qualification.IsRelevant = false;
+            qualification.NeedsReview = false;
+            qualification.QualificationScore = Math.Min(qualification.QualificationScore, rules.Score);
+        }
+
+        qualification.Summary = AppendNote(qualification.Summary, rules.Summary);
+    }
+
+    private async Task<List<ResearchEvidence>> LoadEvidenceForCandidateAsync(
+        Guid researchRunId,
+        ProspectCandidate candidate,
+        CancellationToken cancellationToken)
+    {
+        var urls = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        void AddUrl(string? url)
+        {
+            if (string.IsNullOrWhiteSpace(url))
+            {
+                return;
+            }
+
+            urls.Add(url.Trim());
+            var canonical = UrlCanonicalizer.Canonicalize(url);
+            if (!string.IsNullOrWhiteSpace(canonical))
+            {
+                urls.Add(canonical);
+            }
+        }
+
+        AddUrl(candidate.SourceUrl);
+        AddUrl(candidate.Website);
+        AddUrl(candidate.ContactEvidenceUrl);
+        foreach (var extra in candidate.AdditionalSourceUrls)
+        {
+            AddUrl(extra);
+        }
+
+        foreach (var contact in candidate.AttributedEmails.Concat(candidate.AttributedPhones))
+        {
+            AddUrl(contact.SourceUrl);
+        }
+
+        if (urls.Count == 0)
+        {
+            return [];
+        }
+
+        var urlList = urls.ToList();
+        var domain = UrlCanonicalizer.ExtractDomain(candidate.Website)
+                     ?? UrlCanonicalizer.ExtractDomain(candidate.SourceUrl)
+                     ?? candidate.OfficialDomain;
+        var items = await _db.ResearchEvidenceItems
+            .Where(x => x.ResearchRunId == researchRunId && x.SourceUrl != null)
+            .ToListAsync(cancellationToken);
+
+        return items
+            .Where(x =>
+            {
+                if (urlList.Contains(x.SourceUrl!))
+                {
+                    return true;
+                }
+
+                if (string.IsNullOrWhiteSpace(domain))
+                {
+                    return false;
+                }
+
+                var evidenceDomain = UrlCanonicalizer.ExtractDomain(x.SourceUrl);
+                return string.Equals(evidenceDomain, domain, StringComparison.OrdinalIgnoreCase);
+            })
+            .Take(80)
+            .ToList();
+    }
+
+    private async Task PersistQualificationCriteriaAsync(
+        Guid prospectId,
+        QualificationEvaluationResult evaluation,
+        CancellationToken cancellationToken)
+    {
+        foreach (var criterion in evaluation.Criteria)
+        {
+            criterion.ProspectId = prospectId;
+            _db.QualificationCriterionResults.Add(criterion);
+        }
+
+        await _db.SaveChangesAsync(cancellationToken);
+    }
+
+    private async Task AttachEvidenceToProspectAsync(
+        Guid prospectId,
+        List<ResearchEvidence> evidenceItems,
+        CancellationToken cancellationToken)
+    {
+        foreach (var item in evidenceItems)
+        {
+            if (item.ProspectId is null)
+            {
+                item.ProspectId = prospectId;
+            }
+        }
+
+        await _db.SaveChangesAsync(cancellationToken);
     }
 
     private static bool HasAcceptableContact(ResearchRun run, string? email, string? whatsApp)
@@ -634,8 +1711,53 @@ public class ResearchProcessor
         return false;
     }
 
-    private static string ResolveRejectionReason(AiQualificationResult qualification, ProspectCandidate candidate)
+    private static string ResolveRejectionReason(
+        AiQualificationResult qualification,
+        ProspectCandidate candidate,
+        QualificationEvaluationResult? rules = null)
     {
+        if (rules is not null)
+        {
+            var failedMandatory = rules.Criteria
+                .Where(x => x.IsMandatory && !x.Passed)
+                .Select(x => x.CriterionKey)
+                .ToList();
+            if (failedMandatory.Contains("entityType", StringComparer.OrdinalIgnoreCase))
+            {
+                return "Non-target entity type";
+            }
+
+            if (failedMandatory.Contains("companyIdentity", StringComparer.OrdinalIgnoreCase))
+            {
+                return "Weak company identity";
+            }
+
+            if (failedMandatory.Contains("targetCountry", StringComparer.OrdinalIgnoreCase))
+            {
+                return "Outside target country";
+            }
+
+            if (failedMandatory.Contains("targetIndustry", StringComparer.OrdinalIgnoreCase))
+            {
+                return "Industry mismatch";
+            }
+
+            if (failedMandatory.Contains("contactAttribution", StringComparer.OrdinalIgnoreCase))
+            {
+                return "Contact attribution failed";
+            }
+
+            if (failedMandatory.Contains("exclusionCriteria", StringComparer.OrdinalIgnoreCase))
+            {
+                return "Excluded by criteria";
+            }
+
+            if (failedMandatory.Contains("officialWebsite", StringComparer.OrdinalIgnoreCase))
+            {
+                return "Missing official website";
+            }
+        }
+
         var summary = qualification.Summary ?? string.Empty;
         if (summary.Contains("closed", StringComparison.OrdinalIgnoreCase))
         {
@@ -659,6 +1781,18 @@ public class ResearchProcessor
             return "Outside target country";
         }
 
+        if (summary.Contains("entity type", StringComparison.OrdinalIgnoreCase)
+            || summary.Contains("directory", StringComparison.OrdinalIgnoreCase)
+            || summary.Contains("listicle", StringComparison.OrdinalIgnoreCase))
+        {
+            return "Non-target entity type";
+        }
+
+        if (summary.Contains("industry", StringComparison.OrdinalIgnoreCase))
+        {
+            return "Industry mismatch";
+        }
+
         if (!qualification.IsRelevant)
         {
             return "Low project fit";
@@ -670,6 +1804,24 @@ public class ResearchProcessor
         }
 
         return "Low project fit";
+    }
+
+    private static void AppendCountryEvidenceNotes(
+        ProspectCandidate candidate,
+        QualificationEvaluationResult rules)
+    {
+        var countryCriterion = rules.Criteria.FirstOrDefault(x => x.CriterionKey == "targetCountry");
+        if (countryCriterion is null)
+        {
+            return;
+        }
+
+        var note =
+            $"countryGate={candidate.CountryMatchReasonCode ?? (countryCriterion.Passed ? "country.matched" : "country.failed")}; "
+            + $"country={candidate.Country ?? "unknown"}; "
+            + $"evidence={candidate.CountryEvidenceSummary ?? "none"}; "
+            + countryCriterion.Reason;
+        candidate.ResearchNotes = AppendNote(candidate.ResearchNotes, note);
     }
 
     private static string AppendNote(string? existing, string note)
@@ -687,7 +1839,7 @@ public class ResearchProcessor
         return $"{existing.Trim()} {note}";
     }
 
-    private async Task PersistProspectAsync(
+    private async Task<Guid?> PersistProspectAsync(
         OutreachProject project,
         ResearchRun run,
         ProspectCandidate candidate,
@@ -706,7 +1858,7 @@ public class ResearchProcessor
             attempt++;
             try
             {
-                var savedNew = await PersistProspectCoreAsync(
+                var persistResult = await PersistProspectCoreAsync(
                     project,
                     run,
                     candidate,
@@ -717,12 +1869,12 @@ public class ResearchProcessor
                     match,
                     recommendation,
                     cancellationToken);
-                if (savedNew)
+                if (persistResult.SavedNew)
                 {
                     state.ProspectsSaved++;
                 }
 
-                return;
+                return persistResult.ProspectId;
             }
             catch (DbUpdateException ex) when (attempt < 3 && IsUniqueConstraintViolation(ex))
             {
@@ -756,7 +1908,7 @@ public class ResearchProcessor
         }
     }
 
-    private async Task<bool> PersistProspectCoreAsync(
+    private async Task<(bool SavedNew, Guid? ProspectId)> PersistProspectCoreAsync(
         OutreachProject project,
         ResearchRun run,
         ProspectCandidate candidate,
@@ -775,6 +1927,7 @@ public class ResearchProcessor
         {
             var existing = match.ExistingProspect;
             ProspectMergeHelper.MergeCandidateInto(existing, mergeInput);
+            PreferVerifiedCompanyName(existing, candidate);
             ApplyAdditionalContacts(existing, candidate);
             ProspectMergeHelper.ApplyQualificationMerge(
                 existing,
@@ -800,7 +1953,7 @@ public class ResearchProcessor
                 "Merged duplicate prospect {ProspectId} for {Company}",
                 existing.Id,
                 existing.CompanyName);
-            return false;
+            return (false, existing.Id);
         }
 
         var prospect = new Prospect
@@ -837,8 +1990,7 @@ public class ResearchProcessor
             QualificationScore = qualification.QualificationScore,
             EmailConfidenceScore = qualification.EmailConfidenceScore,
             WhatsAppConfidenceScore = qualification.WhatsAppConfidenceScore,
-            IsQualified = (status is ProspectStatus.Qualified or ProspectStatus.ReadyForOutreach
-                    || (status == ProspectStatus.NeedsReview && qualification.IsQualified))
+            IsQualified = status is ProspectStatus.Qualified or ProspectStatus.ReadyForOutreach
                 && qualification.QualificationScore >= run.MinQualificationScore,
             Status = status,
             DuplicateKind = match.Kind,
@@ -851,11 +2003,51 @@ public class ResearchProcessor
         ApplyAdditionalContacts(prospect, candidate);
         _db.Prospects.Add(prospect);
         await _db.SaveChangesAsync(cancellationToken);
-        return true;
+        return (true, prospect.Id);
+    }
+
+    private static void PreferVerifiedCompanyName(Prospect existing, ProspectCandidate candidate)
+    {
+        if (string.IsNullOrWhiteSpace(candidate.CompanyName))
+        {
+            return;
+        }
+
+        var incoming = candidate.CompanyName.Trim();
+        var current = existing.CompanyName ?? string.Empty;
+        if (CompanyIdentityResolver.IsGenericName(current)
+            && !CompanyIdentityResolver.IsGenericName(incoming))
+        {
+            existing.CompanyName = incoming;
+            existing.NormalizedCompanyName = ProspectNormalizer.NormalizeCompanyName(incoming);
+            return;
+        }
+
+        if (!CompanyIdentityResolver.IsGenericName(incoming)
+            && candidate.NameConfidence >= 70
+            && (CompanyIdentityResolver.IsGenericName(current) || incoming.Length <= current.Length))
+        {
+            existing.CompanyName = incoming;
+            existing.NormalizedCompanyName = ProspectNormalizer.NormalizeCompanyName(incoming);
+        }
     }
 
     private static void ApplyAdditionalContacts(Prospect prospect, ProspectCandidate candidate)
     {
+        if (candidate.AttributedEmails.Count > 0)
+        {
+            prospect.AdditionalEmailsJson = ProspectContactStore.MergeAttributedEmails(
+                prospect.AdditionalEmailsJson,
+                candidate.AttributedEmails);
+        }
+
+        if (candidate.AttributedPhones.Count > 0)
+        {
+            prospect.AdditionalPhonesJson = ProspectContactStore.MergeAttributedPhones(
+                prospect.AdditionalPhonesJson,
+                candidate.AttributedPhones);
+        }
+
         foreach (var extraEmail in candidate.AdditionalEmails)
         {
             ProspectMergeHelper.MergeCandidateInto(
@@ -876,6 +2068,15 @@ public class ResearchProcessor
                     CompanyName = prospect.CompanyName,
                     Phone = extraPhone
                 });
+        }
+
+        if (!string.IsNullOrWhiteSpace(candidate.Address)
+            && (string.IsNullOrWhiteSpace(prospect.CompanyDescription)
+                || !prospect.CompanyDescription.Contains(candidate.Address, StringComparison.OrdinalIgnoreCase)))
+        {
+            prospect.ResearchNotes = AppendNote(
+                prospect.ResearchNotes,
+                $"address={candidate.Address}");
         }
     }
 
@@ -1008,6 +2209,11 @@ public class ResearchProcessor
             return ProspectStatus.DoNotContact;
         }
 
+        if (!qualification.IsRelevant)
+        {
+            return ProspectStatus.Rejected;
+        }
+
         if (match.NeedsReview
             || (match.Kind != ProspectDuplicateKind.None && duplicateHandling == DuplicateHandlingMode.Warn))
         {
@@ -1024,12 +2230,59 @@ public class ResearchProcessor
             return hasRequiredContact ? ProspectStatus.ReadyForOutreach : ProspectStatus.NeedsReview;
         }
 
-        if (qualification.IsRelevant)
+        if (qualification.IsRelevant && qualification.IsQualified)
         {
             return ProspectStatus.NeedsReview;
         }
 
+        if (qualification.IsRelevant)
+        {
+            return ProspectStatus.Discovered;
+        }
+
         return ProspectStatus.Rejected;
+    }
+
+    private static bool HasMinimumDiscoverableEvidence(
+        ProspectCandidate candidate,
+        QualificationEvaluationResult rules)
+    {
+        if (CompanyIdentityResolver.IsGenericName(candidate.CompanyName)
+            || EntityClassifier.IsTopicArticleName(candidate.CompanyName)
+            || EntityClassifier.IsListicleName(candidate.CompanyName))
+        {
+            return false;
+        }
+
+        if (candidate.SourceType == ProspectSourceType.Directory
+            && candidate.NameConfidence >= 55
+            && !string.IsNullOrWhiteSpace(candidate.SourceUrl))
+        {
+            return true;
+        }
+
+        var website = ProspectNormalizer.NormalizeWebsite(candidate.Website);
+        var websiteHost = UrlCanonicalizer.ExtractDomain(website)
+                          ?? UrlCanonicalizer.ExtractDomain(candidate.Website);
+        if (string.IsNullOrWhiteSpace(website)
+            || SystemDirectoryCatalog.IsSeedOrDirectoryHost(websiteHost)
+            || SystemDirectoryCatalog.IsSeedOrDirectoryHost(candidate.SourceUrl))
+        {
+            return false;
+        }
+
+        if (!rules.IsIdentityVerified)
+        {
+            return false;
+        }
+
+        if (string.IsNullOrWhiteSpace(candidate.CompanyDescription)
+            && candidate.NameConfidence < 70)
+        {
+            return false;
+        }
+
+        return true;
     }
 
     private ProspectSourceContext BuildSourceContext(
@@ -1060,6 +2313,120 @@ public class ResearchProcessor
         return context;
     }
 
+    private async Task InterpretProjectAsync(
+        OutreachProject project,
+        ResearchRun run,
+        ProspectSourceContext context,
+        CancellationToken cancellationToken)
+    {
+        ResearchQueryVersion? version = null;
+        if (run.ResearchQueryVersionId is not null)
+        {
+            version = await _db.ResearchQueryVersions
+                .FirstOrDefaultAsync(x => x.Id == run.ResearchQueryVersionId.Value, cancellationToken);
+        }
+
+        var persisted = ProjectUnderstandingEngine.TryRead(version);
+        var spec = persisted
+                   ?? ProjectUnderstandingEngine.Interpret(new ProjectUnderstandingRequest
+                   {
+                       ProjectName = project.Name,
+                       Description = project.Description,
+                       ResearchInstructions = project.ResearchInstructions,
+                       ApprovedIndustries = ResolveApprovedIndustries(context, version),
+                       ExcludedIndustries = context.ExcludedIndustries,
+                       Keywords = context.Keywords,
+                       ExcludedKeywords = context.ExcludedKeywords,
+                       Countries = context.Countries,
+                       TargetRoles = context.TargetRoles,
+                       QueryTargetIndustry = version?.TargetIndustry,
+                       QueryBusinessCategories = ProjectUnderstandingEngine.ReadJsonList(version?.BusinessCategoriesJson),
+                       QueryTargetCountry = version?.TargetCountry,
+                       QueryCities = ProjectUnderstandingEngine.ReadJsonList(version?.CitiesJson),
+                       QueryExclusionCriteria = ProjectUnderstandingEngine.ReadJsonList(version?.ExclusionCriteriaJson),
+                       QueryRequireOfficialWebsite = version?.RequireOfficialWebsite ?? true,
+                       QueryRequirePublicBusinessEmail = version?.RequirePublicBusinessEmail ?? run.IncludeEmail,
+                       MinQualificationScore = run.MinQualificationScore,
+                       TargetProspectCount = run.RequestedProspectCount,
+                       IncludeEmail = run.IncludeEmail,
+                       IncludeWhatsApp = run.IncludeWhatsApp
+                   });
+
+        if (version is not null && (persisted is null || spec.CorrectionReasons.Count > 0))
+        {
+            ProjectUnderstandingEngine.ApplyToQueryVersion(version, spec);
+            await _db.SaveChangesAsync(cancellationToken);
+        }
+
+        context.Specification = spec;
+        context.QueryVersion = version;
+        if (spec.ApprovedIndustries.Count > 0)
+        {
+            context.Industries = spec.ApprovedIndustries.ToList();
+        }
+
+        if (spec.Cities.Count > 0)
+        {
+            context.Locations = spec.Cities.ToList();
+        }
+
+        context.DiscoveryState.CurrentInvestigationActivity = "searching_for_sources";
+        await RecordLifecycleEventAsync(
+            run.Id,
+            ResearchRunEventType.ProjectInterpreted,
+            ResearchRunEventSeverity.Info,
+            $"Interpreted project with {spec.ApprovedIndustries.Count} approved industries and {spec.ExcludedIndustries.Count} exclusions.",
+            new
+            {
+                approvedIndustries = spec.ApprovedIndustries,
+                excludedIndustries = spec.ExcludedIndustries,
+                cities = spec.Cities,
+                corrections = spec.CorrectionReasons,
+                issues = spec.ValidationIssues.Select(x => x.Code).ToList()
+            },
+            cancellationToken,
+            ResearchPipelineStage.ProjectInterpretation);
+
+        var planned = ResearchSearchQueryGenerator.GeneratePlan(context, Math.Clamp(_options.MaxSearchQueries, 1, 200));
+        context.DiscoveryState.PlannedSearchQueries = planned.ToList();
+        await RecordLifecycleEventAsync(
+            run.Id,
+            ResearchRunEventType.SearchQueryGenerated,
+            ResearchRunEventSeverity.Info,
+            $"Planned {planned.Count} search queries across {planned.Select(x => x.Industry).Distinct(StringComparer.OrdinalIgnoreCase).Count()} industries.",
+            new
+            {
+                queryCount = planned.Count,
+                industries = planned.Select(x => x.Industry).Distinct().ToList(),
+                intents = planned.Select(x => x.Intent).Distinct().ToList()
+            },
+            cancellationToken,
+            ResearchPipelineStage.SearchPlanning);
+    }
+
+    private static List<string> ResolveApprovedIndustries(
+        ProspectSourceContext context,
+        ResearchQueryVersion? version)
+    {
+        if (context.Industries.Count > 0)
+        {
+            return context.Industries.ToList();
+        }
+
+        var fromVersion = ProjectUnderstandingEngine.ReadJsonList(version?.BusinessCategoriesJson);
+        if (fromVersion.Count > 0)
+        {
+            return fromVersion;
+        }
+
+        if (!string.IsNullOrWhiteSpace(version?.TargetIndustry))
+        {
+            return [version.TargetIndustry.Trim()];
+        }
+
+        return [];
+    }
+
     private static int CountDistinctCompanies(List<ProspectCandidate> candidates)
     {
         var set = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
@@ -1083,7 +2450,15 @@ public class ResearchProcessor
         }
 
         var parsed = EmailAddressParser.Parse(email);
-        return parsed.ValidEmails.Count == 0 ? null : parsed.ValidEmails[0];
+        foreach (var valid in parsed.ValidEmails)
+        {
+            if (EmailAddressParser.IsAcceptableBusinessEmail(valid))
+            {
+                return valid;
+            }
+        }
+
+        return null;
     }
 
     private static string? TrimOrNull(string? value)
