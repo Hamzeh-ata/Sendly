@@ -133,7 +133,7 @@ public static class GeographicCoveragePlanner
 
         var latSpan = Math.Abs(region.North - region.South);
         var lonSpan = Math.Abs(region.East - region.West);
-        return latSpan > 0.35 && lonSpan > 0.35;
+        return latSpan > 0.18 && lonSpan > 0.18;
     }
 
     public static int CountSubdivisionDepth(string regionLabel)

@@ -2,13 +2,17 @@ import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { HttpErrorResponse } from '@angular/common/http';
+import { forkJoin, of } from 'rxjs';
 import {
   DuplicateHandlingMode,
+  OutreachProjectDetail,
   ProjectTemplateLink,
   UpsertOutreachProject
 } from '../../core/models/prospecting.model';
 import { UpsertResearchQuery } from '../../core/models/research-query.model';
+import { GeoCountry } from '../../core/models/geo-country.model';
 import { ProjectTemplateOption } from '../../core/models/project-row.model';
+import { GeoApiService } from '../../core/services/geo-api.service';
 import { ProjectApiService } from '../../core/services/project-api.service';
 import { ResearchQueryApiService } from '../../core/services/research-query-api.service';
 import { TemplateApiService } from '../../core/services/template-api.service';
@@ -27,6 +31,7 @@ export class ProjectEditorPage implements OnInit {
   private readonly projectApi = inject(ProjectApiService);
   private readonly researchQueryApi = inject(ResearchQueryApiService);
   private readonly templateApi = inject(TemplateApiService);
+  private readonly geoApi = inject(GeoApiService);
   private readonly notification = inject(NotificationService);
   private readonly translate = inject(TranslateService);
 
@@ -45,14 +50,15 @@ export class ProjectEditorPage implements OnInit {
   readonly defaultRequestedProspectCount = signal(50);
   readonly keywordsText = signal('');
   readonly excludedKeywordsText = signal('');
-  readonly countriesText = signal('');
+  readonly selectedCountry = signal('');
+  readonly selectedCity = signal('');
+  readonly countryOptions = signal<GeoCountry[]>([]);
   readonly industriesText = signal('');
   readonly excludedIndustriesText = signal('');
   readonly targetRolesText = signal('');
   readonly queryName = signal('');
   readonly plainLanguageBrief = signal('');
   readonly targetIndustry = signal('');
-  readonly targetCountry = signal('');
   readonly maxPagesPerDomain = signal(5);
   readonly maxCrawlDepth = signal(2);
   readonly maxUrlsPerRun = signal(200);
@@ -68,7 +74,31 @@ export class ProjectEditorPage implements OnInit {
   readonly pageTitleKey = computed(() =>
     this.editingId() ? 'projects.editTitle' : 'projects.createTitle'
   );
-  readonly canSave = computed(() => this.name().trim().length > 0 && !this.saving());
+  readonly cityOptions = computed(() => {
+    const countryName = this.selectedCountry();
+    if (!countryName) {
+      return [] as string[];
+    }
+    for (const country of this.countryOptions()) {
+      if (country.name === countryName) {
+        return country.cities;
+      }
+    }
+    return [] as string[];
+  });
+  readonly cityRequired = computed(() => this.cityOptions().length > 0);
+  readonly canSave = computed(() => {
+    if (this.name().trim().length === 0 || this.saving()) {
+      return false;
+    }
+    if (!this.selectedCountry()) {
+      return false;
+    }
+    if (this.cityRequired() && !this.selectedCity()) {
+      return false;
+    }
+    return true;
+  });
   readonly templateChecklist = computed(() => {
     const selected = this.selectedTemplateIds();
     const options: ProjectTemplateOption[] = [];
@@ -89,14 +119,11 @@ export class ProjectEditorPage implements OnInit {
   ];
 
   ngOnInit(): void {
-    this.loadTemplates();
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.editingId.set(id);
-      this.loadProject(id);
-      return;
     }
-    this.loading.set(false);
+    this.loadPage(id);
   }
 
   onNameChange(value: string): void {
@@ -143,8 +170,13 @@ export class ProjectEditorPage implements OnInit {
     this.excludedKeywordsText.set(value);
   }
 
-  onCountriesChange(value: string): void {
-    this.countriesText.set(value);
+  onCountryChange(value: string): void {
+    this.selectedCountry.set(value);
+    this.selectedCity.set('');
+  }
+
+  onCityChange(value: string): void {
+    this.selectedCity.set(value);
   }
 
   onIndustriesChange(value: string): void {
@@ -169,10 +201,6 @@ export class ProjectEditorPage implements OnInit {
 
   onTargetIndustryChange(value: string): void {
     this.targetIndustry.set(value);
-  }
-
-  onTargetCountryChange(value: string): void {
-    this.targetCountry.set(value);
   }
 
   onMaxPagesPerDomainChange(value: string): void {
@@ -231,10 +259,20 @@ export class ProjectEditorPage implements OnInit {
 
   save(): void {
     if (!this.canSave()) {
+      if (!this.selectedCountry()) {
+        this.notification.error(this.translate.instant('projects.countryRequired'));
+        return;
+      }
+      if (this.cityRequired() && !this.selectedCity()) {
+        this.notification.error(this.translate.instant('projects.cityRequired'));
+        return;
+      }
       this.notification.error(this.translate.instant('projects.validationRequired'));
       return;
     }
 
+    const country = this.selectedCountry();
+    const city = this.selectedCity();
     const payload: UpsertOutreachProject = {
       name: this.name().trim(),
       description: this.description().trim() || null,
@@ -247,7 +285,8 @@ export class ProjectEditorPage implements OnInit {
       defaultRequestedProspectCount: this.defaultRequestedProspectCount(),
       keywords: this.parseList(this.keywordsText()),
       excludedKeywords: this.parseList(this.excludedKeywordsText()),
-      countries: this.parseList(this.countriesText()),
+      countries: country ? [country] : [],
+      cities: city ? [city] : [],
       industries: this.parseList(this.industriesText()),
       excludedIndustries: this.parseList(this.excludedIndustriesText()),
       targetRoles: this.parseList(this.targetRolesText()),
@@ -275,40 +314,80 @@ export class ProjectEditorPage implements OnInit {
     });
   }
 
-  private loadProject(id: string): void {
-    this.projectApi.get(id).subscribe({
-      next: (project) => {
-        this.name.set(project.name);
-        this.description.set(project.description ?? '');
-        this.researchInstructions.set(project.researchInstructions ?? '');
-        this.isActive.set(project.isActive);
-        this.minQualificationScore.set(project.minQualificationScore);
-        this.duplicateHandling.set(project.duplicateHandling);
-        this.enableEmail.set(project.enableEmail);
-        this.enableWhatsApp.set(project.enableWhatsApp);
-        this.defaultRequestedProspectCount.set(project.defaultRequestedProspectCount);
-        this.keywordsText.set(this.joinList(project.keywords));
-        this.excludedKeywordsText.set(this.joinList(project.excludedKeywords));
-        this.countriesText.set(this.joinList(project.countries));
-        this.industriesText.set(this.joinList(project.industries));
-        this.excludedIndustriesText.set(this.joinList(project.excludedIndustries));
-        this.targetRolesText.set(this.joinList(project.targetRoles));
-        this.queryName.set(project.name);
-        this.targetCountry.set(this.joinList(project.countries).split('\n')[0] ?? '');
-        this.targetIndustry.set(this.joinList(project.industries).split('\n')[0] ?? '');
-        const selectedIds: string[] = [];
-        for (const link of project.templates) {
-          selectedIds.push(link.templateId);
+  private loadPage(projectId: string | null): void {
+    this.loading.set(true);
+    forkJoin({
+      countries: this.geoApi.listCountries(),
+      templates: this.templateApi.list(undefined, 'active'),
+      project: projectId ? this.projectApi.get(projectId) : of(null)
+    }).subscribe({
+      next: ({ countries, templates, project }) => {
+        this.countryOptions.set(countries ?? []);
+        this.applyTemplates(templates ?? []);
+        if (!project) {
+          this.loading.set(false);
+          return;
         }
-        this.selectedTemplateIds.set(selectedIds);
-        this.loadResearchQuery(id);
+        this.applyProject(project);
+        this.loadResearchQuery(project.id);
       },
       error: (err: HttpErrorResponse) => {
         this.loading.set(false);
         this.notifyError(err);
-        this.router.navigate(['/projects']);
+        if (projectId) {
+          this.router.navigate(['/projects']);
+        }
       }
     });
+  }
+
+  private applyTemplates(items: { id: string; name: string }[]): void {
+    const options: ProjectTemplateOption[] = [];
+    for (const item of items) {
+      options.push({ id: item.id, name: item.name, selected: false });
+    }
+    this.templateOptions.set(options);
+  }
+
+  private applyProject(project: OutreachProjectDetail): void {
+    this.name.set(project.name);
+    this.description.set(project.description ?? '');
+    this.researchInstructions.set(project.researchInstructions ?? '');
+    this.isActive.set(project.isActive);
+    this.minQualificationScore.set(project.minQualificationScore);
+    this.duplicateHandling.set(project.duplicateHandling);
+    this.enableEmail.set(project.enableEmail);
+    this.enableWhatsApp.set(project.enableWhatsApp);
+    this.defaultRequestedProspectCount.set(project.defaultRequestedProspectCount);
+    this.keywordsText.set(this.joinList(project.keywords));
+    this.excludedKeywordsText.set(this.joinList(project.excludedKeywords));
+    this.selectedCountry.set(this.resolveCountryName(project.countries[0] ?? ''));
+    this.selectedCity.set(project.cities[0] ?? '');
+    this.industriesText.set(this.joinList(project.industries));
+    this.excludedIndustriesText.set(this.joinList(project.excludedIndustries));
+    this.targetRolesText.set(this.joinList(project.targetRoles));
+    this.queryName.set(project.name);
+    this.targetIndustry.set(this.joinList(project.industries).split('\n')[0] ?? '');
+    const selectedIds: string[] = [];
+    for (const link of project.templates) {
+      selectedIds.push(link.templateId);
+    }
+    this.selectedTemplateIds.set(selectedIds);
+  }
+
+  private resolveCountryName(raw: string): string {
+    if (!raw) {
+      return '';
+    }
+    for (const country of this.countryOptions()) {
+      if (
+        country.name.toLowerCase() === raw.toLowerCase()
+        || country.code.toLowerCase() === raw.toLowerCase()
+      ) {
+        return country.name;
+      }
+    }
+    return raw;
   }
 
   private loadResearchQuery(projectId: string): void {
@@ -327,7 +406,9 @@ export class ProjectEditorPage implements OnInit {
             if (version) {
               this.plainLanguageBrief.set(version.plainLanguageBrief ?? '');
               this.targetIndustry.set(version.targetIndustry ?? '');
-              this.targetCountry.set(version.targetCountry ?? '');
+              if (!this.selectedCity() && version.cities?.length) {
+                this.selectedCity.set(version.cities[0] ?? '');
+              }
               this.maxPagesPerDomain.set(version.maxPagesPerDomain);
               this.maxCrawlDepth.set(version.maxCrawlDepth);
               this.maxUrlsPerRun.set(version.maxUrlsPerRun);
@@ -364,15 +445,17 @@ export class ProjectEditorPage implements OnInit {
   }
 
   private buildResearchQueryPayload(): UpsertResearchQuery {
+    const country = this.selectedCountry();
+    const city = this.selectedCity();
     return {
       name: this.queryName().trim() || this.name().trim() || 'Automatic discovery',
       description: this.description().trim() || null,
       plainLanguageBrief: this.plainLanguageBrief().trim() || null,
       targetIndustry: this.targetIndustry().trim() || this.parseList(this.industriesText())[0] || null,
       businessCategories: this.parseList(this.industriesText()),
-      targetCountry: this.targetCountry().trim() || this.parseList(this.countriesText())[0] || null,
+      targetCountry: country || null,
       regions: [],
-      cities: [],
+      cities: city ? [city] : [],
       companyTypes: [],
       companySizes: [],
       requiredCriteria: this.parseList(this.keywordsText()),
@@ -397,19 +480,6 @@ export class ProjectEditorPage implements OnInit {
       enablePriorResearchUrls: this.enablePriorResearchUrls(),
       seedUrls: []
     };
-  }
-
-  private loadTemplates(): void {
-    this.templateApi.list(undefined, 'active').subscribe({
-      next: (items) => {
-        const options: ProjectTemplateOption[] = [];
-        for (const item of items ?? []) {
-          options.push({ id: item.id, name: item.name, selected: false });
-        }
-        this.templateOptions.set(options);
-      },
-      error: () => this.templateOptions.set([])
-    });
   }
 
   private buildTemplateLinks(): ProjectTemplateLink[] {

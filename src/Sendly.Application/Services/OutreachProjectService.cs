@@ -1,5 +1,6 @@
 using Sendly.Application.Abstractions;
 using Sendly.Application.DTOs;
+using Sendly.Application.Services.MapResearch;
 using Sendly.Domain.Entities;
 using Sendly.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +17,16 @@ public class OutreachProjectService
     {
         _db = db;
         _logger = logger;
+    }
+
+    public async Task<ProjectGeographyMigrationResultDto> MigrateGeographyAsync(CancellationToken cancellationToken)
+    {
+        var result = new ProjectGeographyMigrationResultDto();
+        result.CountriesNormalized = await NormalizeExistingCountriesAsync(cancellationToken);
+        var split = await SplitCountryWideProjectsAsync(cancellationToken);
+        result.ProjectsSplit = split.ProjectsSplit;
+        result.CityProjectsCreated = split.CityProjectsCreated;
+        return result;
     }
 
     public async Task<List<OutreachProjectSummaryDto>> ListAsync(
@@ -87,6 +98,7 @@ public class OutreachProjectService
             EnableEmail = summary.EnableEmail,
             EnableWhatsApp = summary.EnableWhatsApp,
             Countries = summary.Countries,
+            Cities = summary.Cities,
             Keywords = summary.Keywords,
             ProspectCount = summary.ProspectCount,
             QualifiedCount = summary.QualifiedCount,
@@ -113,6 +125,7 @@ public class OutreachProjectService
 
         detail.Keywords = project.Keywords.Where(x => !x.IsExcluded).Select(x => x.Value).ToList();
         detail.Countries = project.Countries.Select(x => x.Name).ToList();
+        detail.Cities = project.Cities.Select(x => x.Name).ToList();
         return detail;
     }
 
@@ -250,6 +263,11 @@ public class OutreachProjectService
             .ToListAsync(cancellationToken);
         _db.OutreachProjectCountries.RemoveRange(countries);
 
+        var cities = await _db.OutreachProjectCities
+            .Where(x => x.ProjectId == projectId)
+            .ToListAsync(cancellationToken);
+        _db.OutreachProjectCities.RemoveRange(cities);
+
         var industries = await _db.OutreachProjectIndustries
             .Where(x => x.ProjectId == projectId)
             .ToListAsync(cancellationToken);
@@ -300,6 +318,12 @@ public class OutreachProjectService
                 .Select(x => x.Name)
                 .ToListAsync(cancellationToken);
 
+        var cities = project.Cities?.Select(x => x.Name).ToList()
+            ?? await _db.OutreachProjectCities.AsNoTracking()
+                .Where(x => x.ProjectId == project.Id)
+                .Select(x => x.Name)
+                .ToListAsync(cancellationToken);
+
         var keywords = project.Keywords?.Where(x => !x.IsExcluded).Select(x => x.Value).ToList()
             ?? await _db.OutreachProjectKeywords.AsNoTracking()
                 .Where(x => x.ProjectId == project.Id && !x.IsExcluded)
@@ -316,6 +340,7 @@ public class OutreachProjectService
             EnableEmail = project.EnableEmail,
             EnableWhatsApp = project.EnableWhatsApp,
             Countries = countries,
+            Cities = cities,
             Keywords = keywords,
             ProspectCount = prospects.Count,
             QualifiedCount = prospects.Count(x => x.IsQualified || x.Status == ProspectStatus.Qualified),
@@ -400,6 +425,55 @@ public class OutreachProjectService
         {
             throw new InvalidOperationException("At least one contact method must be enabled.");
         }
+
+        var countries = NormalizeCountries(request.Countries);
+        if (countries.Count == 0)
+        {
+            throw new InvalidOperationException("Country is required.");
+        }
+
+        if (countries.Count > 1)
+        {
+            throw new InvalidOperationException("Select a single country. Create one project per city.");
+        }
+
+        request.Countries = countries;
+        request.Cities = NormalizeCities(countries[0], request.Cities);
+
+        var bounds = GeographicBoundsCatalog.Resolve(countries[0]);
+        if (bounds is null)
+        {
+            throw new InvalidOperationException($"Country '{countries[0]}' is not supported.");
+        }
+
+        var catalogCities = CityBoundsCatalog.ListCities(bounds.CountryCode);
+        if (catalogCities.Count > 0 && request.Cities.Count == 0)
+        {
+            throw new InvalidOperationException("City is required for the selected country.");
+        }
+
+        if (request.Cities.Count > 1)
+        {
+            throw new InvalidOperationException("Select a single city. Create one project per city.");
+        }
+
+        if (request.Cities.Count == 1 && catalogCities.Count > 0)
+        {
+            var cityAllowed = false;
+            foreach (var city in catalogCities)
+            {
+                if (string.Equals(city, request.Cities[0], StringComparison.OrdinalIgnoreCase))
+                {
+                    cityAllowed = true;
+                    break;
+                }
+            }
+
+            if (!cityAllowed)
+            {
+                throw new InvalidOperationException($"City '{request.Cities[0]}' is not supported for {bounds.CountryName}.");
+            }
+        }
     }
 
     private sealed record ProjectCollectionLoadOptions(
@@ -415,6 +489,9 @@ public class OutreachProjectService
             .Where(x => x.ProjectId == project.Id)
             .ToListAsync(cancellationToken);
         project.Countries = await _db.OutreachProjectCountries.AsNoTracking()
+            .Where(x => x.ProjectId == project.Id)
+            .ToListAsync(cancellationToken);
+        project.Cities = await _db.OutreachProjectCities.AsNoTracking()
             .Where(x => x.ProjectId == project.Id)
             .ToListAsync(cancellationToken);
         if (options.IncludeIndustriesAndRoles)
@@ -447,6 +524,9 @@ public class OutreachProjectService
         await _db.OutreachProjectCountries
             .Where(x => x.ProjectId == project.Id)
             .ExecuteDeleteAsync(cancellationToken);
+        await _db.OutreachProjectCities
+            .Where(x => x.ProjectId == project.Id)
+            .ExecuteDeleteAsync(cancellationToken);
         await _db.OutreachProjectIndustries
             .Where(x => x.ProjectId == project.Id)
             .ExecuteDeleteAsync(cancellationToken);
@@ -472,9 +552,14 @@ public class OutreachProjectService
             project.Keywords.Add(new OutreachProjectKeyword { ProjectId = project.Id, Value = value, IsExcluded = true });
         }
 
-        foreach (var value in DistinctValues(request.Countries))
+        foreach (var value in NormalizeCountries(request.Countries))
         {
             project.Countries.Add(new OutreachProjectCountry { ProjectId = project.Id, Name = value });
+        }
+
+        foreach (var value in NormalizeCities(FirstValue(request.Countries), request.Cities))
+        {
+            project.Cities.Add(new OutreachProjectCity { ProjectId = project.Id, Name = value });
         }
 
         foreach (var value in DistinctValues(request.Industries))
@@ -531,9 +616,18 @@ public class OutreachProjectService
             });
         }
 
-        foreach (var value in DistinctValues(request.Countries))
+        foreach (var value in NormalizeCountries(request.Countries))
         {
             _db.OutreachProjectCountries.Add(new OutreachProjectCountry
+            {
+                ProjectId = projectId,
+                Name = value
+            });
+        }
+
+        foreach (var value in NormalizeCities(FirstValue(request.Countries), request.Cities))
+        {
+            _db.OutreachProjectCities.Add(new OutreachProjectCity
             {
                 ProjectId = projectId,
                 Name = value
@@ -586,6 +680,267 @@ public class OutreachProjectService
         }
     }
 
+    private async Task<int> NormalizeExistingCountriesAsync(CancellationToken cancellationToken)
+    {
+        var rows = await _db.OutreachProjectCountries.ToListAsync(cancellationToken);
+        var changed = 0;
+        foreach (var row in rows)
+        {
+            var normalized = GeographicBoundsCatalog.NormalizeName(row.Name);
+            if (string.IsNullOrWhiteSpace(normalized) || string.Equals(normalized, row.Name, StringComparison.Ordinal))
+            {
+                continue;
+            }
+
+            row.Name = normalized;
+            changed++;
+        }
+
+        if (changed > 0)
+        {
+            await _db.SaveChangesAsync(cancellationToken);
+        }
+
+        return changed;
+    }
+
+    private async Task<(int ProjectsSplit, int CityProjectsCreated)> SplitCountryWideProjectsAsync(
+        CancellationToken cancellationToken)
+    {
+        var projects = await _db.OutreachProjects
+            .Where(x => x.IsActive)
+            .ToListAsync(cancellationToken);
+
+        var projectsSplit = 0;
+        var cityProjectsCreated = 0;
+
+        foreach (var project in projects)
+        {
+            var countries = await _db.OutreachProjectCountries
+                .Where(x => x.ProjectId == project.Id)
+                .ToListAsync(cancellationToken);
+            if (countries.Count != 1)
+            {
+                continue;
+            }
+
+            var existingCities = await _db.OutreachProjectCities
+                .Where(x => x.ProjectId == project.Id)
+                .CountAsync(cancellationToken);
+            if (existingCities > 0)
+            {
+                continue;
+            }
+
+            var bounds = GeographicBoundsCatalog.Resolve(countries[0].Name);
+            if (bounds is null)
+            {
+                continue;
+            }
+
+            var catalogCities = CityBoundsCatalog.ListCities(bounds.CountryCode);
+            if (catalogCities.Count == 0)
+            {
+                continue;
+            }
+
+            await LoadSplitSourceCollectionsAsync(project, cancellationToken);
+            var createdForProject = 0;
+            foreach (var city in catalogCities)
+            {
+                var cloneName = BuildCityProjectName(project.Name, city);
+                var alreadyExists = await CityProjectExistsAsync(cloneName, cancellationToken);
+                if (alreadyExists)
+                {
+                    continue;
+                }
+
+                CreateCityProjectClone(project, bounds.CountryName, city, cloneName);
+                cityProjectsCreated++;
+                createdForProject++;
+            }
+
+            if (createdForProject == 0 && catalogCities.Count > 0)
+            {
+                project.IsActive = false;
+                project.UpdatedAtUtc = DateTimeOffset.UtcNow;
+                continue;
+            }
+
+            if (createdForProject == 0)
+            {
+                continue;
+            }
+
+            project.IsActive = false;
+            project.UpdatedAtUtc = DateTimeOffset.UtcNow;
+            projectsSplit++;
+        }
+
+        if (projectsSplit > 0)
+        {
+            await _db.SaveChangesAsync(cancellationToken);
+            _logger.LogInformation(
+                "Split {ProjectsSplit} country-wide projects into {CityProjects} city projects",
+                projectsSplit,
+                cityProjectsCreated);
+        }
+
+        return (projectsSplit, cityProjectsCreated);
+    }
+
+    private async Task LoadSplitSourceCollectionsAsync(
+        OutreachProject project,
+        CancellationToken cancellationToken)
+    {
+        project.Keywords = await _db.OutreachProjectKeywords
+            .Where(x => x.ProjectId == project.Id)
+            .AsNoTracking()
+            .ToListAsync(cancellationToken);
+        project.Industries = await _db.OutreachProjectIndustries
+            .Where(x => x.ProjectId == project.Id)
+            .AsNoTracking()
+            .ToListAsync(cancellationToken);
+        project.TargetRoles = await _db.OutreachProjectTargetRoles
+            .Where(x => x.ProjectId == project.Id)
+            .AsNoTracking()
+            .ToListAsync(cancellationToken);
+        project.Templates = await _db.ProjectTemplates
+            .Where(x => x.ProjectId == project.Id)
+            .AsNoTracking()
+            .ToListAsync(cancellationToken);
+    }
+
+    private async Task<bool> CityProjectExistsAsync(string cloneName, CancellationToken cancellationToken)
+    {
+        return await _db.OutreachProjects.AsNoTracking()
+            .AnyAsync(x => x.Name == cloneName, cancellationToken);
+    }
+
+    private void CreateCityProjectClone(
+        OutreachProject source,
+        string countryName,
+        string cityName,
+        string cloneName)
+    {
+        var clone = new OutreachProject
+        {
+            Name = cloneName,
+            Description = source.Description,
+            ResearchInstructions = source.ResearchInstructions,
+            IsActive = true,
+            MinQualificationScore = source.MinQualificationScore,
+            DuplicateHandling = source.DuplicateHandling,
+            EnableEmail = source.EnableEmail,
+            EnableWhatsApp = source.EnableWhatsApp,
+            DefaultRequestedProspectCount = source.DefaultRequestedProspectCount
+        };
+
+        clone.Countries.Add(new OutreachProjectCountry
+        {
+            ProjectId = clone.Id,
+            Name = countryName
+        });
+        clone.Cities.Add(new OutreachProjectCity
+        {
+            ProjectId = clone.Id,
+            Name = cityName
+        });
+
+        foreach (var keyword in source.Keywords)
+        {
+            clone.Keywords.Add(new OutreachProjectKeyword
+            {
+                ProjectId = clone.Id,
+                Value = keyword.Value,
+                IsExcluded = keyword.IsExcluded
+            });
+        }
+
+        foreach (var industry in source.Industries)
+        {
+            clone.Industries.Add(new OutreachProjectIndustry
+            {
+                ProjectId = clone.Id,
+                Value = industry.Value,
+                IsExcluded = industry.IsExcluded
+            });
+        }
+
+        foreach (var role in source.TargetRoles)
+        {
+            clone.TargetRoles.Add(new OutreachProjectTargetRole
+            {
+                ProjectId = clone.Id,
+                Role = role.Role
+            });
+        }
+
+        foreach (var template in source.Templates)
+        {
+            clone.Templates.Add(new ProjectTemplate
+            {
+                ProjectId = clone.Id,
+                TemplateId = template.TemplateId,
+                Channel = template.Channel,
+                MatchIndustry = template.MatchIndustry,
+                MatchCompanySize = template.MatchCompanySize,
+                MatchNotes = template.MatchNotes,
+                SortOrder = template.SortOrder
+            });
+        }
+
+        _db.OutreachProjects.Add(clone);
+    }
+
+    private static string BuildCityProjectName(string sourceName, string cityName)
+    {
+        var trimmed = sourceName.Trim();
+        if (trimmed.Contains(cityName, StringComparison.OrdinalIgnoreCase))
+        {
+            return trimmed;
+        }
+
+        return $"{trimmed} — {cityName}";
+    }
+
+    private static List<string> NormalizeCountries(IEnumerable<string> values)
+    {
+        var result = new List<string>();
+        var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        foreach (var value in values)
+        {
+            var normalized = GeographicBoundsCatalog.NormalizeName(value);
+            if (string.IsNullOrWhiteSpace(normalized) || !seen.Add(normalized))
+            {
+                continue;
+            }
+
+            result.Add(normalized);
+        }
+
+        return result;
+    }
+
+    private static List<string> NormalizeCities(string? countryName, IEnumerable<string> values)
+    {
+        var countryCode = GeographicBoundsCatalog.Resolve(countryName)?.CountryCode;
+        var result = new List<string>();
+        var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        foreach (var value in values)
+        {
+            var normalized = CityBoundsCatalog.NormalizeCityName(countryCode, value);
+            if (string.IsNullOrWhiteSpace(normalized) || !seen.Add(normalized))
+            {
+                continue;
+            }
+
+            result.Add(normalized);
+        }
+
+        return result;
+    }
+
     private static List<string> DistinctValues(IEnumerable<string> values)
     {
         var result = new List<string>();
@@ -605,6 +960,11 @@ public class OutreachProjectService
         }
 
         return result;
+    }
+
+    private static string? FirstValue(List<string> values)
+    {
+        return values.Count > 0 ? values[0] : null;
     }
 
     private static string? TrimOrNull(string? value)

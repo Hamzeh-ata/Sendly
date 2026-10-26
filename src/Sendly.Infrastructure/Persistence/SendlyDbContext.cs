@@ -38,6 +38,8 @@ public class SendlyDbContext : DbContext, ISendlyDbContext
 
     public DbSet<OutreachProjectCountry> OutreachProjectCountries => Set<OutreachProjectCountry>();
 
+    public DbSet<OutreachProjectCity> OutreachProjectCities => Set<OutreachProjectCity>();
+
     public DbSet<OutreachProjectIndustry> OutreachProjectIndustries => Set<OutreachProjectIndustry>();
 
     public DbSet<OutreachProjectTargetRole> OutreachProjectTargetRoles => Set<OutreachProjectTargetRole>();

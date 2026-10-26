@@ -21,6 +21,7 @@ public class AppSettingsService
     private readonly OpenAiOptions _openAi;
     private readonly ResearchOptions _research;
     private readonly BraveSearchOptions _braveSearch;
+    private readonly GooglePlacesOptions _googlePlaces;
     private readonly SearXngOptions _searXng;
     private readonly OllamaOptions _ollama;
     private readonly WhatsAppBusinessOptions _whatsApp;
@@ -36,6 +37,7 @@ public class AppSettingsService
         IOptions<OpenAiOptions> openAi,
         IOptions<ResearchOptions> research,
         IOptions<BraveSearchOptions> braveSearch,
+        IOptions<GooglePlacesOptions> googlePlaces,
         IOptions<SearXngOptions> searXng,
         IOptions<OllamaOptions> ollama,
         IOptions<WhatsAppBusinessOptions> whatsApp,
@@ -50,6 +52,7 @@ public class AppSettingsService
         _openAi = openAi.Value;
         _research = research.Value;
         _braveSearch = braveSearch.Value;
+        _googlePlaces = googlePlaces.Value;
         _searXng = searXng.Value;
         _ollama = ollama.Value;
         _whatsApp = whatsApp.Value;
@@ -84,6 +87,7 @@ public class AppSettingsService
             OpenAi = MapOpenAi(),
             Research = MapResearch(),
             BraveSearch = MapBraveSearch(),
+            GooglePlaces = MapGooglePlaces(),
             SearXng = MapSearXng(),
             Ollama = MapOllama(),
             WhatsApp = MapWhatsApp(),
@@ -99,6 +103,11 @@ public class AppSettingsService
         ApplyOpenAi(request.OpenAi);
         ApplyResearch(request.Research);
         ApplyBraveSearch(request.BraveSearch);
+        if (request.GooglePlaces is not null)
+        {
+            ApplyGooglePlaces(request.GooglePlaces);
+        }
+
         ApplySearXng(request.SearXng);
         ApplyOllama(request.Ollama);
         ApplyWhatsApp(request.WhatsApp);
@@ -111,6 +120,7 @@ public class AppSettingsService
         await PersistSectionAsync(OpenAiOptions.SectionName, BuildOpenAiStore(), cancellationToken);
         await PersistSectionAsync(ResearchOptions.SectionName, BuildResearchStore(), cancellationToken);
         await PersistSectionAsync(BraveSearchOptions.SectionName, BuildBraveSearchStore(), cancellationToken);
+        await PersistSectionAsync(GooglePlacesOptions.SectionName, BuildGooglePlacesStore(), cancellationToken);
         await PersistSectionAsync(SearXngOptions.SectionName, BuildSearXngStore(), cancellationToken);
         await PersistSectionAsync(OllamaOptions.SectionName, BuildOllamaStore(), cancellationToken);
         await PersistSectionAsync(WhatsAppBusinessOptions.SectionName, BuildWhatsAppStore(), cancellationToken);
@@ -179,6 +189,17 @@ public class AppSettingsService
             if (dto is not null)
             {
                 ApplyBraveSearchNonSecret(dto);
+            }
+
+            return;
+        }
+
+        if (string.Equals(section, GooglePlacesOptions.SectionName, StringComparison.OrdinalIgnoreCase))
+        {
+            var dto = JsonSerializer.Deserialize<GooglePlacesSettingsDto>(json, JsonOptions);
+            if (dto is not null)
+            {
+                ApplyGooglePlaces(dto, allowBlankSecrets: false);
             }
 
             return;
@@ -318,6 +339,25 @@ public class AppSettingsService
             MaxRequestsPerResearchRun = _braveSearch.MaxRequestsPerResearchRun,
             RequestDelayMilliseconds = _braveSearch.RequestDelayMilliseconds,
             ConnectionStatus = configured ? "Configured" : "NotConfigured"
+        };
+    }
+
+    private GooglePlacesSettingsDto MapGooglePlaces()
+    {
+        var configured = !string.IsNullOrWhiteSpace(_googlePlaces.ApiKey);
+        return new GooglePlacesSettingsDto
+        {
+            Enabled = _googlePlaces.Enabled,
+            ApiKey = null,
+            ApiKeyConfigured = configured,
+            BaseUrl = _googlePlaces.BaseUrl,
+            TimeoutSeconds = _googlePlaces.TimeoutSeconds,
+            MaxResultsPerQuery = _googlePlaces.MaxResultsPerQuery,
+            MaxQueriesPerRequest = _googlePlaces.MaxQueriesPerRequest,
+            RequestDelayMilliseconds = _googlePlaces.RequestDelayMilliseconds,
+            ConnectionStatus = configured
+                ? (_googlePlaces.Enabled ? "Configured" : "Disabled")
+                : "NotConfigured"
         };
     }
 
@@ -530,6 +570,29 @@ public class AppSettingsService
         _braveSearch.MaxResultsPerQuery = Math.Clamp(dto.MaxResultsPerQuery, 1, 20);
         _braveSearch.MaxRequestsPerResearchRun = Math.Clamp(dto.MaxRequestsPerResearchRun, 1, 100);
         _braveSearch.RequestDelayMilliseconds = Math.Clamp(dto.RequestDelayMilliseconds, 0, 10000);
+    }
+
+    private void ApplyGooglePlaces(GooglePlacesSettingsDto dto, bool allowBlankSecrets = true)
+    {
+        _googlePlaces.Enabled = dto.Enabled;
+        if (!string.IsNullOrWhiteSpace(dto.BaseUrl))
+        {
+            _googlePlaces.BaseUrl = dto.BaseUrl.Trim();
+        }
+
+        _googlePlaces.TimeoutSeconds = Math.Clamp(dto.TimeoutSeconds, 5, 120);
+        _googlePlaces.MaxResultsPerQuery = Math.Clamp(dto.MaxResultsPerQuery, 1, 20);
+        _googlePlaces.MaxQueriesPerRequest = Math.Clamp(dto.MaxQueriesPerRequest, 1, 8);
+        _googlePlaces.RequestDelayMilliseconds = Math.Clamp(dto.RequestDelayMilliseconds, 0, 10000);
+
+        if (!string.IsNullOrWhiteSpace(dto.ApiKey))
+        {
+            _googlePlaces.ApiKey = dto.ApiKey.Trim();
+        }
+        else if (allowBlankSecrets && dto.ApiKey is not null && dto.ApiKey.Length == 0)
+        {
+            _googlePlaces.ApiKey = null;
+        }
     }
 
     private void ApplySearXng(SearXngSettingsDto dto, bool allowBlankSecrets = true)
@@ -750,6 +813,20 @@ public class AppSettingsService
             maxResultsPerQuery = _braveSearch.MaxResultsPerQuery,
             maxRequestsPerResearchRun = _braveSearch.MaxRequestsPerResearchRun,
             requestDelayMilliseconds = _braveSearch.RequestDelayMilliseconds
+        };
+    }
+
+    private object BuildGooglePlacesStore()
+    {
+        return new
+        {
+            enabled = _googlePlaces.Enabled,
+            apiKey = _googlePlaces.ApiKey,
+            baseUrl = _googlePlaces.BaseUrl,
+            timeoutSeconds = _googlePlaces.TimeoutSeconds,
+            maxResultsPerQuery = _googlePlaces.MaxResultsPerQuery,
+            maxQueriesPerRequest = _googlePlaces.MaxQueriesPerRequest,
+            requestDelayMilliseconds = _googlePlaces.RequestDelayMilliseconds
         };
     }
 

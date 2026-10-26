@@ -254,6 +254,82 @@
       </div>
     </div>
 
+    <h4>{{ 'appSettings.googlePlacesTitle' | translate }}</h4>
+    <p class="section-hint">{{ 'appSettings.googlePlacesHint' | translate }}</p>
+    <div class="toggle-grid">
+      <label class="check-row">
+        <input
+          type="checkbox"
+          [checked]="googlePlacesEnabled()"
+          (change)="onGooglePlacesEnabledChange($any($event.target).checked)"
+        />
+        <span>{{ 'appSettings.googlePlacesEnabled' | translate }}</span>
+      </label>
+    </div>
+    <div class="field-grid">
+      <div class="field">
+        <label>{{ 'appSettings.googlePlacesApiKey' | translate }}</label>
+        <input
+          type="password"
+          class="input"
+          [value]="googlePlacesApiKey()"
+          (input)="onGooglePlacesApiKeyChange($any($event.target).value)"
+          [placeholder]="
+            (googlePlacesApiKeyConfigured()
+              ? 'appSettings.secretKeepExisting'
+              : 'appSettings.apiKeyPlaceholder'
+            ) | translate
+          "
+        />
+      </div>
+      <div class="field">
+        <label>{{ 'appSettings.googlePlacesBaseUrl' | translate }}</label>
+        <input
+          type="text"
+          class="input"
+          [value]="googlePlacesBaseUrl()"
+          (input)="onGooglePlacesBaseUrlChange($any($event.target).value)"
+        />
+      </div>
+      <div class="field">
+        <label>{{ 'appSettings.googlePlacesTimeout' | translate }}</label>
+        <input
+          type="number"
+          class="input"
+          [value]="googlePlacesTimeout()"
+          (input)="onGooglePlacesTimeoutChange($any($event.target).value)"
+        />
+      </div>
+      <div class="field">
+        <label>{{ 'appSettings.googlePlacesMaxResults' | translate }}</label>
+        <input
+          type="number"
+          class="input"
+          [value]="googlePlacesMaxResults()"
+          (input)="onGooglePlacesMaxResultsChange($any($event.target).value)"
+        />
+      </div>
+      <div class="field">
+        <label>{{ 'appSettings.googlePlacesMaxQueries' | translate }}</label>
+        <input
+          type="number"
+          class="input"
+          [value]="googlePlacesMaxQueries()"
+          (input)="onGooglePlacesMaxQueriesChange($any($event.target).value)"
+        />
+      </div>
+      <div class="field">
+        <label>{{ 'appSettings.googlePlacesRequestDelay' | translate }}</label>
+        <input
+          type="number"
+          class="input"
+          [value]="googlePlacesRequestDelay()"
+          (input)="onGooglePlacesRequestDelayChange($any($event.target).value)"
+        />
+      </div>
+    </div>
+    <p class="section-hint">{{ googlePlacesStatusLabelKey() | translate }}</p>
+
     <h4>{{ 'appSettings.braveTitle' | translate }}</h4>
     <p class="section-hint">{{ 'appSettings.braveHint' | translate }}</p>
     <div class="toggle-grid">

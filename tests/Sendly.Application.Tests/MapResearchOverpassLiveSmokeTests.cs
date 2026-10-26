@@ -16,9 +16,18 @@ public class MapResearchOverpassLiveSmokeTests
             return;
         }
 
+        var apiKey = Environment.GetEnvironmentVariable("SENDLY_OVERPASS_API_KEY");
+        var overpassOptions = new OverpassOptions
+        {
+            BaseUrl = "https://api.overpass.ch/v1/interpreter",
+            ApiKey = string.IsNullOrWhiteSpace(apiKey) ? null : apiKey,
+            MaxRetryCount = 1,
+            RequestDelayMilliseconds = 0
+        };
         var source = new OverpassOpenStreetMapSource(
             new SingleClientFactory(),
             Microsoft.Extensions.Options.Options.Create(new ResearchOptions { EnableOpenStreetMapDiscovery = true }),
+            Microsoft.Extensions.Options.Options.Create(overpassOptions),
             new ChallengedSourceRegistry(),
             NullLogger<OverpassOpenStreetMapSource>.Instance);
 

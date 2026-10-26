@@ -468,7 +468,11 @@ public class ProspectService
 
     private static IQueryable<Prospect> ApplyFilters(IQueryable<Prospect> query, ProspectFilterDto filter)
     {
-        if (filter.ProjectId is not null)
+        if (filter.ProjectIds is { Length: > 0 })
+        {
+            query = query.Where(x => filter.ProjectIds.Contains(x.ProjectId));
+        }
+        else if (filter.ProjectId is not null)
         {
             query = query.Where(x => x.ProjectId == filter.ProjectId);
         }
@@ -518,14 +522,16 @@ public class ProspectService
 
         var includeEmail = ContainsNormalized(methods, "email");
         var includeWhatsApp = ContainsNormalized(methods, "whatsapp");
-        if (!includeEmail && !includeWhatsApp)
+        var includePhone = ContainsNormalized(methods, "phone");
+        if (!includeEmail && !includeWhatsApp && !includePhone)
         {
             return query;
         }
 
         return query.Where(x =>
             (includeEmail && x.Email != null && x.Email != string.Empty)
-            || (includeWhatsApp && x.WhatsApp != null && x.WhatsApp != string.Empty));
+            || (includeWhatsApp && x.WhatsApp != null && x.WhatsApp != string.Empty)
+            || (includePhone && x.Phone != null && x.Phone != string.Empty));
     }
 
     private static IQueryable<Prospect> ApplyStatusFilters(

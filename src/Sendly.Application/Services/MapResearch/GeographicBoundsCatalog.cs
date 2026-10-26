@@ -40,6 +40,11 @@ public static class GeographicBoundsCatalog
         Bound("AU", "Australia", -43.65, 112.90, -10.05, 153.64)
     ];
 
+    public static IReadOnlyList<GeographicBounds> ListAll()
+    {
+        return Entries;
+    }
+
     public static GeographicBounds? Resolve(string? countryOrAlias)
     {
         if (string.IsNullOrWhiteSpace(countryOrAlias))
@@ -66,6 +71,17 @@ public static class GeographicBoundsCatalog
         }
 
         return null;
+    }
+
+    public static string NormalizeName(string? countryOrAlias)
+    {
+        var bounds = Resolve(countryOrAlias);
+        if (bounds is null)
+        {
+            return string.IsNullOrWhiteSpace(countryOrAlias) ? string.Empty : countryOrAlias.Trim();
+        }
+
+        return bounds.CountryName;
     }
 
     public static IReadOnlyList<GeographicBounds> ResolveMany(IEnumerable<string> countries)

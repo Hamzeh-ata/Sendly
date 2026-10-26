@@ -25,6 +25,26 @@ public class TemplateMergeRendererTests
     }
 
     [Fact]
+    public void BuildValues_MapsAgencyNameToCompanyName()
+    {
+        var values = TemplateMergeRenderer.BuildValues(
+            "a@example.com",
+            null,
+            "Bright Media Agency",
+            null,
+            null,
+            null,
+            null,
+            null);
+
+        var rendered = TemplateMergeRenderer.Render(
+            "Hi {{AgencyName}}, welcome from {{CompanyName}}",
+            values);
+
+        Assert.Equal("Hi Bright Media Agency, welcome from Bright Media Agency", rendered);
+    }
+
+    [Fact]
     public void Render_UnknownTagsBecomeEmpty()
     {
         var values = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)

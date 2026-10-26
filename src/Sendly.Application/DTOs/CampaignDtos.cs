@@ -114,6 +114,8 @@ public class CampaignSummaryDto
     public string? SendingAccountName { get; set; }
 
     public string? SendingAccountEmail { get; set; }
+
+    public bool AllowAlreadyContacted { get; set; }
 }
 
 public class CampaignDetailDto : CampaignSummaryDto
@@ -121,6 +123,11 @@ public class CampaignDetailDto : CampaignSummaryDto
     public string HtmlBody { get; set; } = string.Empty;
 
     public List<CampaignAttachmentDto> Attachments { get; set; } = [];
+}
+
+public class SetCampaignAllowAlreadyContactedRequestDto
+{
+    public bool AllowAlreadyContacted { get; set; }
 }
 
 public class CampaignRecipientDto

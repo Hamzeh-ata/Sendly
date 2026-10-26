@@ -10,6 +10,7 @@ import {
   ValidateRecipientsRequest,
   ValidateRecipientsResponse
 } from '../models/campaign.model';
+import { CheckTemplateRecipientsResponse } from '../models/template-recipient.model';
 import { ApiBaseService } from './api-base.service';
 
 @Injectable({ providedIn: 'root' })
@@ -48,6 +49,26 @@ export class CampaignApiService {
     return this.http.get<CampaignRecipient[]>(
       `${this.api.baseUrl}/campaigns/${id}/recipients`,
       { params }
+    );
+  }
+
+  checkTemplateRecipients(id: string): Observable<CheckTemplateRecipientsResponse> {
+    return this.http.get<CheckTemplateRecipientsResponse>(
+      `${this.api.baseUrl}/campaigns/${id}/template-recipient-check`
+    );
+  }
+
+  setAllowAlreadyContacted(id: string, allowAlreadyContacted: boolean): Observable<CampaignDetail> {
+    return this.http.post<CampaignDetail>(
+      `${this.api.baseUrl}/campaigns/${id}/allow-already-contacted`,
+      { allowAlreadyContacted }
+    );
+  }
+
+  excludeAlreadyContacted(id: string): Observable<CampaignDetail> {
+    return this.http.post<CampaignDetail>(
+      `${this.api.baseUrl}/campaigns/${id}/exclude-already-contacted`,
+      {}
     );
   }
 

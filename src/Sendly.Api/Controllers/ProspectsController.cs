@@ -22,6 +22,7 @@ public class ProspectsController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<List<ProspectSummaryDto>>> List(
         [FromQuery] Guid? projectId,
+        [FromQuery] Guid[]? projectIds,
         [FromQuery] Guid? researchRunId,
         [FromQuery] string? search,
         [FromQuery] string? country,
@@ -35,6 +36,7 @@ public class ProspectsController : ControllerBase
         var filter = new ProspectFilterDto
         {
             ProjectId = projectId,
+            ProjectIds = projectIds,
             ResearchRunId = researchRunId,
             Search = search,
             Country = country,
@@ -164,6 +166,7 @@ public class ProspectsController : ControllerBase
     [HttpGet("export")]
     public async Task<IActionResult> Export(
         [FromQuery] Guid? projectId,
+        [FromQuery] Guid[]? projectIds,
         [FromQuery] Guid? researchRunId,
         [FromQuery] string? search,
         [FromQuery] string? country,
@@ -177,6 +180,7 @@ public class ProspectsController : ControllerBase
         var filter = new ProspectFilterDto
         {
             ProjectId = projectId,
+            ProjectIds = projectIds,
             ResearchRunId = researchRunId,
             Search = search,
             Country = country,

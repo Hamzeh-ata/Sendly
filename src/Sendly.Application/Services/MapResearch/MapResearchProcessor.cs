@@ -229,6 +229,13 @@ public class MapResearchProcessor
         var queryResult = await _mapSource.QueryAsync(request, cancellationToken);
         if (queryResult.IsRateLimited)
         {
+            if (queryResult.ShouldSubdivide
+                && GeographicCoveragePlanner.CanSubdivide(region, run.MapRegionsTotal, plan.MaxOverpassRequests))
+            {
+                await SubdivideRegionAsync(run, region, plan.MaxOverpassRequests, cancellationToken);
+                return;
+            }
+
             if (region.AttemptCount >= 3)
             {
                 region.Status = MapCoverageRegionStatus.Failed;
@@ -630,6 +637,7 @@ public class MapResearchProcessor
             IncludeWhatsApp = run.IncludeWhatsApp,
             QueryRequireOfficialWebsite = false,
             QueryRequirePublicBusinessEmail = false,
+            QueryCities = project.Cities.Select(x => x.Name).ToList(),
             Budgets = BuildBudgets(run, null)
         };
 
@@ -637,7 +645,11 @@ public class MapResearchProcessor
         {
             request.QueryTargetIndustry = version.TargetIndustry;
             request.QueryTargetCountry = version.TargetCountry;
-            request.QueryCities = ProjectUnderstandingEngine.ReadJsonList(version.CitiesJson);
+            var versionCities = ProjectUnderstandingEngine.ReadJsonList(version.CitiesJson);
+            if (versionCities.Count > 0)
+            {
+                request.QueryCities = versionCities;
+            }
             request.QueryBusinessCategories = ProjectUnderstandingEngine.ReadJsonList(version.BusinessCategoriesJson);
             request.QueryExclusionCriteria = ProjectUnderstandingEngine.ReadJsonList(version.ExclusionCriteriaJson);
             request.QueryRequireOfficialWebsite = version.RequireOfficialWebsite;
@@ -987,6 +999,7 @@ public class MapResearchProcessor
 
         project.Keywords = await _db.OutreachProjectKeywords.Where(x => x.ProjectId == projectId).ToListAsync(cancellationToken);
         project.Countries = await _db.OutreachProjectCountries.Where(x => x.ProjectId == projectId).ToListAsync(cancellationToken);
+        project.Cities = await _db.OutreachProjectCities.Where(x => x.ProjectId == projectId).ToListAsync(cancellationToken);
         project.Industries = await _db.OutreachProjectIndustries.Where(x => x.ProjectId == projectId).ToListAsync(cancellationToken);
         project.TargetRoles = await _db.OutreachProjectTargetRoles.Where(x => x.ProjectId == projectId).ToListAsync(cancellationToken);
         return project;

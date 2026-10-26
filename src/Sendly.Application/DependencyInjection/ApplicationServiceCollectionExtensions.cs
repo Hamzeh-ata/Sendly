@@ -18,6 +18,8 @@ public static class ApplicationServiceCollectionExtensions
         services.Configure<OpenAiOptions>(configuration.GetSection(OpenAiOptions.SectionName));
         services.Configure<ResearchOptions>(configuration.GetSection(ResearchOptions.SectionName));
         services.Configure<BraveSearchOptions>(configuration.GetSection(BraveSearchOptions.SectionName));
+        services.Configure<GooglePlacesOptions>(configuration.GetSection(GooglePlacesOptions.SectionName));
+        services.Configure<OverpassOptions>(configuration.GetSection(OverpassOptions.SectionName));
         services.Configure<OllamaOptions>(configuration.GetSection(OllamaOptions.SectionName));
         services.Configure<SearXngOptions>(configuration.GetSection(SearXngOptions.SectionName));
         services.Configure<WhatsAppBusinessOptions>(configuration.GetSection(WhatsAppBusinessOptions.SectionName));
@@ -35,6 +37,7 @@ public static class ApplicationServiceCollectionExtensions
         services.AddScoped<RuleBasedAiResearchService>();
         services.AddScoped<ProspectDuplicateService>();
         services.AddScoped<OutreachProjectService>();
+        services.AddScoped<GeoCatalogService>();
         services.AddScoped<ResearchRunService>();
         services.AddScoped<ResearchQueryService>();
         services.AddScoped<ResearchDiagnosticsService>();

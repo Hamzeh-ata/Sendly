@@ -198,7 +198,7 @@ public class NominatimMapGeographicSource : IMapGeographicSource
     private static List<NominatimSearchQuery> BuildSearchQueries(MapSourceQueryRequest request)
     {
         var queries = new List<NominatimSearchQuery>();
-        foreach (var category in request.SourceCategories.Take(3))
+        foreach (var category in request.SourceCategories.Take(2))
         {
             var parts = category.Split('=', 2, StringSplitOptions.TrimEntries);
             if (parts.Length != 2 || string.IsNullOrWhiteSpace(parts[0]) || string.IsNullOrWhiteSpace(parts[1]))
@@ -206,17 +206,30 @@ public class NominatimMapGeographicSource : IMapGeographicSource
                 continue;
             }
 
+            var key = parts[0].Trim().ToLowerInvariant();
+            var value = parts[1].Trim().ToLowerInvariant();
             queries.Add(new NominatimSearchQuery
             {
-                CategoryKey = parts[0].Trim().ToLowerInvariant(),
-                CategoryValue = parts[1].Trim().ToLowerInvariant(),
+                CategoryKey = key,
+                CategoryValue = value,
                 FreeText = null
             });
+
+            var freeText = HumanizeTagValue(value);
+            if (!string.IsNullOrWhiteSpace(freeText))
+            {
+                queries.Add(new NominatimSearchQuery
+                {
+                    CategoryKey = null,
+                    CategoryValue = null,
+                    FreeText = freeText
+                });
+            }
         }
 
         if (queries.Count > 0)
         {
-            return queries;
+            return queries.Take(4).ToList();
         }
 
         foreach (var keyword in request.NameKeywords.Take(2))
@@ -240,6 +253,16 @@ public class NominatimMapGeographicSource : IMapGeographicSource
         }
 
         return queries;
+    }
+
+    private static string HumanizeTagValue(string value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            return string.Empty;
+        }
+
+        return value.Replace('_', ' ').Trim();
     }
 
     private static string BuildSearchUrl(NominatimSearchQuery query, MapSourceQueryRequest request)

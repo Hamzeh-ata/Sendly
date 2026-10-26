@@ -1,9 +1,10 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { forkJoin } from 'rxjs';
 import { OutreachProjectSummary, StartResearchRequest } from '../../core/models/prospecting.model';
+import { ProjectCountryGroup } from '../../core/models/project-country-group.model';
 import { ProjectListRow } from '../../core/models/project-row.model';
 import { TemplateFilterTab } from '../../core/models/template-filter-tab.model';
 import { EmailTemplateSummary } from '../../core/models/template.model';
@@ -32,6 +33,7 @@ export class ProjectsPage implements OnInit {
   readonly loading = signal(true);
   readonly saving = signal(false);
   readonly projects = signal<ProjectListRow[]>([]);
+  readonly countryGroups = computed(() => this.buildCountryGroups(this.projects()));
   readonly tabs = signal<TemplateFilterTab[]>([]);
   readonly activeTemplateId = signal<string | null>(null);
   readonly search = signal('');
@@ -73,12 +75,21 @@ export class ProjectsPage implements OnInit {
   }
 
   openResearch(id: string): void {
-    const project = this.projects().find((item) => item.id === id);
+    const project = this.findProject(id);
     this.researchProjectId.set(id);
     this.researchRequestedCount.set(50);
     this.researchIncludeEmail.set(project?.enableEmail ?? true);
     this.researchIncludeWhatsApp.set(project?.enableWhatsApp ?? false);
     this.researchMinScore.set(60);
+  }
+
+  private findProject(id: string): ProjectListRow | undefined {
+    for (const item of this.projects()) {
+      if (item.id === id) {
+        return item;
+      }
+    }
+    return undefined;
   }
 
   closeResearch(): void {
@@ -253,6 +264,7 @@ export class ProjectsPage implements OnInit {
       rows.push({
         ...item,
         countriesLabel: this.joinSnippet(item.countries),
+        citiesLabel: this.joinSnippet(item.cities),
         keywordsLabel: this.joinSnippet(item.keywords),
         contactMethodsLabel: this.buildContactMethods(item.enableEmail, item.enableWhatsApp),
         lastResearchLabel: item.lastResearchAtUtc
@@ -263,6 +275,42 @@ export class ProjectsPage implements OnInit {
       });
     }
     return rows;
+  }
+
+  private buildCountryGroups(rows: ProjectListRow[]): ProjectCountryGroup[] {
+    const groups: ProjectCountryGroup[] = [];
+    const indexByKey = new Map<string, number>();
+    const ungroupedLabel = this.translate.instant('projects.ungroupedCountry');
+
+    for (const row of rows) {
+      const country = row.countries?.[0]?.trim() || '';
+      const key = country || '__none__';
+      const label = country || ungroupedLabel;
+      const existingIndex = indexByKey.get(key);
+      if (existingIndex === undefined) {
+        indexByKey.set(key, groups.length);
+        groups.push({
+          countryKey: key,
+          countryLabel: label,
+          projects: [row]
+        });
+        continue;
+      }
+
+      groups[existingIndex].projects.push(row);
+    }
+
+    groups.sort((a, b) => {
+      if (a.countryKey === '__none__') {
+        return 1;
+      }
+      if (b.countryKey === '__none__') {
+        return -1;
+      }
+      return a.countryLabel.localeCompare(b.countryLabel);
+    });
+
+    return groups;
   }
 
   private buildContactMethods(enableEmail: boolean, enableWhatsApp: boolean): string {

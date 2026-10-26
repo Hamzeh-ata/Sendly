@@ -185,6 +185,7 @@ public class ResearchRunService
     {
         var project = await _db.OutreachProjects
             .Include(x => x.Countries)
+            .Include(x => x.Cities)
             .Include(x => x.Industries)
             .Include(x => x.Keywords)
             .Include(x => x.TargetRoles)
@@ -259,6 +260,7 @@ public class ResearchRunService
     {
         var project = await _db.OutreachProjects
             .Include(x => x.Countries)
+            .Include(x => x.Cities)
             .Include(x => x.Industries)
             .Include(x => x.Keywords)
             .Include(x => x.TargetRoles)
@@ -291,7 +293,7 @@ public class ResearchRunService
             QueryTargetIndustry = version?.TargetIndustry,
             QueryBusinessCategories = ProjectUnderstandingEngine.ReadJsonList(version?.BusinessCategoriesJson),
             QueryTargetCountry = version?.TargetCountry,
-            QueryCities = ProjectUnderstandingEngine.ReadJsonList(version?.CitiesJson),
+            QueryCities = ResolveQueryCities(project, version),
             QueryExclusionCriteria = ProjectUnderstandingEngine.ReadJsonList(version?.ExclusionCriteriaJson),
             QueryRequireOfficialWebsite = version?.RequireOfficialWebsite ?? true,
             QueryRequirePublicBusinessEmail = version?.RequirePublicBusinessEmail ?? project.EnableEmail,
@@ -311,6 +313,23 @@ public class ResearchRunService
                 MaxResearchDurationMinutes = _options.MaxResearchDurationMinutes
             }
         });
+    }
+
+    private static List<string> ResolveQueryCities(OutreachProject project, ResearchQueryVersion? version)
+    {
+        var versionCities = ProjectUnderstandingEngine.ReadJsonList(version?.CitiesJson);
+        if (versionCities.Count > 0)
+        {
+            return versionCities;
+        }
+
+        var projectCities = new List<string>();
+        foreach (var city in project.Cities)
+        {
+            projectCities.Add(city.Name);
+        }
+
+        return projectCities;
     }
 
     private sealed record ResearchQueryBinding(

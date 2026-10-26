@@ -1,0 +1,16 @@
+﻿[
+    {
+        "id":  "e8b49cc2-8030-42d7-b545-f234944dac6b",
+        "name":  "Postlane – Saudi Arabia — Riyadh",
+        "cities":  [
+                       "Riyadh"
+                   ]
+    },
+    {
+        "id":  "2fcda7c6-3db3-471e-bd04-4faa10bfc503",
+        "name":  "Postlane – Saudi Arabia — Jeddah",
+        "cities":  [
+                       "Jeddah"
+                   ]
+    }
+]

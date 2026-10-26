@@ -27,6 +27,8 @@ public interface ISendlyDbContext
 
     DbSet<OutreachProjectCountry> OutreachProjectCountries { get; }
 
+    DbSet<OutreachProjectCity> OutreachProjectCities { get; }
+
     DbSet<OutreachProjectIndustry> OutreachProjectIndustries { get; }
 
     DbSet<OutreachProjectTargetRole> OutreachProjectTargetRoles { get; }

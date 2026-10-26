@@ -71,6 +71,18 @@ export interface BraveSearchSettings {
   connectionStatus: BraveConnectionStatus;
 }
 
+export interface GooglePlacesSettings {
+  enabled: boolean;
+  apiKey: string | null;
+  apiKeyConfigured: boolean;
+  baseUrl: string;
+  timeoutSeconds: number;
+  maxResultsPerQuery: number;
+  maxQueriesPerRequest: number;
+  requestDelayMilliseconds: number;
+  connectionStatus: ProviderConnectionStatus;
+}
+
 export interface SearXngSettings {
   enabled: boolean;
   baseUrl: string;
@@ -154,6 +166,7 @@ export interface AppSettings {
   openAi: OpenAiSettings;
   research: ResearchSettings;
   braveSearch: BraveSearchSettings;
+  googlePlaces: GooglePlacesSettings;
   searXng: SearXngSettings;
   ollama: OllamaSettings;
   whatsApp: WhatsAppSettings;

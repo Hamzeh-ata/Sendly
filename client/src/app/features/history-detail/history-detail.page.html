@@ -25,7 +25,12 @@
       </div>
       <div class="header-actions">
         @if (canStart()) {
-          <button type="button" class="btn btn-primary" [disabled]="actionLoading()" (click)="startCampaign()">
+          <button
+            type="button"
+            class="btn btn-primary"
+            [disabled]="!canConfirmStart()"
+            (click)="startCampaign()"
+          >
             {{ 'detail.start' | translate }}
           </button>
         }
@@ -80,6 +85,65 @@
 
     <p class="disclaimer">{{ 'detail.disclaimer' | translate }}</p>
 
+    @if (showTemplateCheck()) {
+      <section class="template-check-panel">
+        <div class="template-check-summary">
+          <div>
+            <span class="summary-label">{{ 'detail.recipientTotal' | translate }}</span>
+            <strong>{{ templateNewCount() + templateContactedCount() }}</strong>
+          </div>
+          <div>
+            <span class="summary-label">{{ 'detail.recipientNewCount' | translate }}</span>
+            <strong class="new">{{ templateNewCount() }}</strong>
+          </div>
+          <div>
+            <span class="summary-label">{{ 'detail.recipientContactedCount' | translate }}</span>
+            <strong class="contacted">{{ templateContactedCount() }}</strong>
+          </div>
+        </div>
+
+        @if (checkingTemplateRecipients()) {
+          <p class="checking-note">{{ 'detail.checkingTemplateRecipients' | translate }}</p>
+        }
+
+        @if (hasAlreadyContacted()) {
+          <div class="duplicate-warning">
+            <p>{{ 'detail.duplicateWarning' | translate: duplicateWarningParams() }}</p>
+            @if (!allowAlreadyContacted()) {
+              <p class="recommended">{{ 'detail.duplicateRecommended' | translate }}</p>
+              <p class="start-blocked">{{ 'detail.startBlockedAlreadyContacted' | translate }}</p>
+            } @else {
+              <p class="keep-note">{{ 'detail.duplicatesKept' | translate }}</p>
+            }
+            <div class="duplicate-actions">
+              <button
+                type="button"
+                class="btn btn-primary"
+                [disabled]="actionLoading()"
+                (click)="useRecommendedDuplicateHandling()"
+              >
+                {{ 'detail.removeAlreadyContacted' | translate }}
+              </button>
+              <button
+                type="button"
+                class="btn btn-ghost"
+                [disabled]="actionLoading()"
+                (click)="keepAlreadyContacted()"
+              >
+                {{ 'detail.keepDuplicates' | translate }}
+              </button>
+              <button type="button" class="btn btn-ghost" (click)="toggleContactedOnly()">
+                {{
+                  (showContactedOnly() ? 'detail.viewAllRecipients' : 'detail.viewAlreadyContacted')
+                    | translate
+                }}
+              </button>
+            </div>
+          </div>
+        }
+      </section>
+    }
+
     <div class="filters">
       @for (btn of filterButtons; track btn.value) {
         <button
@@ -102,16 +166,28 @@
             <tr>
               <th>{{ 'detail.email' | translate }}</th>
               <th>{{ 'detail.recipientStatus' | translate }}</th>
+              @if (showTemplateCheck()) {
+                <th>{{ 'detail.templateContactStatus' | translate }}</th>
+                <th>{{ 'detail.previousSend' | translate }}</th>
+              }
               <th>{{ 'detail.attempts' | translate }}</th>
               <th>{{ 'detail.lastAttempt' | translate }}</th>
               <th>{{ 'detail.failureReason' | translate }}</th>
             </tr>
           </thead>
           <tbody>
-            @for (recipient of recipients(); track recipient.id) {
-              <tr>
+            @for (recipient of visibleRecipients(); track recipient.id) {
+              <tr [class.already-contacted]="recipient.alreadyContacted">
                 <td>{{ recipient.email }}</td>
                 <td><app-status-badge [status]="recipient.status" prefix="recipientStatus" /></td>
+                @if (showTemplateCheck()) {
+                  <td>
+                    <span class="status-chip" [class.contacted]="recipient.alreadyContacted">
+                      {{ recipient.templateStatusLabelKey | translate }}
+                    </span>
+                  </td>
+                  <td>{{ recipient.previousSendLabel }}</td>
+                }
                 <td>{{ recipient.attemptCount }}</td>
                 <td>{{ recipient.lastAttemptLabel }}</td>
                 <td class="failure">{{ recipient.failureReason ?? '—' }}</td>

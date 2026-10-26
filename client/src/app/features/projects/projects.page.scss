@@ -2,6 +2,19 @@
   white-space: nowrap;
 }
 
+.country-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.country-group-title {
+  margin: 0 0 0.75rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
 .toggle-row {
   display: flex;
   align-items: center;

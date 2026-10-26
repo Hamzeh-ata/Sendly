@@ -56,6 +56,8 @@ using (var scope = app.Services.CreateScope())
     await appSettings.HydrateFromStoreAsync(CancellationToken.None);
     var protection = scope.ServiceProvider.GetRequiredService<TemplateRecipientProtectionService>();
     await protection.BackfillFromExistingCampaignsAsync(CancellationToken.None);
+    var projects = scope.ServiceProvider.GetRequiredService<OutreachProjectService>();
+    await projects.MigrateGeographyAsync(CancellationToken.None);
 }
 
 if (app.Environment.IsDevelopment())

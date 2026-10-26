@@ -132,15 +132,33 @@
           ></textarea>
         </div>
         <div class="field">
-          <label>{{ 'projects.countries' | translate }}</label>
-          <textarea
-            class="textarea"
-            rows="2"
-            [value]="countriesText()"
-            (input)="onCountriesChange($any($event.target).value)"
-            [placeholder]="'projects.listPlaceholder' | translate"
-          ></textarea>
+          <label>{{ 'projects.country' | translate }}</label>
+          <select
+            class="input"
+            [value]="selectedCountry()"
+            (change)="onCountryChange($any($event.target).value)"
+          >
+            <option value="">{{ 'projects.selectCountry' | translate }}</option>
+            @for (country of countryOptions(); track country.code) {
+              <option [value]="country.name">{{ country.name }}</option>
+            }
+          </select>
         </div>
+        @if (cityOptions().length > 0) {
+          <div class="field">
+            <label>{{ 'projects.city' | translate }}</label>
+            <select
+              class="input"
+              [value]="selectedCity()"
+              (change)="onCityChange($any($event.target).value)"
+            >
+              <option value="">{{ 'projects.selectCity' | translate }}</option>
+              @for (city of cityOptions(); track city) {
+                <option [value]="city">{{ city }}</option>
+              }
+            </select>
+          </div>
+        }
         <div class="field">
           <label>{{ 'projects.industries' | translate }}</label>
           <textarea
@@ -196,25 +214,14 @@
             [placeholder]="'projects.plainLanguageBriefPlaceholder' | translate"
           ></textarea>
         </div>
-        <div class="field-grid">
-          <div class="field">
-            <label>{{ 'projects.targetIndustry' | translate }}</label>
-            <input
-              type="text"
-              class="input"
-              [value]="targetIndustry()"
-              (input)="onTargetIndustryChange($any($event.target).value)"
-            />
-          </div>
-          <div class="field">
-            <label>{{ 'projects.targetCountry' | translate }}</label>
-            <input
-              type="text"
-              class="input"
-              [value]="targetCountry()"
-              (input)="onTargetCountryChange($any($event.target).value)"
-            />
-          </div>
+        <div class="field">
+          <label>{{ 'projects.targetIndustry' | translate }}</label>
+          <input
+            type="text"
+            class="input"
+            [value]="targetIndustry()"
+            (input)="onTargetIndustryChange($any($event.target).value)"
+          />
         </div>
         <label class="toggle-row">
           <input

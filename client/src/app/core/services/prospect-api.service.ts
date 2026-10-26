@@ -21,7 +21,7 @@ export class ProspectApiService {
 
   list(filter: ProspectListFilter = {}): Observable<ProspectSummary[]> {
     let params = new HttpParams();
-    params = this.appendParam(params, 'projectId', filter.projectId);
+    params = this.appendProjectParams(params, filter);
     params = this.appendParam(params, 'researchRunId', filter.researchRunId);
     params = this.appendParam(params, 'search', filter.search);
     params = this.appendParam(params, 'country', filter.country);
@@ -72,7 +72,7 @@ export class ProspectApiService {
 
   exportCsv(filter: ProspectListFilter = {}): Observable<Blob> {
     let params = new HttpParams();
-    params = this.appendParam(params, 'projectId', filter.projectId);
+    params = this.appendProjectParams(params, filter);
     params = this.appendParam(params, 'researchRunId', filter.researchRunId);
     params = this.appendParam(params, 'search', filter.search);
     params = this.appendParam(params, 'country', filter.country);
@@ -92,6 +92,17 @@ export class ProspectApiService {
       targetProspectId,
       sourceProspectId
     });
+  }
+
+  private appendProjectParams(params: HttpParams, filter: ProspectListFilter): HttpParams {
+    const projectIds = filter.projectIds ?? [];
+    if (projectIds.length > 1) {
+      return this.appendArray(params, 'projectIds', projectIds);
+    }
+    if (projectIds.length === 1) {
+      return this.appendParam(params, 'projectId', projectIds[0]);
+    }
+    return this.appendParam(params, 'projectId', filter.projectId);
   }
 
   private appendParam(params: HttpParams, key: string, value?: string): HttpParams {

@@ -259,7 +259,7 @@ public class MapResearchService
         CancellationToken cancellationToken)
     {
         var run = await ResolveRunAsync(projectId, researchRunId, cancellationToken);
-        var markers = await ListMarkersAsync(projectId, run?.Id, cancellationToken);
+        var markers = await ListMarkersAsync(projectId, null, cancellationToken);
         if (run is null)
         {
             return new MapResearchOverviewDto
@@ -453,6 +453,7 @@ public class MapResearchService
 
         project.Keywords = await _db.OutreachProjectKeywords.Where(x => x.ProjectId == projectId).ToListAsync(cancellationToken);
         project.Countries = await _db.OutreachProjectCountries.Where(x => x.ProjectId == projectId).ToListAsync(cancellationToken);
+        project.Cities = await _db.OutreachProjectCities.Where(x => x.ProjectId == projectId).ToListAsync(cancellationToken);
         project.Industries = await _db.OutreachProjectIndustries.Where(x => x.ProjectId == projectId).ToListAsync(cancellationToken);
         project.TargetRoles = await _db.OutreachProjectTargetRoles.Where(x => x.ProjectId == projectId).ToListAsync(cancellationToken);
         return project;

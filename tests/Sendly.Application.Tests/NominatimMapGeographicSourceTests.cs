@@ -87,6 +87,7 @@ public class NominatimMapGeographicSourceTests
         var overpass = new OverpassOpenStreetMapSource(
             new FixedResponseClientFactory("[]"),
             Microsoft.Extensions.Options.Options.Create(new ResearchOptions { EnableOpenStreetMapDiscovery = true }),
+            Microsoft.Extensions.Options.Options.Create(new OverpassOptions()),
             challenges,
             NullLogger<OverpassOpenStreetMapSource>.Instance);
         var nominatim = new NominatimMapGeographicSource(
@@ -94,9 +95,14 @@ public class NominatimMapGeographicSourceTests
             Microsoft.Extensions.Options.Options.Create(new ResearchOptions { EnableOpenStreetMapDiscovery = true }),
             challenges,
             NullLogger<NominatimMapGeographicSource>.Instance);
+        var googlePlaces = new GooglePlacesMapGeographicSource(
+            new FixedResponseClientFactory("[]"),
+            Microsoft.Extensions.Options.Options.Create(new GooglePlacesOptions { Enabled = false }),
+            NullLogger<GooglePlacesMapGeographicSource>.Instance);
         var composite = new CompositeMapGeographicSource(
             overpass,
             nominatim,
+            googlePlaces,
             NullLogger<CompositeMapGeographicSource>.Instance);
 
         Assert.True(composite.IsEnabled);

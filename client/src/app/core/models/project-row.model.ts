@@ -3,6 +3,7 @@ import { OutreachProjectSummary } from './prospecting.model';
 export interface ProjectListRow extends OutreachProjectSummary {
   descriptionLabel: string;
   countriesLabel: string;
+  citiesLabel: string;
   keywordsLabel: string;
   contactMethodsLabel: string;
   lastResearchLabel: string;

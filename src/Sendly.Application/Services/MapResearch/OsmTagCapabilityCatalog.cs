@@ -125,6 +125,8 @@ public static class OsmTagCapabilityCatalog
             Tag("shop=convenience", "Convenience store", "convenience", "store", "retail"),
             Tag("shop=supermarket", "Supermarket", "supermarket", "grocery", "retail"),
             Tag("office=company", "Company office", "company", "office", "business"),
+            Tag("office=advertising_agency", "Advertising agency", "advertising", "agency", "ad agency", "advertising agency", "media agency", "marketing", "marketing agency", "digital agency", "digital marketing", "social media", "branding agency", "creative agency", "public relations", "pr agency"),
+            Tag("office=graphic_design", "Graphic design studio", "graphic", "design", "creative", "studio", "branding", "design agency"),
             Tag("office=estate_agent", "Estate agent", "estate", "real", "estate agent", "property"),
             Tag("office=insurance", "Insurance office", "insurance"),
             Tag("office=lawyer", "Lawyer office", "lawyer", "attorney", "legal"),

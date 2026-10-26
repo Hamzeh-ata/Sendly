@@ -47,6 +47,8 @@ public class UpsertOutreachProjectDto
 
     public List<string> Countries { get; set; } = [];
 
+    public List<string> Cities { get; set; } = [];
+
     public List<string> Industries { get; set; } = [];
 
     public List<string> ExcludedIndustries { get; set; } = [];
@@ -73,6 +75,8 @@ public class OutreachProjectSummaryDto
     public bool EnableWhatsApp { get; set; }
 
     public List<string> Countries { get; set; } = [];
+
+    public List<string> Cities { get; set; } = [];
 
     public List<string> Keywords { get; set; } = [];
 
@@ -120,4 +124,13 @@ public class OutreachProjectDetailDto : OutreachProjectSummaryDto
     public List<ProjectTemplateLinkDto> Templates { get; set; } = [];
 
     public List<ResearchRunSummaryDto> RecentResearchRuns { get; set; } = [];
+}
+
+public class ProjectGeographyMigrationResultDto
+{
+    public int CountriesNormalized { get; set; }
+
+    public int ProjectsSplit { get; set; }
+
+    public int CityProjectsCreated { get; set; }
 }

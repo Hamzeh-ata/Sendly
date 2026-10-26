@@ -37,6 +37,7 @@ export class ProjectDetailPage implements OnInit {
 
   readonly keywordsLabel = computed(() => this.joinOrDash(this.project()?.keywords));
   readonly countriesLabel = computed(() => this.joinOrDash(this.project()?.countries));
+  readonly citiesLabel = computed(() => this.joinOrDash(this.project()?.cities));
   readonly rolesLabel = computed(() => this.joinOrDash(this.project()?.targetRoles));
   readonly industriesLabel = computed(() => this.joinOrDash(this.project()?.industries));
   readonly contactMethodsLabel = computed(() => {

@@ -1076,6 +1076,28 @@ namespace Sendly.Infrastructure.Persistence.Migrations
                     b.ToTable("OutreachProjects");
                 });
 
+            modelBuilder.Entity("Sendly.Domain.Entities.OutreachProjectCity", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ProjectId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProjectId");
+
+                    b.ToTable("OutreachProjectCities");
+                });
+
             modelBuilder.Entity("Sendly.Domain.Entities.OutreachProjectCountry", b =>
                 {
                     b.Property<string>("Id")
@@ -2314,6 +2336,17 @@ namespace Sendly.Infrastructure.Persistence.Migrations
                     b.Navigation("ResearchRun");
                 });
 
+            modelBuilder.Entity("Sendly.Domain.Entities.OutreachProjectCity", b =>
+                {
+                    b.HasOne("Sendly.Domain.Entities.OutreachProject", "Project")
+                        .WithMany("Cities")
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Project");
+                });
+
             modelBuilder.Entity("Sendly.Domain.Entities.OutreachProjectCountry", b =>
                 {
                     b.HasOne("Sendly.Domain.Entities.OutreachProject", "Project")
@@ -2596,6 +2629,8 @@ namespace Sendly.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("Sendly.Domain.Entities.OutreachProject", b =>
                 {
+                    b.Navigation("Cities");
+
                     b.Navigation("Countries");
 
                     b.Navigation("Industries");

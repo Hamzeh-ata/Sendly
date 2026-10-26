@@ -55,6 +55,7 @@ export interface UpsertOutreachProject {
   keywords: string[];
   excludedKeywords: string[];
   countries: string[];
+  cities: string[];
   industries: string[];
   excludedIndustries: string[];
   targetRoles: string[];
@@ -70,6 +71,7 @@ export interface OutreachProjectSummary {
   enableEmail: boolean;
   enableWhatsApp: boolean;
   countries: string[];
+  cities: string[];
   keywords: string[];
   prospectCount: number;
   qualifiedCount: number;
@@ -340,6 +342,7 @@ export interface CreateProspectRequest {
 
 export interface ProspectListFilter {
   projectId?: string;
+  projectIds?: string[];
   researchRunId?: string;
   search?: string;
   country?: string;

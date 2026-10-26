@@ -21,6 +21,17 @@
       </button>
       <button
         type="button"
+        class="btn btn-ghost"
+        [disabled]="!hasSelection() || saving()"
+        (click)="openMobileCampaignForSelected()"
+      >
+        {{ 'prospects.createMobileCampaignSelected' | translate }}
+        @if (hasSelection()) {
+          ({{ selectedCount() }})
+        }
+      </button>
+      <button
+        type="button"
         class="btn btn-primary"
         [disabled]="!hasSelection() || saving()"
         (click)="openCampaignForSelected()"
@@ -54,19 +65,40 @@
         (input)="onSearchChange($any($event.target).value)"
         [placeholder]="'prospects.searchPlaceholder' | translate"
       />
-      <select class="input project-select" [value]="projectId()" (change)="onProjectChange($any($event.target).value)">
-        <option value="" [selected]="!projectId()">{{ 'prospects.filterAllProjects' | translate }}</option>
-        @for (project of projects(); track project.id) {
-          <option [value]="project.id" [selected]="project.id === projectId()">{{ project.name }}</option>
+      <select
+        class="input project-select"
+        [value]="selectedFamily()"
+        (change)="onFamilyChange($any($event.target).value)"
+      >
+        <option value="">{{ 'prospects.filterAllProjects' | translate }}</option>
+        @for (family of familyOptions(); track family.value) {
+          <option [value]="family.value">{{ family.label }}</option>
         }
       </select>
-      <input
-        type="text"
-        class="input"
-        [value]="country()"
-        (input)="onCountryChange($any($event.target).value)"
-        [placeholder]="'prospects.countryPlaceholder' | translate"
-      />
+      @if (showCountrySelect()) {
+        <select
+          class="input project-select"
+          [value]="selectedCountry()"
+          (change)="onCascadeCountryChange($any($event.target).value)"
+        >
+          <option value="">{{ 'prospects.filterAllCountries' | translate }}</option>
+          @for (country of countryOptions(); track country.value) {
+            <option [value]="country.value">{{ country.label }}</option>
+          }
+        </select>
+      }
+      @if (showCitySelect()) {
+        <select
+          class="input project-select"
+          [value]="selectedCity()"
+          (change)="onCityChange($any($event.target).value)"
+        >
+          <option value="">{{ 'prospects.filterAllCities' | translate }}</option>
+          @for (city of cityOptions(); track city.value) {
+            <option [value]="city.value">{{ city.label }}</option>
+          }
+        </select>
+      }
       <input
         type="text"
         class="input"
@@ -218,6 +250,14 @@
         </button>
         <button
           type="button"
+          class="btn btn-ghost btn-sm"
+          [disabled]="saving()"
+          (click)="openMobileCampaignForSelected()"
+        >
+          {{ 'prospects.createMobileCampaignSelected' | translate }}
+        </button>
+        <button
+          type="button"
           class="btn btn-primary btn-sm"
           [disabled]="saving()"
           (click)="openCampaignForSelected()"
@@ -286,6 +326,9 @@
               <span class="contact-pill" [class.missing]="!prospect.hasEmail">
                 {{ 'prospects.email' | translate }}: {{ prospect.emailLabel }}
               </span>
+              <span class="contact-pill" [class.missing]="!prospect.hasPhone">
+                {{ 'prospects.phone' | translate }}: {{ prospect.phoneLabel }}
+              </span>
               <span class="contact-pill" [class.missing]="!prospect.hasWhatsApp">
                 {{ 'prospects.whatsApp' | translate }}: {{ prospect.whatsAppLabel }}
               </span>
@@ -324,6 +367,14 @@
               </button>
               <button
                 type="button"
+                class="btn btn-ghost btn-sm"
+                [disabled]="saving() || !prospect.hasMobile"
+                (click)="openMobileCampaignForOne(prospect.id)"
+              >
+                {{ 'prospects.createMobileCampaign' | translate }}
+              </button>
+              <button
+                type="button"
                 class="btn btn-primary btn-sm"
                 [disabled]="saving()"
                 (click)="openCampaignForOne(prospect.id)"
@@ -341,14 +392,51 @@
 @if (campaignOpen()) {
   <div class="overlay" (click)="closeCampaign()">
     <div class="dialog" role="dialog" (click)="$event.stopPropagation()">
-      <h2>{{ 'prospects.campaignTitle' | translate }}</h2>
-      <div class="field">
-        <label>{{ 'prospects.campaignChannel' | translate }}</label>
-        <select class="input" [value]="campaignChannel()" (change)="onCampaignChannelChange($any($event.target).value)">
-          <option value="email">{{ 'projects.channelEmail' | translate }}</option>
-          <option value="whatsApp">{{ 'projects.channelWhatsApp' | translate }}</option>
-        </select>
-      </div>
+      <h2>{{ campaignTitleKey() | translate }}</h2>
+      @if (isMobileCampaign()) {
+        <p class="dialog-hint">{{ 'prospects.mobileCampaignHint' | translate }}</p>
+        <div class="field">
+          <label>{{ 'prospects.mobileRecipients' | translate: { count: mobileRecipientCount() } }}</label>
+          @if (hasMobileRecipients()) {
+            <div class="mobile-recipient-toolbar">
+              <button
+                type="button"
+                class="btn btn-ghost btn-sm"
+                (click)="copyAllMobilePhones()"
+              >
+                {{ 'prospects.copyAllPhones' | translate }}
+              </button>
+            </div>
+            <div class="mobile-recipient-list">
+              @for (row of mobileRecipientRows(); track row.prospectId) {
+                <div class="mobile-recipient-row">
+                  <span class="mobile-recipient-company">{{ row.companyName }}</span>
+                  <div class="mobile-recipient-phone-group">
+                    <span class="mobile-recipient-phone">{{ row.phoneLabel }}</span>
+                    <button
+                      type="button"
+                      class="btn btn-ghost btn-sm"
+                      (click)="copyMobilePhone(row.phoneLabel)"
+                    >
+                      {{ 'prospects.copyPhone' | translate }}
+                    </button>
+                  </div>
+                </div>
+              }
+            </div>
+          } @else {
+            <p class="dialog-hint">{{ 'prospects.mobileNoPhones' | translate }}</p>
+          }
+        </div>
+      } @else {
+        <div class="field">
+          <label>{{ 'prospects.campaignChannel' | translate }}</label>
+          <select class="input" [value]="campaignChannel()" (change)="onCampaignChannelChange($any($event.target).value)">
+            <option value="email">{{ 'projects.channelEmail' | translate }}</option>
+            <option value="whatsApp">{{ 'projects.channelWhatsApp' | translate }}</option>
+          </select>
+        </div>
+      }
       <label class="toggle-row">
         <input
           type="checkbox"
@@ -361,8 +449,13 @@
         <button type="button" class="btn btn-ghost" [disabled]="saving()" (click)="closeCampaign()">
           {{ 'common.cancel' | translate }}
         </button>
-        <button type="button" class="btn btn-primary" [disabled]="saving()" (click)="confirmCampaign()">
-          {{ 'prospects.createCampaign' | translate }}
+        <button
+          type="button"
+          class="btn btn-primary"
+          [disabled]="!canConfirmCampaign()"
+          (click)="confirmCampaign()"
+        >
+          {{ campaignConfirmKey() | translate }}
         </button>
       </div>
     </div>

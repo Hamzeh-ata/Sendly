@@ -79,7 +79,8 @@ public class WhatsAppOutreachChannel : IOutreachChannel
                 continue;
             }
 
-            var normalized = ProspectNormalizer.NormalizeWhatsApp(prospect.WhatsApp);
+            var contactValue = ResolveMobileNumber(prospect);
+            var normalized = ProspectNormalizer.NormalizeWhatsApp(contactValue);
             if (normalized is null)
             {
                 result.SkippedInvalidCount++;
@@ -127,7 +128,7 @@ public class WhatsAppOutreachChannel : IOutreachChannel
                 _db.OutreachContactHistories.Add(new OutreachContactHistory
                 {
                     Channel = OutreachChannelType.WhatsApp,
-                    ContactValue = prospect.WhatsApp ?? normalized,
+                    ContactValue = contactValue ?? normalized,
                     NormalizedValue = normalized,
                     ProspectId = prospect.Id,
                     ProjectId = prospect.ProjectId,
@@ -146,7 +147,7 @@ public class WhatsAppOutreachChannel : IOutreachChannel
 
         if (prepared.Count == 0)
         {
-            throw new InvalidOperationException("No valid WhatsApp prospects were available for preparation.");
+            throw new InvalidOperationException("No valid mobile prospects with phone numbers were available for preparation.");
         }
 
         await _db.SaveChangesAsync(cancellationToken);
@@ -166,6 +167,21 @@ public class WhatsAppOutreachChannel : IOutreachChannel
         }
 
         return result;
+    }
+
+    private static string? ResolveMobileNumber(Prospect prospect)
+    {
+        if (!string.IsNullOrWhiteSpace(prospect.Phone))
+        {
+            return prospect.Phone.Trim();
+        }
+
+        if (!string.IsNullOrWhiteSpace(prospect.WhatsApp))
+        {
+            return prospect.WhatsApp.Trim();
+        }
+
+        return null;
     }
 
     private async Task<string> BuildMessageBodyAsync(

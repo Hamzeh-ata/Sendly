@@ -94,9 +94,11 @@ public static class InfrastructureServiceCollectionExtensions
                 "SendlyResearchBot/1.0 (local research; contact: research@sendly.local)");
             client.DefaultRequestHeaders.Accept.ParseAdd("application/json");
         });
-        services.AddHttpClient("OpenStreetMapOverpass", (_, client) =>
+        services.AddHttpClient("OpenStreetMapOverpass", (sp, client) =>
         {
-            client.Timeout = TimeSpan.FromSeconds(18);
+            var options = sp.GetRequiredService<Microsoft.Extensions.Options.IOptions<OverpassOptions>>().Value;
+            var timeoutSeconds = Math.Clamp(options.TimeoutSeconds, 5, 300);
+            client.Timeout = TimeSpan.FromSeconds(timeoutSeconds);
             client.DefaultRequestHeaders.UserAgent.ParseAdd(
                 "SendlyResearchBot/1.0 (local research; contact: research@sendly.local)");
             client.DefaultRequestHeaders.Accept.ParseAdd("application/json");
@@ -121,8 +123,16 @@ public static class InfrastructureServiceCollectionExtensions
         services.AddScoped<ILocalAiSearchClassifier>(sp => sp.GetRequiredService<OllamaAiResearchService>());
         services.AddScoped<ILocalAiResearchIntelligence>(sp => sp.GetRequiredService<OllamaAiResearchService>());
         services.AddScoped<IMapResearchIntelligence, OllamaMapResearchIntelligence>();
+        services.AddHttpClient("GooglePlaces", (sp, client) =>
+        {
+            var options = sp.GetRequiredService<Microsoft.Extensions.Options.IOptions<GooglePlacesOptions>>().Value;
+            var timeoutSeconds = Math.Clamp(options.TimeoutSeconds, 5, 120);
+            client.Timeout = TimeSpan.FromSeconds(timeoutSeconds);
+            client.DefaultRequestHeaders.Accept.ParseAdd("application/json");
+        });
         services.AddScoped<OverpassOpenStreetMapSource>();
         services.AddScoped<NominatimMapGeographicSource>();
+        services.AddScoped<GooglePlacesMapGeographicSource>();
         services.AddScoped<IMapGeographicSource, CompositeMapGeographicSource>();
         services.AddScoped<WebsitePageCrawler>();
         services.AddScoped<ISitemapParser, SitemapParser>();

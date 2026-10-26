@@ -144,6 +144,8 @@ public class ProspectFilterDto
 {
     public Guid? ProjectId { get; set; }
 
+    public Guid[]? ProjectIds { get; set; }
+
     public Guid? ResearchRunId { get; set; }
 
     public string? Search { get; set; }

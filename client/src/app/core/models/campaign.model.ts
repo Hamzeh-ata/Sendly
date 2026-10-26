@@ -74,6 +74,7 @@ export interface CampaignSummary {
   provider: EmailProvider | null;
   sendingAccountName: string | null;
   sendingAccountEmail: string | null;
+  allowAlreadyContacted: boolean;
 }
 
 export interface CampaignDetail extends CampaignSummary {

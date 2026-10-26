@@ -8,6 +8,8 @@ public class AppSettingsDto
 
     public BraveSearchSettingsDto BraveSearch { get; set; } = new();
 
+    public GooglePlacesSettingsDto GooglePlaces { get; set; } = new();
+
     public SearXngSettingsDto SearXng { get; set; } = new();
 
     public OllamaSettingsDto Ollama { get; set; } = new();
@@ -106,6 +108,27 @@ public class BraveSearchSettingsDto
     public int MaxRequestsPerResearchRun { get; set; } = 20;
 
     public int RequestDelayMilliseconds { get; set; } = 250;
+
+    public string ConnectionStatus { get; set; } = "NotConfigured";
+}
+
+public class GooglePlacesSettingsDto
+{
+    public bool Enabled { get; set; }
+
+    public string? ApiKey { get; set; }
+
+    public bool ApiKeyConfigured { get; set; }
+
+    public string BaseUrl { get; set; } = "https://places.googleapis.com/v1/places:searchText";
+
+    public int TimeoutSeconds { get; set; } = 30;
+
+    public int MaxResultsPerQuery { get; set; } = 20;
+
+    public int MaxQueriesPerRequest { get; set; } = 4;
+
+    public int RequestDelayMilliseconds { get; set; } = 200;
 
     public string ConnectionStatus { get; set; } = "NotConfigured";
 }

@@ -99,6 +99,7 @@ public class CampaignService
             throw new InvalidOperationException("Only draft campaigns can be started.");
         }
 
+        await EnsureDraftCanStartWithTemplateProtectionAsync(campaign, cancellationToken);
         await _emailAccountService.EnsureAccountReadyAsync(campaign.EmailAccountId, cancellationToken);
         await EnsureCanStartCampaignAsync(cancellationToken);
 
@@ -202,6 +203,136 @@ public class CampaignService
         }
 
         return result;
+    }
+
+    public async Task<CheckTemplateRecipientsResponseDto> CheckTemplateRecipientsAsync(
+        Guid id,
+        CancellationToken cancellationToken)
+    {
+        var campaign = await _db.Campaigns.AsNoTracking()
+            .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+        if (campaign is null)
+        {
+            throw new InvalidOperationException("Campaign was not found.");
+        }
+
+        if (campaign.TemplateId is null)
+        {
+            return new CheckTemplateRecipientsResponseDto();
+        }
+
+        var recipients = await _db.CampaignRecipients.AsNoTracking()
+            .Where(x => x.CampaignId == id && x.Status == RecipientDeliveryStatus.Pending)
+            .Select(x => x.Email)
+            .ToListAsync(cancellationToken);
+
+        var rawRecipients = string.Join('\n', recipients);
+        return await _templateRecipientProtection.CheckRecipientsAsync(
+            campaign.TemplateId.Value,
+            new CheckTemplateRecipientsRequestDto { RawRecipients = rawRecipients },
+            cancellationToken);
+    }
+
+    public async Task<CampaignDetailDto> SetAllowAlreadyContactedAsync(
+        Guid id,
+        bool allowAlreadyContacted,
+        CancellationToken cancellationToken)
+    {
+        var campaign = await _db.Campaigns.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+        if (campaign is null)
+        {
+            throw new InvalidOperationException("Campaign was not found.");
+        }
+
+        if (campaign.Status != CampaignStatus.Draft)
+        {
+            throw new InvalidOperationException("Only draft campaigns can change already-contacted settings.");
+        }
+
+        campaign.AllowAlreadyContacted = allowAlreadyContacted;
+        await _db.SaveChangesAsync(cancellationToken);
+        return await MapDetailAsync(id, cancellationToken);
+    }
+
+    public async Task<CampaignDetailDto> ExcludeAlreadyContactedAsync(
+        Guid id,
+        CancellationToken cancellationToken)
+    {
+        var campaign = await _db.Campaigns.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+        if (campaign is null)
+        {
+            throw new InvalidOperationException("Campaign was not found.");
+        }
+
+        if (campaign.Status != CampaignStatus.Draft)
+        {
+            throw new InvalidOperationException("Only draft campaigns can exclude already-contacted recipients.");
+        }
+
+        if (campaign.TemplateId is null)
+        {
+            throw new InvalidOperationException("This campaign has no template to check against.");
+        }
+
+        var pending = await _db.CampaignRecipients
+            .Where(x => x.CampaignId == id && x.Status == RecipientDeliveryStatus.Pending)
+            .ToListAsync(cancellationToken);
+
+        if (pending.Count == 0)
+        {
+            return await MapDetailAsync(id, cancellationToken);
+        }
+
+        var emails = new List<string>();
+        foreach (var recipient in pending)
+        {
+            emails.Add(recipient.Email);
+        }
+
+        var check = await _templateRecipientProtection.CheckRecipientsAsync(
+            campaign.TemplateId.Value,
+            new CheckTemplateRecipientsRequestDto { RawRecipients = string.Join('\n', emails) },
+            cancellationToken);
+
+        var contacted = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        foreach (var item in check.Recipients)
+        {
+            if (item.AlreadyContacted)
+            {
+                contacted.Add(item.Email);
+            }
+        }
+
+        var remaining = 0;
+        var removed = 0;
+        foreach (var recipient in pending)
+        {
+            if (contacted.Contains(recipient.Email))
+            {
+                recipient.Status = RecipientDeliveryStatus.Cancelled;
+                recipient.FailureReason = "Already contacted for this template.";
+                removed++;
+                continue;
+            }
+
+            remaining++;
+        }
+
+        if (removed == 0)
+        {
+            return await MapDetailAsync(id, cancellationToken);
+        }
+
+        if (remaining <= 0)
+        {
+            throw new InvalidOperationException(
+                "All pending recipients were already contacted for this template. Nothing left to send.");
+        }
+
+        campaign.AllowAlreadyContacted = false;
+        RecalculateCounts(campaign);
+        await _db.SaveChangesAsync(cancellationToken);
+        return await MapDetailAsync(id, cancellationToken);
     }
 
     public async Task CancelAsync(Guid id, CancellationToken cancellationToken)
@@ -857,6 +988,7 @@ public class CampaignService
     {
         var values = PersonalizationSerializer.Deserialize(prospect.PersonalizationJson);
         AddPersonalizationValue(values, "CompanyName", prospect.CompanyName);
+        AddPersonalizationValue(values, "AgencyName", prospect.CompanyName);
         AddPersonalizationValue(values, "ContactName", prospect.ContactName);
         AddPersonalizationValue(values, "Industry", prospect.Industry);
         AddPersonalizationValue(values, "City", prospect.City);
@@ -919,6 +1051,7 @@ public class CampaignService
             Provider = campaign.Provider,
             SendingAccountName = campaign.SendingAccountName,
             SendingAccountEmail = campaign.SendingAccountEmail,
+            AllowAlreadyContacted = campaign.AllowAlreadyContacted,
             HtmlBody = campaign.HtmlBody
         };
 
@@ -958,8 +1091,28 @@ public class CampaignService
             EmailAccountId = campaign.EmailAccountId,
             Provider = campaign.Provider,
             SendingAccountName = campaign.SendingAccountName,
-            SendingAccountEmail = campaign.SendingAccountEmail
+            SendingAccountEmail = campaign.SendingAccountEmail,
+            AllowAlreadyContacted = campaign.AllowAlreadyContacted
         };
+    }
+
+    private async Task EnsureDraftCanStartWithTemplateProtectionAsync(
+        Campaign campaign,
+        CancellationToken cancellationToken)
+    {
+        if (campaign.TemplateId is null || campaign.AllowAlreadyContacted)
+        {
+            return;
+        }
+
+        var check = await CheckTemplateRecipientsAsync(campaign.Id, cancellationToken);
+        if (check.AlreadyContactedCount <= 0)
+        {
+            return;
+        }
+
+        throw new InvalidOperationException(
+            $"{check.AlreadyContactedCount} recipient(s) were already emailed with this template. Remove them or allow resend before starting.");
     }
 
     private static CampaignRecipientDto MapRecipient(CampaignRecipient recipient)

@@ -17,14 +17,29 @@ export interface ProspectListRow extends ProspectSummary {
   projectLabel: string;
   locationLabel: string;
   emailLabel: string;
+  phoneLabel: string;
   whatsAppLabel: string;
+  mobileLabel: string;
   hasEmail: boolean;
+  hasPhone: boolean;
   hasWhatsApp: boolean;
+  hasMobile: boolean;
+}
+
+export interface ProspectMobileRecipientRow {
+  prospectId: string;
+  companyName: string;
+  phoneLabel: string;
 }
 
 export interface ProjectFilterOption {
   id: string;
   name: string;
+}
+
+export interface ProspectCascadeOption {
+  value: string;
+  label: string;
 }
 
 export interface ProspectFilterChoice {

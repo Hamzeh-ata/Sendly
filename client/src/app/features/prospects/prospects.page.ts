@@ -10,16 +10,26 @@ import {
 } from '../../core/models/prospecting.model';
 import {
   ProspectActiveFilterChip,
+  ProspectCascadeOption,
   ProspectFilterChoice,
   ProspectListRow,
-  ProjectFilterOption
+  ProspectMobileRecipientRow
 } from '../../core/models/prospect-row.model';
+import { MapProjectOption } from '../../core/models/map-research.model';
 import { SequenceOption } from '../../core/models/sequence.model';
 import { ProjectApiService } from '../../core/services/project-api.service';
 import { ProspectApiService } from '../../core/services/prospect-api.service';
 import { SequenceApiService } from '../../core/services/sequence-api.service';
 import { NotificationService } from '../../core/services/notification.service';
 import { formatDate } from '../../core/utils/format.utils';
+import {
+  findCascadeProject,
+  listCityOptions,
+  listCountryOptions,
+  listFamilyOptions,
+  mapCascadeProject,
+  resolveMatchingProjectIds
+} from '../../core/utils/project-cascade.utils';
 import { EmptyStateComponent } from '../../shared/components/empty-state/empty-state.component';
 import { LoadingComponent } from '../../shared/components/loading/loading.component';
 import { StatusBadgeComponent } from '../../shared/components/status-badge/status-badge.component';
@@ -44,12 +54,14 @@ export class ProspectsPage implements OnInit {
   readonly loading = signal(true);
   readonly saving = signal(false);
   readonly prospects = signal<ProspectListRow[]>([]);
-  readonly projects = signal<ProjectFilterOption[]>([]);
+  readonly projects = signal<MapProjectOption[]>([]);
   readonly selectedIds = signal<string[]>([]);
   readonly search = signal('');
+  readonly selectedFamily = signal('');
+  readonly selectedCountry = signal('');
+  readonly selectedCity = signal('');
   readonly projectId = signal('');
   readonly researchRunId = signal('');
-  readonly country = signal('');
   readonly industry = signal('');
   readonly statuses = signal<string[]>([]);
   readonly contactMethods = signal<string[]>([]);
@@ -59,6 +71,7 @@ export class ProspectsPage implements OnInit {
   readonly campaignOpen = signal(false);
   readonly campaignProspectIds = signal<string[]>([]);
   readonly campaignChannel = signal<OutreachChannelType>('email');
+  readonly campaignMode = signal<'email' | 'mobile'>('email');
   readonly useAiRecommendedTemplate = signal(true);
   readonly enrollOpen = signal(false);
   readonly enrollSequences = signal<SequenceOption[]>([]);
@@ -79,6 +92,7 @@ export class ProspectsPage implements OnInit {
 
   private readonly contactMethodValues = [
     { value: 'email', labelKey: 'projects.channelEmail' },
+    { value: 'phone', labelKey: 'prospects.phone' },
     { value: 'whatsApp', labelKey: 'projects.channelWhatsApp' }
   ];
 
@@ -100,9 +114,54 @@ export class ProspectsPage implements OnInit {
     { value: 'possibleDuplicate', labelKey: 'duplicateKind.possibleDuplicate' }
   ];
 
+  readonly familyOptions = computed((): ProspectCascadeOption[] =>
+    listFamilyOptions(this.projects())
+  );
+  readonly countryOptions = computed((): ProspectCascadeOption[] =>
+    listCountryOptions(this.projects(), this.selectedFamily())
+  );
+  readonly cityOptions = computed((): ProspectCascadeOption[] =>
+    listCityOptions(this.projects(), this.selectedFamily(), this.selectedCountry())
+  );
+  readonly showCountrySelect = computed(() => !!this.selectedFamily());
+  readonly showCitySelect = computed(() => this.cityOptions().length > 0);
   readonly selectedCount = computed(() => this.selectedIds().length);
   readonly hasSelection = computed(() => this.selectedIds().length > 0);
   readonly resultCount = computed(() => this.prospects().length);
+  readonly isMobileCampaign = computed(() => this.campaignMode() === 'mobile');
+  readonly campaignTitleKey = computed(() =>
+    this.isMobileCampaign() ? 'prospects.mobileCampaignTitle' : 'prospects.campaignTitle'
+  );
+  readonly campaignConfirmKey = computed(() =>
+    this.isMobileCampaign() ? 'prospects.createMobileCampaign' : 'prospects.createCampaign'
+  );
+  readonly mobileRecipientRows = computed((): ProspectMobileRecipientRow[] => {
+    const ids = this.campaignProspectIds();
+    const rows: ProspectMobileRecipientRow[] = [];
+    for (const id of ids) {
+      const prospect = this.findProspectRow(id);
+      if (!prospect?.hasMobile) {
+        continue;
+      }
+      rows.push({
+        prospectId: prospect.id,
+        companyName: prospect.companyName,
+        phoneLabel: prospect.mobileLabel
+      });
+    }
+    return rows;
+  });
+  readonly mobileRecipientCount = computed(() => this.mobileRecipientRows().length);
+  readonly hasMobileRecipients = computed(() => this.mobileRecipientCount() > 0);
+  readonly canConfirmCampaign = computed(() => {
+    if (this.saving()) {
+      return false;
+    }
+    if (this.isMobileCampaign()) {
+      return this.hasMobileRecipients();
+    }
+    return this.campaignProspectIds().length > 0;
+  });
   readonly canEnrollInSequence = computed(
     () => this.hasSelection() && !this.enrollMixedProjects() && !this.saving()
   );
@@ -188,6 +247,7 @@ export class ProspectsPage implements OnInit {
       this.queryParamsBound = true;
       this.projectId.set(projectId);
       this.researchRunId.set(researchRunId);
+      this.hydrateCascadeFromProjectId(projectId);
       if (unchanged) {
         return;
       }
@@ -200,21 +260,30 @@ export class ProspectsPage implements OnInit {
     this.loadProspects();
   }
 
-  onProjectChange(value: string): void {
-    this.projectId.set(value);
+  onFamilyChange(value: string): void {
+    this.selectedFamily.set(value);
+    this.selectedCountry.set('');
+    this.selectedCity.set('');
     this.researchRunId.set('');
-    this.syncListQuery(value, '');
-    this.loadProspects();
+    this.applyCascadeFilter();
+  }
+
+  onCascadeCountryChange(value: string): void {
+    this.selectedCountry.set(value);
+    this.selectedCity.set('');
+    this.researchRunId.set('');
+    this.applyCascadeFilter();
+  }
+
+  onCityChange(value: string): void {
+    this.selectedCity.set(value);
+    this.researchRunId.set('');
+    this.applyCascadeFilter();
   }
 
   clearMapRunFilter(): void {
     this.researchRunId.set('');
     this.syncListQuery(this.projectId(), '');
-    this.loadProspects();
-  }
-
-  onCountryChange(value: string): void {
-    this.country.set(value);
     this.loadProspects();
   }
 
@@ -267,7 +336,9 @@ export class ProspectsPage implements OnInit {
 
   clearAllFilters(): void {
     this.search.set('');
-    this.country.set('');
+    this.selectedFamily.set('');
+    this.selectedCountry.set('');
+    this.selectedCity.set('');
     this.industry.set('');
     this.statuses.set([]);
     this.contactMethods.set([]);
@@ -275,7 +346,8 @@ export class ProspectsPage implements OnInit {
     this.duplicates.set([]);
     this.researchRunId.set('');
     this.openFilterMenu.set(null);
-    this.syncListQuery(this.projectId(), '');
+    this.projectId.set('');
+    this.syncListQuery('', '');
     this.loadProspects();
   }
 
@@ -379,17 +451,34 @@ export class ProspectsPage implements OnInit {
       this.notification.error(this.translate.instant('prospects.selectRequired'));
       return;
     }
-    this.campaignProspectIds.set(ids);
-    this.campaignChannel.set('email');
-    this.useAiRecommendedTemplate.set(true);
-    this.campaignOpen.set(true);
+    this.openCampaignDialog(ids, 'email');
+  }
+
+  openMobileCampaignForSelected(): void {
+    const ids = this.selectedIds();
+    if (ids.length === 0) {
+      this.notification.error(this.translate.instant('prospects.selectRequired'));
+      return;
+    }
+    const mobileIds = this.filterMobileProspectIds(ids);
+    if (mobileIds.length === 0) {
+      this.notification.error(this.translate.instant('prospects.mobileNoPhones'));
+      return;
+    }
+    this.openCampaignDialog(mobileIds, 'mobile');
   }
 
   openCampaignForOne(id: string): void {
-    this.campaignProspectIds.set([id]);
-    this.campaignChannel.set('email');
-    this.useAiRecommendedTemplate.set(true);
-    this.campaignOpen.set(true);
+    this.openCampaignDialog([id], 'email');
+  }
+
+  openMobileCampaignForOne(id: string): void {
+    const mobileIds = this.filterMobileProspectIds([id]);
+    if (mobileIds.length === 0) {
+      this.notification.error(this.translate.instant('prospects.mobileNoPhones'));
+      return;
+    }
+    this.openCampaignDialog(mobileIds, 'mobile');
   }
 
   closeCampaign(): void {
@@ -397,6 +486,9 @@ export class ProspectsPage implements OnInit {
   }
 
   onCampaignChannelChange(value: string): void {
+    if (this.isMobileCampaign()) {
+      return;
+    }
     this.campaignChannel.set(value as OutreachChannelType);
   }
 
@@ -404,9 +496,50 @@ export class ProspectsPage implements OnInit {
     this.useAiRecommendedTemplate.set(checked);
   }
 
+  copyMobilePhone(phone: string): void {
+    const value = phone?.trim() ?? '';
+    if (!value || value === '—') {
+      return;
+    }
+    this.copyTextToClipboard(value, 'prospects.copyPhoneSuccess');
+  }
+
+  copyAllMobilePhones(): void {
+    const phones: string[] = [];
+    for (const row of this.mobileRecipientRows()) {
+      const value = row.phoneLabel?.trim() ?? '';
+      if (!value || value === '—') {
+        continue;
+      }
+      phones.push(value);
+    }
+    if (phones.length === 0) {
+      this.notification.error(this.translate.instant('prospects.mobileNoPhones'));
+      return;
+    }
+    this.copyTextToClipboard(phones.join('\n'), 'prospects.copyAllPhonesSuccess');
+  }
+
+  private copyTextToClipboard(value: string, successKey: string): void {
+    void navigator.clipboard.writeText(value).then(
+      () => this.notification.success(this.translate.instant(successKey)),
+      () => this.notification.error(this.translate.instant('common.errorGeneric'))
+    );
+  }
+
   confirmCampaign(): void {
-    const prospectIds = this.campaignProspectIds();
+    if (!this.canConfirmCampaign()) {
+      return;
+    }
+    const prospectIds = this.isMobileCampaign()
+      ? this.filterMobileProspectIds(this.campaignProspectIds())
+      : this.campaignProspectIds();
     if (prospectIds.length === 0) {
+      this.notification.error(
+        this.translate.instant(
+          this.isMobileCampaign() ? 'prospects.mobileNoPhones' : 'prospects.selectRequired'
+        )
+      );
       return;
     }
     const projectId = this.resolveProjectId(prospectIds);
@@ -428,7 +561,11 @@ export class ProspectsPage implements OnInit {
       next: (result) => {
         this.saving.set(false);
         this.campaignOpen.set(false);
-        this.notification.success(this.translate.instant('prospects.campaignSuccess'));
+        this.notification.success(
+          this.translate.instant(
+            this.isMobileCampaign() ? 'prospects.mobileCampaignSuccess' : 'prospects.campaignSuccess'
+          )
+        );
         if (result.campaignId) {
           this.router.navigate(['/history', result.campaignId]);
           return;
@@ -440,6 +577,34 @@ export class ProspectsPage implements OnInit {
         this.notifyError(err);
       }
     });
+  }
+
+  private openCampaignDialog(ids: string[], mode: 'email' | 'mobile'): void {
+    this.campaignProspectIds.set(ids);
+    this.campaignMode.set(mode);
+    this.campaignChannel.set(mode === 'mobile' ? 'whatsApp' : 'email');
+    this.useAiRecommendedTemplate.set(true);
+    this.campaignOpen.set(true);
+  }
+
+  private filterMobileProspectIds(ids: string[]): string[] {
+    const mobileIds: string[] = [];
+    for (const id of ids) {
+      const row = this.findProspectRow(id);
+      if (row?.hasMobile) {
+        mobileIds.push(id);
+      }
+    }
+    return mobileIds;
+  }
+
+  private findProspectRow(id: string): ProspectListRow | undefined {
+    for (const row of this.prospects()) {
+      if (row.id === id) {
+        return row;
+      }
+    }
+    return undefined;
   }
 
   openEnrollSequence(): void {
@@ -634,14 +799,38 @@ export class ProspectsPage implements OnInit {
   private loadProjects(): void {
     this.projectApi.list().subscribe({
       next: (items) => {
-        const options: ProjectFilterOption[] = [];
+        const options: MapProjectOption[] = [];
         for (const item of items ?? []) {
-          options.push({ id: item.id, name: item.name });
+          options.push(mapCascadeProject(item.id, item.name, item.countries, item.cities));
         }
         this.projects.set(options);
+        this.hydrateCascadeFromProjectId(this.projectId());
       },
       error: () => this.projects.set([])
     });
+  }
+
+  private applyCascadeFilter(): void {
+    const resolvedIds = resolveMatchingProjectIds(
+      this.projects(),
+      this.selectedFamily(),
+      this.selectedCountry(),
+      this.selectedCity()
+    );
+    const syncId = resolvedIds.length === 1 ? resolvedIds[0] : '';
+    this.projectId.set(syncId);
+    this.syncListQuery(syncId, this.researchRunId());
+    this.loadProspects();
+  }
+
+  private hydrateCascadeFromProjectId(projectId: string): void {
+    const project = findCascadeProject(this.projects(), projectId);
+    if (!project) {
+      return;
+    }
+    this.selectedFamily.set(project.familyKey);
+    this.selectedCountry.set(project.country);
+    this.selectedCity.set(project.city);
   }
 
   exportCsv(): void {
@@ -666,11 +855,17 @@ export class ProspectsPage implements OnInit {
   }
 
   private buildFilter(): ProspectListFilter {
+    const projectIds = resolveMatchingProjectIds(
+      this.projects(),
+      this.selectedFamily(),
+      this.selectedCountry(),
+      this.selectedCity()
+    );
     return {
-      projectId: this.projectId().trim() || undefined,
+      projectId: projectIds.length === 1 ? projectIds[0] : this.projectId().trim() || undefined,
+      projectIds: projectIds.length > 1 ? projectIds : undefined,
       researchRunId: this.researchRunId().trim() || undefined,
       search: this.search().trim() || undefined,
-      country: this.country().trim() || undefined,
       industry: this.industry().trim() || undefined,
       contactMethods: this.contactMethods().length > 0 ? this.contactMethods() : undefined,
       statuses: this.statuses().length > 0 ? this.statuses() : undefined,
@@ -723,12 +918,26 @@ export class ProspectsPage implements OnInit {
         projectLabel: item.projectName || '—',
         locationLabel: locationParts.length > 0 ? locationParts.join(', ') : '—',
         emailLabel: item.email || '—',
+        phoneLabel: item.phone || '—',
         whatsAppLabel: item.whatsApp || '—',
+        mobileLabel: this.resolveMobileLabel(item.phone, item.whatsApp),
         hasEmail: !!item.email,
-        hasWhatsApp: !!item.whatsApp
+        hasPhone: !!item.phone,
+        hasWhatsApp: !!item.whatsApp,
+        hasMobile: !!item.phone || !!item.whatsApp
       });
     }
     return rows;
+  }
+
+  private resolveMobileLabel(phone?: string | null, whatsApp?: string | null): string {
+    if (phone) {
+      return phone;
+    }
+    if (whatsApp) {
+      return whatsApp;
+    }
+    return '—';
   }
 
   private notifyError(err: HttpErrorResponse): void {

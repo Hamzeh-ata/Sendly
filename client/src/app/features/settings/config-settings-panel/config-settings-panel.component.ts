@@ -75,6 +75,19 @@ export class ConfigSettingsPanelComponent {
     return `appSettings.braveStatus.${status}`;
   });
 
+  readonly googlePlacesEnabled = signal(false);
+  readonly googlePlacesApiKey = signal('');
+  readonly googlePlacesApiKeyConfigured = signal(false);
+  readonly googlePlacesBaseUrl = signal('https://places.googleapis.com/v1/places:searchText');
+  readonly googlePlacesTimeout = signal(30);
+  readonly googlePlacesMaxResults = signal(20);
+  readonly googlePlacesMaxQueries = signal(4);
+  readonly googlePlacesRequestDelay = signal(200);
+  readonly googlePlacesStatus = signal<ProviderConnectionStatus>('NotConfigured');
+  readonly googlePlacesStatusLabelKey = computed(() => {
+    return `appSettings.googlePlacesStatus.${this.googlePlacesStatus()}`;
+  });
+
   readonly searXngEnabled = signal(true);
   readonly searXngBaseUrl = signal('');
   readonly searXngDefaultLanguage = signal('en');
@@ -277,6 +290,34 @@ export class ConfigSettingsPanelComponent {
 
   testBraveConnection(): void {
     this.testBraveRequested.emit();
+  }
+
+  onGooglePlacesEnabledChange(checked: boolean): void {
+    this.googlePlacesEnabled.set(checked);
+  }
+
+  onGooglePlacesApiKeyChange(value: string): void {
+    this.googlePlacesApiKey.set(value);
+  }
+
+  onGooglePlacesBaseUrlChange(value: string): void {
+    this.googlePlacesBaseUrl.set(value);
+  }
+
+  onGooglePlacesTimeoutChange(value: string): void {
+    this.googlePlacesTimeout.set(this.parseIntOr(value, 30));
+  }
+
+  onGooglePlacesMaxResultsChange(value: string): void {
+    this.googlePlacesMaxResults.set(this.parseIntOr(value, 20));
+  }
+
+  onGooglePlacesMaxQueriesChange(value: string): void {
+    this.googlePlacesMaxQueries.set(this.parseIntOr(value, 4));
+  }
+
+  onGooglePlacesRequestDelayChange(value: string): void {
+    this.googlePlacesRequestDelay.set(this.parseIntOr(value, 200));
   }
 
   onSearXngEnabledChange(checked: boolean): void {
@@ -486,6 +527,17 @@ export class ConfigSettingsPanelComponent {
         requestDelayMilliseconds: this.braveRequestDelay(),
         connectionStatus: this.braveStatus()
       },
+      googlePlaces: {
+        enabled: this.googlePlacesEnabled(),
+        apiKey: this.googlePlacesApiKey().trim() || null,
+        apiKeyConfigured: this.googlePlacesApiKeyConfigured(),
+        baseUrl: this.googlePlacesBaseUrl().trim() || 'https://places.googleapis.com/v1/places:searchText',
+        timeoutSeconds: this.googlePlacesTimeout(),
+        maxResultsPerQuery: this.googlePlacesMaxResults(),
+        maxQueriesPerRequest: this.googlePlacesMaxQueries(),
+        requestDelayMilliseconds: this.googlePlacesRequestDelay(),
+        connectionStatus: this.googlePlacesStatus()
+      },
       ollama: {
         enabled: this.ollamaEnabled(),
         baseUrl: this.ollamaBaseUrl().trim() || 'http://localhost:11434',
@@ -588,6 +640,19 @@ export class ConfigSettingsPanelComponent {
     this.braveMaxRequests.set(brave?.maxRequestsPerResearchRun ?? 20);
     this.braveRequestDelay.set(brave?.requestDelayMilliseconds ?? 250);
     this.braveStatus.set(brave?.connectionStatus ?? 'NotConfigured');
+
+    const googlePlaces = settings.googlePlaces;
+    this.googlePlacesEnabled.set(googlePlaces?.enabled ?? false);
+    this.googlePlacesApiKey.set('');
+    this.googlePlacesApiKeyConfigured.set(googlePlaces?.apiKeyConfigured ?? false);
+    this.googlePlacesBaseUrl.set(
+      googlePlaces?.baseUrl ?? 'https://places.googleapis.com/v1/places:searchText'
+    );
+    this.googlePlacesTimeout.set(googlePlaces?.timeoutSeconds ?? 30);
+    this.googlePlacesMaxResults.set(googlePlaces?.maxResultsPerQuery ?? 20);
+    this.googlePlacesMaxQueries.set(googlePlaces?.maxQueriesPerRequest ?? 4);
+    this.googlePlacesRequestDelay.set(googlePlaces?.requestDelayMilliseconds ?? 200);
+    this.googlePlacesStatus.set(googlePlaces?.connectionStatus ?? 'NotConfigured');
 
     const ollama = settings.ollama;
     this.ollamaEnabled.set(ollama?.enabled ?? true);

@@ -7,7 +7,6 @@ using Sendly.Application.Abstractions;
 using Sendly.Application.Options;
 using Sendly.Application.Services;
 using Sendly.Application.Services.MapResearch;
-using Sendly.Domain.Enums;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
@@ -16,15 +15,16 @@ namespace Sendly.Infrastructure.Research;
 public class OverpassOpenStreetMapSource : IMapGeographicSource
 {
     private static readonly Regex RetryAfterRegex = new(@"(\d+)", RegexOptions.Compiled);
-    private static readonly string[] Endpoints =
+    private static readonly string[] PublicFallbackEndpoints =
     [
         "https://overpass-api.de/api/interpreter",
         "https://lz4.overpass-api.de/api/interpreter",
-        "https://overpass.kumi.systems/api/interpreter"
+        "https://overpass.private.coffee/api/interpreter"
     ];
 
     private readonly IHttpClientFactory _httpClientFactory;
-    private readonly ResearchOptions _options;
+    private readonly ResearchOptions _researchOptions;
+    private readonly OverpassOptions _overpassOptions;
     private readonly IChallengedSourceRegistry _challenges;
     private readonly ILogger<OverpassOpenStreetMapSource> _logger;
     private DateTimeOffset? _nextAllowedAtUtc;
@@ -32,12 +32,14 @@ public class OverpassOpenStreetMapSource : IMapGeographicSource
 
     public OverpassOpenStreetMapSource(
         IHttpClientFactory httpClientFactory,
-        IOptions<ResearchOptions> options,
+        IOptions<ResearchOptions> researchOptions,
+        IOptions<OverpassOptions> overpassOptions,
         IChallengedSourceRegistry challenges,
         ILogger<OverpassOpenStreetMapSource> logger)
     {
         _httpClientFactory = httpClientFactory;
-        _options = options.Value;
+        _researchOptions = researchOptions.Value;
+        _overpassOptions = overpassOptions.Value;
         _challenges = challenges;
         _logger = logger;
     }
@@ -45,7 +47,7 @@ public class OverpassOpenStreetMapSource : IMapGeographicSource
     public string Name => "OpenStreetMapOverpass";
 
     public bool IsEnabled
-        => _options.EnableOpenStreetMapDiscovery
+        => _researchOptions.EnableOpenStreetMapDiscovery
            && !_challenges.IsTemporarilyDisabled(Name, DateTimeOffset.UtcNow);
 
     public async Task<MapSourceQueryResult> QueryAsync(
@@ -74,32 +76,44 @@ public class OverpassOpenStreetMapSource : IMapGeographicSource
         await WaitForThrottleAsync(cancellationToken);
         var query = BuildOverpassQuery(request);
         var client = _httpClientFactory.CreateClient("OpenStreetMapOverpass");
+        var endpoints = ResolveEndpoints();
+        var maxAttempts = ResolveMaxAttempts(endpoints.Count);
         MapSourceQueryResult? lastFailure = null;
-        for (var attempt = 0; attempt < Endpoints.Length; attempt++)
+
+        for (var attempt = 0; attempt < maxAttempts; attempt++)
         {
-            var endpoint = Endpoints[(_endpointCursor + attempt) % Endpoints.Length];
+            var endpoint = endpoints[(_endpointCursor + attempt) % endpoints.Count];
+            var endpointLabel = DescribeEndpoint(endpoint);
+            if (attempt > 0)
+            {
+                await DelayBeforeRetryAsync(attempt, lastFailure?.RetryAfterSeconds, cancellationToken);
+            }
+
             try
             {
                 using var content = new StringContent(
                     $"data={Uri.EscapeDataString(query)}",
                     Encoding.UTF8,
                     "application/x-www-form-urlencoded");
-                using var response = await client.PostAsync(endpoint, content, cancellationToken);
-                var body = await response.Content.ReadAsStringAsync(cancellationToken);
-                _nextAllowedAtUtc = DateTimeOffset.UtcNow.AddSeconds(2);
-
-                if (response.StatusCode is HttpStatusCode.TooManyRequests
-                    or HttpStatusCode.ServiceUnavailable
-                    or HttpStatusCode.BadGateway
-                    or HttpStatusCode.GatewayTimeout)
+                using var httpRequest = new HttpRequestMessage(HttpMethod.Post, endpoint)
                 {
-                    var retryAfter = ParseRetryAfter(response) ?? 20;
+                    Content = content
+                };
+                ApplyApiKeyHeader(httpRequest);
+
+                using var response = await client.SendAsync(httpRequest, cancellationToken);
+                var body = await response.Content.ReadAsStringAsync(cancellationToken);
+                ApplyThrottleAfterRequest();
+
+                if (IsTransientStatus(response.StatusCode))
+                {
+                    var retryAfter = ParseRetryAfter(response) ?? ResolveBackoffSeconds(attempt);
                     lastFailure = new MapSourceQueryResult
                     {
                         Succeeded = false,
-                        IsRateLimited = true,
+                        IsRateLimited = response.StatusCode == HttpStatusCode.TooManyRequests,
                         RetryAfterSeconds = retryAfter,
-                        ErrorSummary = $"Overpass capacity/limit HTTP {(int)response.StatusCode} at {endpoint}."
+                        ErrorSummary = $"Overpass capacity/limit HTTP {(int)response.StatusCode} at {endpointLabel}."
                     };
                     continue;
                 }
@@ -124,13 +138,24 @@ public class OverpassOpenStreetMapSource : IMapGeographicSource
                     {
                         Succeeded = false,
                         ShouldSubdivide = shouldSubdivide,
-                        ErrorSummary = $"Overpass HTTP {(int)response.StatusCode}: {Trim(body, 240)}"
+                        ErrorSummary = $"Overpass HTTP {(int)response.StatusCode}: {Trim(SanitizeBody(body), 240)}"
+                    };
+                    continue;
+                }
+
+                if (!LooksLikeOverpassJson(body))
+                {
+                    lastFailure = new MapSourceQueryResult
+                    {
+                        Succeeded = false,
+                        ShouldSubdivide = true,
+                        ErrorSummary = $"Overpass returned an invalid response at {endpointLabel}."
                     };
                     continue;
                 }
 
                 var places = ParseElements(body, request);
-                _endpointCursor = (_endpointCursor + attempt) % Endpoints.Length;
+                _endpointCursor = (_endpointCursor + attempt) % endpoints.Count;
                 _challenges.RecordSuccess(Name);
                 return new MapSourceQueryResult
                 {
@@ -143,36 +168,85 @@ public class OverpassOpenStreetMapSource : IMapGeographicSource
             {
                 throw;
             }
-                catch (TaskCanceledException ex)
+            catch (TaskCanceledException ex)
+            {
+                _logger.LogWarning(ex, "Overpass query timed out for {Endpoint}", endpointLabel);
+                lastFailure = new MapSourceQueryResult
                 {
-                    _logger.LogWarning(ex, "Overpass query timed out for {Endpoint}", endpoint);
-                    lastFailure = new MapSourceQueryResult
-                    {
-                        Succeeded = false,
-                        IsRateLimited = true,
-                        RetryAfterSeconds = 5,
-                        ShouldSubdivide = false,
-                        ErrorSummary = $"Overpass timeout at {endpoint}."
-                    };
-                    break;
-                }
-                catch (Exception ex)
+                    Succeeded = false,
+                    IsRateLimited = true,
+                    RetryAfterSeconds = ResolveBackoffSeconds(attempt),
+                    ShouldSubdivide = true,
+                    ErrorSummary = $"Overpass timeout at {endpointLabel}."
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "Overpass query failed for {Endpoint}", endpointLabel);
+                lastFailure = new MapSourceQueryResult
                 {
-                    _logger.LogWarning(ex, "Overpass query failed for {Endpoint}", endpoint);
-                    lastFailure = new MapSourceQueryResult
-                    {
-                        Succeeded = false,
-                        ShouldSubdivide = false,
-                        ErrorSummary = ex.Message
-                    };
-                }
+                    Succeeded = false,
+                    ShouldSubdivide = true,
+                    ErrorSummary = SanitizeMessage(ex.Message)
+                };
+            }
         }
 
         return lastFailure ?? new MapSourceQueryResult
         {
             Succeeded = false,
+            ShouldSubdivide = true,
             ErrorSummary = "All Overpass endpoints failed."
         };
+    }
+
+    private IReadOnlyList<string> ResolveEndpoints()
+    {
+        if (HasConfiguredProvider())
+        {
+            return [_overpassOptions.BaseUrl.Trim()];
+        }
+
+        return PublicFallbackEndpoints;
+    }
+
+    private bool HasConfiguredProvider()
+        => !string.IsNullOrWhiteSpace(_overpassOptions.ApiKey)
+           && !string.IsNullOrWhiteSpace(_overpassOptions.BaseUrl);
+
+    private int ResolveMaxAttempts(int endpointCount)
+    {
+        var retries = Math.Clamp(_overpassOptions.MaxRetryCount, 0, 5);
+        var configuredAttempts = retries + 1;
+        if (HasConfiguredProvider())
+        {
+            return configuredAttempts;
+        }
+
+        return Math.Max(endpointCount, configuredAttempts);
+    }
+
+    private void ApplyApiKeyHeader(HttpRequestMessage request)
+    {
+        if (string.IsNullOrWhiteSpace(_overpassOptions.ApiKey))
+        {
+            return;
+        }
+
+        request.Headers.Remove("X-API-Key");
+        request.Headers.TryAddWithoutValidation("X-API-Key", _overpassOptions.ApiKey.Trim());
+    }
+
+    private void ApplyThrottleAfterRequest()
+    {
+        var delayMs = Math.Clamp(_overpassOptions.RequestDelayMilliseconds, 0, 30000);
+        if (delayMs <= 0)
+        {
+            _nextAllowedAtUtc = null;
+            return;
+        }
+
+        _nextAllowedAtUtc = DateTimeOffset.UtcNow.AddMilliseconds(delayMs);
     }
 
     private async Task WaitForThrottleAsync(CancellationToken cancellationToken)
@@ -191,6 +265,40 @@ public class OverpassOpenStreetMapSource : IMapGeographicSource
         await Task.Delay(delay, cancellationToken);
     }
 
+    private static async Task DelayBeforeRetryAsync(
+        int attempt,
+        int? retryAfterSeconds,
+        CancellationToken cancellationToken)
+    {
+        var seconds = retryAfterSeconds ?? ResolveBackoffSeconds(attempt - 1);
+        var delay = TimeSpan.FromSeconds(Math.Clamp(seconds, 1, 60));
+        await Task.Delay(delay, cancellationToken);
+    }
+
+    private static int ResolveBackoffSeconds(int attempt)
+    {
+        var exp = Math.Pow(2, Math.Clamp(attempt + 1, 1, 5));
+        return (int)Math.Clamp(exp, 2, 60);
+    }
+
+    private static bool IsTransientStatus(HttpStatusCode statusCode)
+        => statusCode is HttpStatusCode.TooManyRequests
+            or HttpStatusCode.ServiceUnavailable
+            or HttpStatusCode.BadGateway
+            or HttpStatusCode.GatewayTimeout;
+
+    private static bool LooksLikeOverpassJson(string body)
+    {
+        if (string.IsNullOrWhiteSpace(body))
+        {
+            return false;
+        }
+
+        var trimmed = body.TrimStart();
+        return trimmed.StartsWith("{", StringComparison.Ordinal)
+               && trimmed.Contains("\"elements\"", StringComparison.Ordinal);
+    }
+
     private static string BuildOverpassQuery(MapSourceQueryRequest request)
     {
         var south = F(request.South);
@@ -198,11 +306,12 @@ public class OverpassOpenStreetMapSource : IMapGeographicSource
         var north = F(request.North);
         var east = F(request.East);
         var bbox = $"{south},{west},{north},{east}";
+        var limit = Math.Clamp(request.Limit, 1, 80);
         var sb = new StringBuilder();
-        sb.Append("[out:json][timeout:25];(");
+        sb.Append("[out:json][timeout:35][maxsize:33554432];(");
 
         var hasCategories = false;
-        foreach (var category in request.SourceCategories.Take(3))
+        foreach (var category in SelectCategoriesForQuery(request.SourceCategories))
         {
             var parts = category.Split('=', 2, StringSplitOptions.TrimEntries);
             if (parts.Length != 2 || string.IsNullOrWhiteSpace(parts[0]) || string.IsNullOrWhiteSpace(parts[1]))
@@ -212,15 +321,13 @@ public class OverpassOpenStreetMapSource : IMapGeographicSource
 
             var key = EscapeOverpass(parts[0]);
             var value = EscapeOverpass(parts[1]);
-            sb.Append($"node[\"{key}\"=\"{value}\"]({bbox});");
-            sb.Append($"way[\"{key}\"=\"{value}\"]({bbox});");
-            sb.Append($"relation[\"{key}\"=\"{value}\"]({bbox});");
+            sb.Append($"nwr[\"{key}\"=\"{value}\"]({bbox});");
             hasCategories = true;
         }
 
         if (!hasCategories)
         {
-            foreach (var keyword in request.NameKeywords.Take(2))
+            foreach (var keyword in request.NameKeywords.Take(1))
             {
                 if (string.IsNullOrWhiteSpace(keyword) || keyword.Length < 3 || keyword.Length > 24)
                 {
@@ -233,14 +340,37 @@ public class OverpassOpenStreetMapSource : IMapGeographicSource
                 }
 
                 var escaped = EscapeOverpassRegex(keyword.Trim());
-                sb.Append($"node[\"name\"~\"{escaped}\",i]({bbox});");
-                sb.Append($"way[\"name\"~\"{escaped}\",i]({bbox});");
-                sb.Append($"relation[\"name\"~\"{escaped}\",i]({bbox});");
+                sb.Append($"nwr[\"name\"~\"{escaped}\",i]({bbox});");
             }
         }
 
-        sb.Append(");out center tags;");
+        sb.Append($");out center tags {limit};");
         return sb.ToString();
+    }
+
+    private static IEnumerable<string> SelectCategoriesForQuery(IReadOnlyList<string> categories)
+    {
+        var selected = new List<string>();
+        foreach (var category in categories)
+        {
+            if (string.IsNullOrWhiteSpace(category))
+            {
+                continue;
+            }
+
+            if (selected.Contains(category, StringComparer.OrdinalIgnoreCase))
+            {
+                continue;
+            }
+
+            selected.Add(category);
+            if (selected.Count >= 2)
+            {
+                break;
+            }
+        }
+
+        return selected;
     }
 
     private static List<MapPlaceRecord> ParseElements(string body, MapSourceQueryRequest request)
@@ -426,4 +556,38 @@ public class OverpassOpenStreetMapSource : IMapGeographicSource
 
     private static string Trim(string value, int max)
         => value.Length <= max ? value : value[..max];
+
+    private static string DescribeEndpoint(string endpoint)
+    {
+        if (Uri.TryCreate(endpoint, UriKind.Absolute, out var uri))
+        {
+            return uri.Host;
+        }
+
+        return "overpass";
+    }
+
+    private string SanitizeBody(string body)
+    {
+        var trimmed = Trim(body, 400);
+        return SanitizeMessage(trimmed);
+    }
+
+    private string SanitizeMessage(string message)
+    {
+        if (string.IsNullOrWhiteSpace(message))
+        {
+            return "Overpass request failed.";
+        }
+
+        var sanitized = message;
+        if (!string.IsNullOrWhiteSpace(_overpassOptions.ApiKey))
+        {
+            sanitized = sanitized.Replace(_overpassOptions.ApiKey, "[redacted]", StringComparison.Ordinal);
+        }
+
+        return sanitized
+            .Replace("X-API-Key", "api-key", StringComparison.OrdinalIgnoreCase)
+            .Replace("ApiKey", "key", StringComparison.OrdinalIgnoreCase);
+    }
 }

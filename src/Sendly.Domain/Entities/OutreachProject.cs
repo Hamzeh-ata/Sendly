@@ -38,6 +38,8 @@ public class OutreachProject
 
     public ICollection<OutreachProjectCountry> Countries { get; set; } = new List<OutreachProjectCountry>();
 
+    public ICollection<OutreachProjectCity> Cities { get; set; } = new List<OutreachProjectCity>();
+
     public ICollection<OutreachProjectIndustry> Industries { get; set; } = new List<OutreachProjectIndustry>();
 
     public ICollection<OutreachProjectTargetRole> TargetRoles { get; set; } = new List<OutreachProjectTargetRole>();

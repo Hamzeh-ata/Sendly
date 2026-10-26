@@ -17,6 +17,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Subscription, filter, switchMap, takeWhile, timer } from 'rxjs';
 import * as L from 'leaflet';
 import {
+  MapCascadeOption,
   MapCoverageRegionDto,
   MapFieldProvenanceView,
   MapMarkerDetailView,
@@ -31,6 +32,7 @@ import {
 import { MapResearchApiService } from '../../../core/services/map-research-api.service';
 import { ProjectApiService } from '../../../core/services/project-api.service';
 import { NotificationService } from '../../../core/services/notification.service';
+import { mapCascadeProject } from '../../../core/utils/project-cascade.utils';
 import { EmptyStateComponent } from '../../../shared/components/empty-state/empty-state.component';
 import { MetricTileComponent } from '../../../shared/components/researcher/metric-tile.component';
 import { StatusBadgeComponent } from '../../../shared/components/status-badge/status-badge.component';
@@ -64,6 +66,9 @@ export class ResearcherMapPage implements OnInit, OnDestroy {
   readonly batchExtractLoading = signal(false);
   readonly extractingProspectIds = signal<string[]>([]);
   readonly projects = signal<MapProjectOption[]>([]);
+  readonly selectedFamily = signal('');
+  readonly selectedCountry = signal('');
+  readonly selectedCity = signal('');
   readonly projectId = signal('');
   readonly overview = signal<MapResearchOverviewDto | null>(null);
   readonly markers = signal<MapMarkerDto[]>([]);
@@ -72,6 +77,78 @@ export class ResearcherMapPage implements OnInit, OnDestroy {
   readonly qualifiedOnly = signal(false);
   readonly missingContactsOnly = signal(false);
   readonly requestedProspectCount = signal(50);
+
+  readonly familyOptions = computed((): MapCascadeOption[] => {
+    const options: MapCascadeOption[] = [];
+    const seen = new Set<string>();
+    for (const project of this.projects()) {
+      if (seen.has(project.familyKey)) {
+        continue;
+      }
+      seen.add(project.familyKey);
+      options.push({ value: project.familyKey, label: project.familyLabel });
+    }
+    options.sort((a, b) => a.label.localeCompare(b.label));
+    return options;
+  });
+
+  readonly countryOptions = computed((): MapCascadeOption[] => {
+    const family = this.selectedFamily();
+    const options: MapCascadeOption[] = [];
+    const seen = new Set<string>();
+    if (!family) {
+      return options;
+    }
+    for (const project of this.projects()) {
+      if (project.familyKey !== family || !project.country || seen.has(project.country)) {
+        continue;
+      }
+      seen.add(project.country);
+      options.push({ value: project.country, label: project.country });
+    }
+    options.sort((a, b) => a.label.localeCompare(b.label));
+    return options;
+  });
+
+  readonly cityOptions = computed((): MapCascadeOption[] => {
+    const family = this.selectedFamily();
+    const country = this.selectedCountry();
+    const options: MapCascadeOption[] = [];
+    const seen = new Set<string>();
+    if (!family || !country) {
+      return options;
+    }
+    for (const project of this.projects()) {
+      if (
+        project.familyKey !== family
+        || project.country !== country
+        || !project.city
+        || seen.has(project.city)
+      ) {
+        continue;
+      }
+      seen.add(project.city);
+      options.push({ value: project.city, label: project.city });
+    }
+    options.sort((a, b) => a.label.localeCompare(b.label));
+    return options;
+  });
+
+  readonly showCountrySelect = computed(() => !!this.selectedFamily());
+  readonly showCitySelect = computed(() => this.cityOptions().length > 0);
+  readonly hasCountryWideProject = computed(() => {
+    const family = this.selectedFamily();
+    const country = this.selectedCountry();
+    if (!family || !country) {
+      return false;
+    }
+    for (const project of this.projects()) {
+      if (project.familyKey === family && project.country === country && !project.city) {
+        return true;
+      }
+    }
+    return false;
+  });
 
   readonly hasProject = computed(() => !!this.projectId());
   readonly hasOverview = computed(() => !!this.overview());
@@ -295,19 +372,22 @@ export class ResearcherMapPage implements OnInit, OnDestroy {
     this.destroyMap();
   }
 
-  onProjectChange(value: string): void {
-    this.projectId.set(value);
-    this.selectedProspectId.set('');
-    this.lastBoundsKey = '';
-    this.syncProjectQuery(value);
-    if (!value) {
-      this.overview.set(null);
-      this.markers.set([]);
-      this.stopPolling();
-      this.syncMapLayers();
-      return;
-    }
-    this.loadOverview(value);
+  onFamilyChange(value: string): void {
+    this.selectedFamily.set(value);
+    this.selectedCountry.set('');
+    this.selectedCity.set('');
+    this.applyCascadeSelection(true);
+  }
+
+  onCountryChange(value: string): void {
+    this.selectedCountry.set(value);
+    this.selectedCity.set('');
+    this.applyCascadeSelection(true);
+  }
+
+  onCityChange(value: string): void {
+    this.selectedCity.set(value);
+    this.applyCascadeSelection(false);
   }
 
   onStatusFilterChange(value: string): void {
@@ -454,24 +534,241 @@ export class ResearcherMapPage implements OnInit, OnDestroy {
       next: (items) => {
         const options: MapProjectOption[] = [];
         for (const item of items ?? []) {
-          options.push({ id: item.id, name: item.name });
+          options.push(this.mapProjectOption(item.id, item.name, item.countries, item.cities));
         }
         this.projects.set(options);
-        const selected = preferredId || options[0]?.id || '';
-        this.projectId.set(selected);
-        this.syncProjectQuery(selected);
-        if (selected) {
-          this.loadOverview(selected);
-          return;
-        }
-        this.loading.set(false);
+        this.hydrateCascade(preferredId, options);
+        this.applyCascadeSelection(false);
       },
       error: (err: HttpErrorResponse) => {
         this.projects.set([]);
+        this.selectedFamily.set('');
+        this.selectedCountry.set('');
+        this.selectedCity.set('');
+        this.projectId.set('');
         this.loading.set(false);
         this.notifyError(err);
       }
     });
+  }
+
+  private hydrateCascade(preferredId: string, options: MapProjectOption[]): void {
+    const preferred = this.findProjectById(preferredId, options);
+    if (preferred) {
+      this.selectedFamily.set(preferred.familyKey);
+      this.selectedCountry.set(preferred.country);
+      this.selectedCity.set(preferred.city);
+      return;
+    }
+
+    const firstFamily = this.firstFamilyKey(options);
+    this.selectedFamily.set(firstFamily);
+    if (!firstFamily) {
+      this.selectedCountry.set('');
+      this.selectedCity.set('');
+      return;
+    }
+
+    const firstCountry = this.firstCountryForFamily(firstFamily, options);
+    this.selectedCountry.set(firstCountry);
+    this.selectedCity.set(this.defaultCityForSelection(firstFamily, firstCountry, options));
+  }
+
+  private applyCascadeSelection(autoFillDefaults: boolean): void {
+    if (autoFillDefaults) {
+      this.fillCascadeDefaults();
+    }
+
+    const resolvedId = this.resolveProjectId();
+    this.selectedProspectId.set('');
+    this.lastBoundsKey = '';
+    this.projectId.set(resolvedId);
+    this.syncProjectQuery(resolvedId);
+    if (!resolvedId) {
+      this.overview.set(null);
+      this.markers.set([]);
+      this.stopPolling();
+      this.loading.set(false);
+      this.syncMapLayers();
+      return;
+    }
+    this.loadOverview(resolvedId);
+  }
+
+  private fillCascadeDefaults(): void {
+    const family = this.selectedFamily();
+    if (!family) {
+      this.selectedCountry.set('');
+      this.selectedCity.set('');
+      return;
+    }
+
+    let country = this.selectedCountry();
+    if (!country) {
+      country = this.firstCountryForFamily(family, this.projects());
+      this.selectedCountry.set(country);
+    }
+
+    if (!country) {
+      this.selectedCity.set('');
+      return;
+    }
+
+    const cities = this.listCitiesForSelection(family, country, this.projects());
+    if (cities.length === 0) {
+      this.selectedCity.set('');
+      return;
+    }
+
+    const currentCity = this.selectedCity();
+    if (currentCity && this.containsValue(cities, currentCity)) {
+      return;
+    }
+
+    this.selectedCity.set(this.defaultCityForSelection(family, country, this.projects()));
+  }
+
+  private resolveProjectId(): string {
+    const family = this.selectedFamily();
+    const country = this.selectedCountry();
+    const city = this.selectedCity();
+    if (!family || !country) {
+      return '';
+    }
+
+    const matches: MapProjectOption[] = [];
+    let hasCountryWide = false;
+    let hasCities = false;
+    for (const project of this.projects()) {
+      if (project.familyKey !== family || project.country !== country) {
+        continue;
+      }
+      matches.push(project);
+      if (project.city) {
+        hasCities = true;
+      } else {
+        hasCountryWide = true;
+      }
+    }
+    if (matches.length === 0) {
+      return '';
+    }
+
+    if (city) {
+      for (const project of matches) {
+        if (project.city === city) {
+          return project.id;
+        }
+      }
+      return '';
+    }
+
+    if (hasCities && !hasCountryWide) {
+      return '';
+    }
+
+    for (const project of matches) {
+      if (!project.city) {
+        return project.id;
+      }
+    }
+
+    return '';
+  }
+
+  private mapProjectOption(
+    id: string,
+    name: string,
+    countries: string[] | null | undefined,
+    cities: string[] | null | undefined
+  ): MapProjectOption {
+    return mapCascadeProject(id, name, countries, cities);
+  }
+
+  private findProjectById(id: string, options: MapProjectOption[]): MapProjectOption | null {
+    if (!id) {
+      return null;
+    }
+    for (const project of options) {
+      if (project.id === id) {
+        return project;
+      }
+    }
+    return null;
+  }
+
+  private firstFamilyKey(options: MapProjectOption[]): string {
+    const families: MapCascadeOption[] = [];
+    const seen = new Set<string>();
+    for (const project of options) {
+      if (seen.has(project.familyKey)) {
+        continue;
+      }
+      seen.add(project.familyKey);
+      families.push({ value: project.familyKey, label: project.familyLabel });
+    }
+    families.sort((a, b) => a.label.localeCompare(b.label));
+    return families[0]?.value || '';
+  }
+
+  private firstCountryForFamily(familyKey: string, options: MapProjectOption[]): string {
+    const countries: string[] = [];
+    const seen = new Set<string>();
+    for (const project of options) {
+      if (project.familyKey !== familyKey || !project.country || seen.has(project.country)) {
+        continue;
+      }
+      seen.add(project.country);
+      countries.push(project.country);
+    }
+    countries.sort((a, b) => a.localeCompare(b));
+    return countries[0] || '';
+  }
+
+  private listCitiesForSelection(
+    familyKey: string,
+    country: string,
+    options: MapProjectOption[]
+  ): string[] {
+    const cities: string[] = [];
+    const seen = new Set<string>();
+    for (const project of options) {
+      if (
+        project.familyKey !== familyKey
+        || project.country !== country
+        || !project.city
+        || seen.has(project.city)
+      ) {
+        continue;
+      }
+      seen.add(project.city);
+      cities.push(project.city);
+    }
+    cities.sort((a, b) => a.localeCompare(b));
+    return cities;
+  }
+
+  private defaultCityForSelection(
+    familyKey: string,
+    country: string,
+    options: MapProjectOption[]
+  ): string {
+    for (const project of options) {
+      if (project.familyKey === familyKey && project.country === country && !project.city) {
+        return '';
+      }
+    }
+    const cities = this.listCitiesForSelection(familyKey, country, options);
+    return cities[0] || '';
+  }
+
+  private containsValue(values: string[], value: string): boolean {
+    for (const item of values) {
+      if (item === value) {
+        return true;
+      }
+    }
+    return false;
   }
 
   private loadOverview(projectId: string): void {

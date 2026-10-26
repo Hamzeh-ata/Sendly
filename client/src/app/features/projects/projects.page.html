@@ -47,57 +47,64 @@
       [descriptionKey]="'projects.emptyDescription'"
     />
   } @else {
-    <div class="table-wrap">
-      <table class="data-table">
-        <thead>
-          <tr>
-            <th>{{ 'projects.name' | translate }}</th>
-            <th>{{ 'projects.descriptionColumn' | translate }}</th>
-            <th>{{ 'projects.countries' | translate }}</th>
-            <th>{{ 'projects.keywords' | translate }}</th>
-            <th>{{ 'projects.contactMethods' | translate }}</th>
-            <th>{{ 'projects.prospectCount' | translate }}</th>
-            <th>{{ 'projects.qualified' | translate }}</th>
-            <th>{{ 'projects.active' | translate }}</th>
-            <th>{{ 'projects.lastResearch' | translate }}</th>
-            <th>{{ 'projects.actions' | translate }}</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (project of projects(); track project.id) {
-            <tr>
-              <td class="name">{{ project.name }}</td>
-              <td>{{ project.descriptionLabel }}</td>
-              <td>{{ project.countriesLabel }}</td>
-              <td>{{ project.keywordsLabel }}</td>
-              <td>{{ project.contactMethodsLabel }}</td>
-              <td>{{ project.prospectCount }}</td>
-              <td>{{ project.qualifiedCount }}</td>
-              <td>{{ project.statusLabelKey | translate }}</td>
-              <td>{{ project.lastResearchLabel }}</td>
-              <td class="actions-cell">
-                <button type="button" class="btn btn-ghost btn-sm" (click)="openView(project.id)">
-                  {{ 'projects.view' | translate }}
-                </button>
-                <button type="button" class="btn btn-ghost btn-sm" (click)="openEdit(project.id)">
-                  {{ 'projects.edit' | translate }}
-                </button>
-                <button type="button" class="btn btn-ghost btn-sm" (click)="openResearch(project.id)">
-                  {{ 'projects.runResearch' | translate }}
-                </button>
-                @if (project.isActive) {
-                  <button type="button" class="btn btn-ghost btn-sm" (click)="openDeactivate(project.id)">
-                    {{ 'projects.deactivate' | translate }}
-                  </button>
+    <div class="country-groups">
+      @for (group of countryGroups(); track group.countryKey) {
+        <section class="country-group">
+          <h3 class="country-group-title">{{ group.countryLabel }}</h3>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>{{ 'projects.name' | translate }}</th>
+                  <th>{{ 'projects.descriptionColumn' | translate }}</th>
+                  <th>{{ 'projects.city' | translate }}</th>
+                  <th>{{ 'projects.keywords' | translate }}</th>
+                  <th>{{ 'projects.contactMethods' | translate }}</th>
+                  <th>{{ 'projects.prospectCount' | translate }}</th>
+                  <th>{{ 'projects.qualified' | translate }}</th>
+                  <th>{{ 'projects.active' | translate }}</th>
+                  <th>{{ 'projects.lastResearch' | translate }}</th>
+                  <th>{{ 'projects.actions' | translate }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (project of group.projects; track project.id) {
+                  <tr>
+                    <td class="name">{{ project.name }}</td>
+                    <td>{{ project.descriptionLabel }}</td>
+                    <td>{{ project.citiesLabel }}</td>
+                    <td>{{ project.keywordsLabel }}</td>
+                    <td>{{ project.contactMethodsLabel }}</td>
+                    <td>{{ project.prospectCount }}</td>
+                    <td>{{ project.qualifiedCount }}</td>
+                    <td>{{ project.statusLabelKey | translate }}</td>
+                    <td>{{ project.lastResearchLabel }}</td>
+                    <td class="actions-cell">
+                      <button type="button" class="btn btn-ghost btn-sm" (click)="openView(project.id)">
+                        {{ 'projects.view' | translate }}
+                      </button>
+                      <button type="button" class="btn btn-ghost btn-sm" (click)="openEdit(project.id)">
+                        {{ 'projects.edit' | translate }}
+                      </button>
+                      <button type="button" class="btn btn-ghost btn-sm" (click)="openResearch(project.id)">
+                        {{ 'projects.runResearch' | translate }}
+                      </button>
+                      @if (project.isActive) {
+                        <button type="button" class="btn btn-ghost btn-sm" (click)="openDeactivate(project.id)">
+                          {{ 'projects.deactivate' | translate }}
+                        </button>
+                      }
+                      <button type="button" class="btn btn-danger btn-sm" (click)="openDelete(project.id)">
+                        {{ 'projects.delete' | translate }}
+                      </button>
+                    </td>
+                  </tr>
                 }
-                <button type="button" class="btn btn-danger btn-sm" (click)="openDelete(project.id)">
-                  {{ 'projects.delete' | translate }}
-                </button>
-              </td>
-            </tr>
-          }
-        </tbody>
-      </table>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      }
     </div>
   }
 </div>

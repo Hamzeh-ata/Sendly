@@ -70,6 +70,55 @@ public class CampaignsController : ControllerBase
         return Ok(recipients);
     }
 
+    [HttpGet("{id:guid}/template-recipient-check")]
+    public async Task<ActionResult<CheckTemplateRecipientsResponseDto>> CheckTemplateRecipients(
+        Guid id,
+        CancellationToken cancellationToken)
+    {
+        try
+        {
+            return Ok(await _campaignService.CheckTemplateRecipientsAsync(id, cancellationToken));
+        }
+        catch (InvalidOperationException ex)
+        {
+            return NotFound(new { message = ex.Message });
+        }
+    }
+
+    [HttpPost("{id:guid}/allow-already-contacted")]
+    public async Task<ActionResult<CampaignDetailDto>> SetAllowAlreadyContacted(
+        Guid id,
+        [FromBody] SetCampaignAllowAlreadyContactedRequestDto request,
+        CancellationToken cancellationToken)
+    {
+        try
+        {
+            return Ok(await _campaignService.SetAllowAlreadyContactedAsync(
+                id,
+                request.AllowAlreadyContacted,
+                cancellationToken));
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+    }
+
+    [HttpPost("{id:guid}/exclude-already-contacted")]
+    public async Task<ActionResult<CampaignDetailDto>> ExcludeAlreadyContacted(
+        Guid id,
+        CancellationToken cancellationToken)
+    {
+        try
+        {
+            return Ok(await _campaignService.ExcludeAlreadyContactedAsync(id, cancellationToken));
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+    }
+
     [HttpPost("{id:guid}/start")]
     public async Task<IActionResult> Start(Guid id, CancellationToken cancellationToken)
     {

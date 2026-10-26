@@ -41,6 +41,7 @@ public static class TemplateMergeRenderer
         Add(values, "Email", email);
         Add(values, "ContactName", contactName);
         Add(values, "CompanyName", companyName);
+        Add(values, "AgencyName", companyName);
         Add(values, "Industry", industry);
         Add(values, "City", city);
         Add(values, "Country", country);

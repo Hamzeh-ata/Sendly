@@ -103,6 +103,15 @@ export interface MapResearchPlanPreviewDto {
 export interface MapProjectOption {
   id: string;
   name: string;
+  familyKey: string;
+  familyLabel: string;
+  country: string;
+  city: string;
+}
+
+export interface MapCascadeOption {
+  value: string;
+  label: string;
 }
 
 export interface MapStatusFilterOption {
